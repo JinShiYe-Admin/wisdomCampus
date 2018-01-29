@@ -11,13 +11,24 @@
 	</head>
 
 	<body ontouchstart>
+		<!--加密-->
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/jsencrypt.js" type="text/javascript" charset="utf-8"></script>
 
 		<!--vue-->
-		<script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/demoCssJs/jquery-weui.js"></script>
-		<script src="../js/PublicProtocol.js"></script>
+		<!--<script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>-->
+		<!--<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/demoCssJs/jquery-weui.js"></script>-->
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src='../js/lib/jquery.js'></script>
+		<script src="../js/PublicProtocol.js"></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+
 		<script type="text/javascript">
 			$(function() {
 				//获取当前人员信息
@@ -26,45 +37,64 @@
 
 			var getUserInfo = function() {
 				//10.获取发送的通知公告列表
-//				var tempData = {
-//					schoolId:'1',//学校ID
-//					sendManId:'konglm',//发送人ID
-//					title:'',//标题
-//					status:'0',//状态,0 全部,1 发出,2 撤销
-//					progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-//					beginTime:'20170101',//查询开始时间
-//					endTime:'20180127',//查询结束时间
-//					pageIndex:'1',//当前页数
-//					pageSize:'10'//每页记录数
-//				}
-//				getSendNoticePro(tempData,function function_name () {
-//					
-//				});
-				
+				//				var tempData = {
+				//					schoolId:'1',//学校ID
+				//					sendManId:'konglm',//发送人ID
+				//					title:'',//标题
+				//					status:'0',//状态,0 全部,1 发出,2 撤销
+				//					progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+				//					beginTime:'20170101',//查询开始时间
+				//					endTime:'20180127',//查询结束时间
+				//					pageIndex:'1',//当前页数
+				//					pageSize:'10'//每页记录数
+				//				}
+				//				getSendNoticePro(tempData,function function_name () {
+				//					
+				//				});
+
 				//11.获取收到的通知公告列表（接收人为单人）
-//				var tempData = {
-//					schoolId:'1',//学校ID
-//					receiveManId:'2',//接收人ID
-//					title:'',//标题
-//					sendMan:'',//发布人姓名
-//					status:'0',//状态,0 全部,1 发出,2 撤销
-//					progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-//					beginTime:'20170101',//查询开始时间
-//					endTime:'20180127',//查询结束时间
-//					pageIndex:'1',//当前页数
-//					pageSize:'10'//每页记录数
-//				}
-//				getReceiveNoticePro(tempData,function function_name () {
+				//				var tempData = {
+				//					schoolId:'1',//学校ID
+				//					receiveManId:'2',//接收人ID
+				//					title:'',//标题
+				//					sendMan:'',//发布人姓名
+				//					status:'0',//状态,0 全部,1 发出,2 撤销
+				//					progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+				//					beginTime:'20170101',//查询开始时间
+				//					endTime:'20180127',//查询结束时间
+				//					pageIndex:'1',//当前页数
+				//					pageSize:'10'//每页记录数
+				//				}
+				//				getReceiveNoticePro(tempData,function function_name () {
+				//					
+				//				});
+
+				//12.通过ID获取通知公告
+				//				var tempData = {
+				//					noticeId: '1' //通知ID
+				//				}
+				//				getNoticeByIdPro(tempData, function function_name() {
+				//
+				//				});
+
+				//				shakeHandPro(function function_name () {
+				//					
+				//				});
+
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: '16b02e57b4dfb22',
+					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+					appid: 'appid'
+				};
+				//发送网络请求，data为网络返回值
+				postDataEncry('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', enData0, comData0, 0, function(data) {
+					console.log('2121212');
+				});
+//				postDataEncry('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand',enData0,comData0,0,function function_name () {
 //					
 //				});
-				
-				//12.通过ID获取通知公告
-				var tempData = {
-					noticeId:'1'//通知ID
-				}
-				getNoticeByIdPro(tempData,function function_name () {
-					
-				});
 			}
 		</script>
 	</body>
