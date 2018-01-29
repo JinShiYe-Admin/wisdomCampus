@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>wisdomCampus</name>
+	<name>wisdomCampus1</name>
 	<comment>Create By HBuilder</comment>
 	<projects>
 	</projects>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1516691461962</id>
+			<id>1517017502646</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -40,7 +40,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1516692441351</id>
+			<id>1517017571492</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -49,7 +49,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1516692441850</id>
+			<id>1517017571493</id>
 			<name></name>
 			<type>26</type>
 			<matcher>

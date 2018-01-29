@@ -1,6 +1,6 @@
-{
+﻿{
     "@platforms": ["android", "iPhone", "iPad"],
-    "id": "H59189872",/*应用的标识，创建应用时自动生成，勿手动修改*/
+    "id": "H5B104CAC",/*应用的标识，创建应用时自动生成，勿手动修改*/
     "name": "wisdomCampus",/*应用名称，程序桌面图标名称*/
     "version": {
         "name": "1.0",/*应用版本名称*/
@@ -10,7 +10,7 @@
     "icons": {
         "72": "icon.png"
     },
-    "launch_path": "html/login.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+    "launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
     "developer": {
         "name": "",/*开发者名称*/
         "email": "",/*开发者邮箱地址*/
@@ -199,59 +199,5 @@
                 }
             }
         }
-    },
-	"dependencies": {
-		"pages": {
-			"html/home.html": {
-				"resources": [],
-				"refer": [
-					"html/all.html"
-				],
-				"priority": 0
-			}
-		},
-		"idle": {
-			"resources": [
-				"image/u74.png",
-				"image/u227.png",
-				"image/u195.png",
-				"image/u56.png",
-				"image/u193.png",
-				"image/u244.png",
-				"image/u242.png",
-				"js/jquery-2.1.4.js",
-				"fonts/mui-icons-extra.ttf",
-				"image/u191.png",
-				"js/mui.min.js",
-				"js/mui.js",
-				"image/u197.png",
-				"image/u298.png",
-				"js/mui.pullToRefresh.js",
-				"image/u210.png",
-				"js/mui.pullToRefresh.material.js",
-				"fonts/mui.ttf",
-				"image/u99.png",
-				"image/u103.png",
-				"image/u189.png",
-				"image/u101.png",
-				"image/u229.png",
-				"css/mui.css",
-				"image/u296.png",
-				"image/u131.png",
-				"image/loading.gif",
-				"index.html",
-				"image/u219.png",
-				"image/u200.png",
-				"image/u240.png",
-				"image/u54.png",
-				"image/u118.png",
-				"css/mui.min.css",
-				"image/u221.png",
-				"image/u292.png",
-				"image/u52.png",
-				"js/home.js",
-				"image/u70.png"
-			]
-		}
-	}
+    }
 }

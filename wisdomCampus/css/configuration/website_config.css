@@ -1,0 +1,42 @@
+/*网站配置*/
+
+body {
+	word-wrap: break-word;
+}
+
+.weui-cells__title {
+	color: black;
+}
+
+.weui-cells {
+	margin-top: 0px;
+}
+
+.website-image {
+	width: 200px;
+	height: 200px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#image_list .weui-btn {
+	margin-top: 10px;
+}
+
+.weui-gallery {
+	display: block;
+}
+
+.weui-gallery__img {
+	top: 60px;
+}
+
+.website-file-type {
+	display: inline;
+}
+
+.website-upload-image .website-image {
+	margin: 10px 0px;
+}

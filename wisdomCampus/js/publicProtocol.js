@@ -1,81 +1,53 @@
+//
 
-//握手
-var shakeHand = function(){
-	var url = 'https://jsypay.jiaobaowang.net/useradminwebapi';
-	//拼接登录需要的签名
-	var commonData = {
-			uuid: plus.device.uuid,
-			shaketype: 'login',//注册(reg),登录(login),修改密码(repw)
-			appid: plus.runtime.appid,
-		};
-	//将对象转为数组
-	var arr1 = [];
-	for(var item in commonData) {
-		arr1.push(item + '=' + commonData[item]);
-	};
-	//拼接登录需要的签名
-	var signTemp = arr1.sort().join('&');
-	//生成签名，返回值sign则为签名
-	signHmacSHA1.sign(signTemp, storageKeyName.SIGNKEY, function(sign) {
-		//组装发送握手协议需要的data
-		//合并对象
-		var tempData = $.extend({}, commonData);
-		//添加签名
-		tempData.sign = sign;
-		// 等待的对话框
-//		var urlArr = url.split('/');
-//		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', tempData);
-//		var tepTime = tempTime();
-		//发送协议
-
-		mui.ajax(url, {
-			data: JSON.stringify(tempData),
-			dataType: 'json',
-			type: 'post',
-			contentType: "application/json",
-			timeout: 30000,
-			//			success: callback,
-			success: function(data) {
-				console.log(urlArr[urlArr.length - 1] + "接口获取的值:", data);
-//				callback(data);
-			},
-			error: function(xhr, type, errorThrown) {
-				console.log("网络连接失败" + ":" + type + "," + errorThrown + ":", xhr);
-				//console.log('网络连接失败:' + url + ':' + type + ',' + JSON.stringify(xhr) + ',' + errorThrown);
-				var data = {
-					RspCode: '404',
-					RspData: '',
-					RspTxt: '网络连接失败，请重新尝试一下'
-				}
-
-				callback(data);
-				//mui.toast("网络连接失败，请重新尝试一下");
-			}
-		});
-	});
-}
-
-//拼接参数--签名
-//function postDataEncry1(commonData, flag) {
-//	//循环
-//	var tempStr = '';
-//		//获取个人信息
-//		var comData = {
-//			uuid: plus.device.uuid,
-//			shaketype: 'login',//注册(reg),登录(login),修改密码(repw)
-//			appid: plus.runtime.appid,
-//		};
-//		commonData = $.extend(commonData, comData);
-//	//将对象转为数组
-//	var arr1 = [];
-//	for(var item in commonData) {
-//		arr1.push(item + '=' + commonData[item]);
-//	};
-//	//拼接登录需要的签名
-//	var signTemp = arr1.sort().join('&');
-//	return signTemp;
+//function uuid() {
+//  var s = [];
+//  var hexDigits = "0123456789abcdef";
+//  for (var i = 0; i < 36; i++) {
+//      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+//  }
+//  s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+//  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+//  s[8] = s[13] = s[18] = s[23] = "-";
+//  var uuid = s.join("");
+//  return uuid;
 //}
 
+//发送对应的网站协议，根据页面传送的data
+//var unitWebsitePro = function(data0, callback) {
+//	xhrPost('https://jsypay.jiaobaowang.net/wxth/appschweb/schwebapi.aspx', JSON.stringify(data0), callback);
+//}
+
+/**
+ * 发送 jQuery ajax post 的请求
+ * @param {Object} url 路径
+ * @param {Object} data 数据
+ * @param {Object} callback 回调
+ */
+//var jQAjaxPost = function(url, data, callback) {
+//	console.log('jQAP-Url:', url);
+//	console.log('jQAP-Data:', data);
+//	jQuery.ajax({
+//		url: url,
+//		type: "POST",
+//		data: data,
+//		timeout: 30000,
+//		dataType: "json",
+//		async: true,
+//		success: function(success_data) { //请求成功的回调
+//			console.log('jQAP-Success:', success_data);
+//			callback(success_data);
+//		},
+//		error: function(xhr, type, errorThrown) {
+//			console.log('jQAP-Error:', xhr, type);
+//			callback({
+//				RspCode: 404,
+//				RspData: null,
+//				RspTxt: "网络连接失败,请重新尝试一下"
+//			});
+//		}
+//	});
+//}
 
 /**
  * 发送 XMLHttpRequest post 的请求

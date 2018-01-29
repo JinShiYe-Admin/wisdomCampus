@@ -1,235 +1,205 @@
-/**
- * 压缩模块
- */
 var compress = (function(mod) {
-	mod.compressPIC = function(picPath, callback) {
-		var options = {
-			src: picPath, //压缩转换原始图片的路径
-			dst: getSavePath(picPath), //压缩转换目标图片的路径
-			overwrite: true,
-			format:'jpg'
-		}
-		//获取图片类型
-		getPicType(picPath, function(picType) {
-			if(picType) { //宽>=长
-				options.width = "1024px";
-				options.height = "auto";
-			} else { //宽<长
-				options.width = "auto";
-				options.height = "1024px";
-			}
-			//压缩图片
-			plus.zip.compressImage(options,
-				function(event) {
-					//console.log('压缩图片成功:' + JSON.stringify(event));
-					callback(event);
-				},
-				function(error) {
-					//图片压缩失败
-					var code = error.code; // 错误编码
-					var message = error.message; // 错误描述信息
-					mui.toast('图片压缩失败！' + '错误编码：' + code + '描述信息：' + message);
-					//console.log('图片压缩失败！' + JSON.stringify(error));
-					plus.nativeUI.closeWaiting();
-				})
-		});
-
+	mod.uploadImg = function(file, maxSize, callback) {
+		maxSize = maxSize * 1024 * 1024;
+		console.log("要处理的图片地址：" + file.name);
+		mod.getFileReader(file, maxSize, callback);
 	}
-	mod.compressPIC_recursive = function(picPath, callback1) {
-		var options = {
-			src: picPath, //压缩转换原始图片的路径
-			dst: getSavePath(picPath), //压缩转换目标图片的路径
-			overwrite: true
-		}
-		//console.log(123)
-		//获取图片类型
-		getPicType(picPath, function(picType) {
-			if(picType) { //宽>=长
-				options.width = "1024px";
-				options.height = "auto";
-			} else { //宽<长
-				options.width = "auto";
-				options.height = "1024px";
-			}
-			//console.log(JSON.stringify(options))
-			//压缩图片
-			plus.zip.compressImage(options,
-				function(event) {
-					//console.log('压缩图片成功:' + JSON.stringify(event));
-					compressCount++;
-					compressedPaths.push(event.target);
-					widths.push(event.width);
-					if(compressCount < paths.length) {
-						mod.compressPIC_recursive(paths[compressCount], callback1);
-					} else {
-						callback1(compressedPaths, widths);
-					}
-				},
-				function(error) {
-					//图片压缩失败
-					var code = error.code; // 错误编码
-					var message = error.message; // 错误描述信息
-					mui.toast('图片压缩失败！' + '错误编码：' + code + '描述信息：' + message);
-					//console.log('图片压缩失败！' + JSON.stringify(error));
-					plus.nativeUI.closeWaiting();
-				})
-		});
-
-	}
-	var paths = [];
-	compressedPaths = [];
-	var compressCount = 0;
-	var widths = [];
-	mod.compressPics = function(picPaths, callback) {
-		paths = [];
-		compressedPaths = [];
-		compressCount = 0;
-		widths = [];
-		paths = picPaths;
-		mod.compressPIC_recursive(picPaths[0], callback);
-
-	}
-	var getPicType = function(picPath, callback) {
-		var picType;
-		var img = new Image();
-		img.src = picPath;
-		img.onload = function() {
-			if(img.width >= img.height) {
-				picType = true;
-			} else {
-				picType = false;
-			}
-			callback(picType);
-		}
-		img.onerror=function(){
-			callback(false);
-		}
-	}
-	var getSavePath = function(picPath) {
-		var picPaths = picPath.split('/');
-		//console.log("路径：" + picPaths[picPaths.length - 1])
-		var picName=picPaths[picPaths.length - 1];
-		var compressPath = "_doc/savepath/" + picName.split(".")[0]+".jpg";
-		//		picPaths.splice(picPaths.length - 1, 0, "savePath");
-		return compressPath;
-	}
-
-	/**
-	 * 将图片压缩至1M以下
-	 * @author莫尚霖
-	 * @param {Object} data json
-	 * @param {Object} successCallBack 成功的回调
-	 * @param {Object} errorCallBack 失败的回调
-	 */
-	mod.compressImageTo_1MB = function(data, successCallBack, errorCallBack) {
-		var options = {}
-		options.path = data.path; //压缩转换原始图片的路径
-		if(data.dst) {
-			options.dst = data.dst; //压缩转换目标图片的路径
-		}
-		//console.log('compressImageTo_1MB options ' + JSON.stringify(options));
-		mod.compressImageTo_xx(options, function(event) {
-			//console.log('compressImageTo_1MB 成功');
-			successCallBack(event);
-		}, function(error) {
-			//console.log('### ERROR ### compressImageTo_1MB 失败 ' + JSON.stringify(error));
-			errorCallBack(error);
-		});
-	}
-
-	/**
-	 * 将图片压缩至512KB以下
-	 * @author 莫尚霖
-	 * @param {Object} data json
-	 * @param {Object} successCallBack 成功的回调
-	 * @param {Object} errorCallBack 失败的回调
-	 */
-	mod.compressImageTo_512KB = function(data, successCallBack, errorCallBack) {
-		var options = {}
-		options.path = data.path; //压缩转换原始图片的路径
-		options.sizemax = 524288; //最大文件大小
-		if(data.dst) {
-			options.dst = data.dst; //压缩转换目标图片的路径
-		}
-		//console.log('compressImageTo_512KB options ' + JSON.stringify(options));
-		mod.compressImageTo_xx(options, function(event) {
-			//console.log('compressImageTo_512KB 成功');
-			successCallBack(event);
-		}, function(error) {
-			//console.log('### ERROR ### compressImageTo_1MB 失败 ' + JSON.stringify(error));
-			errorCallBack(error);
-		});
-	}
-
-	/**
-	 * 将图片压缩至XX大小以下(默认1MB)
-	 * @author 莫尚霖
-	 * @param {Object} data json
-	 * @param {Object} successCallBack 成功的回调
-	 * @param {Object} errorCallBack 失败的回调
-	 */
-	mod.compressImageTo_xx = function(data, successCallBack, errorCallBack) {
-		var optionWith = 'auto';
-		var optionHeight = 'auto';
-		var sizeMax = 1048576; //1MB
-		if(data.width) {
-			optionWith = data.width;
-		}
-		if(data.height) {
-			optionHeight = data.height;
-		}
-		if(data.sizemax) {
-			sizeMax = data.sizemax;
-		}
-		var options = {
-			src: data.path, //压缩转换原始图片的路径
-			format: '.png', //压缩转换后的图片格式
-			width: optionWith, //缩放图片的宽度
-			height: optionHeight //(String 类型 )缩放图片的高度
-		}
-		if(data.dst) {
-			options.dst = data.dst; //压缩转换目标图片的路径
-			options.overwrite = true; //覆盖生成新文件,仅在dst制定的路径文件存在时有效
-		} else {
-			var myDate = new Date();
-			options.dst = '_documents/' + myDate.getTime() + '.png'; //压缩转换目标图片的路径
-			options.overwrite = false; //覆盖生成新文件,仅在dst制定的路径文件存在时有效
-		}
-		//console.log('compressImageTo_xx options ' + JSON.stringify(options));
-		plus.zip.compressImage(options,
-			function(event) {
-				//图片压缩成功
-				//var target = event.target; // 压缩转换后的图片url路径，以"file://"开头
-				//var size = event.size; // 压缩转换后图片的大小，单位为字节（Byte）
-				//var width = event.width; // 压缩转换后图片的实际宽度，单位为px
-				//var height = event.height; // 压缩转换后图片的实际高度，单位为px
-				//console.log('compressImageTo_xx 成功 target:' + event.target + ' size:' + event.size + ' width:' + event.width + ' height:' + event.height);
-				if(event.size <= sizeMax) {
-					successCallBack(event);
+	mod.getFileReader = function(file, maxSize, callback) {
+		var reader = new FileReader();
+		reader.onload = function() {
+			var result = this.result;
+			var formData = new FormData();
+			mod.getImgInfo(result, function(img, imgInfo) {
+				console.log("获取的文件信息：" + JSON.stringify(imgInfo));
+				console.log("原图尺寸：" + result.length);
+				if(result.length > maxSize) {
+					var newDataUrl = mod.getCanvasDataUrl(img, mod.getSuitableSize(imgInfo, Math.ceil(result.length / maxSize)));
+					var blob = mod.base64ToBlob(newDataUrl, 'image/jpeg');
+					console.log("blob.type:" + blob.type);
+					console.log('要传递的文件大小：' + blob.size);
+					//					var newFile = new File([blob], Date.now() + '.png');
+					formData.append('image', blob, Date.now() + '.png');
 				} else {
-					var data = {
-						path: event.target,
-						dst: event.target,
-						sizemax: sizeMax,
-					}
-
-					if(event.width > event.height) { //宽>=长
-						data.width = parseInt(event.width / 2) + "px";
-					} else { //宽<长
-						data.height = parseInt(event.height / 2) + "px";
-					}
-					mod.compressImageTo_xx(data, successCallBack, errorCallBack);
+					formData.append('image', file);
 				}
-			},
-			function(error) {
-				//图片压缩失败
-				//var code = error.code; // 错误编码
-				//var message = error.message; // 错误描述信息
-				//console.log('### ERROR ### compressImageTo_xx 失败 ' + JSON.stringify(error));
-				errorCallBack(error);
-			}
-		);
+				mod.postFile(formData, callback);
+			})
+		}
+		reader.readAsDataURL(file);
+	}
+	mod.getSquareFile = function(file, width, callback) {
+		var reader = new FileReader();
+		reader.onload = function() {
+			var result = this.result;
+			var formData = new FormData();
+			mod.getImgInfo(result, function(img, imgInfo) {
+				console.log("获取的文件信息：" + JSON.stringify(imgInfo));
+				console.log("原图尺寸：" + result.length);
+				var newDataUrl = mod.getSquareCanvasUrl(img, mod.getSquareImageSize(imgInfo, width));
+				var blob = mod.base64ToBlob(newDataUrl, 'image/jpeg');
+				console.log("blob.type:" + blob.type);
+				console.log('要传递的文件大小：' + blob.size);
+				callback(blob);
+			})
+		}
+		reader.readAsDataURL(file);
+	}
+	/**
+	 * 获取方形图片的裁剪大小
+	 * @param {Object} imgInfo
+	 * @param {Object} width
+	 */
+	mod.getSquareImageSize = function(imgInfo, width) {
+		console.log("*****裁剪成方形：getSquareImage*****");
+		var squreInfo = {};
+		if(imgInfo.width >= imgInfo.height) {
+			squreInfo.direction = 0; //0 为左右裁剪
+		} else {
+			squreInfo.direction = 1; //上下裁剪
+		}
+		squreInfo.distance = Math.abs(squreInfo.width - squreInfo.height) / 2;
+		squreInfo.sideLength = width;
+		return squreInfo; //获取方形图片的信息
 	}
 
+	mod.getSquareCanvasUrl = function(img, squareInfo) {
+		console.log("*****重绘图片的宽高******");
+		console.log("orientation:" + orientation);
+		var imageType = 'image/jpeg',
+			imageArgu = 0.7;
+		var canvas = document.createElement('canvas');
+		canvas.width = squareInfo.sideLength;
+		canvas.height = suitableSize.sideLength;
+		var ctx = canvas.getContext('2d');
+		var drawLeft = 0,
+			drawRight = 0;
+		if(squareInfo.direction === 0) {
+			drawLeft = -squareInfo.distance;
+		} else {
+			drawRight = -squareInfo.distance;
+		}
+		ctx.drawImage(img, drawLeft, drawRight, suitableSize.width, suitableSize.height);
+		return canvas.toDataURL(imageType, imageArgu);
+	}
+	mod.postFile = function(formData, callback) {
+		console.log("开始上传");
+		//		console.log("url="+consts.UPLOADURL+"data="+formData);
+		jQuery.ajax({
+				url: consts.UPLOADURL,
+				type: "POST",
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: formData,
+				dataType: 'json',
+				success: function(response) {
+					console.log("上传文件获取的回调：" + JSON.stringify(response));
+					callback(response);
+				},
+				error: function(errRes) {
+					callback(errRes);
+					console.log("发生未知错误：" + JSON.stringify(errRes));
+					console.log(errRes);
+				}
+			})
+			.done(function(e) {
+				console.log("已完成")
+				console.log(e);
+				console.log(JSON.stringify(e.message));
+			})
+			.fail(function() {
+				console.log("failed!");
+			})
+			.always(function() {
+				console.log("complete!");
+			});
+	}
+
+	/**
+	 * 生成一张图片
+	 * @param {Object} img 原始图片元素
+	 * @param {Object} suitableSize 压缩的配置
+	 * @param {Object} orientation 旋转角度 -1
+	 */
+	mod.getCanvasDataUrl = function(img, suitableSize, orientation) {
+		console.log("*****重绘图片的宽高******");
+		console.log("orientation:" + orientation);
+		var imageType = 'image/jpeg',
+			imageArgu = 0.7;
+		var canvas = document.createElement('canvas');
+		canvas.width = suitableSize.width;
+		canvas.height = suitableSize.height;
+		var ctx = canvas.getContext('2d');
+		switch(orientation) {
+			case 6: //需要顺时针（向左）90度旋转
+				canvas.width = suitableSize.height;
+				canvas.height = suitableSize.width;
+				ctx.translate(suitableSize.height, 0);
+				ctx.rotate(90 * Math.PI / 180);
+				ctx.drawImage(img, 0, 0, suitableSize.width, suitableSize.height);
+				break;
+			case 8: //需要逆时针（向右）90度旋转
+				canvas.width = suitableSize.height;
+				canvas.height = suitableSize.width;
+				ctx.translate(0, suitableSize.width);
+				ctx.rotate(-90 * Math.PI / 180);
+				ctx.drawImage(img, 0, 0, suitableSize.width, suitableSize.height);
+				break;
+			case 3: //需要180度旋转
+				ctx.translate(suitableSize.width, suitableSize.height);
+				ctx.rotate(-180 * Math.PI / 180);
+				ctx.drawImage(img, 0, 0, suitableSize.width, suitableSize.height);
+				break;
+			case -1: //居中裁剪成方形
+
+				break;
+			default:
+				ctx.drawImage(img, 0, 0, suitableSize.width, suitableSize.height);
+				break;
+		}
+
+		return canvas.toDataURL(imageType, imageArgu);
+	}
+	mod.getSuitableSize = function(imgInfo, multi) {
+		imgInfo.width = imgInfo.width / multi;
+		imgInfo.height = imgInfo.height / multi;
+		console.log("获取的图片要裁剪的尺寸：" + JSON.stringify(imgInfo));
+		return imgInfo;
+	}
+	mod.getImgInfo = function(result, callback) {
+		var img = new Image();
+		var imgInfo = {};
+		img.onload = function() {
+			console.log(img);
+			imgInfo.width = img.naturalWidth;
+			imgInfo.height = img.naturalHeight;
+			console.log("获取的图片宽高：" + JSON.stringify(imgInfo));
+			callback(img, imgInfo);
+		}
+		img.src = result;
+	}
+
+	mod.base64ToBlob = function(base64Url, mime) {
+		var base64 = base64Url.replace(/^data:image\/(png|jpeg);base64,/, "");
+		//		console.log("处理后的database64:" + base64);
+		var sliceSize = 1024;
+		var byteChars = window.atob(base64);
+		var byteArrays = [];
+
+		for(var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+			var slice = byteChars.slice(offset, offset + sliceSize);
+
+			var byteNumbers = new Array(slice.length);
+			for(var i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			}
+			var byteArray = new Uint8Array(byteNumbers);
+			byteArrays.push(byteArray);
+		}
+		console.log("文件类型：" + mime);
+		return new Blob(byteArrays, {
+			type: mime
+		});
+	}
 	return mod;
-})(compress || {})
+})(compress || {});
