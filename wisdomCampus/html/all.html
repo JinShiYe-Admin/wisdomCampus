@@ -165,8 +165,75 @@
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../js/publicProtocol.js"></script>
 		<script>
+			var datasource = {
+				notice: {},
+
+			}
+			var data_current = [];
+			var refreshObj = {
+				refreshFlag: 0,
+				pageIndex: 1,
+				TotalPage: 1,
+				sendFlag: 0
+			}
 			mui.init();
+			var createFragment = function(ul, index, data) {
+				var length = ul.querySelectorAll('li').length;
+				var fragment = document.createDocumentFragment();
+				var li;
+				for(var i = 0; i < data.length; i++) {
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					if(index == 0) {
+						li.innerHTML = '<div>' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">' +
+							'[未阅]</span>学校首次召开家长会，希望各位12233488888888888888' +
+							'</p>' +
+							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							'王主任|2017/11/12 13:30' +
+							'</p>' +
+							'</div>'
+					} else if(index == 1) {
+						li.innerHTML = '<div>' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">' +
+							'[未阅]</span>学校首次召开家长会，希望各位12233488888888888888' +
+							'</p>' +
+							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							'王主任|2017/11/12 13:30' +
+							'</p>' +
+							'</div>'
+					}
+
+					fragment.appendChild(li);
+				}
+				return fragment;
+			};
+			var send_receive = function(flag) {
+				var flag2 = 1 - flag;
+				$('#a' + flag).css({
+					'color': 'deepskyblue'
+				});
+				$('#a' + flag2).css({
+					'color': 'black'
+				});
+				if(flag == 0) {
+					refreshObj.sendFlag = 0;
+					data_current = datasource.notice.data_send;
+					var ul = document.querySelector('.mui-table-view');
+					ul.innerHTML = '';
+					ul.appendChild(createFragment(ul, 0, data_current));
+
+				} else {
+					refreshObj.sendFlag = 1;
+					data_current = datasource.notice.data_recevice;
+					var ul = document.querySelector('.mui-table-view');
+					ul.innerHTML = '';
+					ul.appendChild(createFragment(ul, 0, data_current));
+				}
+
+			};
 			(function($) {
 				//阻尼系数
 				var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -175,70 +242,113 @@
 					indicators: true, //是否显示滚动条
 					deceleration: deceleration
 				});
+				var getNotice = function(sendFlag, callback) { //10.获取发送的通知公告列表
+					var tempData = {
+						schoolId: '1', //学校ID
+						sendManId: 'konglm', //发送人ID
+						sendMan: '', //发送人ID
+						receiveManId: '2', //接收人ID
+						title: '', //标题
+						status: '0', //状态,0 全部,1 发出,2 撤销
+						progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+						beginTime: '20170101', //查询开始时间
+						endTime: '20180127', //查询结束时间
+						pageIndex: refreshObj.pageIndex, //当前页数
+						pageSize: '10' //每页记录数
+					}
+					if(sendFlag == 0) {
+						getSendNoticePro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+								refreshObj.TotalPage = data.RspData.TotalPage;
+
+								if(refreshObj.refreshFlag == 0) {
+									refreshObj.pageIndex = 1;
+									datasource.notice.data_send = data.RspData.Data
+								} else {
+									refreshObj.pageIndex++;
+									datasource.notice.data_send = datasource.notice.data_send.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else {
+						getReceiveNoticePro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+								refreshObj.TotalPage = data.RspData.TotalPage;
+
+								if(refreshObj.refreshFlag == 0) {
+									refreshObj.pageIndex = 1;
+									datasource.notice.data_recevice = data.RspData.Data
+								} else {
+									refreshObj.pageIndex++;
+									datasource.notice.data_recevice = datasource.notice.data_recevice.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					}
+				}
 				$.ready(function() {
+
+					getNotice(0, function(data) {
+						var ul = document.querySelector('.mui-table-view');
+						ul.appendChild(createFragment(ul, 0, data));
+					});
+					getNotice(1, function(data) {
+
+					});
 					//循环初始化所有下拉刷新，上拉加载。
 					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
 						$(pullRefreshEl).pullToRefresh({
 							down: {
 								callback: function() {
 									var self = this;
-									setTimeout(function() {
-										var ul = self.element.querySelector('.mui-table-view');
-										ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
-										self.endPullDownToRefresh();
-									}, 1000);
+									refreshObj.refreshFlag = 0;
+									refreshObj.pageIndex = 1;
+									if(index == 0) {
+										getNotice(refreshObj.sendFlag, function(data) {
+											var ul = self.element.querySelector('.mui-table-view');
+											ul.innerHTML = '';
+											ul.appendChild(createFragment(ul, index, data));
+											self.endPullDownToRefresh();
+											self.refresh(true);
+
+										})
+									} else {
+
+									}
+
 								}
 							},
 							up: {
 								callback: function() {
 									var self = this;
-									setTimeout(function() {
-										var ul = self.element.querySelector('.mui-table-view');
-										ul.appendChild(createFragment(ul, index, 5));
-										self.endPullUpToRefresh();
-									}, 1000);
+									if(refreshObj.pageIndex < refreshObj.TotalPage) {
+										refreshObj.refreshFlag = 1;
+										if(index == 0) {
+											getNotice(refreshObj.sendFlag, function(data) {
+												var ul = self.element.querySelector('.mui-table-view');
+												ul.appendChild(createFragment(ul, index, data));
+												self.endPullUpToRefresh();
+
+											})
+										} else {
+
+										}
+
+									} else {
+										self.endPullUpToRefresh(true);
+									}
+
 								}
 							}
 						});
 					});
-					var createFragment = function(ul, index, count, reverse) {
-						var length = ul.querySelectorAll('li').length;
-						var fragment = document.createDocumentFragment();
-						var li;
-						for(var i = 0; i < count; i++) {
-							li = document.createElement('li');
-							li.className = 'mui-table-view-cell';
 
-							if(index == 0) {
-
-							} else if(index == 1) {
-
-							}
-							li.innerHTML = '<div>' +
-								'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">' +
-								'[未阅]</span>学校首次召开家长会，希望各位12233488888888888888' +
-								'</p>' +
-								'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-								'王主任|2017/11/12 13:30' +
-								'</p>' +
-								'</div>'
-							fragment.appendChild(li);
-						}
-						return fragment;
-					};
 				});
 			})(mui);
-
-			function send_receive(flag) {
-				var flag2 = 1 - flag;
-				$('#a' + flag).css({
-					'color': 'deepskyblue'
-				});
-				$('#a' + flag2).css({
-					'color': 'black'
-				});
-
-			}
 		</script>
 	</body>
 
