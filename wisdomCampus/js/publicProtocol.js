@@ -13,6 +13,90 @@ function getUUID() {
 	return uuid;
 }
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+function getUUID111() {
+	// Private array of chars to use  
+	var tempstr = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+	var tempStr1 = Math.uuidFast(tempstr);
+	console.log('tempStr1:',tempStr1);
+//	F023A883-AA40-4989-B0CF-91D3DFBBB8D0
+//1FCAAEC1-180D-41C0-9D1B-7352CFDD7D9B
+}
+
+//	Math.uuid = function(len, radix) {
+//		var chars = CHARS,
+//			uuid = [],
+//			i;
+//		radix = radix || chars.length;
+//
+//		if(len) {
+//			// Compact form  
+//			for(i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+//		} else {
+//			// rfc4122, version 4 form  
+//			var r;
+//
+//			// rfc4122 requires these characters  
+//			uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+//			uuid[14] = '4';
+//
+//			// Fill in random data.  At i==19 set the high bits of clock sequence as  
+//			// per rfc4122, sec. 4.1.5  
+//			for(i = 0; i < 36; i++) {
+//				if(!uuid[i]) {
+//					r = 0 | Math.random() * 16;
+//					uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+//				}
+//			}
+//		}
+//
+//		return uuid.join('');
+//	};
+	Math.uuidFast = function(tempStr) {
+		var chars = tempStr,
+			uuid = new Array(36),
+			rnd = 0,
+			r;
+		for(var i = 0; i < 36; i++) {
+			if(i == 8 || i == 13 || i == 18 || i == 23) {
+				uuid[i] = '-';
+			} else if(i == 14) {
+				uuid[i] = '4';
+			} else {
+				if(rnd <= 0x02) rnd = 0x2000000 + (Math.random() * 0x1000000) | 0;
+				r = rnd & 0xf;
+				rnd = rnd >> 4;
+				uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+			}
+		}
+		return uuid.join('');
+	};
+
+	// A more compact, but less performant, RFC4122v4 solution:  
+//	Math.uuidCompact = function() {
+//		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//			var r = Math.random() * 16 | 0,
+//				v = c == 'x' ? r : (r & 0x3 | 0x8);
+//			return v.toString(16);
+//		});
+//	};
+
 //发送对应的网站协议，根据页面传送的data
 //var unitWebsitePro = function(data0, callback) {
 //	xhrPost('https://jsypay.jiaobaowang.net/wxth/appschweb/schwebapi.aspx', JSON.stringify(data0), callback);
@@ -60,7 +144,7 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
-		console.log('signtemp:'+signTemp+',sign:'+sign);
+		console.log('signtemp:' + signTemp + ',sign:' + sign);
 		//组装发送握手协议需要的data
 		//合并对象
 		var tempData = $.extend(encryData, commonData);
@@ -68,7 +152,7 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 		tempData.sign = sign;
 		// 等待的对话框
 		var urlArr = url.split('/');
-		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', tempData);
+		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
 		//发送协议
 
 		mui.ajax(url, {
@@ -79,7 +163,8 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 			timeout: 30000,
 			//			success: callback,
 			success: function(data) {
-				console.log(urlArr[urlArr.length - 1] + "接口获取的值:", data);
+				console.log(urlArr[urlArr.length - 1] + "接口获取的值:", JSON.stringify(data));
+				callback(data);
 			},
 			error: function(xhr, type, errorThrown) {
 				console.log("网络连接失败" + url + ":" + type + "," + errorThrown + ":", xhr);
@@ -101,31 +186,31 @@ var postDataEncry1 = function(encryData, commonData, flag) {
 	//判断是否需要添加共用数据
 	if(flag == 1) {
 		//获取个人信息
-//		var personalUTID = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).utid;
-//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
-//		var comData = {
-//			uuid: plus.device.uuid,
-//			utid: personalUTID,
-//			token: personalToken,
-//			appid: plus.runtime.appid
-//		};
-//		commonData = $.extend(commonData, comData);
+		//		var personalUTID = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).utid;
+		//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
+		//		var comData = {
+		//			uuid: plus.device.uuid,
+		//			utid: personalUTID,
+		//			token: personalToken,
+		//			appid: plus.runtime.appid
+		//		};
+		//		commonData = $.extend(commonData, comData);
 	} else if(flag == 2) {
 		//获取个人信息
-//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
-//		var comData = {
-//			uuid: plus.device.uuid,
-//			token: personalToken,
-//			appid: plus.runtime.appid
-//		};
-//		commonData = $.extend(commonData, comData);
+		//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
+		//		var comData = {
+		//			uuid: plus.device.uuid,
+		//			token: personalToken,
+		//			appid: plus.runtime.appid
+		//		};
+		//		commonData = $.extend(commonData, comData);
 	} else if(flag == 3) {
 		//获取个人信息
-//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
-//		var comData = {
-//			token: personalToken
-//		};
-//		commonData = $.extend(commonData, comData);
+		//		var personalToken = window.myStorage.getItem(window.storageKeyName.PERSONALINFO).token;
+		//		var comData = {
+		//			token: personalToken
+		//		};
+		//		commonData = $.extend(commonData, comData);
 	}
 	//将对象转为数组
 	var arr0 = [];
@@ -155,11 +240,13 @@ var xhrPost = function(url, data, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.timeout = 30000; //10秒超时
+	xhr.withCredentials = true;
 	xhr.onload = function(e) {
-		console.log("XHRP:onload:", e);
-		if(this.readyState === 4 && this.status === 200) {
+		console.log("XHRP:onload:", JSON.stringify(e));
+		console.log('this.readyState:', this.readyState, ',this.status', this.status);
+		if(this.readyState === 4 && this.status === 500) {
 			var success_data = JSON.parse(this.responseText);
-			console.log('XHRP-Success:', success_data);
+			console.log('XHRP-Success:', JSON.stringify(success_data));
 			if(success_data.RspCode == 0013) {
 				callback({
 					RspCode: 404,
@@ -225,7 +312,7 @@ var jQAjaxPost = function(url, data, callback) {
 //10.获取发送的通知公告列表
 var shakeHandPro = function(callback) {
 	var uuid = getUUID();
-	console.log('uuid:'+uuid);
+	console.log('uuid:' + uuid);
 	//拼接登录需要的签名
 	var commonData = {
 		uuid: '16b02e57b4dfb22',
@@ -239,32 +326,17 @@ var shakeHandPro = function(callback) {
 	};
 	//拼接登录需要的签名
 	var signTemp = arr1.sort().join('&');
-	console.log('signtemp:'+signTemp);
+	console.log('signtemp:' + signTemp);
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
-		console.log('signTemp:'+signTemp+',sign:'+sign);
+		console.log('signTemp:' + signTemp + ',sign:' + sign);
 		//组装发送握手协议需要的data
 		//合并对象
 		var tempData = $.extend({}, commonData);
 		//添加签名
 		tempData.sign = sign;
-		var tempppp = '{"uuid":"16b02e57b4dfb22","shaketype":"login","appid":"appid","sign":"gcdzLsWf+vFBXIQyd1NTEMkqktM="}';
-		mui.ajax('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', {
-			data: JSON.stringify(tempppp),
-			dataType: 'json',
-			type: 'post',
-			contentType: "application/json",
-			timeout: 300000,
-			//			success: callback,
-			success: function(data) {
-				console.log("接口获取的值:"+ data);
-			},
-			error: function(xhr, type, errorThrown) {
-				console.log("网络连接失败" + ":" + type + "," + errorThrown + ":", xhr);
-			}
-		});
 		//发送协议
-//		jQAjaxPost('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', JSON.stringify(tempData), callback);
+		xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', JSON.stringify(tempData), callback);
 	});
 	//	data0 = extendParameter(data0);
 	//	xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi', JSON.stringify(data0), callback);
