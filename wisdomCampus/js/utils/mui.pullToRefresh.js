@@ -34,7 +34,7 @@
 					show: true,
 					contentinit: '上拉加载更多',
 					contentdown: '上拉加载更多',
-					contentrefresh: '<img src="../../image/utils/loading.gif" style="width:16px;vertical-align:text-bottom;"/>正在加载...',
+					contentrefresh: '<img src="../img/firstPage/loading.gif" style="width:16px;vertical-align:text-bottom;"/>正在加载...',
 					contentnomore: '没有更多了',
 					callback: false
 				},

@@ -1,1 +1,12 @@
-null
+{
+  "html/home.html": {
+    "refer": [
+      "html/all.html"
+    ]
+  },
+  "html/all.html": {
+    "refer": [
+      "html/home.html"
+    ]
+  }
+}
