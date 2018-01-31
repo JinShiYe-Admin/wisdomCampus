@@ -38,94 +38,119 @@
 			});
 
 			var getUserInfo = function() {
-//				var tempStr = generateUUID();
-//				console.log('tempStr:',tempStr);
-//				62f8d903-1671-45f9-96c2-62d112441463
-//				getUUID111();
+				//				var tempStr = generateUUID();
+				//				console.log('tempStr:',tempStr);
+				//				62f8d903-1671-45f9-96c2-62d112441463
+				//				getUUID111();
 				//10.获取发送的通知公告列表
-//								var tempData = {
-//									schoolId:'1',//学校ID
-//									sendManId:'konglm',//发送人ID
-//									title:'',//标题
-//									status:'0',//状态,0 全部,1 发出,2 撤销
-//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-//									beginTime:'20170101',//查询开始时间
-//									endTime:'20180127',//查询结束时间
-//									pageIndex:'1',//当前页数
-//									pageSize:'10'//每页记录数
-//								}
-//								getSendNoticePro(tempData,function function_name () {
-//									
-//								});
+				//								var tempData = {
+				//									schoolId:'1',//学校ID
+				//									sendManId:'konglm',//发送人ID
+				//									title:'',//标题
+				//									status:'0',//状态,0 全部,1 发出,2 撤销
+				//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+				//									beginTime:'20170101',//查询开始时间
+				//									endTime:'20180127',//查询结束时间
+				//									pageIndex:'1',//当前页数
+				//									pageSize:'10'//每页记录数
+				//								}
+				//								getSendNoticePro(tempData,function function_name () {
+				//									
+				//								});
 
 				//11.获取收到的通知公告列表（接收人为单人）
-//								var tempData = {
-//									schoolId:'1',//学校ID
-//									receiveManId:'2',//接收人ID
-//									title:'',//标题
-//									sendMan:'',//发布人姓名
-//									status:'0',//状态,0 全部,1 发出,2 撤销
-//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-//									beginTime:'20170101',//查询开始时间
-//									endTime:'20180127',//查询结束时间
-//									pageIndex:'1',//当前页数
-//									pageSize:'10'//每页记录数
-//								}
-//								getReceiveNoticePro(tempData,function function_name () {
-//									
-//								});
+				//								var tempData = {
+				//									schoolId:'1',//学校ID
+				//									receiveManId:'2',//接收人ID
+				//									title:'',//标题
+				//									sendMan:'',//发布人姓名
+				//									status:'0',//状态,0 全部,1 发出,2 撤销
+				//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+				//									beginTime:'20170101',//查询开始时间
+				//									endTime:'20180127',//查询结束时间
+				//									pageIndex:'1',//当前页数
+				//									pageSize:'10'//每页记录数
+				//								}
+				//								getReceiveNoticePro(tempData,function function_name () {
+				//									
+				//								});
 
 				//12.通过ID获取通知公告
-//								var tempData = {
-//									noticeId: '1' //通知ID
-//								}
-//								getNoticeByIdPro(tempData, function function_name() {
-//				
-//								});
-				
-				//17.获取事务及文件申请列表
-				var tempData = {
-									schoolId:'1',//学校ID
-									applyManId:'konglm',//申请人ID
-									title:'',//标题
-									status:'0',//状态,0 全部,1 发出,2 撤销，3 被退回
-									progress:'0',//进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
-									beginTime:'20170101',//查询开始时间
-									endTime:'20180131',//查询结束时间
-									pageIndex:'1',//当前页数
-									pageSize:'10'//每页记录数，0 为全部
-								}
-								getAffairApplyPro(tempData,function function_name () {
-									
-								});
+				//								var tempData = {
+				//									noticeId: '1' //通知ID
+				//								}
+				//								getNoticeByIdPro(tempData, function function_name() {
+				//				
+				//								});
 
-//				var enData0 = {};
-//				//不需要加密的数据
-//				var comData0 = {
-//					uuid: '16b02e57b4dfb22',
-//					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-//					appid: 'appid'
-//				};
-//				//发送网络请求，data为网络返回值
-//				postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
-//					console.log('2121212');
-////					window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
-//					var enData1 = {
-//						uid:'ceshi01',
-//						pw:'123456'
-//					};
-//					//不需要加密的数据
-//					var comData1 = {
-//						uuid: '16b02e57b4dfb22',
-//						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-//						appid: 'appid',
-//						schid:'100005',
-//						utp:'0'
-//					};
-//					postDataEncry('Login', enData1, comData1, 0, function(data) {
-//						
-//					});
+				//17.获取事务及文件申请列表
+//				var tempData = {
+//					schoolId: '1', //学校ID
+//					applyManId: 'konglm', //申请人ID
+//					title: '', //标题
+//					status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
+//					progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
+//					beginTime: '20170101', //查询开始时间
+//					endTime: '20180131', //查询结束时间
+//					pageIndex: '1', //当前页数
+//					pageSize: '10' //每页记录数，0 为全部
+//				}
+//				getAffairApplyPro(tempData, function function_name() {
+//
 //				});
+				
+				//18.获取事务及文件审批列表（审批人为单人）
+//				var tempData = {
+//					schoolId: '1', //学校ID
+//					approveManId: '2', //审批人ID
+//					title: '', //标题
+//					applyMan:'',//申请人姓名
+//					status: '0', //状态,0 全部,1 同意,2 退回，3 等待，4 未批
+//					progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
+//					beginTime: '20170101', //查询开始时间
+//					endTime: '20180131', //查询结束时间
+//					pageIndex: '1', //当前页数
+//					pageSize: '10' //每页记录数，0 为全部
+//				}
+//				getAffairApprovePro(tempData, function function_name() {
+//
+//				});
+				
+				//19.通过ID获取事务及文件申请
+				var tempData = {
+					applyId: '3' //申请ID
+				}
+				getAffairApplyByIdPro(tempData, function function_name() {
+
+				});
+
+				//				var enData0 = {};
+				//				//不需要加密的数据
+				//				var comData0 = {
+				//					uuid: '16b02e57b4dfb22',
+				//					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+				//					appid: 'appid'
+				//				};
+				//				//发送网络请求，data为网络返回值
+				//				postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
+				//					console.log('2121212');
+				////					window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+				//					var enData1 = {
+				//						uid:'ceshi01',
+				//						pw:'123456'
+				//					};
+				//					//不需要加密的数据
+				//					var comData1 = {
+				//						uuid: '16b02e57b4dfb22',
+				//						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+				//						appid: 'appid',
+				//						schid:'100005',
+				//						utp:'0'
+				//					};
+				//					postDataEncry('Login', enData1, comData1, 0, function(data) {
+				//						
+				//					});
+				//				});
 			}
 		</script>
 	</body>

@@ -355,6 +355,7 @@ var jQAjaxPost = function(url, data, callback) {
 
 //智慧校园协议
 var tempAttendUrl = 'https://jbyj.jiaobaowang.net/SchoolOAService/notice/';
+var tempAttendUrl1 = 'https://jbyj.jiaobaowang.net/SchoolOAService/approve/';
 
 //合并参数
 var extendParameter = function(data0) {
@@ -388,23 +389,23 @@ var getNoticeByIdPro = function(data0, callback) {
 //16.审批事务及文件申请
 var setAffairApprovePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'setAffairApprove', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'setAffairApprove', JSON.stringify(data0), callback);
 }
 
 //17.获取事务及文件申请列表
 var getAffairApplyPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getAffairApply', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApply', JSON.stringify(data0), callback);
 }
 
 //18.获取事务及文件审批列表（审批人为单人）
 var getAffairApprovePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getAffairApprove', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApprove', JSON.stringify(data0), callback);
 }
 
 //19.通过ID获取事务及文件申请
 var getAffairApplyByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getAffairApplyById', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApplyById', JSON.stringify(data0), callback);
 }
