@@ -43,49 +43,61 @@
 //				62f8d903-1671-45f9-96c2-62d112441463
 //				getUUID111();
 				//10.获取发送的通知公告列表
-								var tempData = {
-									schoolId:'1',//学校ID
-									sendManId:'konglm',//发送人ID
-									title:'',//标题
-									status:'0',//状态,0 全部,1 发出,2 撤销
-									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-									beginTime:'20170101',//查询开始时间
-									endTime:'20180127',//查询结束时间
-									pageIndex:'1',//当前页数
-									pageSize:'10'//每页记录数
-								}
-								getSendNoticePro(tempData,function function_name () {
-									
-								});
+//								var tempData = {
+//									schoolId:'1',//学校ID
+//									sendManId:'konglm',//发送人ID
+//									title:'',//标题
+//									status:'0',//状态,0 全部,1 发出,2 撤销
+//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+//									beginTime:'20170101',//查询开始时间
+//									endTime:'20180127',//查询结束时间
+//									pageIndex:'1',//当前页数
+//									pageSize:'10'//每页记录数
+//								}
+//								getSendNoticePro(tempData,function function_name () {
+//									
+//								});
 
 				//11.获取收到的通知公告列表（接收人为单人）
-				//				var tempData = {
-				//					schoolId:'1',//学校ID
-				//					receiveManId:'2',//接收人ID
-				//					title:'',//标题
-				//					sendMan:'',//发布人姓名
-				//					status:'0',//状态,0 全部,1 发出,2 撤销
-				//					progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-				//					beginTime:'20170101',//查询开始时间
-				//					endTime:'20180127',//查询结束时间
-				//					pageIndex:'1',//当前页数
-				//					pageSize:'10'//每页记录数
-				//				}
-				//				getReceiveNoticePro(tempData,function function_name () {
-				//					
-				//				});
+//								var tempData = {
+//									schoolId:'1',//学校ID
+//									receiveManId:'2',//接收人ID
+//									title:'',//标题
+//									sendMan:'',//发布人姓名
+//									status:'0',//状态,0 全部,1 发出,2 撤销
+//									progress:'0',//进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+//									beginTime:'20170101',//查询开始时间
+//									endTime:'20180127',//查询结束时间
+//									pageIndex:'1',//当前页数
+//									pageSize:'10'//每页记录数
+//								}
+//								getReceiveNoticePro(tempData,function function_name () {
+//									
+//								});
 
 				//12.通过ID获取通知公告
-				//				var tempData = {
-				//					noticeId: '1' //通知ID
-				//				}
-				//				getNoticeByIdPro(tempData, function function_name() {
-				//
-				//				});
-
-//												shakeHandPro(function function_name () {
-//													
-//												});
+//								var tempData = {
+//									noticeId: '1' //通知ID
+//								}
+//								getNoticeByIdPro(tempData, function function_name() {
+//				
+//								});
+				
+				//17.获取事务及文件申请列表
+				var tempData = {
+									schoolId:'1',//学校ID
+									applyManId:'konglm',//申请人ID
+									title:'',//标题
+									status:'0',//状态,0 全部,1 发出,2 撤销，3 被退回
+									progress:'0',//进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
+									beginTime:'20170101',//查询开始时间
+									endTime:'20180131',//查询结束时间
+									pageIndex:'1',//当前页数
+									pageSize:'10'//每页记录数，0 为全部
+								}
+								getAffairApplyPro(tempData,function function_name () {
+									
+								});
 
 //				var enData0 = {};
 //				//不需要加密的数据

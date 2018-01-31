@@ -321,37 +321,37 @@ var jQAjaxPost = function(url, data, callback) {
 }
 
 //10.获取发送的通知公告列表
-var shakeHandPro = function(callback) {
-	//	var uuid = getUUID();
-	//	console.log('uuid:' + uuid);
-	//拼接登录需要的签名
-	var commonData = {
-		uuid: '16b02e57b4dfb22',
-		shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-		appid: 'appid'
-	}
-	//将对象转为数组
-	var arr1 = [];
-	for(var item in commonData) {
-		arr1.push(item + '=' + commonData[item]);
-	};
-	//拼接登录需要的签名
-	var signTemp = arr1.sort().join('&');
-	console.log('signtemp:' + signTemp);
-	//生成签名，返回值sign则为签名
-	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
-		console.log('signTemp:' + signTemp + ',sign:' + sign);
-		//组装发送握手协议需要的data
-		//合并对象
-		var tempData = $.extend({}, commonData);
-		//添加签名
-		tempData.sign = sign;
-		//发送协议
-		xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', JSON.stringify(tempData), callback);
-	});
-	//	data0 = extendParameter(data0);
-	//	xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi', JSON.stringify(data0), callback);
-}
+//var shakeHandPro = function(callback) {
+//	//	var uuid = getUUID();
+//	//	console.log('uuid:' + uuid);
+//	//拼接登录需要的签名
+//	var commonData = {
+//		uuid: '16b02e57b4dfb22',
+//		shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+//		appid: 'appid'
+//	}
+//	//将对象转为数组
+//	var arr1 = [];
+//	for(var item in commonData) {
+//		arr1.push(item + '=' + commonData[item]);
+//	};
+//	//拼接登录需要的签名
+//	var signTemp = arr1.sort().join('&');
+//	console.log('signtemp:' + signTemp);
+//	//生成签名，返回值sign则为签名
+//	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
+//		console.log('signTemp:' + signTemp + ',sign:' + sign);
+//		//组装发送握手协议需要的data
+//		//合并对象
+//		var tempData = $.extend({}, commonData);
+//		//添加签名
+//		tempData.sign = sign;
+//		//发送协议
+//		xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', JSON.stringify(tempData), callback);
+//	});
+//	//	data0 = extendParameter(data0);
+//	//	xhrPost('https://jsypay.jiaobaowang.net/useradminwebapi', JSON.stringify(data0), callback);
+//}
 
 //智慧校园协议
 var tempAttendUrl = 'https://jbyj.jiaobaowang.net/SchoolOAService/notice/';
@@ -382,5 +382,29 @@ var getReceiveNoticePro = function(data0, callback) {
 //12.通过ID获取通知公告
 var getNoticeByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getNoticeById ', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl + 'getNoticeById', JSON.stringify(data0), callback);
+}
+
+//16.审批事务及文件申请
+var setAffairApprovePro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'setAffairApprove', JSON.stringify(data0), callback);
+}
+
+//17.获取事务及文件申请列表
+var getAffairApplyPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'getAffairApply', JSON.stringify(data0), callback);
+}
+
+//18.获取事务及文件审批列表（审批人为单人）
+var getAffairApprovePro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'getAffairApprove', JSON.stringify(data0), callback);
+}
+
+//19.通过ID获取事务及文件申请
+var getAffairApplyByIdPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'getAffairApplyById', JSON.stringify(data0), callback);
 }
