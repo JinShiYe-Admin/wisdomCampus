@@ -9,6 +9,9 @@
 		<script type="text/javascript" src="../js/mui.min.js"></script>
 		<script type="text/javascript" src="../js/utils/utils.js"></script>
 		<script type="text/javascript" src="../js/utils/storageutil.js"></script>
+		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
+		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
+		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
 		<script type="text/javascript">
 		</script>
 
@@ -20,7 +23,7 @@
 			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;">登录</div>
 			<div class="mui-input-row">
 				<label style="margin-top: -5px;"><image src="../img/login/username.png" style="width: 30px;height: 30px;" /></label>
-				<input id='account' class="mui-input-clear mui-input" placeholder="请输入用户名">
+				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 5px 60px ;" />
 
@@ -49,7 +52,7 @@
 	<script src='../js/utils/sortSign.js'></script>
 	<script src="../js/utils/myStorage.js"></script>
 	<script src="../js/utils/storageKeyName.js"></script>
-	<script src="../js/jquery-weui.min.jsi"></script>
+	<script src="../js/jquery-weui.min.js"></script>
 	<script>
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");
@@ -58,9 +61,7 @@
 			console.log('tempName:' + tempName + ',tempPW' + tempPW);
 			//判断输入是否符合要求
 			if(checkInput(tempName)) {
-				console.log('1111');
 				if(checkInput(tempPW)) {
-					console.log('33333');
 					//握手
 					var enData0 = {};
 					//不需要加密的数据
@@ -69,6 +70,7 @@
 						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
 						appid: 'appid' //系统所分配的应用ID
 					};
+					$.showLoading();
 					//发送网络请求，data为网络返回值
 					postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
 						console.log('2121212');
@@ -88,6 +90,7 @@
 							};
 							//登录
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
+								$.hideLoading();
 								if(data1.RspCode == 0) {
 									window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
@@ -102,15 +105,16 @@
 								}
 							});
 						} else {
+							$.hideLoading();
 							mui.toast(data.RspTxt);
 						}
 
 					});
 				} else {
-					console.log('4444');
+					
 				}
 			} else {
-				console.log('2222');
+				
 			}
 		});
 		//添加课程时，判断是否输入了值，有没有重复
