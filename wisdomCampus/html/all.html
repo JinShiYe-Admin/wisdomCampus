@@ -129,13 +129,7 @@
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul class="mui-table-view">
-									<li class="mui-table-view-cell">
-										<div>
-											<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: red;">[未阅]</span>学校首次召开家长会，希望各位12233488888888888888</p>
-											<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;margin-left: 5px;font-size:10px;color:#999999">
-												王主任|2017/11/12 13:30</p>
-										</div>
-									</li>
+	
 
 								</ul>
 							</div>
@@ -184,15 +178,16 @@
 				var fragment = document.createDocumentFragment();
 				var li;
 				for(var i = 0; i < data.length; i++) {
+					var model = data[i];
 					li = document.createElement('li');
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">' +
-							'[未阅]</span>学校首次召开家长会，希望各位12233488888888888888' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
+							model.NoticeStatus+']</span>'+model.NoticeTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-							'王主任|2017/11/12 13:30' +
+							model.SendManName+"|"+model.SendTime +
 							'</p>' +
 							'</div>'
 					} else if(index == 1) {
