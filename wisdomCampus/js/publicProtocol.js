@@ -147,12 +147,12 @@ var jQAjaxPost = function(url, data, callback) {
 //commonData,不需要加密的对象
 //flag,0表示不需要合并共用数据，1为添加uuid、utid、token、appid普通参数，2为uuid、appid、token
 //callback,返回值
-var postDataEncry = function(url, encryData, commonData, flag,shakeHand, callback) {
+var postDataEncry = function(url, encryData, commonData, flag, callback) {
 	var tempUrl = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';
 	url = tempUrl + url;
 	console.log('url:', url);
 	//拼接登录需要的签名
-	var signTemp = postDataEncry1(encryData, commonData, flag,shakeHand);
+	var signTemp = postDataEncry1(encryData, commonData, flag);
 
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
@@ -183,12 +183,12 @@ var postDataEncry = function(url, encryData, commonData, flag,shakeHand, callbac
 }
 
 //拼接参数
-var postDataEncry1 = function(encryData, commonData, flag,shakeHand) {
+var postDataEncry1 = function(encryData, commonData, flag) {
 	//循环
 	var tempStr = '';
 	for(var tempData in encryData) {
 		//对value进行加密
-		var encryptStr = RSAEncrypt.enctype(encryData[tempData],shakeHand);
+		var encryptStr = RSAEncrypt.enctype(encryData[tempData]);
 		//修改值
 		encryData[tempData] = encryptStr;
 	}

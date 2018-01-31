@@ -183,6 +183,70 @@ var storageKeyName = (function(mod) {
 	mod.CODERECORDVIDEO = 0; //录像
 	mod.CODEPLAYVIDEO = 1; //播放视频
 	//---Activity的code---end---
+	
+	/**
+	 * 在本地存永久数据
+	 * @param {Object} key
+	 * @param {Object} value
+	 */
+	mod.setLocalStorage = function(key, value) {
+		localStorage.setItem(key, value);
+	}
+
+	/**
+	 * 取永久数据
+	 * @param {Object} key
+	 */
+	mod.getLocalStorage = function(key) {
+		return localStorage.getItem(key);
+	}
+
+	/**
+	 * 删除单个永久数据
+	 * @param {Object} key
+	 */
+	mod.removeLocalStorage = function(key) {
+		localStorage.removeItem(key);
+	}
+
+	/**
+	 * 删除所有的永久数据
+	 */
+	mod.clearLocalStorage = function() {
+		localStorage.clear();
+	}
+
+	/**
+	 * 在本地存临时数据
+	 * @param {Object} key
+	 * @param {Object} value
+	 */
+	mod.setSessionStorage = function(key, value) {
+		sessionStorage.setItem(key, value);
+	}
+
+	/**
+	 * 取临时数据
+	 * @param {Object} key
+	 */
+	mod.getSessionStorage = function(key) {
+		return sessionStorage.getItem(key);
+	}
+
+	/**
+	 * 删除单个临时数据
+	 * @param {Object} key
+	 */
+	mod.removeSessionStorage = function(key) {
+		sessionStorage.removeItem(key);
+	}
+
+	/**
+	 * 删除所有的临时数据
+	 */
+	mod.clearSessionStorage = function() {
+		sessionStorage.clear();
+	}
 
 	return mod;
 

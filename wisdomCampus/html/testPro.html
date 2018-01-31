@@ -95,7 +95,7 @@
 					appid: 'appid'
 				};
 				//发送网络请求，data为网络返回值
-				postDataEncry('ShakeHand', enData0, comData0, 0,{}, function(data) {
+				postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
 					console.log('2121212');
 //					window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
 					var enData1 = {
@@ -110,7 +110,7 @@
 						schid:'100005',
 						utp:'0'
 					};
-					postDataEncry('Login', enData1, comData1, 0,data.RspData, function(data) {
+					postDataEncry('Login', enData1, comData1, 0, function(data) {
 						
 					});
 				});
