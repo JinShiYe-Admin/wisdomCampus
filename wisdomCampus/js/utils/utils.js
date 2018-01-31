@@ -13,7 +13,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
 //公共方法
 var utils = (function(mod) {
 
-	mod.function getUUID() {
+	mod.getUUID = function() {
 		var s = [];
 		var hexDigits = "0123456789abcdef";
 		for(var i = 0; i < 36; i++) {
@@ -25,6 +25,18 @@ var utils = (function(mod) {
 
 		var uuid = s.join("");
 		return uuid;
+	}
+	//判断是否安卓系统
+	mod.isAndroid = function() {
+		var u = navigator.userAgent;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+		return isAndroid;
+	}
+	//判断是否ios系统
+	mod.isiOS = function() {
+		var u = navigator.userAgent;
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		return isiOS;
 	}
 
 	/**

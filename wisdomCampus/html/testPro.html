@@ -28,8 +28,8 @@
 		<script src="../js/PublicProtocol.js"></script>
 		<script src='../js/utils/sortSign.js'></script>
 		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/utils/myStorage.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/utils/storageKeyName.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../js/utils/myStorage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/storageKeyName.js" type="text/javascript" charset="utf-8"></script>-->
 
 		<script type="text/javascript">
 			$(function() {
@@ -38,9 +38,9 @@
 			});
 
 			var getUserInfo = function() {
-				var tempStr = uuidv4();
-				console.log('tempStr:',tempStr);
-//				3db5e018-3aab-4bdf-822d-350f4b1ea811  
+//				var tempStr = generateUUID();
+//				console.log('tempStr:',tempStr);
+//				62f8d903-1671-45f9-96c2-62d112441463
 //				getUUID111();
 				//10.获取发送的通知公告列表
 				//				var tempData = {
@@ -83,37 +83,37 @@
 				//
 				//				});
 
-				//								shakeHandPro(function function_name () {
-				//									
-				//								});
+//												shakeHandPro(function function_name () {
+//													
+//												});
 
-//				var enData0 = {};
-//				//不需要加密的数据
-//				var comData0 = {
-//					uuid: '16b02e57b4dfb22',
-//					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-//					appid: 'appid'
-//				};
-//				//发送网络请求，data为网络返回值
-//				postDataEncry('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/ShakeHand', enData0, comData0, 0, function(data) {
-//					console.log('2121212');
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: '16b02e57b4dfb22',
+					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+					appid: 'appid'
+				};
+				//发送网络请求，data为网络返回值
+				postDataEncry('ShakeHand', enData0, comData0, 0,{}, function(data) {
+					console.log('2121212');
 //					window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
-//					var enData1 = {
-//						uid:'ceshi01',
-//						pw:'123456'
-//					};
-//					//不需要加密的数据
-//					var comData1 = {
-//						uuid: '16b02e57b4dfb22',
-//						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-//						appid: 'appid',
-//						schid:'100005',
-//						utp:'0'
-//					};
-//					postDataEncry('https://jsypay.jiaobaowang.net/useradminwebapi/api/data/Login', enData1, comData1, 0, function(data) {
-//						
-//					});
-//				});
+					var enData1 = {
+						uid:'ceshi01',
+						pw:'123456'
+					};
+					//不需要加密的数据
+					var comData1 = {
+						uuid: '16b02e57b4dfb22',
+						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+						appid: 'appid',
+						schid:'100005',
+						utp:'0'
+					};
+					postDataEncry('Login', enData1, comData1, 0,data.RspData, function(data) {
+						
+					});
+				});
 			}
 		</script>
 	</body>

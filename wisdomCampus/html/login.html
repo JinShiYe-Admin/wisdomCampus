@@ -19,30 +19,78 @@
 		<div class="mui-content">
 			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;">登录</div>
 			<div class="mui-input-row">
-				<label style="margin-top: -5px;"><image src="../image/user-photo.png" style="width: 30px;height: 30px;" /></label>
+				<label style="margin-top: -5px;"><image src="../img/login/username.png" style="width: 30px;height: 30px;" /></label>
 				<input id='account' type="tel" class="mui-input-clear mui-input" placeholder="请输入用户名">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 5px 60px ;" />
 
 			<div class="mui-input-row ">
-				<label><image src="../image/user-photo.png" style="width: 30px;height: 30px;" /></label>
+				<label><image src="../img/login/password.png" style="width: 30px;height: 30px;" /></label>
 				<input id='password' type="password" class="mui-input-clear mui-input " placeholder="请输入6位密码">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 0px 60px ;" />
 
 			<div style="padding: 0px 20px;">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary" style="background: #13b7f6; border:none; margin-top: 30px;">登录</button>
-
 			</div>
 		</div>
 	</body>
+	<!--加密-->
+	<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+	<!---->
+	<script src='../js/lib/vconsole/vconsole.min.js'></script>
+	<script src='../js/lib/crypto-js/require.js'></script>
+	<script src='../js/utils/signHmacSHA1.js'></script>
+	<script src='../js/lib/jquery.js'></script>
+	<script src="../js/PublicProtocol.js"></script>
+	<script src='../js/utils/sortSign.js'></script>
+	<!--<script src="../js/utils/myStorage.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/utils/storageKeyName.js" type="text/javascript" charset="utf-8"></script>-->
 	<script>
 		document.getElementById("login").addEventListener('tap', function(event) {
-			console.log("登录")
-			utils.hrefSessionStorage('home.html',{})
+			console.log("登录");
+			//判断输入是否符合要求
 			
-		})
-		
+			//握手
+			var enData0 = {};
+			//不需要加密的数据
+			var comData0 = {
+				uuid: '16b02e57b4dfb22',//用户设备号
+				shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+				appid: 'appid'//系统所分配的应用ID
+			};
+			//发送网络请求，data为网络返回值
+			postDataEncry('ShakeHand', enData0, comData0, 0,{}, function(data) {
+				console.log('2121212');
+//				window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+				var enData1 = {
+					uid: 'ceshi01',//用户账号
+					pw: '123456'//用户密码
+				};
+				//不需要加密的数据
+				var comData1 = {
+					uuid: '16b02e57b4dfb22',//用户设备号
+					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+					appid: 'appid',//系统所分配的应用ID
+					schid: '100005',//学校ID
+					utp: '0'//用户类型，0老师,1家长,2学生
+				};
+				//登录
+				postDataEncry('Login', enData1, comData1, 0,data.RspData, function(data1) {
+//					window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
+					utils.hrefSessionStorage('home.html',{});
+					//判断是否安卓系统
+					if (utils.isAndroid()) {
+						
+					} else if (utils.isiOS()) {//判断是否ios系统
+						
+					}
+				});
+			});
+		});
 	</script>
 
 </html>
