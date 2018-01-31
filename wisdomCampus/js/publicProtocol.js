@@ -116,31 +116,31 @@ function generateUUID() {
  * @param {Object} data 数据
  * @param {Object} callback 回调
  */
-var jQAjaxPost = function(url, data, callback) {
-	console.log('jQAP-Url:', url);
-	console.log('jQAP-Data:', data);
-	jQuery.ajax({
-		url: url,
-		type: "POST",
-		data: data,
-		timeout: 30000,
-		dataType: "json",
-		contentType: "application/json; charset=utf-8",
-		async: true,
-		success: function(success_data) { //请求成功的回调
-			console.log('jQAP-Success:', success_data);
-			callback(success_data);
-		},
-		error: function(xhr, type, errorThrown) {
-			console.log('jQAP-Error:', xhr, type);
-			callback({
-				RspCode: 404,
-				RspData: null,
-				RspTxt: "网络连接失败,请重新尝试一下"
-			});
-		}
-	});
-}
+//var jQAjaxPost = function(url, data, callback) {
+//	console.log('jQAP-Url:', url);
+//	console.log('jQAP-Data:', data);
+//	jQuery.ajax({
+//		url: url,
+//		type: "POST",
+//		data: data,
+//		timeout: 30000,
+//		dataType: "json",
+//		contentType: "application/json; charset=utf-8",
+//		async: true,
+//		success: function(success_data) { //请求成功的回调
+//			console.log('jQAP-Success:', success_data);
+//			callback(success_data);
+//		},
+//		error: function(xhr, type, errorThrown) {
+//			console.log('jQAP-Error:', xhr, type);
+//			callback({
+//				RspCode: 404,
+//				RspData: null,
+//				RspTxt: "网络连接失败,请重新尝试一下"
+//			});
+//		}
+//	});
+//}
 
 //url,
 //encryData,需要加密的字段
@@ -249,13 +249,13 @@ var xhrPost = function(url, data, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("post", url, true);
 	xhr.timeout = 30000; //10秒超时
-	xhr.withCredentials = true;
-	xhr.contentType = 'application/json; charset=utf-8';
+//	xhr.withCredentials = true;
+	xhr.contentType = 'application/json;';
 	xhr.onload = function(e) {
 		console.log("XHRP:onload:", JSON.stringify(e));
 		console.log('this.readyState:', this.readyState);
 		console.log('this.status', this.status);
-		if(this.readyState === 4 && this.status === 500) {
+		if(this.readyState === 4 && this.status === 200) {
 			var success_data = JSON.parse(this.responseText);
 			console.log('XHRP-Success:', JSON.stringify(success_data));
 			if(success_data.RspCode == 0013) {

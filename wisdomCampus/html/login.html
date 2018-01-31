@@ -20,7 +20,7 @@
 			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;">登录</div>
 			<div class="mui-input-row">
 				<label style="margin-top: -5px;"><image src="../img/login/username.png" style="width: 30px;height: 30px;" /></label>
-				<input id='account' type="tel" class="mui-input-clear mui-input" placeholder="请输入用户名">
+				<input id='account' class="mui-input-clear mui-input" placeholder="请输入用户名">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 5px 60px ;" />
 
@@ -47,50 +47,92 @@
 	<script src='../js/lib/jquery.js'></script>
 	<script src="../js/PublicProtocol.js"></script>
 	<script src='../js/utils/sortSign.js'></script>
+	<script src="../js/utils/myStorage.js"></script>
 	<script src="../js/utils/storageKeyName.js"></script>
+	<script src="../js/jquery-weui.min.jsi"></script>
 	<script>
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");
+			var tempName = document.getElementById("account").value;
+			var tempPW = document.getElementById("password").value;
+			console.log('tempName:' + tempName + ',tempPW' + tempPW);
 			//判断输入是否符合要求
-			
-			//握手
-			var enData0 = {};
-			//不需要加密的数据
-			var comData0 = {
-				uuid: '16b02e57b4dfb22',//用户设备号
-				shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-				appid: 'appid'//系统所分配的应用ID
-			};
-			//发送网络请求，data为网络返回值
-			postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
-				console.log('2121212');
-				window.storageutil.setLocalStorage(window.storageKeyName.SHAKEHAND, JSON.stringify(data.RspData));
-//				storageutil.setLocalStorage('111',data.RspData);
-				var enData1 = {
-					uid: 'ceshi01',//用户账号
-					pw: '123456'//用户密码
-				};
-				//不需要加密的数据
-				var comData1 = {
-					uuid: '16b02e57b4dfb22',//用户设备号
-					shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-					appid: 'appid',//系统所分配的应用ID
-					schid: '100005',//学校ID
-					utp: '0'//用户类型，0老师,1家长,2学生
-				};
-				//登录
-				postDataEncry('Login', enData1, comData1, 0, function(data1) {
-					window.storageutil.setLocalStorage(window.storageKeyName.PERSONALINFO, data1.RspData);
-					utils.hrefSessionStorage('home.html',{});
-					//判断是否安卓系统
-					if (utils.isAndroid()) {
-						
-					} else if (utils.isiOS()) {//判断是否ios系统
-						
-					}
-				});
-			});
+			if(checkInput(tempName)) {
+				console.log('1111');
+				if(checkInput(tempPW)) {
+					console.log('33333');
+					//握手
+					var enData0 = {};
+					//不需要加密的数据
+					var comData0 = {
+						uuid: '16b02e57b4dfb22', //用户设备号
+						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+						appid: 'appid' //系统所分配的应用ID
+					};
+					//发送网络请求，data为网络返回值
+					postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
+						console.log('2121212');
+						if(data.RspCode == 0) {
+							window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+							var enData1 = {
+								uid: tempName, //用户账号
+								pw: tempPW //用户密码
+							};
+							//不需要加密的数据
+							var comData1 = {
+								uuid: '16b02e57b4dfb22', //用户设备号
+								shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
+								appid: 'appid', //系统所分配的应用ID
+								schid: '100005', //学校ID
+								utp: '0' //用户类型，0老师,1家长,2学生
+							};
+							//登录
+							postDataEncry('Login', enData1, comData1, 0, function(data1) {
+								if(data1.RspCode == 0) {
+									window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
+									utils.hrefSessionStorage('home.html', {});
+									//判断是否安卓系统
+									if(utils.isAndroid()) {
+										
+									} else if(utils.isiOS()) { //判断是否ios系统
+										
+									}
+								} else {
+									mui.toast(data1.RspTxt);
+								}
+							});
+						} else {
+							mui.toast(data.RspTxt);
+						}
+
+					});
+				} else {
+					console.log('4444');
+				}
+			} else {
+				console.log('2222');
+			}
 		});
+		//添加课程时，判断是否输入了值，有没有重复
+		var checkInput = function(text) {
+			if(text.trim().length == 0) {
+				mui.toast('请输入账号密码');
+				return false;
+			}
+			if(isNull(text)) {
+				mui.toast('请输入账号密码');
+				return false;
+			}
+			return true;
+		}
+
+		//判断输入字符串是否为空或者全部都是空格
+		function isNull(str) {
+			if(str == "") return true;
+			var regu = "^[ ]+$";
+			var re = new RegExp(regu);
+			return re.test(str);
+		}
 	</script>
 
 </html>

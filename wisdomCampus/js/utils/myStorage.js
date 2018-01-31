@@ -12,10 +12,10 @@
 		return jsonStr ? JSON.parse(jsonStr).data : null;
 	};
 
-	function getItemPlus(k) {
-		var jsonStr = plus.storage.getItem(k.toString());
-		return jsonStr ? JSON.parse(jsonStr).data : null;
-	};
+//	function getItemPlus(k) {
+//		var jsonStr = plus.storage.getItem(k.toString());
+//		return jsonStr ? JSON.parse(jsonStr).data : null;
+//	};
 	/**
 	 * 获取数据
 	 * @param {Object} k
@@ -40,7 +40,7 @@
 			//TODO 超出localstorage容量限制则存到plus.storage中
 			//且删除localStorage重复的数据
 			removeItem(k);
-			plus.storage.setItem(k, value);
+//			plus.storage.setItem(k, value);
 		}
 	};
 
@@ -49,43 +49,43 @@
 	};
 	myStorage.getLength = getLength;
 
-	function getLengthPlus() {
-		return plus.storage.getLength();
-	};
-	myStorage.getLengthPlus = getLengthPlus;
+//	function getLengthPlus() {
+//		return plus.storage.getLength();
+//	};
+//	myStorage.getLengthPlus = getLengthPlus;
 
 	function removeItem(k) {
 		return window.localStorage.removeItem(k);
 	};
 
-	function removeItemPlus(k) {
-		return plus.storage.removeItem(k);
-	};
+//	function removeItemPlus(k) {
+//		return plus.storage.removeItem(k);
+//	};
 	/**
 	 * 删除数据
 	 * @param {Object} k
 	 */
-	myStorage.removeItem = function(k) {
-		window.localStorage.removeItem(k);
-		return plus.storage.removeItem(k);
-	}
+//	myStorage.removeItem = function(k) {
+//		window.localStorage.removeItem(k);
+//		return plus.storage.removeItem(k);
+//	}
 	/**
 	 * 清空数据
 	 */
-	myStorage.clear = function() {
-		window.localStorage.clear();
-		return plus.storage.clear();
-	};
+//	myStorage.clear = function() {
+//		window.localStorage.clear();
+//		return plus.storage.clear();
+//	};
 
 	function key(index) {
 		return window.localStorage.key(index);
 	};
 	myStorage.key = key;
 
-	function keyPlus(index) {
-		return plus.storage.key(index);
-	};
-	myStorage.keyPlus = keyPlus;
+//	function keyPlus(index) {
+//		return plus.storage.key(index);
+//	};
+//	myStorage.keyPlus = keyPlus;
 
 	function getItemByIndex(index) {
 		var item = {
