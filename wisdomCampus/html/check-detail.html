@@ -6,6 +6,9 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
+		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
+		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
 		<style type="text/css">
 			.center-horizontal {
 				text-align: center;
@@ -159,24 +162,24 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">审批详情</h1>
 		</header>
-		<div class="mui-content">
+		<div class="mui-content" id="checkDetailData" v-show="flag>0">
 			<div class="leave-detail">
-				<h3 class="center-horizontal">请假申请</h3>
-				<p class="center-horizontal"><span>王主任</span>|<span>2017/11/12 13:30</span></p>
-				<p>9月20日至9月30日，因爲本人家裏有些事情需要處理，所以希望能請10天的假期，希望領導可以批准。謝謝。9月20日至9月30日，因爲本人家裏有些事情需要處理，所以希望能請10天的假期，希望領導可以批准。謝謝。9月20日至9月30日，因爲本人家裏有些事情需要處理，所以希望能請10天的假期，希望領導可以批准。謝謝。</p>
+				<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
+				<p class="center-horizontal"><span>{{leaveDetail.ApplyManName}}</span> | <span>{{leaveDetail.CreateTime}}</span></p>
+				<p>{{leaveDetail.ApplyContent}}</p>
 				<div>
-					<p class="display-inline extral-file">附件：<span class="color_primary">请假时间表</span><span>(9.13k)</span></p>
+					<p class="display-inline extral-file">附件：<span class="color_primary">{{leaveDetail.ApplyEncName}}</span><span>(9.13k)</span></p>
 					<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
 				</div>
-				<div class="check-reply-back"><button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true">批复</button><button class="mui-btn-danger mui-btn-outlined">返回</button></div>
+				<div class="check-reply-back"><button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button><button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button></div>
 			</div>
 			<div class="check-flow">
-				<div v-for="check in checkList">
+				<div v-for="check in leaveDetail.ApproveList">
 					<p class="check-container">
-						<span class="checker-name">{{check.name}}</span>
-						<span v-if="check.time" class="check-reply">
-							<span class="reply-content">{{check.reply}}</span>
-							<span class="reply-time">----{{check.time}}</span>
+						<span class="checker-name">{{check.ApproveManName}}</span>
+						<span v-if="check.ApproveTime" class="check-reply">
+							<span class="reply-content">{{check.ApproveContent}}</span>
+						<span class="reply-time">----{{check.ApproveTime}}</span>
 						</span>
 					</p>
 				</div>
@@ -197,28 +200,36 @@
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.js"></script>
+		<script src="../js/PublicProtocol.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			var vue = new Vue({
-				el: ".mui-content",
+			$(function() {
+				//获取当前人员信息
+				getDetail();
+			});
+			var checkDetailData = new Vue({
+				el: "#checkDetailData",
 				data: {
+					flag: 0,
 					leaveDetail: {},
-					checkList: [{
-						name: "宋经理",
-						reply: "同意王主任的请假申请",
-						time: "2017/11/20 17:30"
-					}, {
-						name: "李经理",
-						reply: "",
-						time: ""
-					},{
-						name: "李经理",
-						reply: "",
-						time: ""
-					}, {
-						name: "李凤华",
-						reply: "常常的想，现在的你，是否依然露出乡恋，我的梦是昨天的颜色 白了黑 黑出中的白",
-						time: "2018-22-01"
-					}],
+					//					ApproveList: [{
+					//						name: "宋经理",
+					//						reply: "同意王主任的请假申请",
+					//						time: "2017/11/20 17:30"
+					//					}, {
+					//						name: "李经理",
+					//						reply: "",
+					//						time: ""
+					//					}, {
+					//						name: "李经理",
+					//						reply: "",
+					//						time: ""
+					//					}, {
+					//						name: "李凤华",
+					//						reply: "常常的想，现在的你，是否依然露出乡恋，我的梦是昨天的颜色 白了黑 黑出中的白",
+					//						time: "2018-22-01"
+					//					}],
 					keywords: [
 						"同意",
 						"拟同意",
@@ -226,6 +237,7 @@
 						"已阅"
 					],
 					replyShow: false,
+					approveResult: 1,
 					replyContent: ""
 				},
 				computed: function() {
@@ -233,10 +245,59 @@
 				},
 				methods: {
 					replyLeave: function() {
+						console.log('approveResult:' + checkDetailData.approveResult);
+						if(checkInput(checkDetailData.replyContent)) {
+							//16.审批事务及文件申请
+							var tempData = {
+								approveId: '3', //审批ID
+								approveContent: checkDetailData.replyContent, //审批内容
+								approveResult: checkDetailData.approveResult //审批结果，1 同意，2 退回
+							}
+							setAffairApprovePro(tempData, function function_name() {
 
+							});
+						}
 					}
 				}
-			})
+			});
+			var getDetail = function() {
+				$.showLoading();
+				//19.通过ID获取事务及文件申请
+				var tempData = {
+					applyId: '3' //申请ID
+				}
+				getAffairApplyByIdPro(tempData, function function_name(data) {
+					$.hideLoading();
+					if(data.RspCode == 0) {
+						console.log('data:' + JSON.stringify(data));
+						checkDetailData.flag = 1;
+						checkDetailData.leaveDetail = data.RspData;
+					} else {
+						$.toast(data.RspTxt);
+					}
+				});
+			}
+
+			//判断是否输入了值
+			var checkInput = function(text) {
+				if(text.trim().length == 0) {
+					mui.toast('请输入账号密码');
+					return false;
+				}
+				if(isNull(text)) {
+					mui.toast('请输入账号密码');
+					return false;
+				}
+				return true;
+			}
+
+			//判断输入字符串是否为空或者全部都是空格
+			function isNull(str) {
+				if(str == "") return true;
+				var regu = "^[ ]+$";
+				var re = new RegExp(regu);
+				return re.test(str);
+			}
 		</script>
 	</body>
 
