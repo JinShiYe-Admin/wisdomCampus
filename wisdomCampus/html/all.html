@@ -115,10 +115,10 @@
 			<div id="slider" class="mui-slider mui-fullscreen">
 				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
-						<a class="mui-control-item mui-active" href="#item1mobile">
+						<a id="item1" class="mui-control-item mui-active" href="#item1mobile">
 							通知公告
 						</a>
-						<a class="mui-control-item" href="#item2mobile">
+						<a id="item2" class="mui-control-item" href="#item2mobile">
 							事物审批
 						</a>
 
@@ -128,8 +128,10 @@
 					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<ul class="mui-table-view">
-	
+								<ul id="notice_send" class="mui-table-view mui-hidden">
+
+								</ul>
+								<ul id="notice_recevice" class="mui-table-view">
 
 								</ul>
 							</div>
@@ -139,13 +141,12 @@
 						<div class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul class="mui-table-view">
-									<li class="mui-table-view-cell">
-										<div>
-											<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000">[未批]</span>学校首次召开家长会，希望各位12233488888888888888</p>
-											<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">
-												王主任|2017/11/12 13:30</p>
-										</div>
-									</li>
+									<ul id="apply_send" class="mui-table-view mui-hidden">
+
+									</ul>
+									<ul id="apply_recevice" class="mui-table-view">
+
+									</ul>
 
 								</ul>
 							</div>
@@ -159,21 +160,56 @@
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../js/utils/storageutil.js"></script>
+		<script src="../js/utils/utils.js"></script>
 		<script src="../js/publicProtocol.js"></script>
 		<script>
+			var current_key = {
+				title: 'notice',
+				send_recevice: 'recevice'
+			}
 			var datasource = {
-				notice: {},
+				notice_send: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
 
+				},
+				notice_recevice: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				apply_send: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				apply_recevice: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
 			}
-			var data_current = [];
-			var refreshObj = {
-				refreshFlag: 0,
-				pageIndex: 1,
-				TotalPage: 1,
-				sendFlag: 0
-			}
+
 			mui.init();
 			var createFragment = function(ul, index, data) {
+				console.log("88888888888====" + JSON.stringify(data))
 				var length = ul.querySelectorAll('li').length;
 				var fragment = document.createDocumentFragment();
 				var li;
@@ -182,21 +218,32 @@
 					li = document.createElement('li');
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
+						li.id =model.NoticeId
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
-							model.NoticeStatus+']</span>'+model.NoticeTitle +
+							model.NoticeStatus + ']</span>' + model.NoticeTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-							model.SendManName+"|"+model.SendTime +
+							model.SendManName + "|" + model.SendTime +
 							'</p>' +
 							'</div>'
 					} else if(index == 1) {
+						var myId = "";
+						var Progress = "";
+						if(ul.id=="apply_send"){
+							li.id = myId =model.ApplyId
+							Progress = model.ApplyProgress
+						}else{
+							li.id = myId =model.ApproveId
+							Progress = model.ApproveProgress
+						}
+						
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">' +
-							'[未阅]</span>学校首次召开家长会，希望各位12233488888888888888' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
+							Progress + ']</span>' + model.ApplyTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-							'王主任|2017/11/12 13:30' +
+							myId + "|" + model.CreateTime +
 							'</p>' +
 							'</div>'
 					}
@@ -214,18 +261,17 @@
 					'color': 'black'
 				});
 				if(flag == 0) {
-					refreshObj.sendFlag = 0;
-					data_current = datasource.notice.data_send;
-					var ul = document.querySelector('.mui-table-view');
-					ul.innerHTML = '';
-					ul.appendChild(createFragment(ul, 0, data_current));
-
+					var ul0 = document.getElementById(current_key.title + "_" + "recevice");
+					ul0.className = "mui-table-view";
+					var ul1 = document.getElementById(current_key.title + "_" + "send");
+					ul1.className = "mui-table-view mui-hidden";
+					current_key.send_recevice = "recevice";
 				} else {
-					refreshObj.sendFlag = 1;
-					data_current = datasource.notice.data_recevice;
-					var ul = document.querySelector('.mui-table-view');
-					ul.innerHTML = '';
-					ul.appendChild(createFragment(ul, 0, data_current));
+					var ul0 = document.getElementById(current_key.title + "_" + "send");
+					ul0.className = "mui-table-view";
+					var ul1 = document.getElementById(current_key.title + "_" + "recevice");
+					ul1.className = "mui-table-view mui-hidden";
+					current_key.send_recevice = "send";
 				}
 
 			};
@@ -237,7 +283,12 @@
 					indicators: true, //是否显示滚动条
 					deceleration: deceleration
 				});
-				var getNotice = function(sendFlag, callback) { //10.获取发送的通知公告列表
+				var getNotice = function(title, sendFlag, callback) { //10.获取发送的通知公告列表
+					
+					var k = current_key.title + '_' + current_key.send_recevice
+					console.log('kkkkkkk===='+k)
+					var current_data = datasource[k];
+					var refreshObj = current_data.refreshObj
 					var tempData = {
 						schoolId: '1', //学校ID
 						sendManId: 'konglm', //发送人ID
@@ -251,34 +302,90 @@
 						pageIndex: refreshObj.pageIndex, //当前页数
 						pageSize: '10' //每页记录数
 					}
-					if(sendFlag == 0) {
+					
+					if(title == "notice" && sendFlag == "send") {
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								refreshObj.TotalPage = data.RspData.TotalPage;
+								datasource.notice_send.TotalPage = data.RspData.TotalPage;
 
-								if(refreshObj.refreshFlag == 0) {
-									refreshObj.pageIndex = 1;
-									datasource.notice.data_send = data.RspData.Data
+								if(datasource.notice_send.refreshObj.refreshFlag == 0) {
+									datasource.notice_send.refreshObj.pageIndex = 1;
+									datasource.notice_send.data = data.RspData.Data
 								} else {
-									refreshObj.pageIndex++;
-									datasource.notice.data_send = datasource.notice.data_send.concat(data.RspData.Data)
+									datasource.notice_send.refreshObj.pageIndex++;
+									datasource.notice_send.data = datasource.notice_send.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
 							}
 						});
-					} else {
+					} else if(title == "notice" && sendFlag == "recevice") {
 						getReceiveNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								refreshObj.TotalPage = data.RspData.TotalPage;
+								datasource.notice_recevice.TotalPage = data.RspData.TotalPage;
 
-								if(refreshObj.refreshFlag == 0) {
-									refreshObj.pageIndex = 1;
-									datasource.notice.data_recevice = data.RspData.Data
+								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
+									datasource.notice_recevice.refreshObj.pageIndex = 1;
+									datasource.notice_recevice.data = data.RspData.Data
 								} else {
-									refreshObj.pageIndex++;
-									datasource.notice.data_recevice = datasource.notice.data_recevice.concat(data.RspData.Data)
+									datasource.notice_recevice.refreshObj.pageIndex++;
+									datasource.notice_recevice.data = datasource.notice_recevice.data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else if(title == "apply" && sendFlag == "send") {
+						tempData = {
+							schoolId: '1', //学校ID
+							applyManId: 'konglm', //申请人ID
+							title: '', //标题
+							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
+							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '20180131', //查询结束时间
+							pageIndex: '1', //当前页数
+							pageSize: '10' //每页记录数，0 为全部
+						}
+						getAffairApplyPro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+								datasource.apply_send.TotalPage = data.RspData.TotalPage;
+
+								if(datasource.apply_send.refreshObj.refreshFlag == 0) {
+									datasource.apply_send.refreshObj.pageIndex = 1;
+									datasource.apply_send.data = data.RspData.Data
+								} else {
+									datasource.apply_send.refreshObj.pageIndex++;
+									datasource.apply_send.data = datasource.apply_send.data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else if(title == "apply" && sendFlag == "recevice") {
+						var tempData = {
+							schoolId: '1', //学校ID
+							approveManId: '2', //审批人ID
+							title: '', //标题
+							applyMan: '', //申请人姓名
+							status: '0', //状态,0 全部,1 同意,2 退回，3 等待，4 未批
+							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
+							beginTime: '20170101', //查询开始时间
+							endTime: '20180131', //查询结束时间
+							pageIndex: '1', //当前页数
+							pageSize: '10' //每页记录数，0 为全部
+						}
+						getAffairApprovePro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+								datasource.apply_recevice.TotalPage = data.RspData.TotalPage;
+
+								if(datasource.apply_recevice.refreshObj.refreshFlag == 0) {
+									datasource.apply_recevice.refreshObj.pageIndex = 1;
+									datasource.apply_recevice.data = data.RspData.Data
+								} else {
+									datasource.apply_recevice.refreshObj.pageIndex++;
+									datasource.apply_recevice.data = datasource.apply_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
 							}
@@ -287,12 +394,21 @@
 				}
 				$.ready(function() {
 
-					getNotice(0, function(data) {
-						var ul = document.querySelector('.mui-table-view');
+					getNotice('notice', 'send', function(data) {
+						var ul = document.getElementById("notice_send");
 						ul.appendChild(createFragment(ul, 0, data));
 					});
-					getNotice(1, function(data) {
-
+					getNotice('notice', 'recevice', function(data) {
+						var ul = document.getElementById("notice_recevice");
+						ul.appendChild(createFragment(ul, 0, data));
+					});
+					getNotice('apply', 'send', function(data) {
+						var ul = document.getElementById("apply_send");
+						ul.appendChild(createFragment(ul, 1, data));
+					});
+					getNotice('apply', 'recevice', function(data) {
+						var ul = document.getElementById("apply_recevice");
+						ul.appendChild(createFragment(ul, 1, data));
 					});
 					//循环初始化所有下拉刷新，上拉加载。
 					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
@@ -300,39 +416,35 @@
 							down: {
 								callback: function() {
 									var self = this;
+									var k = current_key.title + '_' + current_key.send_recevice
+									var current_data = datasource[k];
+									var refreshObj = current_data.refreshObj
 									refreshObj.refreshFlag = 0;
 									refreshObj.pageIndex = 1;
-									if(index == 0) {
-										getNotice(refreshObj.sendFlag, function(data) {
-											var ul = self.element.querySelector('.mui-table-view');
-											ul.innerHTML = '';
-											ul.appendChild(createFragment(ul, index, data));
-											self.endPullDownToRefresh();
-											self.refresh(true);
+									getNotice(current_key.title, current_key.send_recevice, function(data) {
+										var ul = document.getElementById(k);
+										ul.innerHTML = '';
+										ul.appendChild(createFragment(ul, index, data));
+										self.endPullDownToRefresh();
+										self.refresh(true);
 
-										})
-									} else {
-
-									}
+									})
 
 								}
 							},
 							up: {
 								callback: function() {
 									var self = this;
+									var k = current_key.title + '_' + current_key.send_recevice
+									var current_data = datasource[k];
+									var refreshObj = current_data.refreshObj
 									if(refreshObj.pageIndex < refreshObj.TotalPage) {
 										refreshObj.refreshFlag = 1;
-										if(index == 0) {
-											getNotice(refreshObj.sendFlag, function(data) {
-												var ul = self.element.querySelector('.mui-table-view');
-												ul.appendChild(createFragment(ul, index, data));
-												self.endPullUpToRefresh();
-
-											})
-										} else {
-
-										}
-
+										getNotice(current_key.title, current_key.send_recevice, function(data) {
+											var ul = document.getElementById(k);
+											ul.appendChild(createFragment(ul, index, data));
+											self.endPullUpToRefresh();
+										})
 									} else {
 										self.endPullUpToRefresh(true);
 									}
@@ -344,6 +456,24 @@
 
 				});
 			})(mui);
+			mui('.mui-segmented-control').on('tap', 'a', function() {
+				console.log(this.id)
+				if(this.id == 'item1') {
+					current_key.title = "notice"
+				} else if(this.id == 'item2') {
+					current_key.title = "apply"
+				}
+			})
+			mui(".mui-table-view").on('tap', 'li', function() {
+				console.log(this.id);
+				if(this.parentElement.id=='notice_recevice'||this.parentElement.id=='notice_send'){
+					utils.hrefSessionStorage("check-detail.html",this.id)
+				}else{
+					utils.hrefSessionStorage = ("check-detail.html",this.id)
+				}
+				
+			})
+
 		</script>
 	</body>
 
