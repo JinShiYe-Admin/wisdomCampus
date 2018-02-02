@@ -154,6 +154,14 @@
 				height: 35px;
 				margin: 15px 15px 0;
 			}
+			
+			.refused-words {
+				color: indianred;
+			}
+			
+			.applied-words {
+				color: green;
+			}
 		</style>
 	</head>
 
@@ -162,22 +170,27 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">审批详情</h1>
 		</header>
-		<div class="mui-content" id="checkDetailData" v-show="flag>0">
+		<div class="mui-content" id="checkDetailData">
 			<div class="leave-detail">
 				<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
 				<p class="center-horizontal"><span>{{leaveDetail.ApplyManName}}</span> | <span>{{leaveDetail.CreateTime}}</span></p>
 				<p>{{leaveDetail.ApplyContent}}</p>
 				<div>
-					<p class="display-inline extral-file">附件：<span class="color_primary">{{leaveDetail.ApplyEncName}}</span><span>(9.13k)</span></p>
-					<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
+					<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
+						<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
+						<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
+					</template>
 				</div>
-				<div class="check-reply-back"><button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button><button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button></div>
+				<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
+					<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
+					<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
+				</div>
 			</div>
 			<div class="check-flow">
 				<div v-for="check in leaveDetail.ApproveList">
 					<p class="check-container">
 						<span class="checker-name">{{check.ApproveManName}}</span>
-						<span v-if="check.ApproveTime" class="check-reply">
+						<span v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
 							<span class="reply-content">{{check.ApproveContent}}</span>
 						<span class="reply-time">----{{check.ApproveTime}}</span>
 						</span>
@@ -203,101 +216,127 @@
 		<script src="../js/PublicProtocol.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/utils.js"></script>
 		<script type="text/javascript">
-			$(function() {
-				//获取当前人员信息
-				getDetail();
-			});
 			var checkDetailData = new Vue({
 				el: "#checkDetailData",
 				data: {
-					flag: 0,
+					id: 0, //id
+					flag: 0, //0审核 1我发送的
 					leaveDetail: {},
-					//					ApproveList: [{
-					//						name: "宋经理",
-					//						reply: "同意王主任的请假申请",
-					//						time: "2017/11/20 17:30"
-					//					}, {
-					//						name: "李经理",
-					//						reply: "",
-					//						time: ""
-					//					}, {
-					//						name: "李经理",
-					//						reply: "",
-					//						time: ""
-					//					}, {
-					//						name: "李凤华",
-					//						reply: "常常的想，现在的你，是否依然露出乡恋，我的梦是昨天的颜色 白了黑 黑出中的白",
-					//						time: "2018-22-01"
-					//					}],
 					keywords: [
 						"同意",
 						"拟同意",
 						"情况属实",
 						"已阅"
 					],
+					approveResult: 0, //1同意 2 退回
 					replyShow: false,
-					approveResult: 1,
-					replyContent: ""
+					replyContent: "",
+					approveIndex: 0
 				},
-				computed: function() {
-
+				mounted: function() {
+					console.log("mounted");
+					this.getDetail();
+				},
+				watch: {
+					leaveDeatil: function(newVal, oldVal) {
+						if((!oldVal.ApproveList) && this.flag == 0) {
+							this.getApproveIndex();
+						}
+					}
 				},
 				methods: {
+					getExtraFileNames: function(extraFileName) {
+						return extraFileName.split("|");
+					},
+					getApproveIndex: function() {
+						for(var i = 0; i < this.leaveDetail.ApproveList; i++) {
+							if(this.leaveDetail.ApproveList[i].ApproveId == this.id) {
+								return i;
+							}
+						}
+					},
 					replyLeave: function() {
 						console.log('approveResult:' + checkDetailData.approveResult);
-						if(checkInput(checkDetailData.replyContent)) {
-							//16.审批事务及文件申请
-							var tempData = {
-								approveId: '3', //审批ID
-								approveContent: checkDetailData.replyContent, //审批内容
-								approveResult: checkDetailData.approveResult //审批结果，1 同意，2 退回
-							}
-							setAffairApprovePro(tempData, function function_name() {
-
-							});
+						var com = this;
+						//16.审批事务及文件申请
+						var tempData = {
+							approveId: com.id, //审批ID
+							approveContent: com.replyContent, //审批内容
+							approveResult: com.approveResult //审批结果，1 同意，2 退回
 						}
+						setAffairApprovePro(tempData, function(data) {
+							console.log("获取的审批结果:" + JSON.stringify(data));
+							if(data.RspCode == 0) {
+								com.replyContent = "";
+								com.getDetail();
+								com.replyShow = false;
+							} else {
+								$.toast(data.RspTxt);
+							}
+						});
+
+					},
+					getDetail: function() {
+						this.id = utils.getUrlParam(location.href, "id");
+						this.flag = parseInt(utils.getUrlParam(location.href, "flag"));
+						console.log("获取的id:" + this.id);
+						console.log("获取的flag:" + this.flag);
+						if(!this.id) {
+							$.toast("程序内部参数错误，请返回上一界面！");
+							return;
+						}
+
+						if(this.flag == 0) {
+							this.getCheckDetail();
+						} else {
+							this.getLeaveDetail();
+						}
+					},
+					getLeaveDetail: function() {
+						var com = this;
+						$.showLoading();
+						//19.通过ID获取事务及文件申请
+						var tempData = {
+							applyId: this.id
+						}
+						getAffairApplyByIdPro(tempData, function(data) {
+							$.hideLoading();
+							if(data.RspCode == 0) {
+								console.log('data:' + JSON.stringify(data));
+								if(data.RspData.ApplyEncName) {
+									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName);
+									data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr);
+								}
+								com.leaveDetail = data.RspData;
+							} else {
+								$.toast(data.RspTxt);
+							}
+						});
+					},
+					getCheckDetail: function() {
+						var com = this;
+						$.showLoading();
+						var tempData = {
+							approveId: this.id
+						}
+						getAffairApproveByIdPro(tempData, function(data) {
+							console.log("获取的审核详情：" + JSON.stringify(data));
+							$.hideLoading();
+							if(data.RspCode == 0) {
+								if(data.RspData.ApplyEncName) {
+									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName)
+									data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr)
+								}
+								com.leaveDetail = data.RspData;
+							} else {
+								$.toast(data.RspTxt);
+							}
+						})
 					}
 				}
 			});
-			var getDetail = function() {
-				$.showLoading();
-				//19.通过ID获取事务及文件申请
-				var tempData = {
-					applyId: '3' //申请ID
-				}
-				getAffairApplyByIdPro(tempData, function function_name(data) {
-					$.hideLoading();
-					if(data.RspCode == 0) {
-						console.log('data:' + JSON.stringify(data));
-						checkDetailData.flag = 1;
-						checkDetailData.leaveDetail = data.RspData;
-					} else {
-						$.toast(data.RspTxt);
-					}
-				});
-			}
-
-			//判断是否输入了值
-			var checkInput = function(text) {
-				if(text.trim().length == 0) {
-					mui.toast('请输入账号密码');
-					return false;
-				}
-				if(isNull(text)) {
-					mui.toast('请输入账号密码');
-					return false;
-				}
-				return true;
-			}
-
-			//判断输入字符串是否为空或者全部都是空格
-			function isNull(str) {
-				if(str == "") return true;
-				var regu = "^[ ]+$";
-				var re = new RegExp(regu);
-				return re.test(str);
-			}
 		</script>
 	</body>
 
