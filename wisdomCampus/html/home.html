@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 
@@ -32,7 +31,7 @@
 				border-left: 0px solid #eee;
 				background-color: white
 			}
-
+			
 			.mui-grid-view.mui-grid-9 .mui-table-view-cell {
 				margin: 0;
 				padding: 11px 15px;
@@ -71,19 +70,21 @@
 		mui('.mui-scroll-wrapper').scroll({
 			indicators: true, //是否显示滚动条
 		});
-			var titles = ["", "", ""]
-			//加黑条
-			addStrip(getImgArray())
-			//加图片
-			addImg(getImgArray(), titles)
-			var slider = mui("#slider");
-			//轮播开始
-			slider.slider({
-				interval: 5000
-			});
-			//圆圈按钮
-			getHomeCircle('circler');
-
+		var titles = ["", "", ""]
+		//加黑条
+		addStrip(getImgArray())
+		//加图片
+		addImg(getImgArray(), titles)
+		var slider = mui("#slider");
+		//轮播开始
+		slider.slider({
+			interval: 5000
+		});
+		//圆圈按钮
+		getHomeCircle('circler');
+		mui(".mui-table-view").on('tap', 'a', function() {
+			location.href = "all.html"
+		})
 	</script>
 
 </html>
