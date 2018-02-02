@@ -83,7 +83,8 @@
 		//圆圈按钮
 		getHomeCircle('circler');
 		mui(".mui-table-view").on('tap', 'a', function() {
-			location.href = "all.html"
+			var id = this.parentElement.id
+			utils.hrefSessionStorage("all.html",id);
 		})
 	</script>
 
