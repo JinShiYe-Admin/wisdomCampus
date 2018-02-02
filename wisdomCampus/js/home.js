@@ -26,7 +26,7 @@ var createGirde = function(gride, array) {
 				li.className = "mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3";
 			}
 			//子控件的innerHTML
-			li.innerHTML = '<a href="all.html">' +
+			li.innerHTML = '<a href="#">' +
 				'<img class="mui-icon circular-square" src="' + map.imgUrl +
 				'" style="background-color:' +
 				';"></img>' +

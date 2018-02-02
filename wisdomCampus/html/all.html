@@ -465,11 +465,15 @@
 				}
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
-				console.log(this.id);
+				var flag = this.parentElement.id.indexOf("send")>0? 1:0;
+				var data = {
+					id:this.id,
+					flag:flag//1:我发送的 0：发给我的
+				}
 				if(this.parentElement.id=='notice_recevice'||this.parentElement.id=='notice_send'){
-					utils.hrefSessionStorage("check-detail.html",this.id)
+					utils.hrefSessionStorage("noticeDetails.html",data)
 				}else{
-					utils.hrefSessionStorage = ("check-detail.html",this.id)
+					utils.hrefSessionStorage = ("check-detail.html",data)
 				}
 				
 			})
