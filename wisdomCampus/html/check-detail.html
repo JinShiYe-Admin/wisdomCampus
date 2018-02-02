@@ -277,18 +277,20 @@
 								com.getDetail();
 								com.replyShow = false;
 							} else {
-								$.toast(data.RspTxt);
+								$.alert(data.RspTxt);
 							}
 						});
 
 					},
-					getDetail: function() {
+					getDetail: function() {	
 						this.id = utils.getUrlParam(location.href, "id");
 						this.flag = parseInt(utils.getUrlParam(location.href, "flag"));
 						console.log("获取的id:" + this.id);
 						console.log("获取的flag:" + this.flag);
 						if(!this.id) {
-							$.toast("程序内部参数错误，请返回上一界面！");
+							$.alert("程序内部参数错误，请返回上一界面！", function() {
+								history.go(-1);
+							});
 							return;
 						}
 
@@ -315,7 +317,7 @@
 								}
 								com.leaveDetail = data.RspData;
 							} else {
-								$.toast(data.RspTxt);
+								$.alert(data.RspTxt);
 							}
 						});
 					},
@@ -335,7 +337,7 @@
 								}
 								com.leaveDetail = data.RspData;
 							} else {
-								$.toast(data.RspTxt);
+								$.alert(data.RspTxt);
 							}
 						})
 					}
