@@ -409,3 +409,7 @@ var getAffairApplyByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApplyById', JSON.stringify(data0), callback);
 }
+var getAffairApproveByIdPro=function(data0,callback){
+	data0=extendParameter(data0);
+	xhrPost(tempAttendUrl1+'getAffairApproveById',JSON.stringify(data0),callback)
+}
