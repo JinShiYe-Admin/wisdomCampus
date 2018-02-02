@@ -203,7 +203,7 @@
 					<div class="textarea-container">
 						<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
 						</p>
-						<textarea rows="3" v-model="replyContent">
+						<textarea rows="3" v-model.trim="replyContent">
 						
 						</textarea>
 					</div>
@@ -259,6 +259,10 @@
 					},
 					replyLeave: function() {
 						console.log('approveResult:' + checkDetailData.approveResult);
+						if(!this.replyContent) {
+							$.toast("请输入审批内容！");
+							return
+						}
 						var com = this;
 						//16.审批事务及文件申请
 						var tempData = {
