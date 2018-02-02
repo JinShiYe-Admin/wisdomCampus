@@ -19,6 +19,7 @@ var createGirde = function(gride, array) {
 		 */
 		function(map, index, array) {
 			var li = document.createElement('li'); //子元素
+			li.id = index;
 			//			var bgColor = getRandomColor(); //获取背景色
 			if(array.length <= 3) { //数组小于等于3，每行3个图标
 				li.className = "mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4";

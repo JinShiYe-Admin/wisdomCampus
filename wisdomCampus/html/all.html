@@ -115,17 +115,17 @@
 			<div id="slider" class="mui-slider mui-fullscreen">
 				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
-						<a id="item1" class="mui-control-item mui-active" href="#item1mobile">
+						<a id="notice" class="mui-control-item  mui-active" href="#item1mobile">
 							通知公告
 						</a>
-						<a id="item2" class="mui-control-item" href="#item2mobile">
+						<a id="apply" class="mui-control-item" href="#item2mobile">
 							事物审批
 						</a>
 
 					</div>
 				</div>
 				<div class="mui-slider-group">
-					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+					<div id="item1mobile" class="mui-slider-item mui-control-content  mui-active">
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul id="notice_send" class="mui-table-view mui-hidden">
@@ -208,8 +208,16 @@
 			}
 
 			mui.init();
+			var title_id = utils.getSessionStorageByUrlsKey();
+			console.log(title_id);
+			if(title_id==2){
+				document.getElementById("notice").className = "mui-control-item"
+				document.getElementById("apply").className = "mui-control-item mui-active"
+				document.getElementById("item1mobile").className = "mui-slider-item mui-control-content"
+				document.getElementById("item2mobile").className = "mui-slider-item mui-control-content  mui-active"
+//			mui('#slider').slider().gotoItem(title_id)
+			}
 			var createFragment = function(ul, index, data) {
-				console.log("88888888888====" + JSON.stringify(data))
 				var length = ul.querySelectorAll('li').length;
 				var fragment = document.createDocumentFragment();
 				var li;
@@ -286,7 +294,6 @@
 				var getNotice = function(title, sendFlag, callback) { //10.获取发送的通知公告列表
 					
 					var k = current_key.title + '_' + current_key.send_recevice
-					console.log('kkkkkkk===='+k)
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
 					var tempData = {
@@ -457,23 +464,22 @@
 				});
 			})(mui);
 			mui('.mui-segmented-control').on('tap', 'a', function() {
-				console.log(this.id)
-				if(this.id == 'item1') {
-					current_key.title = "notice"
-				} else if(this.id == 'item2') {
-					current_key.title = "apply"
-				}
+				current_key.title = this.id
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
-				var flag = this.parentElement.id.indexOf("send")>0? 1:0;
+				
+				var flag = this.parentElement.id.indexOf("send")>=0? 1:0;
 				var data = {
 					id:this.id,
 					flag:flag//1:我发送的 0：发给我的
 				}
-				if(this.parentElement.id=='notice_recevice'||this.parentElement.id=='notice_send'){
+//				console.log(JSON.stringify(data))
+//				console.log(this.parentElement.id)
+				var b =  this.parentElement.id.indexOf("notice")>=0
+				if(b){
 					utils.hrefSessionStorage("noticeDetails.html",data)
 				}else{
-					utils.hrefSessionStorage = ("check-detail.html",data)
+					utils.hrefSessionStorage("check-detail.html",data)
 				}
 				
 			})

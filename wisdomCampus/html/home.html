@@ -130,7 +130,7 @@
 					<img class="head-portrait" src="../img/firstPage/firstPage0.png" />
 					<p class="user-name">name</p>
 				</div>
-				<a v-for="setting in settings" class="weui-cell weui-cell_access"  v-on:click="jumpToDetail(setting)">
+				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
 					<div class="weui-cell__bd">
 						<p><span></span>{{setting.name}}</p>
 					</div>
@@ -164,7 +164,8 @@
 			//圆圈按钮
 			getHomeCircle('circler');
 			mui(".mui-table-view").on('tap', 'a', function() {
-				location.href = "all.html";
+				var id = this.parentElement.id
+				utils.hrefSessionStorage("all.html", id);
 			})
 			var mine = new Vue({
 				el: "#mine",
@@ -194,5 +195,4 @@
 			})
 		</script>
 	</body>
-
 </html>
