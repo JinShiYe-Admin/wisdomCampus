@@ -54,7 +54,18 @@
 	<script src="../js/utils/storageKeyName.js"></script>
 	<script src="../js/jquery-weui.min.js"></script>
 	<script>
+		var tempModel = {
+			uuid: '',
+			appid: ''
+		}
 		document.getElementById("login").addEventListener('tap', function(event) {
+			if(utils.getSystem() == 'Android') {
+				console.log("native:appid:" + native.getAPPID());
+				console.log("native:schoolid:" + native.getSCHOOLID());
+				var tempModel0 = parseJSON((tempStr));
+				tempModel.uuid = native.getSCHOOLID();
+				tempModel.appid = native.getAPPID();
+			}
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
 			var tempPW = document.getElementById("password").value;
@@ -66,9 +77,9 @@
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
-						uuid: '16b02e57b4dfb22', //用户设备号
+						uuid: tempModel.uuid, //用户设备号
 						shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-						appid: 'appid' //系统所分配的应用ID
+						appid: tempModel.appid //系统所分配的应用ID
 					};
 					$.showLoading();
 					//发送网络请求，data为网络返回值
@@ -82,9 +93,9 @@
 							};
 							//不需要加密的数据
 							var comData1 = {
-								uuid: '16b02e57b4dfb22', //用户设备号
+								uuid: tempModel.uuid, //用户设备号
 								shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
-								appid: 'appid', //系统所分配的应用ID
+								appid: tempModel.appid, //系统所分配的应用ID
 								schid: '100005', //学校ID
 								utp: '0' //用户类型，0老师,1家长,2学生
 							};
@@ -96,9 +107,9 @@
 									utils.hrefSessionStorage('home.html', {});
 									//判断是否安卓系统
 									if(utils.isAndroid()) {
-										
+
 									} else if(utils.isiOS()) { //判断是否ios系统
-										
+
 									}
 								} else {
 									mui.toast(data1.RspTxt);
@@ -111,12 +122,19 @@
 
 					});
 				} else {
-					
+
 				}
 			} else {
-				
+
 			}
 		});
+
+		var setUUID = function(tempStr) {
+			var tempModel0 = $.parseJSON(tempStr);
+			tempModel.uuid = tempModel0.id;
+			tempModel.appid = tempModel0.name;
+			console.log('tempStr:' + tempStr);
+		}
 		//判断是否输入了值
 		var checkInput = function(text) {
 			if(text.trim().length == 0) {
