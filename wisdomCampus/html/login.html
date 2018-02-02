@@ -62,7 +62,6 @@
 			if(utils.getSystem() == 'Android') {
 				console.log("native:appid:" + native.getAPPID());
 				console.log("native:schoolid:" + native.getSCHOOLID());
-				var tempModel0 = parseJSON((tempStr));
 				tempModel.uuid = native.getSCHOOLID();
 				tempModel.appid = native.getAPPID();
 			}
@@ -105,12 +104,6 @@
 								if(data1.RspCode == 0) {
 									window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
-									//判断是否安卓系统
-									if(utils.isAndroid()) {
-
-									} else if(utils.isiOS()) { //判断是否ios系统
-
-									}
 								} else {
 									mui.toast(data1.RspTxt);
 								}
@@ -119,7 +112,6 @@
 							$.hideLoading();
 							mui.toast(data.RspTxt);
 						}
-
 					});
 				} else {
 
@@ -128,7 +120,8 @@
 
 			}
 		});
-
+		
+		//从ios原生得到信息
 		var setUUID = function(tempStr) {
 			var tempModel0 = $.parseJSON(tempStr);
 			tempModel.uuid = tempModel0.id;
