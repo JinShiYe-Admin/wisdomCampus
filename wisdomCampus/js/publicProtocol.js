@@ -153,10 +153,9 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 	console.log('url:', url);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1(encryData, commonData, flag);
-
+	console.log('signTemp000:'+signTemp);
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
-		console.log('signtemp:' + signTemp + ',sign:' + sign);
 		//组装发送握手协议需要的data
 		//合并对象
 		var tempData = $.extend(encryData, commonData);
