@@ -171,45 +171,47 @@
 			<h1 class="mui-title" style="color: white;">审批详情</h1>
 		</header>
 		<div class="mui-content" id="checkDetailData">
-			<div class="leave-detail">
-				<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
-				<p class="center-horizontal"><span>{{leaveDetail.ApplyManName}}</span> | <span>{{leaveDetail.CreateTime}}</span></p>
-				<p>{{leaveDetail.ApplyContent}}</p>
-				<div>
-					<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
-						<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
-						<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
-					</template>
+			<template>
+				<div class="leave-detail">
+					<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
+					<p class="center-horizontal"><span>{{leaveDetail.ApplyManName}}</span> | <span>{{leaveDetail.CreateTime}}</span></p>
+					<p>{{leaveDetail.ApplyContent}}</p>
+					<div>
+						<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
+							<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
+							<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
+						</template>
+					</div>
+					<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
+						<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
+						<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
+					</div>
 				</div>
-				<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
-					<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
-					<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
-				</div>
-			</div>
-			<div class="check-flow">
-				<div v-for="check in leaveDetail.ApproveList">
-					<p class="check-container">
-						<span class="checker-name">{{check.ApproveManName}}</span>
-						<span v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
+				<div class="check-flow">
+					<div v-for="check in leaveDetail.ApproveList">
+						<p class="check-container">
+							<span class="checker-name">{{check.ApproveManName}}</span>
+							<span v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
 							<span class="reply-content">{{check.ApproveContent}}</span>
-						<span class="reply-time">----{{check.ApproveTime}}</span>
-						</span>
-					</p>
-				</div>
-			</div>
-			<div class="reply-container" v-if="replyShow" v-on:click="replyShow=false">
-				<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
-					<p class="check-reply-title">批复内容</p>
-					<div class="textarea-container">
-						<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
+							<span class="reply-time">----{{check.ApproveTime}}</span>
+							</span>
 						</p>
-						<textarea rows="3" v-model.trim="replyContent">
+					</div>
+				</div>
+				<div class="reply-container" v-if="replyShow" v-on:click="replyShow=false">
+					<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
+						<p class="check-reply-title">批复内容</p>
+						<div class="textarea-container">
+							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
+							</p>
+							<textarea rows="3" v-model.trim="replyContent">
 						
 						</textarea>
+						</div>
+						<p style="text-align: center; margin-bottom: 0;"><button v-on:click.stop="replyLeave" class="mui-btn-primary dialog-btn">确定</button><button class="mui-btn dialog-btn" v-on:click.stop="replyShow=false">取消</button></p>
 					</div>
-					<p style="text-align: center; margin-bottom: 0;"><button v-on:click.stop="replyLeave" class="mui-btn-primary dialog-btn">确定</button><button class="mui-btn dialog-btn" v-on:click.stop="replyShow=false">取消</button></p>
 				</div>
-			</div>
+			</template>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.js"></script>
