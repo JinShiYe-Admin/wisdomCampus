@@ -210,12 +210,12 @@
 			mui.init();
 			var title_id = utils.getSessionStorageByUrlsKey();
 			console.log(title_id);
-			if(title_id==2){
+			if(title_id == 2) {
 				document.getElementById("notice").className = "mui-control-item"
 				document.getElementById("apply").className = "mui-control-item mui-active"
 				document.getElementById("item1mobile").className = "mui-slider-item mui-control-content"
 				document.getElementById("item2mobile").className = "mui-slider-item mui-control-content  mui-active"
-//			mui('#slider').slider().gotoItem(title_id)
+				//			mui('#slider').slider().gotoItem(title_id)
 			}
 			var createFragment = function(ul, index, data) {
 				var length = ul.querySelectorAll('li').length;
@@ -226,7 +226,7 @@
 					li = document.createElement('li');
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
-						li.id =model.NoticeId
+						li.id = model.NoticeId
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
 							model.NoticeStatus + ']</span>' + model.NoticeTitle +
@@ -238,14 +238,14 @@
 					} else if(index == 1) {
 						var myId = "";
 						var Progress = "";
-						if(ul.id=="apply_send"){
-							li.id = myId =model.ApplyId
+						if(ul.id == "apply_send") {
+							li.id = myId = model.ApplyId
 							Progress = model.ApplyProgress
-						}else{
-							li.id = myId =model.ApproveId
+						} else {
+							li.id = myId = model.ApproveId
 							Progress = model.ApproveProgress
 						}
-						
+
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
 							Progress + ']</span>' + model.ApplyTitle +
@@ -292,7 +292,7 @@
 					deceleration: deceleration
 				});
 				var getNotice = function(title, sendFlag, callback) { //10.获取发送的通知公告列表
-					
+
 					var k = current_key.title + '_' + current_key.send_recevice
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
@@ -309,7 +309,7 @@
 						pageIndex: refreshObj.pageIndex, //当前页数
 						pageSize: '10' //每页记录数
 					}
-					
+
 					if(title == "notice" && sendFlag == "send") {
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
@@ -467,23 +467,22 @@
 				current_key.title = this.id
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
-				
-				var flag = this.parentElement.id.indexOf("send")>=0? 1:0;
-				var data = {
-					id:this.id,
-					flag:flag//1:我发送的 0：发给我的
-				}
-//				console.log(JSON.stringify(data))
-//				console.log(this.parentElement.id)
-				var b =  this.parentElement.id.indexOf("notice")>=0
-				if(b){
-					utils.hrefSessionStorage("noticeDetails.html",data)
-				}else{
-					utils.hrefSessionStorage("check-detail.html",data)
-				}
-				
-			})
 
+				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
+				var data = {
+					id: this.id,
+					flag: flag //1:我发送的 0：发给我的
+				}
+				//				console.log(JSON.stringify(data))
+				//				console.log(this.parentElement.id)
+				var b = this.parentElement.id.indexOf("notice") >= 0
+				if(b) {
+					utils.hrefSessionStorage("noticeDetails.html", data)
+				} else {
+					utils.hrefSessionStorage("check-detail.html", data)
+				}
+
+			})
 		</script>
 	</body>
 
