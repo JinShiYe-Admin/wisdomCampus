@@ -217,6 +217,7 @@
 		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/utils.js"></script>
+		<script src="../js/utils/storageutil.js"></script>
 		<script type="text/javascript">
 			var checkDetailData = new Vue({
 				el: "#checkDetailData",
@@ -282,18 +283,17 @@
 						});
 
 					},
-					getDetail: function() {	
-						this.id = utils.getUrlParam(location.href, "id");
-						this.flag = parseInt(utils.getUrlParam(location.href, "flag"));
-						console.log("获取的id:" + this.id);
-						console.log("获取的flag:" + this.flag);
-						if(!this.id) {
+					getDetail: function() {
+						var localSkey = utils.getSessionStorageByUrlsKey();
+						if(localSkey != null) {
+							this.id = localSkey.id;
+							this.flag = parseInt(localSkey.flag);
+						} else {
 							$.alert("程序内部参数错误，请返回上一界面！", function() {
 								history.go(-1);
 							});
 							return;
 						}
-
 						if(this.flag == 0) {
 							this.getCheckDetail();
 						} else {
