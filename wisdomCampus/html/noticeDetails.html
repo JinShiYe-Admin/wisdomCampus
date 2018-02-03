@@ -93,7 +93,7 @@
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.min.js"></script>
-		<script src="../js/PublicProtocol.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/publicProtocol.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
@@ -103,10 +103,10 @@
 			$(function() {
 				var curPage = utils.getSessionStorageByUrlsKey();
 				console.log('2222:' + JSON.stringify(curPage));
-				var curPage = {
-					"id": "17", //通知ID
-					"flag": 0//1我发送的，0发给我的
-				}
+//				var curPage = {
+//					"id": "17", //通知ID
+//					"flag": 0//1我发送的，0发给我的
+//				}
 				//获取当前人员信息
 				getNoticeDetail(curPage.id);
 			});
