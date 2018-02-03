@@ -65,12 +65,14 @@
 			<h1 class="mui-title">通知详情</h1>
 		</header>
 		<div class="mui-content" id="noticeDetailData" v-show="flag>0" style="background-color: white;">
-			<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
-			<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
-			<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
-			<p class="encName">附件:
-				<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
-				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+			<template>
+				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
+				<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
+				<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
+				<p class="encName">附件:
+					<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
+					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+				</p>
 				<!--滑动组件-->
 				<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
@@ -90,6 +92,8 @@
 						<a class="contentCSS">{{detailModel.NoReadNames}}</a>
 					</div>
 				</div>
+			</template>
+
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.min.js"></script>
@@ -103,10 +107,10 @@
 			$(function() {
 				var curPage = utils.getSessionStorageByUrlsKey();
 				console.log('2222:' + JSON.stringify(curPage));
-//				var curPage = {
-//					"id": "17", //通知ID
-//					"flag": 0//1我发送的，0发给我的
-//				}
+				//				var curPage = {
+				//					"id": "17", //通知ID
+				//					"flag": 0//1我发送的，0发给我的
+				//				}
 				//获取当前人员信息
 				getNoticeDetail(curPage.id);
 			});
@@ -119,7 +123,7 @@
 				},
 				methods: {
 					checkEnc: function(tempFlag) {
-						console.log('tempFlag:'+tempFlag);
+						console.log('tempFlag:' + tempFlag);
 					}
 				}
 			});
