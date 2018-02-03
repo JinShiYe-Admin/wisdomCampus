@@ -165,7 +165,11 @@
 			getHomeCircle('circler');
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id
-				utils.hrefSessionStorage("all.html", id);
+				if(id==1||id==2){
+					utils.hrefSessionStorage("all.html", id);
+				}else{
+					mui.toast("此功能暂未开放");
+				}
 			})
 			var mine = new Vue({
 				el: "#mine",
