@@ -171,7 +171,7 @@
 			<h1 class="mui-title" style="color: white;">审批详情</h1>
 		</header>
 		<div class="mui-content" id="checkDetailData">
-			<template>
+			<template v-if="leaveDetail.ApplyTitle">
 				<div class="leave-detail">
 					<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
 					<p class="center-horizontal"><span>{{leaveDetail.ApplyManName}}</span> | <span>{{leaveDetail.CreateTime}}</span></p>
