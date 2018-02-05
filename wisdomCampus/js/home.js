@@ -119,7 +119,7 @@ var addImg = function(imgUrls, titles) {
 		div.className = "mui-slider-item"
 		div.innerHTML = '<a href="#">' +
 			'<img src="' + imgUrl + '">' +
-			'<p class="mui-slider-title" style="background-color: red;">' + titles[index] + '</p>' +
+			'<p class="mui-slider-title" style="background-color: #BFEBB2;">' + titles[index] + '</p>' +
 			'</a>'
 		group.appendChild(div);
 	})
