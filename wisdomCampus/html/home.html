@@ -187,6 +187,7 @@
 				},
 				methods: {
 					quitLogin: function() { //退出登录
+						window.myStorage.setItem(window.storageKeyName.PERSONALINFO, '');
 						this.isMineShow = false;
 						history.go(-1);
 					},
