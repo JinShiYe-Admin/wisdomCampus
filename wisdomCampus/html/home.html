@@ -105,7 +105,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF">
-			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left mui-icon-chatbubble"></a>
+			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;" src="../img/firstPage/firstPage5.png" /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold">首页</h1>
 		</header>
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
@@ -129,8 +129,8 @@
 		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
-					<img class="head-portrait" src="../img/firstPage/firstPage0.png" />
-					<p class="user-name">name</p>
+					<img class="head-portrait" src="../img/login/username.png" />
+					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
 					<div class="weui-cell__bd">
@@ -147,6 +147,8 @@
 		<script type="text/javascript" src="../js/utils/utils.js"></script>
 		<script type="text/javascript" src="../js/utils/storageutil.js"></script>
 		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/utils/myStorage.js"></script>
+		<script type="text/javascript" src="../js/utils/storageKeyName.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../js/home.js"></script>
 		<script>
@@ -172,10 +174,13 @@
 				} else {
 					mui.toast("此功能暂未开放");
 				}
-			})
+			});
+			var tempInfo = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			console.log('tempInfo:'+tempInfo);
 			var mine = new Vue({
 				el: "#mine",
 				data: {
+					userName:tempInfo.utname,
 					settings: [{
 						name: "密码修改",
 						icon: "",
