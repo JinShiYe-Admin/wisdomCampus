@@ -469,6 +469,12 @@
 			})(mui);
 			mui('.mui-segmented-control').on('tap', 'a', function() {
 				current_key.title = this.id
+				console.log(JSON.stringify(current_key))
+					var ul0 = document.getElementById(current_key.title + "_" + current_key.send_recevice);
+					ul0.className = "mui-table-view";
+					var temp = current_key.send_recevice=="send"?"recevice":"send"
+					var ul1 = document.getElementById(current_key.title + "_" + temp);
+					ul1.className = "mui-table-view mui-hidden";
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
 
