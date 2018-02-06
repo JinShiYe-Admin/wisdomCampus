@@ -54,9 +54,9 @@
 	<script src="../js/utils/storageKeyName.js"></script>
 	<script src="../js/jquery-weui.min.js"></script>
 	<script type="text/javascript">
-			$(function() {
-				
-			});
+		$(function() {
+
+		});
 		var tempModel = {
 			uuid: '',
 			appid: ''
@@ -123,13 +123,40 @@
 
 			}
 		});
-		
+
+		//从ios原生得到信息
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
 			var tempModel0 = $.parseJSON(tempStr);
 			tempModel.uuid = tempModel0.id;
 			tempModel.appid = tempModel0.name;
 			console.log('tempStr:' + tempStr);
+			//判断上次是否登录过，自动登录
+			var personal = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			if(personal && personal.utid != 0) { //有账号，正常登录
+				//需要参数
+				var comData = {
+					uuid: tempModel0.id,
+					utid: personal.utid,
+					utoken: personal.utoken,
+					appid: tempModel0.name,
+					schid: personal.schid,
+					utname: personal.utname
+				};
+				$.showLoading();
+				//令牌续订
+				postDataEncry('TokenReset', {}, comData, 0, function(data) {
+					$.hideLoading();
+					if(data.RspCode == 0) {
+						var tempInfo00 = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+						tempInfo00.token = data.RspData;
+						window.myStorage.setItem(window.storageKeyName.PERSONALINFO, tempInfo00);
+						utils.hrefSessionStorage('home.html', {});
+					} else {
+						mui.toast(data.RspTxt);
+					}
+				});
+			}
 		}
 		//判断是否输入了值
 		var checkInput = function(text) {
