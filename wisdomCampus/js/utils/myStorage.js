@@ -11,6 +11,7 @@
 		var jsonStr = window.localStorage.getItem(k.toString());
 		return jsonStr ? JSON.parse(jsonStr).data : null;
 	};
+	myStorage.getItem = getItem;
 
 //	function getItemPlus(k) {
 //		var jsonStr = plus.storage.getItem(k.toString());
@@ -20,9 +21,9 @@
 	 * 获取数据
 	 * @param {Object} k
 	 */
-	myStorage.getItem = function(k) {
-		return getItem(k) || getItemPlus(k);
-	};
+//	myStorage.getItem = function(k) {
+//		return getItem(k) || getItemPlus(k);
+//	};
 	/**
 	 * 设置数据
 	 * @param {Object} k key 

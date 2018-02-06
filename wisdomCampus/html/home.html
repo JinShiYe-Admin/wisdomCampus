@@ -105,7 +105,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF">
-			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;" src="../img/firstPage/firstPage5.png" /></a>
+			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" src="../img/login/headImg.png" /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold">首页</h1>
 		</header>
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
@@ -129,7 +129,7 @@
 		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
-					<img class="head-portrait" src="../img/login/username.png" />
+					<img class="head-portrait" src="../img/login/headImg.png" />
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
@@ -176,11 +176,15 @@
 				}
 			});
 			var tempInfo = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			var tempName = '暂无姓名';
+			if (tempInfo) {
+				tempName = tempInfo.utname;
+			}
 			console.log('tempInfo:'+tempInfo);
 			var mine = new Vue({
 				el: "#mine",
 				data: {
-					userName:tempInfo.utname,
+					userName:tempName,
 					settings: [{
 						name: "密码修改",
 						icon: "",
