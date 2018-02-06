@@ -228,6 +228,7 @@
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
 						li.id = model.NoticeId
+						model.SendManName=model.SendManName==undefined?"孔":model.SendManName
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
 							model.NoticeStatus + ']</span>' + model.NoticeTitle +
@@ -237,13 +238,15 @@
 							'</p>' +
 							'</div>'
 					} else if(index == 1) {
-						var myId = "";
+						var myName = "";
 						var Progress = "";
 						if(ul.id == "apply_send") {
-							li.id = myId = model.ApplyId
+							li.id= model.ApplyId
+							myName =model. ApplyManName
 							Progress = model.ApplyProgress
 						} else {
 							li.id = myId = model.ApproveId
+							myName ="孔"
 							Progress = model.ApproveProgress
 						}
 
@@ -252,7 +255,7 @@
 							Progress + ']</span>' + model.ApplyTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-							myId + "|" + model.CreateTime +
+							myName + "|" + model.CreateTime +
 							'</p>' +
 							'</div>'
 					}
