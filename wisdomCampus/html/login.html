@@ -106,6 +106,7 @@
 								$.hideLoading();
 								if(data1.RspCode == 0) {
 									window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
+									utils.hrefSessionStorage('home.html', {});
 								} else {
 									mui.toast(data1.RspTxt);
 								}
