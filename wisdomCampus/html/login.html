@@ -98,8 +98,8 @@
 								uuid: tempModel.uuid, //用户设备号
 								shaketype: 'login', //注册(reg),登录(login),修改密码(repw)
 								appid: tempModel.appid, //系统所分配的应用ID
-								schid: '100005', //学校ID
-								utp: '0' //用户类型，0老师,1家长,2学生
+								schid: storageKeyName.SCHOOLID, //学校ID
+								utp: storageKeyName.USERTYPE //用户类型，0老师,1家长,2学生
 							};
 							//登录
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
