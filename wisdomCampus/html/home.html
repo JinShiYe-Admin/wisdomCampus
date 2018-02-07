@@ -97,8 +97,6 @@
 				margin-left: 5%;
 				width: 90%;
 			}
-			
-
 		</style>
 
 	</head>
@@ -177,14 +175,14 @@
 			});
 			var tempInfo = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
 			var tempName = '暂无姓名';
-			if (tempInfo) {
+			if(tempInfo) {
 				tempName = tempInfo.utname;
 			}
-			console.log('tempInfo:'+tempInfo);
+			console.log('tempInfo:' + JSON.stringify(tempInfo));
 			var mine = new Vue({
 				el: "#mine",
 				data: {
-					userName:tempName,
+					userName: tempName,
 					settings: [{
 						name: "密码修改",
 						icon: "",
@@ -198,7 +196,13 @@
 				},
 				methods: {
 					quitLogin: function() { //退出登录
-						window.myStorage.setItem(window.storageKeyName.PERSONALINFO, '');
+						window.myStorage.setItem(window.storageKeyName.PERSONALINFO, {});
+						//将个人信息存入原生app
+									if(utils.getSystem() == 'Android') {
+										
+									}else{
+										window.webkit.messageHandlers.setInfo.postMessage('');
+									}
 						this.isMineShow = false;
 						history.go(-1);
 					},
