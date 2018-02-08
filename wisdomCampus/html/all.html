@@ -164,7 +164,11 @@
 		<script src="../js/utils/utils.js"></script>
 		<script src="../js/publicProtocol.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../js/utils/myStorage.js"></script>
+	<script src="../js/utils/storageKeyName.js"></script>
 		<script>
+			var tempInfo00 = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			console.log(JSON.stringify(tempInfo00))
 			var current_key = {
 				title: 'notice',
 				send_recevice: 'recevice'
