@@ -31,7 +31,9 @@ var storageKeyName = (function(mod) {
 	mod.AUTOLOGIN = 'autoLogin'; //登录信息
 	mod.DOCUMENTSPATH = 'DOCUMENTSPATH'; //记录document的地址
 
-
+	mod.UUID = '';//uuid
+	mod.APPID = '';//appid
+	mod.TOKEN = '';//token
 
 	mod.WAITING = '加载中...'; //
 	mod.UPLOADING = '上传中...';
