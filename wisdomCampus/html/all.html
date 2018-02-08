@@ -164,7 +164,11 @@
 		<script src="../js/utils/utils.js"></script>
 		<script src="../js/publicProtocol.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../js/utils/myStorage.js"></script>
+	<script src="../js/utils/storageKeyName.js"></script>
 		<script>
+			var tempInfo00 = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			console.log(JSON.stringify(tempInfo00))
 			var current_key = {
 				title: 'notice',
 				send_recevice: 'recevice'
@@ -301,7 +305,7 @@
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
 					var tempData = {
-						schoolId: '1', //学校ID
+						schoolId: storageKeyName.SCHOOLID, //学校ID
 						sendManId: 'konglm', //发送人ID
 						sendMan: '', //发送人ID
 						receiveManId: '2', //接收人ID
@@ -348,7 +352,7 @@
 						});
 					} else if(title == "apply" && sendFlag == "send") {
 						tempData = {
-							schoolId: '1', //学校ID
+							schoolId: storageKeyName.SCHOOLID, //学校ID
 							applyManId: 'konglm', //申请人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
@@ -375,7 +379,7 @@
 						});
 					} else if(title == "apply" && sendFlag == "recevice") {
 						var tempData = {
-							schoolId: '1', //学校ID
+							schoolId: storageKeyName.SCHOOLID, //学校ID
 							approveManId: '2', //审批人ID
 							title: '', //标题
 							applyMan: '', //申请人姓名
