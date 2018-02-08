@@ -28,6 +28,10 @@
 				font-size: 15px;
 				padding-top: 15px;
 			}
+			
+			.weui-cell__hd {
+				padding-right: 15px;
+			}
 		</style>
 	</head>
 
@@ -42,15 +46,14 @@
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
-
+						<input class="weui-input" placeholder="请输入标题" />
 					</div>
 					<div class="weui-cell__ft">0/64</div>
 				</div>
 				<div class="weui-cell">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea>
-		    				
+						<textarea class="weui-textarea">
 		    			</textarea>
 					</div>
 					<div class="weui-cell__ft">
@@ -63,13 +66,13 @@
 					<div class="weui-cell__bd">
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
-								<p class="weui-uploader_title">文件上传</p>
+								<p class="weui-uploader__title">文件上传</p>
 								<div class="weui-uploader__info">0/5</div>
 							</div>
 							<div class="weui-uploader__bd">
 								<ul class="weui-uploader__files" id="uploaderFiles">
-									<li class="weui-uploader__file"></li>
-
+									<!--<li class="weui-uploader__file"></li>
+-->
 								</ul>
 								<div class="weui-uploader__input-box">
 									<input id="uploaderInput" class="weui-uploader__input" type="file" accept="" />
@@ -100,7 +103,6 @@
 		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../js/demoCssJs/jquery-weui.js"></script>
 		<script type="text/javascript">
-			
 		</script>
 	</body>
 
