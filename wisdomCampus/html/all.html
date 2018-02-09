@@ -176,8 +176,9 @@
 	<script src='../js/lib/crypto-js/require.js'></script>
 	<script src='../js/utils/signHmacSHA1.js'></script>
 	<script src='../js/utils/sortSign.js'></script>
+	<script src='../js/utils/store.js'></script>
 		<script>
-			var tempInfo00 = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 			console.log(JSON.stringify(tempInfo00))
 			var current_key = {
 				title: 'notice',

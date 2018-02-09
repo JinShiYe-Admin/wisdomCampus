@@ -53,6 +53,7 @@
 	<script src="../js/utils/myStorage.js"></script>
 	<script src="../js/utils/storageKeyName.js"></script>
 	<script src="../js/jquery-weui.min.js"></script>
+	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(function() {
 
@@ -67,6 +68,7 @@
 				console.log("native:schoolid:" + native.getSCHOOLID());
 				tempModel.uuid = native.getSCHOOLID();
 				tempModel.appid = native.getAPPID();
+				store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
 			}
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
@@ -88,7 +90,8 @@
 					postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
 						console.log('2121212');
 						if(data.RspCode == 0) {
-							window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+//							window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+							store.set(window.storageKeyName.SHAKEHAND,data.RspData);
 							var enData1 = {
 								uid: tempName, //用户账号
 								pw: tempPW //用户密码
@@ -105,13 +108,7 @@
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
 								$.hideLoading();
 								if(data1.RspCode == 0) {
-									window.myStorage.setItem(window.storageKeyName.PERSONALINFO, data1.RspData);
-									//将个人信息存入原生app
-									if(utils.getSystem() == 'Android') {
-										
-									}else{
-//										window.webkit.messageHandlers.setInfo.postMessage(data1.RspData);
-									}
+									store.set(window.storageKeyName.PERSONALINFO,data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
 								} else {
 									mui.toast(data1.RspTxt);
@@ -135,10 +132,11 @@
 			var tempModel0 = $.parseJSON(tempStr);
 			tempModel.uuid = tempModel0.id;
 			tempModel.appid = tempModel0.name;
-			window.myStorage.setItem(window.storageKeyName.PUBLICPARAMETER, tempModel);
+			store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
 			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
-			var personal = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.parse(personal));
 			if(personal && personal.utid > 0) { //有账号，正常登录
 				//需要参数
 				var comData = {
@@ -154,9 +152,9 @@
 				postDataEncry('TokenReset', {}, comData, 0, function(data) {
 					$.hideLoading();
 					if(data.RspCode == 0) {
-						var tempInfo00 = window.myStorage.getItem(window.storageKeyName.PERSONALINFO);
+						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.token = data.RspData;
-						window.myStorage.setItem(window.storageKeyName.PERSONALINFO, tempInfo00);
+						store.set(window.storageKeyName.PERSONALINFO,tempInfo00);
 						utils.hrefSessionStorage('home.html', {});
 					} else {
 						mui.toast(data.RspTxt);
@@ -166,15 +164,15 @@
 		}
 		
 		//从ios原生得到信息
-		var setPersonInfo = function(tempStr) {
-			if (tempStr.length>0) {
-				var tempModel0 = $.parseJSON(tempStr);
-				console.log('tempStr:' + tempStr);
-				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, tempModel0);
-			}else{
-				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, {});
-			}
-		}
+//		var setPersonInfo = function(tempStr) {
+//			if (tempStr.length>0) {
+//				var tempModel0 = $.parseJSON(tempStr);
+//				console.log('tempStr:' + tempStr);
+//				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, tempModel0);
+//			}else{
+//				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, {});
+//			}
+//		}
 		
 		//判断是否输入了值
 		var checkInput = function(text) {

@@ -2,7 +2,7 @@
 
 var RSAEncrypt = (function(mod) {
 	mod.enctype = function(encryptStr) {
-		var shakeHand = window.myStorage.getItem(window.storageKeyName.SHAKEHAND);
+		var shakeHand = store.get(window.storageKeyName.SHAKEHAND);
 		//加密
 		setMaxDigits(129);
 		var key00 = new RSAKeyPair(shakeHand.Exponent, '', shakeHand.Modulus);
