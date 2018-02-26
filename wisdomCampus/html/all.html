@@ -98,7 +98,7 @@
 	</head>
 
 	<body>
-        <header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">通知公告</h1>
 		</header>
@@ -166,17 +166,17 @@
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../js/utils/myStorage.js"></script>
 		<script src="../js/utils/storageKeyName.js"></script>
-		
+
 		<!--加密-->
-	<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-	<!---->
-	<script src='../js/lib/crypto-js/require.js'></script>
-	<script src='../js/utils/signHmacSHA1.js'></script>
-	<script src='../js/utils/sortSign.js'></script>
-	<script src='../js/utils/store.js'></script>
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src='../js/utils/store.js'></script>
 		<script>
 			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 			console.log(JSON.stringify(tempInfo00))
@@ -243,7 +243,7 @@
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
 						li.id = model.NoticeId
-						model.SendManName=model.SendManName==undefined?"":model.SendManName + "|"
+						model.SendManName = model.SendManName == undefined ? "" : model.SendManName + "|"
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
 							model.NoticeStatus + ']</span>' + model.NoticeTitle +
@@ -256,12 +256,12 @@
 						var myName = "";
 						var Progress = "";
 						if(ul.id == "apply_send") {
-							li.id= model.ApplyId
-							myName =""
+							li.id = model.ApplyId
+							myName = ""
 							Progress = model.ApplyProgress
 						} else {
 							li.id = myId = model.ApproveId
-							myName =model. ApplyManName+ "|"
+							myName = model.ApplyManName + "|"
 							Progress = model.ApproveProgress
 						}
 
@@ -270,7 +270,7 @@
 							Progress + ']</span>' + model.ApplyTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-							myName  + model.CreateTime +
+							myName + model.CreateTime +
 							'</p>' +
 							'</div>'
 					}
@@ -315,21 +315,20 @@
 					var k = current_key.title + '_' + current_key.send_recevice
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
-					var tempData = {
-						schoolId: storageKeyName.SCHOOLID, //学校ID
-						sendManId: 'konglm', //发送人ID
-						sendMan: '', //发送人ID
-						receiveManId: '2', //接收人ID
-						title: '', //标题
-						status: '0', //状态,0 全部,1 发出,2 撤销
-						progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-						beginTime: '20170101', //查询开始时间
-						endTime: '20180127', //查询结束时间
-						pageIndex: refreshObj.pageIndex, //当前页数
-						pageSize: '10' //每页记录数
-					}
+					var tempData = {}
 
 					if(title == "notice" && sendFlag == "send") {
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							sendManId: 'konglm', //发送人ID
+							title: '', //标题
+							status: '0', //状态,0 全部,1 发出,2 撤销
+							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180127', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数
+						}
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
@@ -346,6 +345,18 @@
 							}
 						});
 					} else if(title == "notice" && sendFlag == "recevice") {
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							sendMan: '', //发送人ID
+							receiveManId: '2', //接收人ID
+							title: '', //标题
+							status: '0', //状态,0 全部,1 发出,2 撤销
+							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180127', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数
+						}
 						getReceiveNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
@@ -369,10 +380,11 @@
 							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
 							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
 							beginTime: '20170101', //查询开始时间
-							endTime: '20180131', //查询结束时间
+							endTime: '30180131', //查询结束时间
 							pageIndex: '1', //当前页数
 							pageSize: '10' //每页记录数，0 为全部
 						}
+
 						getAffairApplyPro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
@@ -389,7 +401,7 @@
 							}
 						});
 					} else if(title == "apply" && sendFlag == "recevice") {
-						var tempData = {
+						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							approveManId: '2', //审批人ID
 							title: '', //标题
@@ -397,10 +409,11 @@
 							status: '0', //状态,0 全部,1 同意,2 退回，3 等待，4 未批
 							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
 							beginTime: '20170101', //查询开始时间
-							endTime: '20180131', //查询结束时间
+							endTime: '30180131', //查询结束时间
 							pageIndex: '1', //当前页数
 							pageSize: '10' //每页记录数，0 为全部
 						}
+
 						getAffairApprovePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
@@ -485,11 +498,11 @@
 			mui('.mui-segmented-control').on('tap', 'a', function() {
 				current_key.title = this.id
 				console.log(JSON.stringify(current_key))
-					var ul0 = document.getElementById(current_key.title + "_" + current_key.send_recevice);
-					ul0.className = "mui-table-view";
-					var temp = current_key.send_recevice=="send"?"recevice":"send"
-					var ul1 = document.getElementById(current_key.title + "_" + temp);
-					ul1.className = "mui-table-view mui-hidden";
+				var ul0 = document.getElementById(current_key.title + "_" + current_key.send_recevice);
+				ul0.className = "mui-table-view";
+				var temp = current_key.send_recevice == "send" ? "recevice" : "send"
+				var ul1 = document.getElementById(current_key.title + "_" + temp);
+				ul1.className = "mui-table-view mui-hidden";
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
 
