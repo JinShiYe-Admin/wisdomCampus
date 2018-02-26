@@ -316,11 +316,12 @@
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
 					var tempData = {}
+					var personal = store.get(window.storageKeyName.PERSONALINFO);
 
 					if(title == "notice" && sendFlag == "send") {
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
-							sendManId: 'konglm', //发送人ID
+							sendManId: personal.utid, //发送人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销
 							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
@@ -348,7 +349,7 @@
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendMan: '', //发送人ID
-							receiveManId: '2', //接收人ID
+							receiveManId: personal.utid, //接收人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销
 							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
@@ -375,13 +376,13 @@
 					} else if(title == "apply" && sendFlag == "send") {
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
-							applyManId: 'konglm', //申请人ID
+							applyManId: personal.utid, //申请人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
 							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
 							beginTime: '20170101', //查询开始时间
 							endTime: '30180131', //查询结束时间
-							pageIndex: '1', //当前页数
+							pageIndex: refreshObj.pageIndex, //当前页数
 							pageSize: '10' //每页记录数，0 为全部
 						}
 
@@ -403,14 +404,14 @@
 					} else if(title == "apply" && sendFlag == "recevice") {
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
-							approveManId: '2', //审批人ID
+							approveManId: personal.utid, //审批人ID
 							title: '', //标题
 							applyMan: '', //申请人姓名
 							status: '0', //状态,0 全部,1 同意,2 退回，3 等待，4 未批
 							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
 							beginTime: '20170101', //查询开始时间
 							endTime: '30180131', //查询结束时间
-							pageIndex: '1', //当前页数
+							pageIndex: refreshObj.pageIndex, //当前页数
 							pageSize: '10' //每页记录数，0 为全部
 						}
 
