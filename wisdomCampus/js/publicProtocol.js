@@ -87,11 +87,11 @@ var postDataEncry1 = function(encryData, commonData, flag) {
  * @param {Object} callback 回调
  */
 var xhrPost = function(url, commonData, callback) {
-	console.log('XHRP-Url:', url);
-	console.log('XHRP-Data:', commonData);
+//	console.log('XHRP-Url:', url);
+//	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1({}, commonData, 0);
-	console.log('signTemp000:' + signTemp);
+//	console.log('signTemp000:' + signTemp);
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
 		//组装发送握手协议需要的data
@@ -100,9 +100,9 @@ var xhrPost = function(url, commonData, callback) {
 		//添加签名
 		tempData.sign = sign;
 		// 等待的对话框
-		//		var urlArr = url.split('/');
-		//		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
-		//		jQAjaxPost(url, JSON.stringify(tempData), callback);
+		var urlArr = url.split('/');
+		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
+		//        jQAjaxPost(url, JSON.stringify(tempData), callback);
 
 		var xhr = new XMLHttpRequest();
 		xhr.open("post", url, true);
@@ -113,6 +113,8 @@ var xhrPost = function(url, commonData, callback) {
 			console.log('this.readyState:', this.readyState);
 			console.log('this.status', this.status);
 			if(this.readyState === 4 && this.status === 200) {
+				var urlArr = url.split('/');
+				console.log('传递的参数' + urlArr[urlArr.length - 1]);
 				var success_data = JSON.parse(this.responseText);
 				console.log('XHRP-Success:', JSON.stringify(success_data));
 				if(success_data.RspCode == 0013) {
@@ -148,7 +150,7 @@ var xhrPost = function(url, commonData, callback) {
 				RspTxt: "网络连接失败,请重新尝试一下"
 			});
 		};
-		xhr.send(tempData);
+		xhr.send(JSON.stringify(tempData));
 	});
 }
 
@@ -197,45 +199,45 @@ var extendParameter = function(data0) {
 //10.获取发送的通知公告列表
 var getSendNoticePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getSendNotice', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl + 'getSendNotice', data0, callback);
 }
 
 //11.获取收到的通知公告列表（接收人为单人）
 var getReceiveNoticePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getReceiveNotice', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl + 'getReceiveNotice', data0, callback);
 }
 
 //12.通过ID获取通知公告
 var getNoticeByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getNoticeById', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl + 'getNoticeById', data0, callback);
 }
 
 //16.审批事务及文件申请
 var setAffairApprovePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'setAffairApprove', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'setAffairApprove', data0, callback);
 }
 
 //17.获取事务及文件申请列表
 var getAffairApplyPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApply', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApply', data0, callback);
 }
 
 //18.获取事务及文件审批列表（审批人为单人）
 var getAffairApprovePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApprove', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApprove', data0, callback);
 }
 
 //19.通过ID获取事务及文件申请
 var getAffairApplyByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApplyById', JSON.stringify(data0), callback);
+	xhrPost(tempAttendUrl1 + 'getAffairApplyById', data0, callback);
 }
 var getAffairApproveByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApproveById', JSON.stringify(data0), callback)
+	xhrPost(tempAttendUrl1 + 'getAffairApproveById', data0, callback)
 }
