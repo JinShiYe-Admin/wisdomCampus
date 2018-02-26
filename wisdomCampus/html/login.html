@@ -136,7 +136,7 @@
 			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			console.log('personal:' + JSON.parse(personal));
+//			console.log('personal:' + JSON.parse(personal));
 			if(personal && personal.utid > 0) { //有账号，正常登录
 				//需要参数
 				var comData = {
