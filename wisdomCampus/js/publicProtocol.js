@@ -189,8 +189,8 @@ var extendParameter = function(data0) {
 	var personal = store.get(window.storageKeyName.PERSONALINFO);
 	var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
 	var tempData = {
-		uuid: publicPar.uuid,
-		appid: publicPar.appid,
+		uuid: 'publicPar.uuid',
+		appid: 'publicPar.appid',
 		token: personal.utoken
 	}
 	return $.extend(data0, tempData);
