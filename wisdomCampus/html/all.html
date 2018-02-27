@@ -101,6 +101,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">通知公告</h1>
+			<a onclick="add()" class="mui-icon mui-icon-plusempty mui-pull-right" style="color: white;"></a>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
 
@@ -232,6 +233,13 @@
 				document.getElementById("item1mobile").className = "mui-slider-item mui-control-content"
 				document.getElementById("item2mobile").className = "mui-slider-item mui-control-content  mui-active"
 				//			mui('#slider').slider().gotoItem(title_id)
+			}
+			var add = function(){
+				if(current_key.title=="notice"){
+					utils.hrefSessionStorage("new_message.html", {})
+				}else{
+					utils.hrefSessionStorage("new-check.html", {})
+				}
 			}
 			var createFragment = function(ul, index, data) {
 				var length = ul.querySelectorAll('li').length;
