@@ -1,18 +1,18 @@
 {
-	"html/home.html": {
-		"refer": [
-			"html/all.html"
-		]
-	},
-	"html/all.html": {
-		"refer": [
-			"html/home.html",
-			"html/new_message.html"
-		]
-	},
-	"html/new_message.html": {
-		"refer": [
-			"html/all.html"
-		]
-	}
+  "html/home.html": {
+    "refer": [
+      "html/all.html"
+    ]
+  },
+  "html/all.html": {
+    "refer": [
+      "html/home.html",
+      "html/new_message.html"
+    ]
+  },
+  "html/new_message.html": {
+    "refer": [
+      "html/all.html"
+    ]
+  }
 }
