@@ -86,10 +86,10 @@
 				<!--滑动内容-->
 				<div class="mui-slider-group">
 					<div id="div-finished" class="mui-slider-item mui-control-content mui-active">
-						<a class="contentCSS">{{detailModel.ReadNames}}</a>
+						<div class="contentCSS">{{detailModel.ReadNames}}</div>
 					</div>
 					<div id="div-unfinish" class="mui-slider-item mui-control-content">
-						<a class="contentCSS">{{detailModel.NoReadNames}}</a>
+						<div class="contentCSS">{{detailModel.NoReadNames}}</div>
 					</div>
 				</div>
 			</template>
@@ -111,6 +111,8 @@
 	<script src='../js/lib/crypto-js/require.js'></script>
 	<script src='../js/utils/signHmacSHA1.js'></script>
 	<script src='../js/utils/sortSign.js'></script>
+	<script src="../js/utils/storageKeyName.js"></script>
+	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
 			$(function() {
