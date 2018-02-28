@@ -64,10 +64,10 @@
 		}
 		document.getElementById("login").addEventListener('tap', function(event) {
 			if(utils.getSystem() == 'Android') {
-				console.log("native:appid:" + native.getAPPID());
-				console.log("native:schoolid:" + native.getSCHOOLID());
-				tempModel.uuid = native.getSCHOOLID();
-				tempModel.appid = native.getAPPID();
+//				console.log("native:appid:" + native.getAPPID());
+//				console.log("native:schoolid:" + native.getSCHOOLID());
+				tempModel.uuid = 'native.getSCHOOLID()';
+				tempModel.appid = 'native.getAPPID()';
 				store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
 			}
 			console.log("登录");
