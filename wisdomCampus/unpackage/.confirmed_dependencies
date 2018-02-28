@@ -2,17 +2,25 @@
   "html/home.html": {
     "refer": [
       "html/all.html"
-    ]
+    ],
+    "resources": []
   },
   "html/all.html": {
     "refer": [
       "html/home.html",
       "html/new_message.html"
-    ]
+    ],
+    "resources": []
   },
   "html/new_message.html": {
     "refer": [
       "html/all.html"
+    ],
+    "resources": []
+  },
+  "html/login.html": {
+    "refer": [
+      "html/home.html"
     ]
   }
 }

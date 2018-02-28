@@ -241,3 +241,7 @@ var getAffairApproveByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApproveById', data0, callback)
 }
+var addNoticePro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'addNotice', data0, callback)
+}
