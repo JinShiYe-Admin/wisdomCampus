@@ -25,9 +25,11 @@
 		<script src='../js/lib/crypto-js/require.js'></script>
 		<script src='../js/utils/signHmacSHA1.js'></script>
 		<script src='../js/lib/jquery.js'></script>
-		<script src="../js/PublicProtocol.js"></script>
+		<script src="../js/publicProtocol.js"></script>
 		<script src='../js/utils/sortSign.js'></script>
 		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/storageKeyName.js"></script>
+		<script src="../js/utils/store.js"></script>
 		<!--<script src="../js/utils/myStorage.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/storageKeyName.js" type="text/javascript" charset="utf-8"></script>-->
 
@@ -127,12 +129,22 @@
 //				});
 				
 				//19.通过ID获取事务及文件申请
-				var tempData = {
-					applyId: '3' //申请ID
-				}
-				getAffairApplyByIdPro(tempData, function function_name() {
-
-				});
+//				var tempData = {
+//					applyId: '3' //申请ID
+//				}
+//				getAffairApplyByIdPro(tempData, function function_name() {
+//
+//				});
+				
+				//24.获取角色对应的菜单权限
+					var tempData = {
+						schoolId: '100005', //学校ID
+						system: 2, //1 通知公告,2 事务及文件
+						roleType: 2 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+					}
+					getPrivilegeByRolePro(tempData, function(data1) {
+						console.log(JSON.stringify(data1));
+					});
 
 				//				var enData0 = {};
 				//				//不需要加密的数据

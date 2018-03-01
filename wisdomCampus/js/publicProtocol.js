@@ -87,7 +87,7 @@ var postDataEncry1 = function(encryData, commonData, flag) {
  * @param {Object} callback 回调
  */
 var xhrPost = function(url, commonData, callback) {
-//	console.log('XHRP-Url:', url);
+	console.log('XHRP-Url:', url);
 //	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1({}, commonData, 0);
@@ -101,7 +101,7 @@ var xhrPost = function(url, commonData, callback) {
 		tempData.sign = sign;
 		// 等待的对话框
 		var urlArr = url.split('/');
-		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
+		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', tempData);
 		//        jQAjaxPost(url, JSON.stringify(tempData), callback);
 
 		var xhr = new XMLHttpRequest();
@@ -114,7 +114,6 @@ var xhrPost = function(url, commonData, callback) {
 			console.log('this.status', this.status);
 			if(this.readyState === 4 && this.status === 200) {
 				var urlArr = url.split('/');
-				console.log('传递的参数' + urlArr[urlArr.length - 1]);
 				var success_data = JSON.parse(this.responseText);
 				console.log('XHRP-Success:', JSON.stringify(success_data));
 				if(success_data.RspCode == 0013) {
@@ -183,6 +182,7 @@ var jQAjaxPost = function(url, data, callback) {
 //智慧校园协议
 var tempAttendUrl = 'https://jbyj.jiaobaowang.net/SchoolOAService/notice/';
 var tempAttendUrl1 = 'https://jbyj.jiaobaowang.net/SchoolOAService/approve/';
+var tempAttendUrl2 = 'https://jbyj.jiaobaowang.net/SchoolOAService/privilege/';//获取权限
 
 //合并参数
 var extendParameter = function(data0) {
@@ -194,6 +194,12 @@ var extendParameter = function(data0) {
 		token: personal.utoken
 	}
 	return $.extend(data0, tempData);
+}
+
+//7.新增通知公告
+var addNoticePro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'addNotice', data0, callback)
 }
 
 //10.获取发送的通知公告列表
@@ -237,11 +243,16 @@ var getAffairApplyByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApplyById', data0, callback);
 }
+
+//23.通过审批ID获取事务及文件申请及审批
 var getAffairApproveByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApproveById', data0, callback)
+	xhrPost(tempAttendUrl1 + 'getAffairApproveById', data0, callback);
 }
-var addNoticePro = function(data0, callback) {
+
+//24.获取角色对应的菜单权限
+var getPrivilegeByRolePro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'addNotice', data0, callback)
+	//判断是通知公告还是事务
+	xhrPost(tempAttendUrl2 + 'getPrivilegeByRole', data0, callback);
 }

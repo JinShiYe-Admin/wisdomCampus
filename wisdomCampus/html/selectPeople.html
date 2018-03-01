@@ -10,42 +10,118 @@
 
 	<body>
 		<ul class="mui-table-view">
-		        <li class="mui-table-view-cell mui-collapse">
-					<a class="mui-navigate-right" href="#">
-						button（按钮）
-					</a>
-					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/buttons.html">
-								普通按钮
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/buttons-with-icons.html">
-								带图标的按钮
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/buttons-with-badges.html">
-								带数字的按钮
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" data-title-type="native" href="examples/buttons-with-block.html">
-								块级按钮
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" data-title-type="native" href="examples/buttons-with-loading.html">
-								加载中按钮
-							</a>
-						</li>
-					</ul>
-				</li>
-		    </ul>
+			<li class="mui-table-view-cell mui-collapse">
+				<a class="mui-navigate-right" href="#">
+					button（按钮）
+				</a>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							普通按钮
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							带图标的按钮
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							带数字的按钮
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							块级按钮
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							加载中按钮
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
 		<script src="../js/mui.min.js"></script>
+		<!--加密-->
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src="../js/publicProtocol.js"></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src="../js/utils/storageKeyName.js"></script>
+		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			mui.init();
+
+			var getData = function() {
+				//获取个人信息
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				//判断是否年级领导
+				if(personal.grds.length > 0) {
+					//24.获取角色对应的菜单权限
+					var tempData = {
+						schoolId: personal.schid, //学校ID
+						system: 1, //1 通知公告,2 事务及文件
+						roleType: 2 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+					}
+					getPrivilegeByRolePro(tempData, function() {
+
+					});
+				}
+				//判断是否是班主任或任课老师
+				if(personal.clss.length > 0) {
+					var a = 0;
+					var b = 0;
+					for(var i = 0; i < personal.clss.length; i++) {
+						var tempModel = personal.clss[i];
+						//判断是不是班主任，0非1是
+						if(tempModel.isms == 0 && a == 0) {
+							a = 1;
+							//24.获取角色对应的菜单权限
+							var tempData = {
+								schoolId: personal.schid, //学校ID
+								system: 1, //1 通知公告,2 事务及文件
+								roleType: 4 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+							}
+							getPrivilegeByRolePro(tempData, function() {
+
+							});
+						}
+						//判断是不是班主任，0非1是
+						if(tempModel.isms == 1 && b == 0) {
+							b = 1;
+							//24.获取角色对应的菜单权限
+							var tempData = {
+								schoolId: personal.schid, //学校ID
+								system: 1, //1 通知公告,2 事务及文件
+								roleType: 3 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+							}
+							getPrivilegeByRolePro(tempData, function() {
+
+							});
+						}
+					}
+				}
+				//判断是否是科任组长
+				if(personal.subs.length > 0) {
+					//24.获取角色对应的菜单权限
+					var tempData = {
+						schoolId: personal.schid, //学校ID
+						system: 1, //1 通知公告,2 事务及文件
+						roleType: 1 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+					}
+					getPrivilegeByRolePro(tempData, function() {
+
+					});
+				}
+			}
 		</script>
 	</body>
 
