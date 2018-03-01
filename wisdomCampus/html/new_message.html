@@ -51,7 +51,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">新消息</h1>
+			<h1 class="mui-title">新建通知</h1>
 			<a class="mui-icon mui-pull-right right-cancel">取消</a>
 		</header>
 		<div id="message" class="mui-content">
@@ -59,14 +59,14 @@
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
-						<input class="weui-input" placeholder="请输入标题" />
+						<input v-model="title" class="weui-input" placeholder="请输入标题" />
 					</div>
 					<!--<div class="weui-cell__ft">0/64</div>-->
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						<textarea  v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 						<!--<div class="weui-textarea-counter">
 		    				<span>0</span>
 		    				/500
@@ -106,11 +106,11 @@
 				<div class="weui-cell weui-cell_switch">
 					<div class="weui-cell__bd">是否短信同步</div>
 					<div class="weui-cell__ft">
-						<input class="weui-switch" type="checkbox" />
+						<input v-model="smsSync" class="weui-switch" type="checkbox" />
 					</div>
 				</div>
 			</div>
-			<a @click="clickSubmitBtn()" href="" class="weui-btn weui-btn_blue">发布</a>
+			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
 		</div>
 		<input id="qnInput" style="display: none;">
 		<div class="weui-gallery" :style="displayGallery" v-if="stat<2" style="z-index: 999999;position:absolute;">
@@ -135,10 +135,10 @@
 		<script src="../js/utils/storageutil.js"></script>
 		<script src="../js/utils/cloudutil.js"></script>
 		<script src='../js/utils/store.js'></script>
-			<script src="../js/utils/storageKeyName.js"></script>
-				<script src="../js/publicProtocol.js"></script>
-				<script src='../js/lib/crypto-js/require.js'></script>
-				<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src="../js/utils/storageKeyName.js"></script>
+		<script src="../js/publicProtocol.js"></script>
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
 
 		<script type="text/javascript">
 			var uptokenData;
@@ -147,7 +147,10 @@
 			var message = new Vue({
 				el: '#message',
 				data: {
-					workTitle: '',
+					
+					title: '',
+					content: '',
+					smsSync:false,
 					displayGallery: {
 						display: 'none'
 					},
@@ -194,46 +197,9 @@
 							}
 						});
 					},
-					clickSubmitBtn: function() { //提交按钮
-						//						if(message.workTitle.trim().length == 0 && isNull(message.workTitle) && message.uploadedFiles.length == 0) {
-						//							$.alert('请输入标题');
-						//							return;
-						//						}
-						//附件数组
-						var tempEncs = [];
-						for(var i = 0; i < message.uploadedFiles.length; i++) {
-							var tempValue = message.uploadedFiles[i];
-							var tempModel = {
-								oldname: tempValue.OldName,
-								newname: tempValue.NewName,
-								saveurl: tempValue.SaveUrl,
-								filesize: tempValue.FileSize,
-								imgurl: tempValue.ImgUrl
-							}
-							tempEncs.push(tempModel);
-						}
+					clickSubmitBtn: function() { 
 						addNotice()
-						//						$.showLoading('加载中...');
 
-						//						//14.作业管理
-						//						var tempData = {
-						//							cmd: 'work', //14.作业管理
-						//							type: 'studo', //学生做作业
-						//							colid: workId, //workdoid
-						//							colv: message.workTitle, //作答内容
-						//							encs: tempEncs //作答附件
-						//						}
-						//						unitWebsitePro(tempData, function(data) {
-						//							$.hideLoading();
-						//							if(data.RspCode == 0) {
-						//								console.log('成功');
-						//								$.toast("成功");
-						//
-						//								window.location.reload();
-						//							} else {
-						//								$.alert(data.RspTxt);
-						//							}
-						//						});
 					}
 				}
 			})
@@ -407,25 +373,55 @@
 				return upToken;
 			}
 			var addNotice = function() {
+				if (message.title.length == 0 ||message.content.length == 0 ||message.uploadedFiles.length == 0) {
+		                    alert('请填写具体内容后再发布');
+		                    return;
+		                }
+		                if (message.title.length >= 50) {
+		                    alert('标题不能超过50字');
+		                    return;
+		                }
+		                 if (message.content.length >= 500) {
+		                    alert('内容不能超过500字');
+		                    return;
+		                }
+
+
+				//附件数组
+				var nameArr = [];
+				var addrArr = []
+
+				for(var i = 0; i < message.uploadedFiles.length; i++) {
+					var tempValue = message.uploadedFiles[i];
+					nameArr.push(tempValue.NewName);
+					addrArr.push(tempValue.ImgUrl);
+				}
+				var noticEncName = nameArr.join("|")
+				var noticeEncAddr = addrArr.join("|")
+				var smsSync = message.smsSync==true? 1:0
+				$.showLoading('加载中...');
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var ids = [];
+				var codes = [];
+				var names = [];
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
-					noticeTitle: 'test', //标题
-					noticeContent: 'test', //内容
-					noticEncName: '', //附件名称
-					noticeEncAddr: '', //附件地址
-					smsSync: 0, //是否短信同步
+					noticeTitle: message.title, //标题
+					noticeContent: message.content, //内容
+					noticEncName: noticEncName, //附件名称
+					noticeEncAddr: noticeEncAddr, //附件地址
+					smsSync: smsSync, //是否短信同步
 					sendManId: personal.utid, //发布人ID
 					sendManCode: personal.uid, //发布人账号
 					sendManName: personal.utname, //发布人姓名
-					receiveManIds: '', //接收人人ID
-					receiveManCodes: '', //接收人账号
-					receiveManNames: '', //接收人姓名
+					receiveManIds: ids, //接收人人ID
+					receiveManCodes: codes, //接收人账号
+					receiveManNames: names, //接收人姓名
 				}
 				addNoticePro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
-
+						$.hideLoading();
 					} else {
 
 					}
