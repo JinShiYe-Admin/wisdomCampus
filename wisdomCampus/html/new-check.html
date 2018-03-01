@@ -203,7 +203,7 @@
 						});
 					},
 					clickSubmitBtn: function() { 
-						addNotice()
+						addAffairApply()
 
 					},
 					selectPepole:function(){
@@ -383,7 +383,7 @@
 				});
 				return upToken;
 			}
-			var addNotice = function() {
+			var addAffairApply = function() {
 				if (message.title.length == 0 ||message.content.length == 0 ||message.uploadedFiles.length == 0) {
 		                    alert('请填写具体内容后再发布');
 		                    return;
@@ -417,19 +417,18 @@
 				var names = [];
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
-					noticeTitle: message.title, //标题
-					noticeContent: message.content, //内容
-					noticEncName: noticEncName, //附件名称
-					noticeEncAddr: noticeEncAddr, //附件地址
-					smsSync: smsSync, //是否短信同步
-					sendManId: personal.utid, //发布人ID
-					sendManCode: personal.uid, //发布人账号
-					sendManName: personal.utname, //发布人姓名
-					receiveManIds: ids, //接收人人ID
-					receiveManCodes: codes, //接收人账号
-					receiveManNames: names, //接收人姓名
+					applyTitle: message.title, //标题
+					applyContent: message.content, //内容
+					applyEncName: noticEncName, //附件名称
+					applyEncAddr: noticeEncAddr, //附件地址
+					applyManId: personal.utid, //发布人ID
+					applyManCode: personal.uid, //发布人账号
+					applyManName: personal.utname, //发布人姓名
+					approveManIds: ids, //接收人人ID
+					approveManCodes: codes, //接收人账号
+					approveManNames: names, //接收人姓名
 				}
-				addNoticePro(tempData, function function_name(data) {
+				addAffairApplyPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();

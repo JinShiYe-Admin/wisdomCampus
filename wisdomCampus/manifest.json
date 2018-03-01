@@ -205,7 +205,8 @@
 			"html/home.html": {
 				"resources": [],
 				"refer": [
-					"html/all.html"
+					"html/all.html",
+					"html/login.html"
 				],
 				"priority": 0
 			},
@@ -213,7 +214,10 @@
 				"resources": [],
 				"refer": [
 					"html/home.html",
-					"html/new_message.html"
+					"html/new_message.html",
+					"html/new-check.html",
+					"html/noticeDetails.html",
+					"html/check-detail.html"
 				],
 				"priority": 0
 			},
@@ -228,6 +232,27 @@
 				"resources": [],
 				"refer": [
 					"html/home.html"
+				],
+				"priority": 0
+			},
+			"html/new-check.html": {
+				"resources": [],
+				"refer": [
+					"html/all.html"
+				],
+				"priority": 0
+			},
+			"html/noticeDetails.html": {
+				"resources": [],
+				"refer": [
+					"html/all.html"
+				],
+				"priority": 0
+			},
+			"html/check-detail.html": {
+				"resources": [],
+				"refer": [
+					"html/all.html"
 				],
 				"priority": 0
 			}
@@ -275,7 +300,6 @@
 				"js/lib/swiper/swiper.js",
 				"js/lib/crypto-js/aes.js",
 				"js/pcWeb-HUI/Uploader.js",
-				"html/noticeDetails.html",
 				"js/lib/crypto-js/hmac-sha384.js",
 				"js/lib/crypto-js/hmac-md5.js",
 				"js/demoCssJs/iscroll.js",

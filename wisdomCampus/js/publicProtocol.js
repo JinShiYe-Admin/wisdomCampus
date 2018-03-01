@@ -256,3 +256,8 @@ var getPrivilegeByRolePro = function(data0, callback) {
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl2 + 'getPrivilegeByRole', data0, callback);
 }
+var addAffairApplyPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	//判断是通知公告还是事务
+	xhrPost(tempAttendUrl1 + 'addAffairApply', data0, callback);
+}
