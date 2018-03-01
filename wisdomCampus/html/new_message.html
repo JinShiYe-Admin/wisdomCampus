@@ -95,7 +95,7 @@
 				</div>
 			</div>
 			<div class="weui-cells">
-				<div class="weui-cell weui-cell_access">
+				<div @click="selectPepole()" class="weui-cell weui-cell_access">
 					<div class="weui-cell__bd">
 						接收人
 					</div>
@@ -200,6 +200,12 @@
 					clickSubmitBtn: function() { 
 						addNotice()
 
+					},
+					selectPepole:function(){
+						var data = {
+							flag:0
+						}
+						utils.hrefSessionStorage("selectPeople.html", data)
 					}
 				}
 			})
