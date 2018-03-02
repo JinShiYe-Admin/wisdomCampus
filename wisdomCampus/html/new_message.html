@@ -66,7 +66,7 @@
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea  v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						<textarea v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 						<!--<div class="weui-textarea-counter">
 		    				<span>0</span>
 		    				/500
@@ -111,16 +111,17 @@
 				</div>
 			</div>
 			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
-		</div>
-		<input id="qnInput" style="display: none;">
-		<div class="weui-gallery" :style="displayGallery" v-if="stat<2" style="z-index: 999999;position:absolute;">
-			<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
-			<div class="weui-gallery__opr">
-				<a href="javascript:" class="weui-gallery__del">
-					<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
-				</a>
+			<div class="weui-gallery" :style="displayGallery" style="z-index: 999999;position:absolute;">
+				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
+				<div class="weui-gallery__opr">
+					<a href="javascript:" class="weui-gallery__del">
+						<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
+					</a>
+				</div>
 			</div>
 		</div>
+			<input id="qnInput" style="display: none;">
+		<script src="../js/weui.min.js"></script>
 		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
@@ -147,10 +148,10 @@
 			var message = new Vue({
 				el: '#message',
 				data: {
-					
+
 					title: '',
 					content: '',
-					smsSync:false,
+					smsSync: false,
 					displayGallery: {
 						display: 'none'
 					},
@@ -173,6 +174,7 @@
 						}
 					},
 					clickImg: function(index) { //点击列表中的附件，给别的地方赋值
+						console.log(message.uploadedFiles[index].ImgUrl)
 						message.selectIndex = index;
 						message.selectImgPath = message.uploadedFiles[index].ImgUrl;
 						message.displayGallery = {
@@ -197,13 +199,13 @@
 							}
 						});
 					},
-					clickSubmitBtn: function() { 
+					clickSubmitBtn: function() {
 						addNotice()
 
 					},
-					selectPepole:function(){
+					selectPepole: function() {
 						var data = {
-							flag:1//1 通知公告
+							flag: 1 //1 通知公告
 						}
 						utils.hrefSessionStorage("selectPeople.html", data)
 					}
@@ -379,19 +381,18 @@
 				return upToken;
 			}
 			var addNotice = function() {
-				if (message.title.length == 0 ||message.content.length == 0 ||message.uploadedFiles.length == 0) {
-		                    alert('请填写具体内容后再发布');
-		                    return;
-		                }
-		                if (message.title.length >= 50) {
-		                    alert('标题不能超过50字');
-		                    return;
-		                }
-		                 if (message.content.length >= 500) {
-		                    alert('内容不能超过500字');
-		                    return;
-		                }
-
+				if(message.title.length == 0 || message.content.length == 0 || message.uploadedFiles.length == 0) {
+					alert('请填写具体内容后再发布');
+					return;
+				}
+				if(message.title.length >= 50) {
+					alert('标题不能超过50字');
+					return;
+				}
+				if(message.content.length >= 500) {
+					alert('内容不能超过500字');
+					return;
+				}
 
 				//附件数组
 				var nameArr = [];
@@ -404,7 +405,7 @@
 				}
 				var noticEncName = nameArr.join("|")
 				var noticeEncAddr = addrArr.join("|")
-				var smsSync = message.smsSync==true? 1:0
+				var smsSync = message.smsSync == true ? 1 : 0
 				$.showLoading('加载中...');
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var ids = [];
