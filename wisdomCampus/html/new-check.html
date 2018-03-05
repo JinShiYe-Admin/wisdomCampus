@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -67,7 +66,7 @@
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea  v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						<textarea v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 						<!--<div class="weui-textarea-counter">
 		    				<span>0</span>
 		    				/500
@@ -95,7 +94,7 @@
 					</div>
 				</div>
 			</div>
-						<div class="weui-cells">
+			<div class="weui-cells">
 				<div class="weui-cell weui-cell_access">
 					<div class="weui-cell__bd">
 						审批流程
@@ -116,16 +115,17 @@
 			</div>
 
 			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
-		</div>
-		<input id="qnInput" style="display: none;">
-		<div class="weui-gallery" :style="displayGallery" v-if="stat<2" style="z-index: 999999;position:absolute;">
-			<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
-			<div class="weui-gallery__opr">
-				<a href="javascript:" class="weui-gallery__del">
-					<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
-				</a>
+			<div class="weui-gallery" :style="displayGallery"  style="z-index: 999999;position:absolute;">
+				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
+				<div class="weui-gallery__opr">
+					<a href="javascript:" class="weui-gallery__del">
+						<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
+					</a>
+				</div>
 			</div>
 		</div>
+		<input id="qnInput" style="display: none;">
+
 		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
@@ -152,10 +152,10 @@
 			var message = new Vue({
 				el: '#message',
 				data: {
-					
+
 					title: '',
 					content: '',
-					smsSync:false,
+					smsSync: false,
 					displayGallery: {
 						display: 'none'
 					},
@@ -202,13 +202,13 @@
 							}
 						});
 					},
-					clickSubmitBtn: function() { 
-						addNotice()
+					clickSubmitBtn: function() {
+						addAffairApply()
 
 					},
-					selectPepole:function(){
+					selectPepole: function() {
 						var data = {
-							flag:2//事务及文件
+							flag: 2 //事务及文件
 						}
 						utils.hrefSessionStorage("selectPeople.html", data)
 					}
@@ -383,20 +383,19 @@
 				});
 				return upToken;
 			}
-			var addNotice = function() {
-				if (message.title.length == 0 ||message.content.length == 0 ||message.uploadedFiles.length == 0) {
-		                    alert('请填写具体内容后再发布');
-		                    return;
-		                }
-		                if (message.title.length >= 50) {
-		                    alert('标题不能超过50字');
-		                    return;
-		                }
-		                 if (message.content.length >= 500) {
-		                    alert('内容不能超过500字');
-		                    return;
-		                }
-
+			var addAffairApply = function() {
+				if(message.title.length == 0 || message.content.length == 0 || message.uploadedFiles.length == 0) {
+					alert('请填写具体内容后再发布');
+					return;
+				}
+				if(message.title.length >= 50) {
+					alert('标题不能超过50字');
+					return;
+				}
+				if(message.content.length >= 500) {
+					alert('内容不能超过500字');
+					return;
+				}
 
 				//附件数组
 				var nameArr = [];
@@ -409,7 +408,7 @@
 				}
 				var noticEncName = nameArr.join("|")
 				var noticeEncAddr = addrArr.join("|")
-				var smsSync = message.smsSync==true? 1:0
+				var smsSync = message.smsSync == true ? 1 : 0
 				$.showLoading('加载中...');
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var ids = [];
@@ -417,19 +416,18 @@
 				var names = [];
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
-					noticeTitle: message.title, //标题
-					noticeContent: message.content, //内容
-					noticEncName: noticEncName, //附件名称
-					noticeEncAddr: noticeEncAddr, //附件地址
-					smsSync: smsSync, //是否短信同步
-					sendManId: personal.utid, //发布人ID
-					sendManCode: personal.uid, //发布人账号
-					sendManName: personal.utname, //发布人姓名
-					receiveManIds: ids, //接收人人ID
-					receiveManCodes: codes, //接收人账号
-					receiveManNames: names, //接收人姓名
+					applyTitle: message.title, //标题
+					applyContent: message.content, //内容
+					applyEncName: noticEncName, //附件名称
+					applyEncAddr: noticeEncAddr, //附件地址
+					applyManId: personal.utid, //发布人ID
+					applyManCode: personal.uid, //发布人账号
+					applyManName: personal.utname, //发布人姓名
+					approveManIds: ids, //接收人人ID
+					approveManCodes: codes, //接收人账号
+					approveManNames: names, //接收人姓名
 				}
-				addNoticePro(tempData, function function_name(data) {
+				addAffairApplyPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
