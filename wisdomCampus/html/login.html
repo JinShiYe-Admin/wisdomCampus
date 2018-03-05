@@ -56,7 +56,7 @@
 	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(function() {
-
+			setUUID();
 		});
 		var tempModel = {
 			uuid: '',
@@ -129,7 +129,11 @@
 
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
-			var tempModel0 = $.parseJSON(tempStr);
+//			var tempModel0 = $.parseJSON(tempStr);
+			var tempModel0 = {
+				id:111,
+				name:'ceshi'
+			};
 			tempModel.uuid = tempModel0.id;
 			tempModel.appid = tempModel0.name;
 			store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
@@ -155,7 +159,7 @@
 					$.hideLoading();
 					if(data.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.token = data.RspData;
+						tempInfo00.utoken = data.RspData;
 						store.set(window.storageKeyName.PERSONALINFO,tempInfo00);
 						utils.hrefSessionStorage('home.html', {});
 					} else {

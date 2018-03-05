@@ -163,6 +163,7 @@
 		<script src="../js/utils/mui.pullToRefresh.material.js"></script>
 		<script src="../js/utils/storageutil.js"></script>
 		<script src="../js/utils/utils.js"></script>
+		<script src='../js/utils/store.js'></script>
 		<script src="../js/publicProtocol.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../js/utils/myStorage.js"></script>
@@ -234,10 +235,25 @@
 				document.getElementById("item2mobile").className = "mui-slider-item mui-control-content  mui-active"
 				//			mui('#slider').slider().gotoItem(title_id)
 			}
-			var add = function(){
-				if(current_key.title=="notice"){
+			var add = function() {
+								var newData = {
+					title: '',
+					content: '',
+					smsSync: false,
+					selectIndex: 0,
+					selectImgPath: '',
+					uploadedFiles: [],
+					selectPeople: []
+
+				}
+
+				if(current_key.title == "notice") {
+					newData.flag = 1;
+					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.hrefSessionStorage("new_message.html", {})
-				}else{
+				} else {
+					newData.flag = 2;
+					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.hrefSessionStorage("new-check.html", {})
 				}
 			}
@@ -523,9 +539,13 @@
 				//				console.log(JSON.stringify(data))
 				//				console.log(this.parentElement.id)
 				var b = this.parentElement.id.indexOf("notice") >= 0
+
 				if(b) {
+
 					utils.hrefSessionStorage("noticeDetails.html", data)
+
 				} else {
+
 					utils.hrefSessionStorage("check-detail.html", data)
 				}
 

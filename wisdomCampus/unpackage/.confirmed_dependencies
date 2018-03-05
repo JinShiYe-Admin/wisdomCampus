@@ -18,7 +18,8 @@
 	},
 	"html/new_message.html": {
 		"refer": [
-			"html/all.html"
+			"html/all.html",
+			"html/selectPeople.html"
 		],
 		"resources": []
 	},
@@ -40,6 +41,11 @@
 	"html/check-detail.html": {
 		"refer": [
 			"html/all.html"
+		]
+	},
+	"html/selectPeople.html": {
+		"refer": [
+			"html/new_message.html"
 		]
 	}
 }
