@@ -523,9 +523,23 @@
 				//				console.log(JSON.stringify(data))
 				//				console.log(this.parentElement.id)
 				var b = this.parentElement.id.indexOf("notice") >= 0
+							var newData = {
+					title: '',
+					content: '',
+					smsSync: false,
+					selectIndex: 0,
+					selectImgPath: '',
+					uploadedFiles: [],
+					selectPeople:[]
+					
+				}
 				if(b) {
+					newData.flag=1;
 					utils.hrefSessionStorage("noticeDetails.html", data)
+					store.set(window.storageKeyName.NEWDETAIL,newData);
 				} else {
+					newData.flag=2;
+					store.set(window.storageKeyName.NEWDETAIL,newData);
 					utils.hrefSessionStorage("check-detail.html", data)
 				}
 

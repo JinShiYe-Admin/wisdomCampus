@@ -224,7 +224,8 @@
 			"html/new_message.html": {
 				"resources": [],
 				"refer": [
-					"html/all.html"
+					"html/all.html",
+					"html/selectPeople.html"
 				],
 				"priority": 0
 			},
@@ -253,6 +254,13 @@
 				"resources": [],
 				"refer": [
 					"html/all.html"
+				],
+				"priority": 0
+			},
+			"html/selectPeople.html": {
+				"resources": [],
+				"refer": [
+					"html/new_message.html"
 				],
 				"priority": 0
 			}
