@@ -32,6 +32,7 @@ var storageKeyName = (function(mod) {
 	mod.DOCUMENTSPATH = 'DOCUMENTSPATH'; //记录document的地址
 	
 	mod.PUBLICPARAMETER = 'publicParameter'//共用参数
+	mod.NEWDETAIL = 'newDetail'//新建通知、事务，记录页面填的数据
 
 	mod.WAITING = '加载中...'; //
 	mod.UPLOADING = '上传中...';

@@ -63,7 +63,8 @@
 				</li>
 			</ul>
 			<nav class="mui-bar mui-bar-tab">
-				<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+				<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue mui-action-back">确定({{selectPeopleArray.length}}人)</a>
+				<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
 			</nav>
 		</div>
 		<script src="../js/mui.min.js"></script>
@@ -91,6 +92,10 @@
 			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
 			var PrivilegeStr = 0; //权限
 			var requestFlag = 0; //记录发送权限请求的次数
+			//清掉之前选择的人员信息
+			var tempInfo = store.get(window.storageKeyName.NEWDETAIL);
+			tempInfo.selectPeople = [];
+			store.set(window.storageKeyName.NEWDETAIL, tempInfo);
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
@@ -206,9 +211,17 @@
 								}
 							}
 						}
-
 						//去重
 						selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
+					},
+					clickSubmitBtn: function() {
+						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
+							$.toast('请选择人员');
+						} else {
+							var tempInfo1 = store.get(window.storageKeyName.NEWDETAIL);
+							tempInfo1.selectPeople = selectPeopleData.selectPeopleArray;
+							store.set(window.storageKeyName.NEWDETAIL, tempInfo1);
+						}
 					}
 				}
 			});
