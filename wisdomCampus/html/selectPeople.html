@@ -43,8 +43,8 @@
 							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
 								<div class="mui-input-row mui-checkbox">
 									<label>{{peopleModel.utname}}</label>
-									<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
-									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>
+									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
+									<!--<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>-->
 								</div>
 							</li>
 						</ul>
@@ -55,8 +55,9 @@
 							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
 								<div class="mui-input-row mui-checkbox">
 									<label>{{peopleModel.utname}}</label>
-									<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
-									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>
+									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
+									<!--<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
+									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>-->
 								</div>
 							</li>
 						</ul>
@@ -126,7 +127,7 @@
 									//默认不选中
 									for(var i = 0; i < data.RspData.users.length; i++) {
 										var tempModel = data.RspData.users[i];
-										tempModel.flag = 0;
+										tempModel.flag = false;
 									}
 									model.peopleArray = [].concat(data.RspData.users);
 								} else {
@@ -148,7 +149,7 @@
 									//默认不选中
 									for(var i = 0; i < data.RspData.clssusers.length; i++) {
 										var tempModel = data.RspData.clssusers[i];
-										tempModel.flag = 0;
+										tempModel.flag = false;
 									}
 									model.peopleArray = [].concat(data.RspData.clssusers);
 								} else {
@@ -158,10 +159,12 @@
 						}
 					},
 					clickPeople: function(model, index) {
-						var tempFlag = 0;
-						if(model.flag == 0) {
-							tempFlag = 1;
-						}
+						console.log('model:' + JSON.stringify(model));
+						var tempFlag = model.flag;
+//						if(model.flag == false) {
+//							tempFlag = true;
+//						}
+//						model.flag = tempFlag;
 						//遍历全部数据，将utid一样的，都变化
 						for(var i = 0; i < selectPeopleData.departmentArray.length; i++) {
 							var tempModel = selectPeopleData.departmentArray[i];
@@ -169,8 +172,7 @@
 								var tempPeople = tempModel.peopleArray[a];
 								if(model.utid == tempPeople.utid) {
 									tempPeople.flag = tempFlag;
-									console.log('tempFlag222333:' + JSON.stringify(tempPeople));
-									if(tempFlag == 1) {
+									if(tempFlag == true) {
 										selectPeopleData.selectPeopleArray.push(model);
 									}else{
 										for (var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
