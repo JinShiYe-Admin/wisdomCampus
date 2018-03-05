@@ -87,7 +87,7 @@ var postDataEncry1 = function(encryData, commonData, flag) {
  * @param {Object} callback 回调
  */
 var xhrPost = function(url, commonData, callback) {
-	console.log('XHRP-Url:', url);
+//	console.log('XHRP-Url:', url);
 //	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1({}, commonData, 0);

@@ -6,121 +6,432 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
+		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
+		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
+		<style type="text/css">
+			.mui-table-view{
+				margin-bottom: 40px;
+			}
+			.weui-btn_blue {
+				background-color: #3C9BFE;
+				color: white;
+				/*margin-top: 12px;*/
+				margin-left: 5%;
+				margin-right: 5%;
+				margin-bottom: 15px;
+			}
+			
+			.weui-btn_blue:hover {
+				background-color: #0062CC;
+				color: white;
+			}
+		</style>
 	</head>
 
 	<body>
-		<ul class="mui-table-view">
-			<li class="mui-table-view-cell mui-collapse">
-				<a class="mui-navigate-right" href="#">
-					button（按钮）
-				</a>
-				<ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							普通按钮
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							带图标的按钮
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							带数字的按钮
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							块级按钮
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							加载中按钮
-						</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">通知详情</h1>
+		</header>
+		<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-collapse" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
+					<template v-if='department.dptname'>
+						<a class="mui-navigate-right">{{department.dptname}}</a>
+						<ul class="mui-table-view mui-table-view-chevron">
+							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
+								<div class="mui-input-row mui-checkbox">
+									<label>{{peopleModel.utname}}</label>
+									<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
+									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>
+								</div>
+							</li>
+						</ul>
+					</template>
+					<template v-else>
+						<a class="mui-navigate-right">{{department.clsname}}</a>
+						<ul class="mui-table-view mui-table-view-chevron">
+							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
+								<div class="mui-input-row mui-checkbox">
+									<label>{{peopleModel.utname}}</label>
+									<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
+									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>
+								</div>
+							</li>
+						</ul>
+					</template>
+				</li>
+			</ul>
+			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+			<!--<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="padding-left: 15px;padding-right: 15px;">按钮</button>-->
+		</div>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/vue.min.js"></script>
 		<!--加密-->
 		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
 		<!---->
+		<script src='../js/lib/jquery.js'></script>
+		<script src="../js/jquery-weui.min.js"></script>
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src='../js/lib/crypto-js/require.js'></script>
 		<script src='../js/utils/signHmacSHA1.js'></script>
 		<script src="../js/publicProtocol.js"></script>
 		<script src='../js/utils/sortSign.js'></script>
 		<script src="../js/utils/storageKeyName.js"></script>
-		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/store.js"></script>
+		<script src="../js/utils/utils.js"></script>
+		<script src="../js/utils/storageutil.js"></script>
 		<script type="text/javascript">
 			mui.init();
+			var curPage = utils.getSessionStorageByUrlsKey();
+			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
+			var PrivilegeStr = 0; //权限
+			var requestFlag = 0; //记录发送权限请求的次数
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			$(function() {
+				//根据个人信息，获取权限等
+				getData();
+			});
 
+			var selectPeopleData = new Vue({
+				el: "#selectPeopleData",
+				data: {
+					flag: 0,
+					departmentArray: [],
+					selectPeopleArray: [] //选择人员数组
+				},
+				methods: {
+					clickDepartment: function(model, index) {
+						console.log('tempFlag111:');
+						//点击获取部门用户
+						if(model.dptname && model.peopleArray.length == 0) {
+							var enData0 = {};
+							//不需要加密的数据
+							var comData0 = {
+								uuid: publicParameter.uuid, //用户设备号
+								utoken: personal.utoken, //用户令牌
+								dptids: model.dptid, //需要查询的部门ID，多个代码用英文逗号隔开
+								uidstat: 1, //需要查询的用户类型,-1全部,0无账号,1有账号
+								appid: publicParameter.appid //系统所分配的应用ID
+							}
+							//发送网络请求，data为网络返回值
+							postDataEncry('DepartUser', enData0, comData0, 0, function(data) {
+								if(data.RspCode == 0) {
+									//默认不选中
+									for(var i = 0; i < data.RspData.users.length; i++) {
+										var tempModel = data.RspData.users[i];
+										tempModel.flag = 0;
+									}
+									model.peopleArray = [].concat(data.RspData.users);
+								} else {
+									$.toast(data.RspTxt);
+								}
+							});
+						} else if(model.clsname && model.peopleArray.length == 0) {
+							var enData0 = {};
+							//不需要加密的数据
+							var comData0 = {
+								uuid: publicParameter.uuid, //用户设备号
+								utoken: personal.utoken, //用户令牌
+								classids: model.clsid, //需要查询的班级ID,多个代码用英文逗号隔开
+								appid: publicParameter.appid //系统所分配的应用ID
+							}
+							//发送网络请求，data为网络返回值
+							postDataEncry('ClassTec', enData0, comData0, 0, function(data) {
+								if(data.RspCode == 0) {
+									//默认不选中
+									for(var i = 0; i < data.RspData.clssusers.length; i++) {
+										var tempModel = data.RspData.clssusers[i];
+										tempModel.flag = 0;
+									}
+									model.peopleArray = [].concat(data.RspData.clssusers);
+								} else {
+									$.toast(data.RspTxt);
+								}
+							});
+						}
+					},
+					clickPeople: function(model, index) {
+						var tempFlag = 0;
+						if(model.flag == 0) {
+							tempFlag = 1;
+						}
+						//遍历全部数据，将utid一样的，都变化
+						for(var i = 0; i < selectPeopleData.departmentArray.length; i++) {
+							var tempModel = selectPeopleData.departmentArray[i];
+							for(var a = 0; a < tempModel.peopleArray.length; a++) {
+								var tempPeople = tempModel.peopleArray[a];
+								if(model.utid == tempPeople.utid) {
+									tempPeople.flag = tempFlag;
+									console.log('tempFlag222333:' + JSON.stringify(tempPeople));
+									if(tempFlag == 1) {
+										selectPeopleData.selectPeopleArray.push(model);
+									}else{
+										for (var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
+											var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
+											if (tempSelectPeople.utid == model.utid) {
+												selectPeopleData.selectPeopleArray.splice(b,1);
+											}
+										}
+									}
+								}
+							}
+						}
+
+						//去重
+						selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
+						console.log('selectPeopleArray:' + JSON.stringify(selectPeopleData.selectPeopleArray));
+					}
+				}
+			});
+
+			//根据个人信息，获取权限等
 			var getData = function() {
-				//获取个人信息
-				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				//判断是否年级领导
 				if(personal.grds.length > 0) {
+					requestFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
-						system: 1, //1 通知公告,2 事务及文件
+						system: systemFlag, //1 通知公告,2 事务及文件
 						roleType: 2 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 					}
-					getPrivilegeByRolePro(tempData, function() {
-
+					getPrivilegeByRolePro(tempData, function(data) {
+						requestFlag--;
+						if(data.RspCode == 0) {
+							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
+							//等权限的协议都返回值后，获取部门
+							if(requestFlag == 0) {
+								getSchDepart();
+							}
+						} else {
+							$.toast(data.RspTxt);
+						}
 					});
 				}
 				//判断是否是班主任或任课老师
 				if(personal.clss.length > 0) {
-					var a = 0;
+					requestFlag++;
 					var b = 0;
+					//24.获取角色对应的菜单权限
+					var tempData = {
+						schoolId: personal.schid, //学校ID
+						system: systemFlag, //1 通知公告,2 事务及文件
+						roleType: 4 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
+					}
+					getPrivilegeByRolePro(tempData, function(data) {
+						requestFlag--;
+						if(data.RspCode == 0) {
+							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
+							//等权限的协议都返回值后，获取部门
+							if(requestFlag == 0) {
+								getSchDepart();
+							}
+						} else {
+							$.toast(data.RspTxt);
+						}
+					});
 					for(var i = 0; i < personal.clss.length; i++) {
 						var tempModel = personal.clss[i];
 						//判断是不是班主任，0非1是
-						if(tempModel.isms == 0 && a == 0) {
-							a = 1;
-							//24.获取角色对应的菜单权限
-							var tempData = {
-								schoolId: personal.schid, //学校ID
-								system: 1, //1 通知公告,2 事务及文件
-								roleType: 4 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
-							}
-							getPrivilegeByRolePro(tempData, function() {
-
-							});
-						}
-						//判断是不是班主任，0非1是
 						if(tempModel.isms == 1 && b == 0) {
 							b = 1;
+							requestFlag++;
 							//24.获取角色对应的菜单权限
 							var tempData = {
 								schoolId: personal.schid, //学校ID
-								system: 1, //1 通知公告,2 事务及文件
+								system: systemFlag, //1 通知公告,2 事务及文件
 								roleType: 3 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 							}
-							getPrivilegeByRolePro(tempData, function() {
-
+							getPrivilegeByRolePro(tempData, function(data) {
+								requestFlag--;
+								if(data.RspCode == 0) {
+									PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
+									//等权限的协议都返回值后，获取部门
+									if(requestFlag == 0) {
+										getSchDepart();
+									}
+								} else {
+									$.toast(data.RspTxt);
+								}
 							});
 						}
 					}
 				}
 				//判断是否是科任组长
 				if(personal.subs.length > 0) {
+					requestFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
-						system: 1, //1 通知公告,2 事务及文件
+						system: systemFlag, //1 通知公告,2 事务及文件
 						roleType: 1 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 					}
-					getPrivilegeByRolePro(tempData, function() {
-
+					getPrivilegeByRolePro(tempData, function(data) {
+						requestFlag--;
+						if(data.RspCode == 0) {
+							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
+							//等权限的协议都返回值后，获取部门
+							if(requestFlag == 0) {
+								getSchDepart();
+							}
+						} else {
+							$.toast(data.RspTxt);
+						}
 					});
 				}
+			}
+
+			//获取学校部门
+			var getSchDepart = function() {
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				}
+				//发送网络请求，data为网络返回值
+				postDataEncry('SchDepart', enData0, comData0, 0, function(data) {
+					selectPeopleData.departmentArray = [];
+					if(data.RspCode == 0) {
+						//将个人信息中的部门列表，根据此协议，添加成完整的model
+						setArray0(data.RspData.dpts);
+						//判断权限
+						if(PrivilegeStr > 999) { //第一位：新建可选本部门及下级部门教师
+							setArray1(data.RspData.dpts);
+						}
+						var tempFlag3 = PrivilegeStr.toString().substring(1);
+						if(tempFlag3 > 99) { //第二位：新建可选任教年级教师
+							//8.年级下班级
+							getGradeClass();
+						}
+						var tempFlag2 = PrivilegeStr.toString().substring(2);
+						if(tempFlag2 > 9) { //第三位：新建可选上级部门教师
+							setArray3(data.RspData.dpts);
+						}
+						var tempFlag1 = PrivilegeStr.toString().substring(3);
+						if(tempFlag1 > 0) { //第四位：新建可选全校教师
+							for(var i = 0; i < data.RspData.dpts.length; i++) {
+								var tempModel = data.RspData.dpts[i];
+								tempModel.peopleArray = [];
+							}
+							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.dpts);
+						}
+						//给数组去重
+						selectPeopleData.departmentArray = selectPeopleData.departmentArray.unique('dptid');
+					} else {
+						$.toast(data.RspTxt);
+					}
+				});
+			}
+
+			//将个人信息中的部门列表，根据此协议，添加成完整的model
+			var setArray0 = function(array) {
+				//循环替换
+				for(var i = 0; i < array.length; i++) {
+					var tempModel = array[i];
+					for(var a = 0; a < personal.dpts.length; a++) {
+						var tempModel1 = personal.dpts[a];
+						if(tempModel.dptid == tempModel1.dptid) {
+							tempModel1.pid = tempModel.pid;
+							tempModel1.orderid = tempModel.orderid;
+							tempModel1.peopleArray = []; //嵌套的人员数组
+						}
+					}
+				}
+			}
+
+			//将本部门和下级部门，塞入数组
+			var setArray1 = function(array) {
+				//将本部门的塞入
+				selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(personal.dpts);
+				selectPeopleData.flag = 1;
+				//循环塞入下级部门
+
+			}
+
+			//将上级部门，塞入数组
+			var setArray3 = function(array) {
+				//循环得到的数组
+				for(var i = 0; i < array.length; i++) {
+					var tempModel = array[i];
+					tempModel.peopleArray = [];
+					for(var a = 0; a < personal.dpts.length; a++) {
+						var tempModel1 = personal.dpts[a];
+						if(tempModel.dptid == tempModel1.pid) {
+							selectPeopleData.departmentArray.push(tempModel);
+							selectPeopleData.flag = 1;
+						}
+					}
+				}
+			}
+
+			//8.年级下班级
+			var getGradeClass = function() {
+				//个人信息中的班级列表
+				var tempClass = [].concat(personal.clss);
+				//去重
+				tempClass = tempClass.unique('grdcode');
+				console.log('tempClass:' + JSON.stringify(tempClass));
+				var tempGradeCode = ''; //需要查询的年级代码
+				for(var i = 0; i < tempClass.length; i++) {
+					var tempModel = tempClass[i];
+					tempGradeCode = tempGradeCode + ',' + tempModel.grdcode;
+				}
+				//去掉第一个，
+				tempGradeCode = tempGradeCode.substr(1, tempGradeCode.length);
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					gradecodes: tempGradeCode, //需要查询的年级代码，多个代码用英文逗号隔开
+					appid: publicParameter.appid //系统所分配的应用ID
+				}
+				//发送网络请求，data为网络返回值
+				postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
+					if(data.RspCode == 0) {
+						for(var i = 0; i < data.RspData.clss.length; i++) {
+							var tempModel = data.RspData.clss[i];
+							tempModel.peopleArray = [];
+						}
+						selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.clss);
+					} else {
+						$.toast(data.RspTxt);
+					}
+				});
+			}
+
+			//给数组去重
+			Array.prototype.unique = function(key) {
+				var arr = this;
+				var n = [arr[0]];
+				for(var i = 1; i < arr.length; i++) {
+					if(key === undefined) {
+						if(n.indexOf(arr[i]) == -1) n.push(arr[i]);
+					} else {
+						inner: {
+							var has = false;
+							for(var j = 0; j < n.length; j++) {
+								if(arr[i][key] == n[j][key]) {
+									has = true;
+									break inner;
+								}
+							}
+						}
+						if(!has) {
+							n.push(arr[i]);
+						}
+					}
+				}
+				return n;
 			}
 		</script>
 	</body>
