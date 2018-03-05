@@ -10,16 +10,17 @@
 		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
 		<style type="text/css">
-			.mui-table-view{
-				margin-bottom: 40px;
+			.tableView {
+				padding-bottom: 65px;
 			}
+			
 			.weui-btn_blue {
 				background-color: #3C9BFE;
 				color: white;
-				/*margin-top: 12px;*/
+				margin-top: 7px;
 				margin-left: 5%;
 				margin-right: 5%;
-				margin-bottom: 15px;
+				margin-bottom: 7px;
 			}
 			
 			.weui-btn_blue:hover {
@@ -35,7 +36,7 @@
 			<h1 class="mui-title">通知详情</h1>
 		</header>
 		<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
-			<ul class="mui-table-view">
+			<ul class="mui-table-view tableView">
 				<li class="mui-table-view-cell mui-collapse" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
 					<template v-if='department.dptname'>
 						<a class="mui-navigate-right">{{department.dptname}}</a>
@@ -44,7 +45,6 @@
 								<div class="mui-input-row mui-checkbox">
 									<label>{{peopleModel.utname}}</label>
 									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
-									<!--<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>-->
 								</div>
 							</li>
 						</ul>
@@ -56,16 +56,15 @@
 								<div class="mui-input-row mui-checkbox">
 									<label>{{peopleModel.utname}}</label>
 									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
-									<!--<input v-if="peopleModel.flag==0" name="checkbox1" value="Item 3" type="checkbox">
-									<input v-else name="checkbox1" value="Item 3" type="checkbox" checked>-->
 								</div>
 							</li>
 						</ul>
 					</template>
 				</li>
 			</ul>
-			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
-			<!--<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="padding-left: 15px;padding-right: 15px;">按钮</button>-->
+			<nav class="mui-bar mui-bar-tab">
+				<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+			</nav>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.min.js"></script>
@@ -127,7 +126,19 @@
 									//默认不选中
 									for(var i = 0; i < data.RspData.users.length; i++) {
 										var tempModel = data.RspData.users[i];
-										tempModel.flag = false;
+										var tempA = 0;
+										//判断当前的utid是否已经选择
+										for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
+											var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
+											if(tempSelectPeople.utid == tempModel.utid) {
+												tempA++;
+											}
+										}
+										if(tempA == 0) {
+											tempModel.flag = false;
+										} else {
+											tempModel.flag = true;
+										}
 									}
 									model.peopleArray = [].concat(data.RspData.users);
 								} else {
@@ -146,12 +157,26 @@
 							//发送网络请求，data为网络返回值
 							postDataEncry('ClassTec', enData0, comData0, 0, function(data) {
 								if(data.RspCode == 0) {
-									//默认不选中
-									for(var i = 0; i < data.RspData.clssusers.length; i++) {
-										var tempModel = data.RspData.clssusers[i];
-										tempModel.flag = false;
+									if(data.RspData) {
+										//默认不选中
+										for(var i = 0; i < data.RspData.clssusers.length; i++) {
+											var tempModel = data.RspData.clssusers[i];
+											var tempA = 0;
+											//判断当前的utid是否已经选择
+											for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
+												var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
+												if(tempSelectPeople.utid == tempModel.utid) {
+													tempA++;
+												}
+											}
+											if(tempA == 0) {
+												tempModel.flag = false;
+											} else {
+												tempModel.flag = true;
+											}
+										}
+										model.peopleArray = [].concat(data.RspData.clssusers);
 									}
-									model.peopleArray = [].concat(data.RspData.clssusers);
 								} else {
 									$.toast(data.RspTxt);
 								}
@@ -161,10 +186,6 @@
 					clickPeople: function(model, index) {
 						console.log('model:' + JSON.stringify(model));
 						var tempFlag = model.flag;
-//						if(model.flag == false) {
-//							tempFlag = true;
-//						}
-//						model.flag = tempFlag;
 						//遍历全部数据，将utid一样的，都变化
 						for(var i = 0; i < selectPeopleData.departmentArray.length; i++) {
 							var tempModel = selectPeopleData.departmentArray[i];
@@ -174,11 +195,11 @@
 									tempPeople.flag = tempFlag;
 									if(tempFlag == true) {
 										selectPeopleData.selectPeopleArray.push(model);
-									}else{
-										for (var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
+									} else {
+										for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
 											var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
-											if (tempSelectPeople.utid == model.utid) {
-												selectPeopleData.selectPeopleArray.splice(b,1);
+											if(tempSelectPeople.utid == model.utid) {
+												selectPeopleData.selectPeopleArray.splice(b, 1);
 											}
 										}
 									}
@@ -188,7 +209,6 @@
 
 						//去重
 						selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
-						console.log('selectPeopleArray:' + JSON.stringify(selectPeopleData.selectPeopleArray));
 					}
 				}
 			});
