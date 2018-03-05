@@ -100,7 +100,7 @@
 						接收人
 					</div>
 					<div class="weui-cell__ft">
-						点击选择接收人
+						{{selectPeople.length>0? selectPeople.length+'人':'点击选择接收人'}}
 					</div>
 				</div>
 				<div class="weui-cell weui-cell_switch">
@@ -120,7 +120,7 @@
 				</div>
 			</div>
 		</div>
-			<input id="qnInput" style="display: none;">
+		<input id="qnInput" style="display: none;">
 		<script src="../js/weui.min.js"></script>
 		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../js/vue.min.js"></script>
@@ -143,6 +143,7 @@
 
 		<script type="text/javascript">
 			var newData = store.get(window.storageKeyName.NEWDETAIL);
+			console.log('newData:', JSON.stringify(newData));
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
 			initQNUploader();
@@ -161,7 +162,8 @@
 					},
 					selectIndex: newData.selectIndex,
 					selectImgPath: newData.selectImgPath,
-					uploadedFiles: newData.uploadedFiles
+					uploadedFiles: newData.uploadedFiles,
+					selectPeople:newData.selectPeople
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -208,6 +210,17 @@
 						var data = {
 							flag: 1 //1 通知公告
 						}
+						var tempData = {
+							title: message.title,
+							content: message.content,
+							smsSync: message.smsSync,
+							selectIndex: message.selectIndex,
+							selectImgPath: message.selectImgPath,
+							uploadedFiles: message.uploadedFiles,
+							selectPeople: newData.selectPeople
+
+						}
+						store.set(window.storageKeyName.NEWDETAIL, tempData);
 						utils.hrefSessionStorage("selectPeople.html", data)
 					}
 				}
@@ -413,13 +426,13 @@
 				var ids = [];
 				var codes = [];
 				var names = [];
-				for(var i=0;i<selectPeople_arr.length;i++){
+				for(var i = 0; i < selectPeople_arr.length; i++) {
 					var model = selectPeople_arr[i];
 					ids.push(model.utid)
 					codes.push('')
 					names.push(model.utname)
 				}
-				
+
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
 					noticeTitle: message.title, //标题
