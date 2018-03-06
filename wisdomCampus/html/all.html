@@ -274,9 +274,10 @@
 					if(index == 0) {
 						li.id = model.NoticeId
 						model.SendManName = model.SendManName == undefined ? "" : model.SendManName + "|"
+						model.NoticeProgress = model.NoticeProgress== undefined ? model.progress : model.NoticeProgress
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
-							model.NoticeStatus + ']</span>' + model.NoticeTitle +
+							model.NoticeProgress + ']</span>' + model.NoticeTitle +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
 							model.SendManName + model.SendTime +
