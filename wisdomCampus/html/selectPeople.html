@@ -113,7 +113,7 @@
 				},
 				methods: {
 					clickDepartment: function(model, index) {
-						console.log('tempFlag111:');
+						console.log('tempFlag111:'+JSON.stringify(model));
 						//点击获取部门用户
 						if(model.dptname && model.peopleArray.length == 0) {
 							var enData0 = {};
@@ -128,24 +128,27 @@
 							//发送网络请求，data为网络返回值
 							postDataEncry('DepartUser', enData0, comData0, 0, function(data) {
 								if(data.RspCode == 0) {
-									//默认不选中
-									for(var i = 0; i < data.RspData.users.length; i++) {
-										var tempModel = data.RspData.users[i];
-										var tempA = 0;
-										//判断当前的utid是否已经选择
-										for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
-											var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
-											if(tempSelectPeople.utid == tempModel.utid) {
-												tempA++;
+									if(data.RspData) {
+										//默认不选中
+										for(var i = 0; i < data.RspData.users.length; i++) {
+											var tempModel = data.RspData.users[i];
+											var tempA = 0;
+											//判断当前的utid是否已经选择
+											for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
+												var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
+												if(tempSelectPeople.utid == tempModel.utid) {
+													tempA++;
+												}
+											}
+											if(tempA == 0) {
+												tempModel.flag = false;
+											} else {
+												tempModel.flag = true;
 											}
 										}
-										if(tempA == 0) {
-											tempModel.flag = false;
-										} else {
-											tempModel.flag = true;
-										}
+										model.peopleArray = [].concat(data.RspData.users);
+										console.log('tempFlag222:'+JSON.stringify(model));
 									}
-									model.peopleArray = [].concat(data.RspData.users);
 								} else {
 									$.toast(data.RspTxt);
 								}
@@ -389,7 +392,29 @@
 				selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(personal.dpts);
 				selectPeopleData.flag = 1;
 				//循环塞入下级部门
+				setSubordinateDepart(array, selectPeopleData.departmentArray);
+			}
 
+			//循环塞入下级部门
+			var setSubordinateDepart = function(array, tempArray) {
+				var tempDepartArray = [];
+				//循环现在存入的部门
+				for(var i = 0; i < tempArray.length; i++) {
+					var nowModel = tempArray[i];
+					for(var a = 0; a < array.length; a++) {
+						var sumModel = array[a];
+//						console.log('sumModel.pid:' + sumModel.pid + ',nowModel.dptid:' + nowModel.dptid);
+						//判断存入部门的id，是否和全部部门的上级id一致
+						if(sumModel.pid == nowModel.dptid) {
+//							console.log('1111111111111');
+							tempDepartArray.push(sumModel);
+						}
+					}
+				}
+				if(tempDepartArray.length > 0) {
+					selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(tempDepartArray);
+					setSubordinateDepart(array, tempDepartArray);
+				}
 			}
 
 			//将上级部门，塞入数组
@@ -427,17 +452,19 @@
 				var comData0 = {
 					uuid: publicParameter.uuid, //用户设备号
 					utoken: personal.utoken, //用户令牌
-					gradecodes: tempGradeCode, //需要查询的年级代码，多个代码用英文逗号隔开
+					gradeids: tempGradeCode, //需要查询的年级代码，多个代码用英文逗号隔开
 					appid: publicParameter.appid //系统所分配的应用ID
 				}
 				//发送网络请求，data为网络返回值
 				postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
 					if(data.RspCode == 0) {
-						for(var i = 0; i < data.RspData.clss.length; i++) {
+						if (data.RspData) {
+							for(var i = 0; i < data.RspData.clss.length; i++) {
 							var tempModel = data.RspData.clss[i];
 							tempModel.peopleArray = [];
 						}
 						selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.clss);
+						}
 					} else {
 						$.toast(data.RspTxt);
 					}
