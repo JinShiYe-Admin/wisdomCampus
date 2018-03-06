@@ -23,7 +23,6 @@
 			.mui-icon {
 				color: white;
 			}
-			
 			/*.mui-bar .mui-icon {
 				font-size: 15px;
 				padding-top: 15px;
@@ -50,12 +49,12 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" ></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">新建审批</h1>
 			<!--<a class="mui-icon mui-pull-right right-cancel">取消</a>-->
 		</header>
 		<div id="message" class="mui-content">
-		
+
 			<div class="weui-cells">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
@@ -106,7 +105,9 @@
 					<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
 					<div class="weui-cell__bd">
 						<ol>
-							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">{{item.ManName}}</span><a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a></li>
+							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">{{item.ManName}}</span>
+								<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
+							</li>
 							<li @click="selectPepole()" style="margin-top: 10px;"><span style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px;">选择审批人</span></li>
 						</ol>
 					</div>
@@ -148,7 +149,20 @@
 		<script type="text/javascript">
 			var newData = store.get(window.storageKeyName.NEWDETAIL);
 			console.log('newData:', JSON.stringify(newData));
-			var flowMan_arr = newData.flowMan_arr.concat(newData.selectPeople);
+			var tempArr = [];
+			for(var i = 0; i < newData.selectPeople.length; i++) {
+				var model = newData.selectPeople[i]
+				var tempData = {
+					ManName: model.utname,
+					ManId: model.utid,
+
+				}
+				tempArr.push(tempData)
+
+			}
+
+			var flowMan_arr = newData.flowMan_arr.concat(tempArr);
+			console.log('flowMan_arr:', JSON.stringify(flowMan_arr));
 			getSelWorkFlow();
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
@@ -172,7 +186,7 @@
 					selectIndex: newData.selectIndex,
 					selectImgPath: newData.selectImgPath,
 					uploadedFiles: newData.uploadedFiles,
-					selectPeople:newData.selectPeople
+					selectPeople: newData.selectPeople
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -214,7 +228,7 @@
 						addAffairApply()
 
 					},
-					delPeople:function(index) {
+					delPeople: function(index) {
 						message.flowMan_arr.splice(index, 1);
 					},
 					selectPepole: function() {
