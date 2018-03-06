@@ -236,7 +236,7 @@
 				//			mui('#slider').slider().gotoItem(title_id)
 			}
 			var add = function() {
-								var newData = {
+				var newData = {
 					title: '',
 					content: '',
 					smsSync: false,
@@ -244,20 +244,22 @@
 					selectImgPath: '',
 					uploadedFiles: [],
 					selectPeople: [],
-					flowName:"",
-					flowId:"",
-					flowMan_arr:[],
+					flowName: "",
+					flowId: "",
+					flowMan_arr: [],
 
 				}
 
 				if(current_key.title == "notice") {
 					newData.flag = 1;
 					store.set(window.storageKeyName.NEWDETAIL, newData);
-					utils.hrefSessionStorage("new_message.html", {})
+					utils.mOpenWithData("new_message.html", {})
+					//					utils.hrefSessionStorage("new_message.html", {})
 				} else {
 					newData.flag = 2;
 					store.set(window.storageKeyName.NEWDETAIL, newData);
-					utils.hrefSessionStorage("new-check.html", {})
+					utils.mOpenWithData("new-check.html", {})
+					//					utils.hrefSessionStorage("new-check.html", {})
 				}
 			}
 			var createFragment = function(ul, index, data) {
@@ -544,12 +546,12 @@
 				var b = this.parentElement.id.indexOf("notice") >= 0
 
 				if(b) {
-
-					utils.hrefSessionStorage("noticeDetails.html", data)
+					utils.mOpenWithData("noticeDetails.html", data)
+					//					utils.hrefSessionStorage("noticeDetails.html", data)
 
 				} else {
-
-					utils.hrefSessionStorage("check-detail.html", data)
+					utils.mOpenWithData("check-detail.html", data)
+					//					utils.hrefSessionStorage("check-detail.html", data)
 				}
 
 			})
