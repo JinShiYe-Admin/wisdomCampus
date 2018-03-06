@@ -69,7 +69,7 @@
 				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
 				<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
 				<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
-				<p class="encName">附件:
+				<p class="encName" v-if="detailModel.NoticeEncName.length>0">附件:
 					<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
 					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				</p>
@@ -115,8 +115,9 @@
 	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
-			$(function() {
-				var curPage = utils.getSessionStorageByUrlsKey();
+			mui.plusReady(function() {
+//				var curPage = utils.getSessionStorageByUrlsKey();
+				var curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
 				//				var curPage = {
 				//					"id": "17", //通知ID
