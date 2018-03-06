@@ -261,3 +261,16 @@ var addAffairApplyPro = function(data0, callback) {
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl1 + 'addAffairApply', data0, callback);
 }
+//4.获取流程列表
+var getSelWorkFlowPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	//判断是通知公告还是事务
+	xhrPost('https://jbyj.jiaobaowang.net/SchoolOAService/flow/' + 'getSelWorkFlow', data0, callback);
+}
+
+var getWorkFlowListByIdPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	//判断是通知公告还是事务
+	xhrPost('https://jbyj.jiaobaowang.net/SchoolOAService/flow/' + 'getWorkFlowListById', data0, callback);
+}
+

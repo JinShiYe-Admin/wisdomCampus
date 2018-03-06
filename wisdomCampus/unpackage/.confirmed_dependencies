@@ -30,7 +30,8 @@
 	},
 	"html/new-check.html": {
 		"refer": [
-			"html/all.html"
+			"html/all.html",
+			"html/selectPeople.html"
 		]
 	},
 	"html/noticeDetails.html": {
@@ -45,7 +46,8 @@
 	},
 	"html/selectPeople.html": {
 		"refer": [
-			"html/new_message.html"
+			"html/new_message.html",
+			"html/new-check.html"
 		]
 	}
 }

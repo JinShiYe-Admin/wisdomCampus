@@ -55,6 +55,7 @@
 			<a class="mui-icon mui-pull-right right-cancel">取消</a>
 		</header>
 		<div id="message" class="mui-content">
+		
 			<div class="weui-cells">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
@@ -95,27 +96,25 @@
 				</div>
 			</div>
 			<div class="weui-cells">
-				<div class="weui-cell weui-cell_access">
+				<div class="weui-cell">
+					<div class="weui-cell__hd"><label class="weui-label">审批流程</label></div>
 					<div class="weui-cell__bd">
-						审批流程
-					</div>
-					<div class="weui-cell__ft">
-						点击选择审批流程
+						<input id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" class="weui-input" placeholder="点击选择审批流程" v-model="flowName">
 					</div>
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
 					<div class="weui-cell__bd">
 						<ol>
-							<li style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">徐浩然</span></li>
-							<li @click="selectPepole()" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">徐浩然</span><span style="border: solid 1px #3C9BFE;color: #3C9BFE;margin-left: 10px; padding: 7px 5px 5px;">选择审批人</span></li>
+							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">{{item.ManName}}</span><a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a></li>
+							<li @click="selectPepole()" style="margin-top: 10px;"><span style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px;">选择审批人</span></li>
 						</ol>
 					</div>
 				</div>
 			</div>
 
 			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
-			<div class="weui-gallery" :style="displayGallery"  style="z-index: 999999;position:absolute;">
+			<div class="weui-gallery" :style="displayGallery" style="z-index: 999999;position:absolute;">
 				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
 				<div class="weui-gallery__opr">
 					<a href="javascript:" class="weui-gallery__del">
@@ -131,6 +130,7 @@
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../js/demoCssJs/jquery-weui.js"></script>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/weui.min.js"></script>
 		<script src="../js/lib/exif/exif.min.js"></script>
 		<script src="../js/utils/compress.js"></script>
 		<script src="../js/utils/utils.js"></script>
@@ -146,25 +146,33 @@
 		<script src='../js/utils/signHmacSHA1.js'></script>
 
 		<script type="text/javascript">
+			var newData = store.get(window.storageKeyName.NEWDETAIL);
+			console.log('newData:', JSON.stringify(newData));
+			var flowMan_arr = newData.flowMan_arr.concat(newData.selectPeople);
+			getSelWorkFlow();
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
 			initQNUploader();
 			var message = new Vue({
 				el: '#message',
 				data: {
-
-					title: '',
-					content: '',
-					smsSync: false,
+					flowName: newData.flowName,
+					flowId: newData.flowId,
+					workFlow: [],
+					flowMan_arr: flowMan_arr,
+					title: newData.title,
+					content: newData.content,
+					smsSync: newData.smsSync,
 					displayGallery: {
 						display: 'none'
 					},
 					displayAddBtn: {
 						display: 'block'
 					},
-					selectIndex: 0,
-					selectImgPath: '',
-					uploadedFiles: []
+					selectIndex: newData.selectIndex,
+					selectImgPath: newData.selectImgPath,
+					uploadedFiles: newData.uploadedFiles,
+					selectPeople:newData.selectPeople
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -206,7 +214,26 @@
 						addAffairApply()
 
 					},
+					delPeople:function(index) {
+						message.flowMan_arr.splice(index, 1);
+					},
 					selectPepole: function() {
+
+						var tempData = {
+							title: message.title,
+							content: message.content,
+							smsSync: message.smsSync,
+							selectIndex: message.selectIndex,
+							selectImgPath: message.selectImgPath,
+							uploadedFiles: message.uploadedFiles,
+							selectPeople: newData.selectPeople,
+							flowName: message.flowName,
+							flowId: message.flowId,
+							flowMan_arr: message.flowMan_arr,
+
+						}
+						store.set(window.storageKeyName.NEWDETAIL, tempData);
+
 						var data = {
 							flag: 2 //事务及文件
 						}
@@ -414,6 +441,13 @@
 				var ids = [];
 				var codes = [];
 				var names = [];
+				for(var i = 0; i < message.flowMan_arr.length; i++) {
+					var model = message.flowMan_arr[i];
+					ids.push(model.ManId)
+					codes.push("")
+					names.push(model.ManName)
+				}
+
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
 					applyTitle: message.title, //标题
@@ -433,6 +467,67 @@
 						$.hideLoading();
 					} else {
 
+					}
+				});
+			}
+
+			function getSelWorkFlow() {
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+
+				}
+				getSelWorkFlowPro(tempData, function function_name(data) {
+					console.log(JSON.stringify(data))
+					if(data.RspCode == 0) {
+						message.workFlow = data.RspData.Data
+						for(var i = 0; i < message.workFlow.length; i++) {
+
+							var model = message.workFlow[i]
+							model.label = model.FlowName;
+							model.value = model.WorkFlowId;
+						}
+					} else {
+
+					}
+				});
+			}
+
+			function getWorkFlowListById(workFlowId) {
+
+				var tempData = {
+					workFlowId: workFlowId, //学校ID
+
+				}
+				getWorkFlowListByIdPro(tempData, function function_name(data) {
+					console.log(JSON.stringify(data))
+					if(data.RspCode == 0) {
+						message.flowMan_arr = data.RspData.Data;
+
+					} else {
+
+					}
+				});
+			}
+
+			function selectWorkFlow(input_item) {
+				document.activeElement.blur();
+				var self = input_item;
+				//		if(message.workFlow==undefined||message.workFlow.length==0){
+				//			alert("暂无部门")
+				//		}
+
+				weui.picker(message.workFlow, {
+					onChange: function(result) {
+						//						console.log(result);
+					},
+					onConfirm: function(result) {
+						//						document.getElementById("workFlow").value = result[0].label;
+						//						document.getElementById("workFlow").data_id = result[0].value;
+						message.flowName = result[0].label;
+						message.flowId = result[0].value;
+						getWorkFlowListById(result[0].value);
 					}
 				});
 			}
