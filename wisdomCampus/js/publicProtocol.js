@@ -166,7 +166,31 @@ var jQAjaxPost = function(url, data, callback) {
 		async: true,
 		success: function(success_data) { //请求成功的回调
 			console.log('jQAP-Success:', success_data);
-			callback(success_data);
+			if (success_data.RspCode == 6) {//令牌过期
+				//续订令牌
+				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				//需要参数
+				var comData = {
+					uuid: publicParameter.uuid,
+					utid: personal.utid,
+					utoken: personal.utoken,
+					appid: publicParameter.appid,
+					schid: personal.schid,
+					utname: personal.utname
+				};
+				//令牌续订
+				postDataEncry('TokenReset', {}, comData, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+						tempInfo00.utoken = data1.RspData;
+						store.set(window.storageKeyName.PERSONALINFO,tempInfo00);
+						jQAjaxPost(url, data, callback);
+					} 
+				});
+			} else{
+				callback(success_data);
+			}
 		},
 		error: function(xhr, type, errorThrown) {
 			console.log('jQAP-Error777:', xhr, type);

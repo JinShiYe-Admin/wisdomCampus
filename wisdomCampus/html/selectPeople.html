@@ -403,10 +403,9 @@
 					var nowModel = tempArray[i];
 					for(var a = 0; a < array.length; a++) {
 						var sumModel = array[a];
-//						console.log('sumModel.pid:' + sumModel.pid + ',nowModel.dptid:' + nowModel.dptid);
+						sumModel.peopleArray = [];
 						//判断存入部门的id，是否和全部部门的上级id一致
 						if(sumModel.pid == nowModel.dptid) {
-//							console.log('1111111111111');
 							tempDepartArray.push(sumModel);
 						}
 					}
