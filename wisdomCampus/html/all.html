@@ -481,6 +481,27 @@
 					//					$.hideLoading();
 				}
 				$.ready(function() {
+					mui('.mui-table-view').on('tap', '.del', function() {
+
+						window.event.stopPropagation()
+						var guid = this.getAttribute('guid');
+						console.log(guid)
+						var btnArray = ['取消', '确定'];
+						var closeId = this.id;
+						mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
+							if(e.index == 1) {
+								var tempData = {
+									noticeId: guid
+								}
+								var li= document.getElementById(guid)
+								li.innerHTML = li.innerHTML.replace("撤销",'')
+								li.innerHTML = li.innerHTML.replace("新建",'已撤销')
+								li.innerHTML = li.innerHTML.replace("68bc31",'c9c9c9')
+
+							}
+						});
+
+					})
 					//					$.showLoading();
 					getNotice('notice', 'send', function(data) {
 						var ul = document.getElementById("notice_send");
@@ -604,20 +625,6 @@
 				}
 
 			})
-			mui('.mui-table-view').on('tap', '.del', function() {
-
-				window.event.stopPropagation()
-				var guid = this.getAttribute('guid');
-				console.log(guid)
-				var btnArray = ['取消', '确定'];
-								var closeId = this.id;
-								mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
-									if(e.index == 1) {
-										console.log('确定')
-									}
-									})
-				
-			});
 		</script>
 	</body>
 
