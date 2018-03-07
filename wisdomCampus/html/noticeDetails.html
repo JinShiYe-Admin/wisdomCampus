@@ -105,22 +105,22 @@
 					<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
 					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				</p>-->
-				<template v-for="(extraFile,index) in detailModel.NoticeEncName">
+				<template v-for="(extraFile,index) in detailModel.NoticeEncName" v-show="detailModel.NoticeEncName.length>0">
 					<p class="encName" v-show="extraFile">附件:
 						<a class="encTitle">{{extraFile}}
-							<p class="encName"><button v-on:click.stop="checkEnc(0)" type="button" class="prev-btn">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn-primary down-btn">下载</button></p>
-						</a>
+							<p class="encName"><button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button></p>
+						</a> 
+						<!--<button v-on:click.stop="checkEnc(1,index)" type="button" class="mui-btn-primary down-btn">下载</button>-->
 						<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 					</p>
 				</template>
 				<!--滑动组件-->
 				<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
-						已完成({{detailModel.ReadCnt}})
+						已读({{detailModel.ReadCnt}})
 					</a>
-
 					<a id="item2" class="mui-control-item readPeople" href="#div-unfinish">
-						未完成({{detailModel.NoReadCnt}})
+						未读({{detailModel.NoReadCnt}})
 					</a>
 				</div>
 				<!--滑动内容-->
@@ -174,8 +174,10 @@
 					detailModel: ''
 				},
 				methods: {
-					checkEnc: function(tempFlag) {
+					checkEnc: function(tempFlag,index) {
 						console.log('tempFlag:' + tempFlag);
+						var tempUrl = noticeDetailData.detailModel.NoticeEncAddr[index];
+						plus.runtime.openURL(tempUrl);
 					}
 				}
 			});
@@ -190,10 +192,13 @@
 					$.hideLoading();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
-						data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");
+						if(data.RspData.NoticeEncName) {
+							data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
+							data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");
+						}
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
+						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
 					} else {
 						$.toast(data.RspTxt);
 					}

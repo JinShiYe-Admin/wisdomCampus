@@ -63,13 +63,13 @@
 			appid: ''
 		}
 		document.getElementById("login").addEventListener('tap', function(event) {
-			if(utils.getSystem() == 'Android') {
+//			if(utils.getSystem() == 'Android') {
 //				console.log("native:appid:" + native.getAPPID());
 //				console.log("native:schoolid:" + native.getSCHOOLID());
-				tempModel.uuid = 'native.getSCHOOLID()';
-				tempModel.appid = 'native.getAPPID()';
-				store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
-			}
+//				tempModel.uuid = 'native.getSCHOOLID()';
+//				tempModel.appid = 'native.getAPPID()';
+//				store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
+//			}
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
 			var tempPW = document.getElementById("password").value;
@@ -132,8 +132,8 @@
 		var setUUID = function(tempStr) {
 //			var tempModel0 = $.parseJSON(tempStr);
 			var tempModel0 = {
-				id:111,
-				name:'ceshi'
+				id:plus.device.uuid,
+				name:plus.runtime.appid
 			};
 			tempModel.uuid = tempModel0.id;
 			tempModel.appid = tempModel0.name;

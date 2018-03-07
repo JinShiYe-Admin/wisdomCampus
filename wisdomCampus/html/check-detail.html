@@ -179,7 +179,7 @@
 					<div>
 						<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
 							<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
-							<p class="display-inline prev-down"><button class="prev-btn">预览</button><button class="mui-btn-primary down-btn">下载</button></p>
+							<p class="display-inline prev-down"><button v-on:click.stop="checkEnc(0,index)" class="prev-btn">预览</button></p>
 						</template>
 					</div>
 					<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
@@ -233,134 +233,137 @@
 		<script src="../js/utils/storageKeyName.js"></script>
 		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			
-				var checkDetailData = new Vue({
-					el: "#checkDetailData",
-					data: {
-						id: 0, //id
-						flag: 0, //0审核 1我发送的
-						leaveDetail: {},
-						keywords: [
-							"同意",
-							"拟同意",
-							"情况属实",
-							"已阅"
-						],
-						approveResult: 0, //1同意 2 退回
-						replyShow: false,
-						replyContent: "",
-						approveIndex: 0
-					},
-					mounted: function() {
-						console.log("mounted");
-						this.getDetail();
-					},
-					watch: {
-						leaveDeatil: function(newVal, oldVal) {
-							if((!oldVal.ApproveList) && this.flag == 0) {
-								this.getApproveIndex();
-							}
-						}
-					},
-					methods: {
-						getExtraFileNames: function(extraFileName) {
-							return extraFileName.split("|");
-						},
-						getApproveIndex: function() {
-							for(var i = 0; i < this.leaveDetail.ApproveList; i++) {
-								if(this.leaveDetail.ApproveList[i].ApproveId == this.id) {
-									return i;
-								}
-							}
-						},
-						replyLeave: function() {
-							console.log('approveResult:' + checkDetailData.approveResult);
-							if(!this.replyContent) {
-								$.toast("请输入审批内容！");
-								return
-							}
-							var com = this;
-							//16.审批事务及文件申请
-							var tempData = {
-								approveId: com.id, //审批ID
-								approveContent: com.replyContent, //审批内容
-								approveResult: com.approveResult //审批结果，1 同意，2 退回
-							}
-							setAffairApprovePro(tempData, function(data) {
-								console.log("获取的审批结果:" + JSON.stringify(data));
-								if(data.RspCode == 0) {
-									com.replyContent = "";
-									com.getDetail();
-									com.replyShow = false;
-								} else {
-									$.alert(data.RspTxt);
-								}
-							});
-
-						},
-						getDetail: function() {
-							var localSkey = utils.getDataFromUrl(window.location.href);
-							console.log('data:'+JSON.stringify(localSkey))
-							//						var localSkey = utils.getSessionStorageByUrlsKey();
-							if(localSkey != null) {
-								this.id = localSkey.id;
-								this.flag = parseInt(localSkey.flag);
-							} else {
-								$.alert("程序内部参数错误，请返回上一界面！", function() {
-									history.go(-1);
-								});
-								return;
-							}
-							if(this.flag == 0) {
-								this.getCheckDetail();
-							} else {
-								this.getLeaveDetail();
-							}
-						},
-						getLeaveDetail: function() {
-							var com = this;
-							$.showLoading();
-							//19.通过ID获取事务及文件申请
-							var tempData = {
-								applyId: this.id
-							}
-							getAffairApplyByIdPro(tempData, function(data) {
-								$.hideLoading();
-								if(data.RspCode == 0) {
-									console.log('data:' + JSON.stringify(data));
-									if(data.RspData.ApplyEncName) {
-										data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName);
-										data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr);
-									}
-									com.leaveDetail = data.RspData;
-								} else {
-									$.alert(data.RspTxt);
-								}
-							});
-						},
-						getCheckDetail: function() {
-							var com = this;
-							$.showLoading();
-							var tempData = {
-								approveId: this.id
-							}
-							getAffairApproveByIdPro(tempData, function(data) {
-								console.log("获取的审核详情：" + JSON.stringify(data));
-								$.hideLoading();
-								if(data.RspCode == 0) {
-									if(data.RspData.ApplyEncName) {
-										data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName)
-										data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr)
-									}
-									com.leaveDetail = data.RspData;
-								} else {
-									$.alert(data.RspTxt);
-								}
-							})
+			var checkDetailData = new Vue({
+				el: "#checkDetailData",
+				data: {
+					id: 0, //id
+					flag: 0, //0审核 1我发送的
+					leaveDetail: {},
+					keywords: [
+						"同意",
+						"拟同意",
+						"情况属实",
+						"已阅"
+					],
+					approveResult: 0, //1同意 2 退回
+					replyShow: false,
+					replyContent: "",
+					approveIndex: 0
+				},
+				mounted: function() {
+					console.log("mounted");
+					this.getDetail();
+				},
+				watch: {
+					leaveDeatil: function(newVal, oldVal) {
+						if((!oldVal.ApproveList) && this.flag == 0) {
+							this.getApproveIndex();
 						}
 					}
-				});
-			
+				},
+				methods: {
+					getExtraFileNames: function(extraFileName) {
+						return extraFileName.split("|");
+					},
+					getApproveIndex: function() {
+						for(var i = 0; i < this.leaveDetail.ApproveList; i++) {
+							if(this.leaveDetail.ApproveList[i].ApproveId == this.id) {
+								return i;
+							}
+						}
+					},
+					checkEnc: function(tempFlag, index) {
+						console.log('tempFlag:' + tempFlag);
+						var tempUrl = checkDetailData.leaveDetail.ApplyEncAddr[index];
+						plus.runtime.openURL(tempUrl);
+					},
+					replyLeave: function() {
+						console.log('approveResult:' + checkDetailData.approveResult);
+						if(!this.replyContent) {
+							$.toast("请输入审批内容！");
+							return
+						}
+						var com = this;
+						//16.审批事务及文件申请
+						var tempData = {
+							approveId: com.id, //审批ID
+							approveContent: com.replyContent, //审批内容
+							approveResult: com.approveResult //审批结果，1 同意，2 退回
+						}
+						setAffairApprovePro(tempData, function(data) {
+							console.log("获取的审批结果:" + JSON.stringify(data));
+							if(data.RspCode == 0) {
+								com.replyContent = "";
+								com.getDetail();
+								com.replyShow = false;
+							} else {
+								$.alert(data.RspTxt);
+							}
+						});
+
+					},
+					getDetail: function() {
+						var localSkey = utils.getDataFromUrl(window.location.href);
+						console.log('data:' + JSON.stringify(localSkey))
+						//						var localSkey = utils.getSessionStorageByUrlsKey();
+						if(localSkey != null) {
+							this.id = localSkey.id;
+							this.flag = parseInt(localSkey.flag);
+						} else {
+							$.alert("程序内部参数错误，请返回上一界面！", function() {
+								history.go(-1);
+							});
+							return;
+						}
+						if(this.flag == 0) {
+							this.getCheckDetail();
+						} else {
+							this.getLeaveDetail();
+						}
+					},
+					getLeaveDetail: function() {
+						var com = this;
+						$.showLoading();
+						//19.通过ID获取事务及文件申请
+						var tempData = {
+							applyId: this.id
+						}
+						getAffairApplyByIdPro(tempData, function(data) {
+							$.hideLoading();
+							if(data.RspCode == 0) {
+								console.log('data:' + JSON.stringify(data));
+								if(data.RspData.ApplyEncName) {
+									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName);
+									data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr);
+								}
+								com.leaveDetail = data.RspData;
+							} else {
+								$.alert(data.RspTxt);
+							}
+						});
+					},
+					getCheckDetail: function() {
+						var com = this;
+						$.showLoading();
+						var tempData = {
+							approveId: this.id
+						}
+						getAffairApproveByIdPro(tempData, function(data) {
+							console.log("获取的审核详情：" + JSON.stringify(data));
+							$.hideLoading();
+							if(data.RspCode == 0) {
+								if(data.RspData.ApplyEncName) {
+									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName)
+									data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr)
+								}
+								com.leaveDetail = data.RspData;
+							} else {
+								$.alert(data.RspTxt);
+							}
+						})
+					}
+				}
+			});
 		</script>
 	</body>
 
