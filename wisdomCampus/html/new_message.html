@@ -23,7 +23,6 @@
 			.mui-icon {
 				color: white;
 			}
-			
 			/*.mui-bar .mui-icon {
 				font-size: 15px;
 				padding-top: 15px;
@@ -110,7 +109,7 @@
 					</div>
 				</div>
 			</div>
-			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
+			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
 			<div class="weui-gallery" :style="displayGallery" style="z-index: 999999;position:absolute;">
 				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
 				<div class="weui-gallery__opr">
@@ -142,28 +141,23 @@
 		<script src='../js/utils/signHmacSHA1.js'></script>
 
 		<script type="text/javascript">
-			var newData = store.get(window.storageKeyName.NEWDETAIL);
-			console.log('newData:', JSON.stringify(newData));
-			var uptokenData;
-			var qnFileUploader; //七牛上传控件对象
-			initQNUploader();
 			var message = new Vue({
 				el: '#message',
 				data: {
 
-					title: newData.title,
-					content: newData.content,
-					smsSync: newData.smsSync,
+					title: '',
+					content: '',
+					smsSync: false,
 					displayGallery: {
 						display: 'none'
 					},
 					displayAddBtn: {
 						display: 'block'
 					},
-					selectIndex: newData.selectIndex,
-					selectImgPath: newData.selectImgPath,
-					uploadedFiles: newData.uploadedFiles,
-					selectPeople:newData.selectPeople
+					selectIndex: 0,
+					selectImgPath: '',
+					uploadedFiles: [],
+					selectPeople: []
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -210,21 +204,13 @@
 						var data = {
 							flag: 1 //1 通知公告
 						}
-						var tempData = {
-							title: message.title,
-							content: message.content,
-							smsSync: message.smsSync,
-							selectIndex: message.selectIndex,
-							selectImgPath: message.selectImgPath,
-							uploadedFiles: message.uploadedFiles,
-							selectPeople: newData.selectPeople
-
-						}
-						store.set(window.storageKeyName.NEWDETAIL, tempData);
-						utils.hrefSessionStorage("selectPeople.html", data)
+						utils.mOpenWithData("selectPeople.html", data)
 					}
 				}
 			})
+						var uptokenData;
+			var qnFileUploader; //七牛上传控件对象
+			initQNUploader();
 
 			//从相册中选择照片后，上传
 			//index--从相册选择照片回调里面，照片的索引，files--选择的照片信息，filesSum--选择照片之前，现存的照片张数
@@ -422,7 +408,7 @@
 				var smsSync = message.smsSync == true ? 1 : 0
 				$.showLoading('加载中...');
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
-				var selectPeople_arr = newData.selectPeople;
+				var selectPeople_arr = message.selectPeople;
 				var ids = [];
 				var codes = [];
 				var names = [];
@@ -451,11 +437,17 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.back();
 					} else {
 
 					}
 				});
 			}
+			window.addEventListener('selectPeople', function(data) {
+				console.log("data" + JSON.stringify(data.detail.peopleArray))
+				message.selectPeople = data.detail.peopleArray;
+
+			})
 		</script>
 	</body>
 

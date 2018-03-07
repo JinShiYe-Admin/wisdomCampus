@@ -68,7 +68,7 @@
 					</li>
 				</ul>
 				<nav class="mui-bar mui-bar-tab">
-					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue mui-action-back">确定({{selectPeopleArray.length}}人)</a>
+					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
 					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
 				</nav>
 			</template>
@@ -94,7 +94,7 @@
 		<script src="../js/utils/storageutil.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var curPage = utils.getSessionStorageByUrlsKey();
+			var curPage = utils.getDataFromUrl(window.location.href);
 			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
 			var PrivilegeStr = 0; //权限
 			var requestFlag = 0; //记录发送权限请求的次数
@@ -224,9 +224,11 @@
 						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
 							$.toast('请选择人员');
 						} else {
+							console.log(1111111)
 							mui.fire(plus.webview.currentWebview().opener(), 'selectPeople', {
 								peopleArray: selectPeopleData.selectPeopleArray
 							});
+							mui.back();
 						}
 					}
 				}

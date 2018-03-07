@@ -237,30 +237,10 @@
 				//			mui('#slider').slider().gotoItem(title_id)
 			}
 			var add = function() {
-				var newData = {
-					title: '',
-					content: '',
-					smsSync: false,
-					selectIndex: 0,
-					selectImgPath: '',
-					uploadedFiles: [],
-					selectPeople: [],
-					flowName: "",
-					flowId: "",
-					flowMan_arr: [],
-
-				}
-
 				if(current_key.title == "notice") {
-					newData.flag = 1;
-					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.mOpenWithData("new_message.html", {})
-					//					utils.hrefSessionStorage("new_message.html", {})
 				} else {
-					newData.flag = 2;
-					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.mOpenWithData("new-check.html", {})
-					//					utils.hrefSessionStorage("new-check.html", {})
 				}
 			}
 			var createFragment = function(ul, index, data) {
@@ -274,7 +254,7 @@
 					if(index == 0) {
 						li.id = model.NoticeId
 						model.SendManName = model.SendManName == undefined ? "" : model.SendManName + "|"
-						model.NoticeProgress = model.NoticeProgress== undefined ? model.progress : model.NoticeProgress
+						model.NoticeProgress = model.NoticeProgress == undefined ? model.progress : model.NoticeProgress
 						li.innerHTML = '<div>' +
 							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
 							model.NoticeProgress + ']</span>' + model.NoticeTitle +
@@ -364,13 +344,13 @@
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								datasource.notice_send.TotalPage = data.RspData.TotalPage;
+								datasource.notice_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_send.refreshObj.refreshFlag == 0) {
 									datasource.notice_send.refreshObj.pageIndex = 1;
 									datasource.notice_send.data = data.RspData.Data
 								} else {
-									datasource.notice_send.refreshObj.pageIndex++;
+//									datasource.notice_send.refreshObj.pageIndex++;
 									datasource.notice_send.data = datasource.notice_send.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -392,10 +372,10 @@
 						getReceiveNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								datasource.notice_recevice.TotalPage = data.RspData.TotalPage;
+								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
-									datasource.notice_recevice.refreshObj.pageIndex = 1;
+//									datasource.notice_recevice.refreshObj.pageIndex = 1;
 									datasource.notice_recevice.data = data.RspData.Data
 								} else {
 									datasource.notice_recevice.refreshObj.pageIndex++;
@@ -420,13 +400,13 @@
 						getAffairApplyPro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								datasource.apply_send.TotalPage = data.RspData.TotalPage;
+								datasource.apply_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_send.refreshObj.refreshFlag == 0) {
 									datasource.apply_send.refreshObj.pageIndex = 1;
 									datasource.apply_send.data = data.RspData.Data
 								} else {
-									datasource.apply_send.refreshObj.pageIndex++;
+//									datasource.apply_send.refreshObj.pageIndex++;
 									datasource.apply_send.data = datasource.apply_send.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -449,22 +429,23 @@
 						getAffairApprovePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								datasource.apply_recevice.TotalPage = data.RspData.TotalPage;
+								datasource.apply_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_recevice.refreshObj.refreshFlag == 0) {
 									datasource.apply_recevice.refreshObj.pageIndex = 1;
 									datasource.apply_recevice.data = data.RspData.Data
 								} else {
-									datasource.apply_recevice.refreshObj.pageIndex++;
+//									datasource.apply_recevice.refreshObj.pageIndex++;
 									datasource.apply_recevice.data = datasource.apply_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
 							}
 						});
 					}
+//					$.hideLoading();
 				}
 				$.ready(function() {
-
+//					$.showLoading();
 					getNotice('notice', 'send', function(data) {
 						var ul = document.getElementById("notice_send");
 						ul.appendChild(createFragment(ul, 0, data));
@@ -509,14 +490,18 @@
 									var k = current_key.title + '_' + current_key.send_recevice
 									var current_data = datasource[k];
 									var refreshObj = current_data.refreshObj
+									console.log(JSON.stringify(refreshObj))
 									if(refreshObj.pageIndex < refreshObj.TotalPage) {
 										refreshObj.refreshFlag = 1;
+										refreshObj.pageIndex++;
 										getNotice(current_key.title, current_key.send_recevice, function(data) {
 											var ul = document.getElementById(k);
 											ul.appendChild(createFragment(ul, index, data));
 											self.endPullUpToRefresh();
 										})
 									} else {
+										console.log(refreshObj.pageIndex)
+										console.log(refreshObj.TotalPage)
 										self.endPullUpToRefresh(true);
 									}
 
