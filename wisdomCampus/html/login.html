@@ -62,14 +62,13 @@
 			uuid: '',
 			appid: ''
 		}
+		mui.plusReady(function() {
+			tempModel = {
+				uuid: plus.device.uuid,
+				appid: plus.runtime.appid
+			}
+		});
 		document.getElementById("login").addEventListener('tap', function(event) {
-//			if(utils.getSystem() == 'Android') {
-//				console.log("native:appid:" + native.getAPPID());
-//				console.log("native:schoolid:" + native.getSCHOOLID());
-//				tempModel.uuid = 'native.getSCHOOLID()';
-//				tempModel.appid = 'native.getAPPID()';
-//				store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
-//			}
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
 			var tempPW = document.getElementById("password").value;
@@ -90,8 +89,8 @@
 					postDataEncry('ShakeHand', enData0, comData0, 0, function(data) {
 						console.log('2121212');
 						if(data.RspCode == 0) {
-//							window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
-							store.set(window.storageKeyName.SHAKEHAND,data.RspData);
+							//							window.myStorage.setItem(window.storageKeyName.SHAKEHAND, data.RspData);
+							store.set(window.storageKeyName.SHAKEHAND, data.RspData);
 							var enData1 = {
 								uid: tempName, //用户账号
 								pw: tempPW //用户密码
@@ -108,8 +107,8 @@
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
 								$.hideLoading();
 								if(data1.RspCode == 0) {
-									console.log('data1.RspData:'+data1.RspData);
-									store.set(window.storageKeyName.PERSONALINFO,data1.RspData);
+									console.log('data1.RspData:' + data1.RspData);
+									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
 								} else {
 									mui.toast(data1.RspTxt);
@@ -130,27 +129,21 @@
 
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
-//			var tempModel0 = $.parseJSON(tempStr);
-			var tempModel0 = {
-				id:plus.device.uuid,
-				name:plus.runtime.appid
-			};
-			tempModel.uuid = tempModel0.id;
-			tempModel.appid = tempModel0.name;
-			store.set(window.storageKeyName.PUBLICPARAMETER,tempModel);
+			//			var tempModel0 = $.parseJSON(tempStr);
+			store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
 			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-//			console.log('personal:' + JSON.parse(personal));
-			if (personal.utid == 'undefined' || personal.utid == null) {
-				
-			} else{
+			//			console.log('personal:' + JSON.parse(personal));
+			if(personal.utid == 'undefined' || personal.utid == null) {
+
+			} else {
 				//需要参数
 				var comData = {
-					uuid: tempModel0.id,
+					uuid: tempModel.uuid,
 					utid: personal.utid,
 					utoken: personal.utoken,
-					appid: tempModel0.name,
+					appid: tempModel.appid,
 					schid: personal.schid,
 					utname: personal.utname
 				};
@@ -161,7 +154,7 @@
 					if(data.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data.RspData;
-						store.set(window.storageKeyName.PERSONALINFO,tempInfo00);
+						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 						utils.hrefSessionStorage('home.html', {});
 					} else {
 						mui.toast(data.RspTxt);
@@ -169,18 +162,7 @@
 				});
 			}
 		}
-		
-		//从ios原生得到信息
-//		var setPersonInfo = function(tempStr) {
-//			if (tempStr.length>0) {
-//				var tempModel0 = $.parseJSON(tempStr);
-//				console.log('tempStr:' + tempStr);
-//				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, tempModel0);
-//			}else{
-//				window.myStorage.setItem(window.storageKeyName.PERSONALINFO, {});
-//			}
-//		}
-		
+
 		//判断是否输入了值
 		var checkInput = function(text) {
 			if(text.trim().length == 0) {
