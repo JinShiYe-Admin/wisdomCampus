@@ -253,11 +253,35 @@
 					li.className = 'mui-table-view-cell';
 					if(index == 0) {
 						li.id = model.NoticeId
-						model.SendManName = model.SendManName == undefined ? "" : model.SendManName + "|"
-						model.NoticeProgress = model.NoticeProgress == undefined ? model.progress : model.NoticeProgress
+						var noticep = '';
+						//						model.SendManName = model.SendManName == undefined ? "" : model.SendManName + "|"
+						if(model.SendManName == undefined) {
+							model.SendManName = ''
+							noticep = model.NoticeProgress
+						} else {
+							model.SendManName = model.SendManName + "|"
+							noticep = model.NoticeStatus
+						}
+
+						var readcolor = 'red';
+						var noYes = ''
+						if(noticep == "未阅") {
+							readcolor = '#ff0000';
+						} else if(noticep == "已阅" || noticep == "阅毕" || noticep == "已撤销") {
+							readcolor = '#c9c9c9';
+						} else if(noticep == "新建/撤销") {
+							noticep = '新建';
+							noYes = '<a class="del mui-pull-right" guid=' + li.id + ' type="button">撤销</a>'
+							//															<button  onclick="download(this)" type="button" class="mui-btn mui-btn-warning mui-btn-outlined mui-pull-right">下载</button>
+
+							readcolor = '#68bc31';
+						} else {
+							readcolor = '#68bc31';
+						}
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
-							model.NoticeProgress + ']</span>' + model.NoticeTitle +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' +
+							readcolor + ';">[' +
+							noticep + ']</span>' + model.NoticeTitle + noYes +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
 							model.SendManName + model.SendTime +
@@ -273,12 +297,24 @@
 						} else {
 							li.id = myId = model.ApproveId
 							myName = model.ApplyManName + "|"
-							Progress = model.ApproveProgress
+							Progress = model.ApproveStatus
 						}
-
+						var readcolor = 'red';
+						var noYes = ''
+						if(Progress == "未批") {
+							readcolor = '#ff0000';
+						} else if(Progress == "等待") {
+							readcolor = '#68bc31';
+						} else if(Progress == "新建/撤销") {
+							Progress = '新建';
+							readcolor = '#68bc31';
+							noYes = '<a class="del mui-pull-right" guid=' + li.id + ' type="button">撤销</a>'
+						} else {
+							readcolor = '#c9c9c9';
+						}
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 90%;"><span style="color: #FF0000;">[' +
-							Progress + ']</span>' + model.ApplyTitle +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' + readcolor + ';">[' +
+							Progress + ']</span>' + model.ApplyTitle + noYes +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
 							myName + model.CreateTime +
@@ -350,7 +386,7 @@
 									datasource.notice_send.refreshObj.pageIndex = 1;
 									datasource.notice_send.data = data.RspData.Data
 								} else {
-//									datasource.notice_send.refreshObj.pageIndex++;
+									//									datasource.notice_send.refreshObj.pageIndex++;
 									datasource.notice_send.data = datasource.notice_send.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -375,7 +411,7 @@
 								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
-//									datasource.notice_recevice.refreshObj.pageIndex = 1;
+									//									datasource.notice_recevice.refreshObj.pageIndex = 1;
 									datasource.notice_recevice.data = data.RspData.Data
 								} else {
 									datasource.notice_recevice.refreshObj.pageIndex++;
@@ -406,7 +442,7 @@
 									datasource.apply_send.refreshObj.pageIndex = 1;
 									datasource.apply_send.data = data.RspData.Data
 								} else {
-//									datasource.apply_send.refreshObj.pageIndex++;
+									//									datasource.apply_send.refreshObj.pageIndex++;
 									datasource.apply_send.data = datasource.apply_send.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -435,17 +471,17 @@
 									datasource.apply_recevice.refreshObj.pageIndex = 1;
 									datasource.apply_recevice.data = data.RspData.Data
 								} else {
-//									datasource.apply_recevice.refreshObj.pageIndex++;
+									//									datasource.apply_recevice.refreshObj.pageIndex++;
 									datasource.apply_recevice.data = datasource.apply_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
 							}
 						});
 					}
-//					$.hideLoading();
+					//					$.hideLoading();
 				}
 				$.ready(function() {
-//					$.showLoading();
+					//					$.showLoading();
 					getNotice('notice', 'send', function(data) {
 						var ul = document.getElementById("notice_send");
 						ul.appendChild(createFragment(ul, 0, data));
@@ -528,8 +564,27 @@
 
 				}
 			})
-			mui(".mui-table-view").on('tap', 'li', function() {
+			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+				var i = event.detail.slideNumber;
+				console.log(i);
+				current_key.title = i == 1 ? 'apply' : 'notice'
+				console.log(JSON.stringify(current_key))
+				var ul0 = document.getElementById(current_key.title + "_" + current_key.send_recevice);
+				ul0.className = "mui-table-view";
+				var temp = current_key.send_recevice == "send" ? "recevice" : "send"
+				var ul1 = document.getElementById(current_key.title + "_" + temp);
+				ul1.className = "mui-table-view mui-hidden";
+				if(current_key.title == 'notice') {
+					document.getElementById("ntitle").innerHTML = "通知公告"
 
+				} else {
+					document.getElementById("ntitle").innerHTML = "事务审批"
+
+				}
+
+			})
+			mui(".mui-table-view").on('tap', 'li', function() {
+				console.log(456)
 				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
 				var data = {
 					id: this.id,
@@ -549,6 +604,20 @@
 				}
 
 			})
+			mui('.mui-table-view').on('tap', '.del', function() {
+
+				window.event.stopPropagation()
+				var guid = this.getAttribute('guid');
+				console.log(guid)
+				var btnArray = ['取消', '确定'];
+								var closeId = this.id;
+								mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
+									if(e.index == 1) {
+										console.log('确定')
+									}
+									})
+				
+			});
 		</script>
 	</body>
 
