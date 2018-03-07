@@ -23,7 +23,6 @@
 			.mui-icon {
 				color: white;
 			}
-			
 			/*.mui-bar .mui-icon {
 				font-size: 15px;
 				padding-top: 15px;
@@ -161,7 +160,7 @@
 					selectIndex: 0,
 					selectImgPath: '',
 					uploadedFiles: [],
-					selectPeople:[]
+					selectPeople: []
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -438,16 +437,17 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.back();
 					} else {
 
 					}
 				});
 			}
-				window.addEventListener('selectPeople', function(data) {
-					console.log(data)
-					message.selectPeople = data;
-					
-				})
+			window.addEventListener('selectPeople', function(data) {
+				console.log("data" + JSON.stringify(data.detail.peopleArray))
+				message.selectPeople = data.detail.peopleArray;
+
+			})
 		</script>
 	</body>
 
