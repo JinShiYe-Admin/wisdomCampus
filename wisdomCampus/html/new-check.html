@@ -114,7 +114,7 @@
 				</div>
 			</div>
 
-			<a @click="clickSubmitBtn()" href="#" class="weui-btn weui-btn_blue">发布</a>
+			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
 			<div class="weui-gallery" :style="displayGallery" style="z-index: 999999;position:absolute;">
 				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
 				<div class="weui-gallery__opr">
@@ -447,6 +447,7 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.back();
 					} else {
 
 					}
@@ -528,7 +529,7 @@
 
 				}
 
-				var flowMan_arr = newData.flowMan_arr.concat(tempArr);
+				message.flowMan_arr = message.flowMan_arr.concat(tempArr);
 				console.log('flowMan_arr:', JSON.stringify(flowMan_arr));
 
 			})
