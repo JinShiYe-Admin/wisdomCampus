@@ -56,6 +56,38 @@
 				padding: 0 5px 5px 5px;
 				font-size: 10px;
 			}
+			
+			.display-inline {
+				padding: 20px;
+				display: inline-block;
+			}
+			
+			.extral-file {
+				padding-right: 10px;
+			}
+			
+			.color_primary {
+				color: #3c9bfe;
+			}
+			
+			.prev-down {
+				padding-left: 20px;
+			}
+			
+			.prev-btn,
+			.down-btn {
+				margin-left: 20px;
+			}
+			
+			.mui-btn-primary {
+				border: 1px solid #3C9BFE;
+				background-color: #3C9BFE;
+			}
+			
+			.mui-btn-outlined.mui-btn-primary {
+				color: #3C9BFE;
+				background-color: transparent;
+			}
 		</style>
 	</head>
 
@@ -69,10 +101,18 @@
 				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
 				<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
 				<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
-				<p class="encName" v-if="detailModel.NoticeEncName.length>0">附件:
+				<!--<p class="encName" v-show="detailModel.NoticeEncName">附件:
 					<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
 					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
-				</p>
+				</p>-->
+				<template v-for="(extraFile,index) in detailModel.NoticeEncName">
+					<p class="encName" v-show="extraFile">附件:
+						<a class="encTitle">{{extraFile}}
+							<p class="encName"><button v-on:click.stop="checkEnc(0)" type="button" class="prev-btn">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn-primary down-btn">下载</button></p>
+						</a>
+						<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+					</p>
+				</template>
 				<!--滑动组件-->
 				<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
@@ -103,20 +143,20 @@
 		<script src="../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/utils/storageutil.js" type="text/javascript" charset="utf-8"></script>
 		<!--加密-->
-	<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-	<!---->
-	<script src='../js/lib/crypto-js/require.js'></script>
-	<script src='../js/utils/signHmacSHA1.js'></script>
-	<script src='../js/utils/sortSign.js'></script>
-	<script src="../js/utils/storageKeyName.js"></script>
-	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src="../js/utils/storageKeyName.js"></script>
+		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
 			mui.plusReady(function() {
-//				var curPage = utils.getSessionStorageByUrlsKey();
+				//				var curPage = utils.getSessionStorageByUrlsKey();
 				var curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
 				//				var curPage = {
@@ -150,6 +190,8 @@
 					$.hideLoading();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
+						data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
+						data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
 					} else {
