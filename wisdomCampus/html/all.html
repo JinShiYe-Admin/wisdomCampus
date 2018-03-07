@@ -237,28 +237,12 @@
 				//			mui('#slider').slider().gotoItem(title_id)
 			}
 			var add = function() {
-				var newData = {
-					title: '',
-					content: '',
-					smsSync: false,
-					selectIndex: 0,
-					selectImgPath: '',
-					uploadedFiles: [],
-					selectPeople: [],
-					flowName: "",
-					flowId: "",
-					flowMan_arr: [],
 
-				}
 
 				if(current_key.title == "notice") {
-					newData.flag = 1;
-					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.mOpenWithData("new_message.html", {})
 					//					utils.hrefSessionStorage("new_message.html", {})
 				} else {
-					newData.flag = 2;
-					store.set(window.storageKeyName.NEWDETAIL, newData);
 					utils.mOpenWithData("new-check.html", {})
 					//					utils.hrefSessionStorage("new-check.html", {})
 				}

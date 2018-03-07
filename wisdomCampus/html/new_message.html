@@ -142,8 +142,6 @@
 		<script src='../js/utils/signHmacSHA1.js'></script>
 
 		<script type="text/javascript">
-			var newData = store.get(window.storageKeyName.NEWDETAIL);
-			console.log('newData:', JSON.stringify(newData));
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
 			initQNUploader();
@@ -151,19 +149,19 @@
 				el: '#message',
 				data: {
 
-					title: newData.title,
-					content: newData.content,
-					smsSync: newData.smsSync,
+					title: '',
+					content: '',
+					smsSync: false,
 					displayGallery: {
 						display: 'none'
 					},
 					displayAddBtn: {
 						display: 'block'
 					},
-					selectIndex: newData.selectIndex,
-					selectImgPath: newData.selectImgPath,
-					uploadedFiles: newData.uploadedFiles,
-					selectPeople:newData.selectPeople
+					selectIndex: 0,
+					selectImgPath: '',
+					uploadedFiles: [],
+					selectPeople:[]
 				},
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
@@ -210,18 +208,7 @@
 						var data = {
 							flag: 1 //1 通知公告
 						}
-						var tempData = {
-							title: message.title,
-							content: message.content,
-							smsSync: message.smsSync,
-							selectIndex: message.selectIndex,
-							selectImgPath: message.selectImgPath,
-							uploadedFiles: message.uploadedFiles,
-							selectPeople: newData.selectPeople
-
-						}
-						store.set(window.storageKeyName.NEWDETAIL, tempData);
-						utils.hrefSessionStorage("selectPeople.html", data)
+						utils.mOpenWithData("selectPeople.html", data)
 					}
 				}
 			})
@@ -422,7 +409,7 @@
 				var smsSync = message.smsSync == true ? 1 : 0
 				$.showLoading('加载中...');
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
-				var selectPeople_arr = newData.selectPeople;
+				var selectPeople_arr = message.selectPeople;
 				var ids = [];
 				var codes = [];
 				var names = [];
@@ -456,6 +443,11 @@
 					}
 				});
 			}
+				window.addEventListener('selectPeople', function(data) {
+					console.log(data)
+					message.selectPeople = data;
+					
+				})
 		</script>
 	</body>
 
