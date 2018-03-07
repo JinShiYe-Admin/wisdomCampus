@@ -226,6 +226,18 @@ var addNoticePro = function(data0, callback) {
 	xhrPost(tempAttendUrl + 'addNotice', data0, callback)
 }
 
+//8.撤销通知公告
+var setNoticeUndoPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'setNoticeUndo', data0, callback)
+}
+
+//9.阅读通知公告
+var setNoticeReadPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'setNoticeRead', data0, callback)
+}
+
 //10.获取发送的通知公告列表
 var getSendNoticePro = function(data0, callback) {
 	data0 = extendParameter(data0);
@@ -242,6 +254,12 @@ var getReceiveNoticePro = function(data0, callback) {
 var getNoticeByIdPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'getNoticeById', data0, callback);
+}
+
+//15.撤销事务及文件申请
+var setAffairApplyUndoPro = function(data0, callback) {
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'setAffairApplyUndo', data0, callback);
 }
 
 //16.审批事务及文件申请
