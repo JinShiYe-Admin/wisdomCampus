@@ -13,6 +13,7 @@
 			.tableView {
 				padding-bottom: 65px;
 			}
+			
 			.mui-bar-nav {
 				background-color: #63BBFF;
 			}
@@ -39,36 +40,38 @@
 			<h1 class="mui-title" style="color: white;">选择接收人</h1>
 		</header>
 		<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
-			<ul class="mui-table-view tableView">
-				<li class="mui-table-view-cell mui-collapse" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
-					<template v-if='department.dptname'>
-						<a class="mui-navigate-right">{{department.dptname}}</a>
-						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
-								<div class="mui-input-row mui-checkbox">
-									<label>{{peopleModel.utname}}</label>
-									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
-								</div>
-							</li>
-						</ul>
-					</template>
-					<template v-else>
-						<a class="mui-navigate-right">{{department.clsname}}</a>
-						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
-								<div class="mui-input-row mui-checkbox">
-									<label>{{peopleModel.utname}}</label>
-									<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
-								</div>
-							</li>
-						</ul>
-					</template>
-				</li>
-			</ul>
-			<nav class="mui-bar mui-bar-tab">
-				<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue mui-action-back">确定({{selectPeopleArray.length}}人)</a>
-				<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
-			</nav>
+			<template>
+				<ul class="mui-table-view tableView">
+					<li class="mui-table-view-cell mui-collapse" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
+						<template v-if='department.dptname'>
+							<a class="mui-navigate-right">{{department.dptname}}</a>
+							<ul class="mui-table-view mui-table-view-chevron">
+								<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
+									<div class="mui-input-row mui-checkbox">
+										<label>{{peopleModel.utname}}</label>
+										<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
+									</div>
+								</li>
+							</ul>
+						</template>
+						<template v-else>
+							<a class="mui-navigate-right">{{department.clsname}}</a>
+							<ul class="mui-table-view mui-table-view-chevron">
+								<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @click="clickPeople(peopleModel,index)">
+									<div class="mui-input-row mui-checkbox">
+										<label>{{peopleModel.utname}}</label>
+										<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
+									</div>
+								</li>
+							</ul>
+						</template>
+					</li>
+				</ul>
+				<nav class="mui-bar mui-bar-tab">
+					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue mui-action-back">确定({{selectPeopleArray.length}}人)</a>
+					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+				</nav>
+			</template>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/vue.min.js"></script>
@@ -95,12 +98,9 @@
 			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
 			var PrivilegeStr = 0; //权限
 			var requestFlag = 0; //记录发送权限请求的次数
-			//清掉之前选择的人员信息
-			var tempInfo = store.get(window.storageKeyName.NEWDETAIL);
-			tempInfo.selectPeople = [];
-			store.set(window.storageKeyName.NEWDETAIL, tempInfo);
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 			$(function() {
 				//根据个人信息，获取权限等
@@ -116,7 +116,7 @@
 				},
 				methods: {
 					clickDepartment: function(model, index) {
-						console.log('tempFlag111:'+JSON.stringify(model));
+						console.log('tempFlag111:' + JSON.stringify(model));
 						//点击获取部门用户
 						if(model.dptname && model.peopleArray.length == 0) {
 							var enData0 = {};
@@ -150,7 +150,7 @@
 											}
 										}
 										model.peopleArray = [].concat(data.RspData.users);
-										console.log('tempFlag222:'+JSON.stringify(model));
+										console.log('tempFlag222:' + JSON.stringify(model));
 									}
 								} else {
 									$.toast(data.RspTxt);
@@ -224,9 +224,9 @@
 						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
 							$.toast('请选择人员');
 						} else {
-							var tempInfo1 = store.get(window.storageKeyName.NEWDETAIL);
-							tempInfo1.selectPeople = selectPeopleData.selectPeopleArray;
-							store.set(window.storageKeyName.NEWDETAIL, tempInfo1);
+							mui.fire(plus.webview.currentWebview().opener(), 'selectPeople', {
+								peopleArray: selectPeopleData.selectPeopleArray
+							});
 						}
 					}
 				}
@@ -235,7 +235,7 @@
 			//根据个人信息，获取权限等
 			var getData = function() {
 				//判断是否年级领导
-				if(personal.grds.length > 0) {
+				if(personal.grds) {
 					requestFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
@@ -257,7 +257,7 @@
 					});
 				}
 				//判断是否是班主任或任课老师
-				if(personal.clss.length > 0) {
+				if(personal.clss) {
 					requestFlag++;
 					var b = 0;
 					//24.获取角色对应的菜单权限
@@ -306,7 +306,7 @@
 					}
 				}
 				//判断是否是科任组长
-				if(personal.subs.length > 0) {
+				if(personal.subs) {
 					requestFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
@@ -460,12 +460,12 @@
 				//发送网络请求，data为网络返回值
 				postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
 					if(data.RspCode == 0) {
-						if (data.RspData) {
+						if(data.RspData) {
 							for(var i = 0; i < data.RspData.clss.length; i++) {
-							var tempModel = data.RspData.clss[i];
-							tempModel.peopleArray = [];
-						}
-						selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.clss);
+								var tempModel = data.RspData.clss[i];
+								tempModel.peopleArray = [];
+							}
+							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.clss);
 						}
 					} else {
 						$.toast(data.RspTxt);
