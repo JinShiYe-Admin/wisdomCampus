@@ -109,7 +109,7 @@
 					<p class="encName" v-show="extraFile">附件:
 						<a class="encTitle">{{extraFile}}
 							<p class="encName"><button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button></p>
-						</a> 
+						</a>
 						<!--<button v-on:click.stop="checkEnc(1,index)" type="button" class="mui-btn-primary down-btn">下载</button>-->
 						<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 					</p>
@@ -155,6 +155,8 @@
 		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
+			//获取个人信息
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.plusReady(function() {
 				//				var curPage = utils.getSessionStorageByUrlsKey();
 				var curPage = utils.getDataFromUrl(window.location.href);
@@ -174,7 +176,7 @@
 					detailModel: ''
 				},
 				methods: {
-					checkEnc: function(tempFlag,index) {
+					checkEnc: function(tempFlag, index) {
 						console.log('tempFlag:' + tempFlag);
 						var tempUrl = noticeDetailData.detailModel.NoticeEncAddr[index];
 						plus.runtime.openURL(tempUrl);
@@ -199,6 +201,15 @@
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
 						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
+						//修改阅读状态
+						var tempData1 = {
+							noticeId: id, //通知ID
+							receiveManId: personal.utid
+						}
+						//9.阅读通知公告
+						setNoticeReadPro(tempData1, function function_name(data) {
+							
+						});
 					} else {
 						$.toast(data.RspTxt);
 					}
