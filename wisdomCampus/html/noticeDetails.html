@@ -111,9 +111,9 @@
 							<p class="encName"><button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button></p>
 						</a>
 						<!--<button v-on:click.stop="checkEnc(1,index)" type="button" class="mui-btn-primary down-btn">下载</button>-->
-						<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 					</p>
 				</template>
+				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<!--滑动组件-->
 				<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
@@ -124,7 +124,7 @@
 					</a>
 				</div>
 				<!--滑动内容-->
-				<div class="mui-slider-group">
+				<div class="mui-slider-group" style="min-height: 200px;">
 					<div id="div-finished" class="mui-slider-item mui-control-content mui-active">
 						<div class="contentCSS">{{detailModel.ReadNames}}</div>
 					</div>

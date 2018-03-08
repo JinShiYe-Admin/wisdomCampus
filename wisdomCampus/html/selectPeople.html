@@ -153,7 +153,7 @@
 										console.log('tempFlag222:' + JSON.stringify(model));
 									}
 								} else {
-									$.toast(data.RspTxt);
+									$.toast(data.RspTxt, "cancel");
 								}
 							});
 						} else if(model.clsname && model.peopleArray.length == 0) {
@@ -191,7 +191,7 @@
 										model.peopleArray = [].concat(data.RspData.clssusers);
 									}
 								} else {
-									$.toast(data.RspTxt);
+									$.toast(data.RspTxt, "cancel");
 								}
 							});
 						}
@@ -224,7 +224,7 @@
 					},
 					clickSubmitBtn: function() {
 						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
-							$.toast('请选择人员');
+							$.toast('请选择人员', "cancel");
 						} else {
 							console.log(1111111)
 							mui.fire(plus.webview.currentWebview().opener(), 'selectPeople', {
@@ -238,9 +238,11 @@
 
 			//根据个人信息，获取权限等
 			var getData = function() {
+				var tempFlag = 0;
 				//判断是否年级领导
 				if(personal.grds) {
 					requestFlag++;
+					tempFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
@@ -256,13 +258,14 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt);
+							$.toast(data.RspTxt, "cancel");
 						}
 					});
 				}
 				//判断是否是班主任或任课老师
 				if(personal.clss) {
 					requestFlag++;
+					tempFlag++;
 					var b = 0;
 					//24.获取角色对应的菜单权限
 					var tempData = {
@@ -279,7 +282,7 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt);
+							$.toast(data.RspTxt, "cancel");
 						}
 					});
 					for(var i = 0; i < personal.clss.length; i++) {
@@ -303,7 +306,7 @@
 										getSchDepart();
 									}
 								} else {
-									$.toast(data.RspTxt);
+									$.toast(data.RspTxt, "cancel");
 								}
 							});
 						}
@@ -312,6 +315,7 @@
 				//判断是否是科任组长
 				if(personal.subs) {
 					requestFlag++;
+					tempFlag++;
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
@@ -327,9 +331,18 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt);
+							$.toast(data.RspTxt, "cancel");
 						}
 					});
+				}
+				if (tempFlag == 0) {
+					//判断个人信息的urolestr参数，第6位
+					var tempStr = personal.urolestr.substr(5,1);
+					console.log('tempStr22222222222222222:'+tempStr);
+					if (tempStr == 1) {
+						console.log('tempStr2222222222222233333:');
+						getSchDepart();
+					}
 				}
 			}
 
@@ -358,11 +371,15 @@
 							getGradeClass();
 						}
 						var tempFlag2 = PrivilegeStr.toString().substring(2);
-						if(tempFlag2 > 9) { //第三位：新建可选上级部门教师
+						//判断个人信息的urolestr参数，第6位，可选上级部门人员
+						var tempStr = personal.urolestr.substr(5,1);
+						console.log('tempStr:'+tempStr);
+						if(tempFlag2 > 9||tempStr == 1) { //第三位：新建可选上级部门教师
 							setArray3(data.RspData.dpts);
 						}
 						var tempFlag1 = PrivilegeStr.toString().substring(3);
-						if(tempFlag1 > 0) { //第四位：新建可选全校教师
+						var tempStr1 = personal.urolestr.substr(6,1);
+						if(tempFlag1 > 0||tempStr1 == 1) { //第四位：新建可选全校教师
 							for(var i = 0; i < data.RspData.dpts.length; i++) {
 								var tempModel = data.RspData.dpts[i];
 								tempModel.peopleArray = [];
@@ -372,7 +389,7 @@
 						//给数组去重
 						selectPeopleData.departmentArray = selectPeopleData.departmentArray.unique('dptid');
 					} else {
-						$.toast(data.RspTxt);
+						$.toast(data.RspTxt, "cancel");
 					}
 				});
 			}
@@ -444,7 +461,7 @@
 			//8.年级下班级
 			var getGradeClass = function() {
 				//个人信息中的班级列表
-				var tempClass = [].concat(personal.clss);
+				var tempClass = [].concat(personal.grds);
 				//去重
 				tempClass = tempClass.unique('grdid');
 				console.log('tempClass:' + JSON.stringify(tempClass));
@@ -482,7 +499,7 @@
 							selectPeopleData.departmentArray.unshift(tempClassModel);
 						}
 					} else {
-						$.toast(data.RspTxt);
+						$.toast(data.RspTxt, "cancel");
 					}
 				});
 			}

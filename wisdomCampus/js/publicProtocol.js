@@ -102,7 +102,6 @@ var xhrPost = function(url, commonData, callback) {
 		// 等待的对话框
 		var urlArr = url.split('/');
 		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', tempData);
-		//        jQAjaxPost(url, JSON.stringify(tempData), callback);
 
 		var xhr = new XMLHttpRequest();
 		xhr.open("post", url, true);
@@ -185,7 +184,14 @@ var jQAjaxPost = function(url, data, callback) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO,tempInfo00);
-						jQAjaxPost(url, data, callback);
+//						jQAjaxPost(url, data, callback);
+						var urlArr = url.split('/');
+						console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
+						data.utoken = data1.RspData;
+						delete data.sign;
+						postDataEncry(urlArr[urlArr.length - 1], {}, data, 0, function(data2) {
+							
+						});
 					} 
 				});
 			} else{

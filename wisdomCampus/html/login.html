@@ -107,7 +107,7 @@
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
 								$.hideLoading();
 								if(data1.RspCode == 0) {
-									console.log('data1.RspData:' + data1.RspData);
+//									console.log('data1.RspData:' + data1.RspData);
 									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
 								} else {

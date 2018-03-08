@@ -54,11 +54,11 @@
 			<!--<a class="mui-icon mui-pull-right right-cancel">取消</a>-->
 		</header>
 		<div id="message" class="mui-content">
-			<div class="weui-cells">
+			<div class="weui-cells" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
-						<input v-model="title" class="weui-input" placeholder="请输入标题" />
+						<input v-model="title" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
 					</div>
 					<!--<div class="weui-cell__ft">0/64</div>-->
 				</div>
@@ -218,7 +218,7 @@
 				console.log('index:' + index + ',files.count:' + files.length + ',filesSum.length:' + filesSum.length);
 				if(index < files.length) {
 					if(filesSum + index > 8) {
-						$.alert("最多只能上传9张照片");
+						$.toast("最多只能上传9张照片", "cancel");
 					} else {
 						var file = files[index];
 						var types = file.type.toLowerCase().split("/");
@@ -257,7 +257,7 @@
 								uploadFiles(index, files, filesSum);
 							}
 							$('#uploaderInput').val('');
-							$.toast("请选择png,jpg,jpeg类型的图片");
+							$.toast("请选择png,jpg,jpeg类型的图片", "cancel");
 						}
 					}
 				}
@@ -381,16 +381,16 @@
 				return upToken;
 			}
 			var addNotice = function() {
-				if(message.title.length == 0 || message.content.length == 0 || message.uploadedFiles.length == 0) {
-					alert('请填写具体内容后再发布');
+				if(message.title.length == 0 || message.content.length == 0) {
+					$.toast("请填写具体内容后再发布", "cancel");
 					return;
 				}
 				if(message.title.length >= 50) {
-					alert('标题不能超过50字');
+					$.toast("标题不能超过50字", "cancel");
 					return;
 				}
 				if(message.content.length >= 500) {
-					alert('内容不能超过500字');
+					$.toast("内容不能超过500字", "cancel");
 					return;
 				}
 
@@ -406,7 +406,7 @@
 				var noticEncName = nameArr.join("|")
 				var noticeEncAddr = addrArr.join("|")
 				var smsSync = message.smsSync == true ? 1 : 0
-				$.showLoading('加载中...');
+				
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var selectPeople_arr = message.selectPeople;
 				var ids = [];
@@ -418,7 +418,11 @@
 					codes.push('')
 					names.push(model.utname)
 				}
-
+				if(ids.length == 0) {
+					$.toast("请选择接收人", "cancel");
+					return;
+				}
+				$.showLoading('加载中...');
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
 					noticeTitle: message.title, //标题
