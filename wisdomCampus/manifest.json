@@ -211,7 +211,9 @@
 				"priority": 0
 			},
 			"html/all.html": {
-				"resources": [],
+				"resources": [
+					"img/firstPage/loading.gif"
+				],
 				"refer": [
 					"html/home.html",
 					"html/new_message.html",
