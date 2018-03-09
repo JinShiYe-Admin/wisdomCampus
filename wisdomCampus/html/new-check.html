@@ -450,9 +450,10 @@
 					approveManNames: names //接收人姓名
 				}
 				addAffairApplyPro(tempData, function function_name(data) {
+					$.hideLoading();
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
-						$.hideLoading();
+						
 						mui.toast("发布成功")
 						mui.back();
 					} else {
