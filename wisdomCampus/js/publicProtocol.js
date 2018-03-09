@@ -8,7 +8,7 @@
 //document.write('<script src="../js/lib/jquery.js"><\/script>');
 //document.write('<script src="../js/utils/sortSign.js"><\/script>');
 //document.write('<script src="../js/utils/myStorage.js"><\/script>');
-//document.write('<script src="../js/utils/storageKeyName.js"><\/script>');
+document.write('<script src="../js/utils/storageKeyName.js"><\/script>');
 
 function generateUUID() {
 	var d = new Date().getTime();
@@ -26,7 +26,7 @@ function generateUUID() {
 //flag,0表示不需要合并共用数据，1为添加uuid、utid、token、appid普通参数，2为uuid、appid、token
 //callback,返回值
 var postDataEncry = function(url, encryData, commonData, flag, callback) {
-	var tempUrl = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';
+	var tempUrl = window.storageKeyName.INTERFACEGU;
 	url = tempUrl + url;
 	console.log('url:', url);
 	//拼接登录需要的签名
@@ -210,9 +210,6 @@ var jQAjaxPost = function(url, data, callback) {
 }
 
 //智慧校园协议
-var tempAttendUrl = 'https://jbyj.jiaobaowang.net/SchoolOAService/notice/';
-var tempAttendUrl1 = 'https://jbyj.jiaobaowang.net/SchoolOAService/approve/';
-var tempAttendUrl2 = 'https://jbyj.jiaobaowang.net/SchoolOAService/privilege/';//获取权限
 
 //合并参数
 var extendParameter = function(data0) {
@@ -228,97 +225,113 @@ var extendParameter = function(data0) {
 
 //7.新增通知公告
 var addNoticePro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'addNotice', data0, callback)
 }
 
 //8.撤销通知公告
 var setNoticeUndoPro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'setNoticeUndo', data0, callback)
 }
 
 //9.阅读通知公告
 var setNoticeReadPro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'setNoticeRead', data0, callback)
 }
 
 //10.获取发送的通知公告列表
 var getSendNoticePro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'getSendNotice', data0, callback);
 }
 
 //11.获取收到的通知公告列表（接收人为单人）
 var getReceiveNoticePro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'getReceiveNotice', data0, callback);
 }
 
 //12.通过ID获取通知公告
 var getNoticeByIdPro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'getNoticeById', data0, callback);
 }
 
 //15.撤销事务及文件申请
 var setAffairApplyUndoPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'setAffairApplyUndo', data0, callback);
 }
 
 //16.审批事务及文件申请
 var setAffairApprovePro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'setAffairApprove', data0, callback);
 }
 
 //17.获取事务及文件申请列表
 var getAffairApplyPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApply', data0, callback);
 }
 
 //18.获取事务及文件审批列表（审批人为单人）
 var getAffairApprovePro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApprove', data0, callback);
 }
 
 //19.通过ID获取事务及文件申请
 var getAffairApplyByIdPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApplyById', data0, callback);
 }
 
 //23.通过审批ID获取事务及文件申请及审批
 var getAffairApproveByIdPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAffairApproveById', data0, callback);
 }
 
 //24.获取角色对应的菜单权限
 var getPrivilegeByRolePro = function(data0, callback) {
+	var tempAttendUrl2 = window.storageKeyName.INTERFACEKONG + 'privilege/';//获取权限
 	data0 = extendParameter(data0);
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl2 + 'getPrivilegeByRole', data0, callback);
 }
 var addAffairApplyPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl1 + 'addAffairApply', data0, callback);
 }
 //4.获取流程列表
 var getSelWorkFlowPro = function(data0, callback) {
+	var tempAttendUrl3 = window.storageKeyName.INTERFACEKONG + 'flow/';
 	data0 = extendParameter(data0);
 	//判断是通知公告还是事务
-	xhrPost('https://jbyj.jiaobaowang.net/SchoolOAService/flow/' + 'getSelWorkFlow', data0, callback);
+	xhrPost(tempAttendUrl3 + 'getSelWorkFlow', data0, callback);
 }
 
 var getWorkFlowListByIdPro = function(data0, callback) {
+	var tempAttendUrl3 = window.storageKeyName.INTERFACEKONG + 'flow/';
 	data0 = extendParameter(data0);
 	//判断是通知公告还是事务
-	xhrPost('https://jbyj.jiaobaowang.net/SchoolOAService/flow/' + 'getWorkFlowListById', data0, callback);
+	xhrPost(tempAttendUrl3 + 'getWorkFlowListById', data0, callback);
 }
 

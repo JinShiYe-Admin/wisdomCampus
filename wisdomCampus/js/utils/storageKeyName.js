@@ -15,11 +15,16 @@ var storageKeyName = (function(mod) {
 	}
 	switch(mod.key) {
 		case 0: //开发
-		{
 			mod.SCHOOLID = 100005;//学校ID
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
-		}
-
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
+			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/';//孔工接口
+			break;
+		case 0: //发布
+			mod.SCHOOLID = 100005;//学校ID
+			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
+			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/';//孔工接口
 			break;
 
 		default:

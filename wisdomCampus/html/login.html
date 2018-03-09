@@ -150,6 +150,8 @@
 			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			document.getElementById("account").value = personal.uid;
+			document.getElementById("password").value = '111111';
 			//			console.log('personal:' + JSON.parse(personal));
 			if(personal.utid == 'undefined' || personal.utid == null) {
 

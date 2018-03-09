@@ -104,7 +104,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" src="../img/login/headImg.png" /></a>
-			<h1 class="mui-title common-color-white common-font-family-Bold"  style="color: white;">首页</h1>
+			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
 			<div class="mui-scroll">
@@ -150,15 +150,15 @@
 		<script src='../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../js/home.js"></script>
 		<!--加密-->
-	<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-	<!---->
-	<script src='../js/lib/crypto-js/require.js'></script>
-	<script src='../js/utils/signHmacSHA1.js'></script>
-	<script src='../js/utils/sortSign.js'></script>
-	<script src='../js/utils/store.js'></script>
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src='../js/utils/store.js'></script>
 		<script>
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
@@ -181,9 +181,17 @@
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id
 				if(id == 1 || id == 2) {
-											utils.mOpenWithData("all.html",id)
+					//检查是否有权限
+					if (checkPermission()) {
+						console.log('1111');
+						mui.toast("无此权限");
+					} else{
+						console.log('22222');
+						utils.mOpenWithData("all.html", id)
+					}
+					
 
-//					utils.hrefSessionStorage("all.html", id);
+					//					utils.hrefSessionStorage("all.html", id);
 				} else {
 					mui.toast("此功能暂未开放");
 				}
@@ -194,20 +202,53 @@
 				tempName = tempInfo.utname;
 			}
 			console.log('tempInfo:' + tempInfo);
+			//检查是否有权限
+			var checkPermission = function() {
+				//获取个人信息
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var tempFlag = 0;
+				//判断是否年级领导
+				if(personal.grds.length > 0) {
+					tempFlag++;
+				}
+				//判断是否是班主任或任课老师
+				if(personal.clss.length > 0) {
+					tempFlag++;
+				}
+				//判断是否是科任组长
+				if(personal.subs.length > 0) {
+					tempFlag++;
+				}
+				//判断个人信息的urolestr参数，第6位
+				var tempStr = personal.urolestr.substr(5, 1);
+				if(tempStr == 1) {
+					tempFlag++;
+				}
+				//判断个人信息的urolestr参数，第6位
+				var tempStr1 = personal.urolestr.substr(6, 1);
+				if(tempStr1 == 1) {
+					tempFlag++;
+				}
+				if (tempFlag == 0) {
+					return true;
+				} else{
+					return false;
+				}
+			}
 			var mine = new Vue({
 				el: "#mine",
 				data: {
 					userName: tempName,
 					settings: [
-//					{
-//						name: "密码修改",
-//						icon: "",
-//						href: ""
-//					}, {
-//						name: "关于我们",
-//						icon: "",
-//						href: ""
-//					}
+						//					{
+						//						name: "密码修改",
+						//						icon: "",
+						//						href: ""
+						//					}, {
+						//						name: "关于我们",
+						//						icon: "",
+						//						href: ""
+						//					}
 					],
 					isMineShow: false //屏蔽或显示我的界面
 				},
@@ -218,7 +259,7 @@
 						if(utils.getSystem() == 'Android') {
 
 						} else {
-//							window.webkit.messageHandlers.setInfo.postMessage('');
+							//							window.webkit.messageHandlers.setInfo.postMessage('');
 						}
 						this.isMineShow = false;
 						history.go(-1);
