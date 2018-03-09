@@ -96,6 +96,9 @@
 			mui.init();
 			var curPage = utils.getDataFromUrl(window.location.href);
 			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
+			if (systemFlag == 1) {//如果是通知公告，加入数组
+				selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
+			}
 			var PrivilegeStr = 0; //权限
 			var requestFlag = 0; //记录发送权限请求的次数
 			//获取个人信息
