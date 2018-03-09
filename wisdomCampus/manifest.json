@@ -203,9 +203,10 @@
 	"dependencies": {
 		"pages": {
 			"html/home.html": {
-				"resources": [],
+				"resources": [
+					"html/all.html"
+				],
 				"refer": [
-					"html/all.html",
 					"html/login.html"
 				],
 				"priority": 0

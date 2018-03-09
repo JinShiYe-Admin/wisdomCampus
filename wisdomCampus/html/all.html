@@ -424,7 +424,7 @@ $.showLoading();
 									//									datasource.notice_recevice.refreshObj.pageIndex = 1;
 									datasource.notice_recevice.data = data.RspData.Data
 								} else {
-									datasource.notice_recevice.refreshObj.pageIndex++;
+//									datasource.notice_recevice.refreshObj.pageIndex++;
 									datasource.notice_recevice.data = datasource.notice_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -591,7 +591,8 @@ $.showLoading();
 									} else {
 										console.log(refreshObj.pageIndex)
 										console.log(refreshObj.TotalPage)
-										self.endPullUpToRefresh(true);
+										mui.toast('没有更多了')
+										self.endPullUpToRefresh(false);
 									}
 
 								}
