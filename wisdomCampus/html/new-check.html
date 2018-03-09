@@ -453,6 +453,7 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.toast("发布成功")
 						mui.back();
 					} else {
 
@@ -492,7 +493,7 @@
 				getWorkFlowListByIdPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
-						message.flowMan_arr = data.RspData.Data;
+						message.flowMan_arr =message.flowMan_arr.concat(data.RspData.Data) ;
 
 					} else {
 
@@ -536,7 +537,6 @@
 				}
 
 				message.flowMan_arr = message.flowMan_arr.concat(tempArr);
-				console.log('flowMan_arr:', JSON.stringify(flowMan_arr));
 
 			})
 		</script>

@@ -99,7 +99,7 @@
 						接收人
 					</div>
 					<div class="weui-cell__ft">
-						{{selectPeople.length>0? selectPeople.length+'人':'点击选择接收人'}}
+						{{peopleNum}}
 					</div>
 				</div>
 				<div class="weui-cell weui-cell_switch">
@@ -110,7 +110,7 @@
 				</div>
 			</div>
 			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
-			<div class="weui-gallery" :style="displayGallery" style="z-index: 999999;position:absolute;">
+			<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
 				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
 				<div class="weui-gallery__opr">
 					<a href="javascript:" class="weui-gallery__del">
@@ -159,6 +159,13 @@
 					uploadedFiles: [],
 					selectPeople: []
 				},
+				computed: {
+    // 计算属性的 getter
+    peopleNum: function () {
+      // `this` 指向 vm 实例
+      return this.selectPeople.length>0? this.selectPeople.length+'人':'点击选择接收人'
+    }
+  },
 				methods: {
 					selectFile: function(event) { //从手机中选择图片后到界面的回调
 						// 如果没有选中文件，直接返回  
@@ -202,7 +209,8 @@
 					},
 					selectPepole: function() {
 						var data = {
-							flag: 1 //1 通知公告
+							flag: 1 ,//1 通知公告
+							selectPepople:message.selectPeople
 						}
 						utils.mOpenWithData("selectPeople.html", data)
 					}
@@ -441,6 +449,7 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.toast("发布成功")
 						mui.back();
 					} else {
 
