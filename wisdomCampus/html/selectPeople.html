@@ -96,7 +96,7 @@
 			mui.init();
 			var curPage = utils.getDataFromUrl(window.location.href);
 			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
-			if (systemFlag == 1) {//如果是通知公告，加入数组
+			if(systemFlag == 1) { //如果是通知公告，加入数组
 				selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
 			}
 			var PrivilegeStr = 0; //权限
@@ -243,7 +243,7 @@
 			var getData = function() {
 				var tempFlag = 0;
 				//判断是否年级领导
-				if(personal.grds) {
+				if(personal.grds.length>0) {
 					requestFlag++;
 					tempFlag++;
 					//24.获取角色对应的菜单权限
@@ -266,7 +266,7 @@
 					});
 				}
 				//判断是否是班主任或任课老师
-				if(personal.clss) {
+				if(personal.clss.length>0) {
 					requestFlag++;
 					tempFlag++;
 					var b = 0;
@@ -316,7 +316,7 @@
 					}
 				}
 				//判断是否是科任组长
-				if(personal.subs) {
+				if(personal.subs.length>0) {
 					requestFlag++;
 					tempFlag++;
 					//24.获取角色对应的菜单权限
@@ -338,12 +338,10 @@
 						}
 					});
 				}
-				if (tempFlag == 0) {
+				if(tempFlag == 0) {
 					//判断个人信息的urolestr参数，第6位
-					var tempStr = personal.urolestr.substr(5,1);
-					console.log('tempStr22222222222222222:'+tempStr);
-					if (tempStr == 1) {
-						console.log('tempStr2222222222222233333:');
+					var tempStr = personal.urolestr.substr(5, 1);
+					if(tempStr == 1) {
 						getSchDepart();
 					}
 				}
@@ -375,14 +373,14 @@
 						}
 						var tempFlag2 = PrivilegeStr.toString().substring(2);
 						//判断个人信息的urolestr参数，第6位，可选上级部门人员
-						var tempStr = personal.urolestr.substr(5,1);
-						console.log('tempStr:'+tempStr);
-						if(tempFlag2 > 9||tempStr == 1) { //第三位：新建可选上级部门教师
+						var tempStr = personal.urolestr.substr(5, 1);
+						console.log('tempStr:' + tempStr);
+						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
 							setArray3(data.RspData.dpts);
 						}
 						var tempFlag1 = PrivilegeStr.toString().substring(3);
-						var tempStr1 = personal.urolestr.substr(6,1);
-						if(tempFlag1 > 0||tempStr1 == 1) { //第四位：新建可选全校教师
+						var tempStr1 = personal.urolestr.substr(6, 1);
+						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
 							for(var i = 0; i < data.RspData.dpts.length; i++) {
 								var tempModel = data.RspData.dpts[i];
 								tempModel.peopleArray = [];
@@ -463,48 +461,67 @@
 
 			//8.年级下班级
 			var getGradeClass = function() {
-				//个人信息中的班级列表
-				var tempClass = [].concat(personal.grds);
-				//去重
-				tempClass = tempClass.unique('grdid');
-				console.log('tempClass:' + JSON.stringify(tempClass));
-				var tempGradeId = ''; //需要查询的年级ID
-				for(var i = 0; i < tempClass.length; i++) {
-					var tempModel = tempClass[i];
-					tempGradeId = tempGradeId + ',' + tempModel.grdid;
-				}
-				//去掉第一个，
-				tempGradeId = tempGradeId.substr(1, tempGradeId.length);
-				var enData0 = {};
-				//不需要加密的数据
-				var comData0 = {
-					uuid: publicParameter.uuid, //用户设备号
-					utoken: personal.utoken, //用户令牌
-					gradeids: tempGradeId, //需要查询的年级ID，多个代码用英文逗号隔开
-					appid: publicParameter.appid //系统所分配的应用ID
-				}
-				//发送网络请求，data为网络返回值
-				postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
-					if(data.RspCode == 0) {
-						if(data.RspData) {
-							var tempClassId = ''; //需要查询的年级ID
-							for(var i = 0; i < data.RspData.clss.length; i++) {
-								var tempModel = data.RspData.clss[i];
-								tempClassId = tempClassId + ',' + tempModel.clsid;
-							}
-							//去掉第一个，
-							tempClassId = tempClassId.substr(1, tempClassId.length);
-							var tempClassModel = {
-								clsname:'任教年级教师',
-								clsid:tempClassId,
-								peopleArray:[]
-							}
-							selectPeopleData.departmentArray.unshift(tempClassModel);
+				if(personal.grds.length > 0 || personal.clss.length > 0) {
+					var tempGradeId = ''; //需要查询的年级ID
+					if(personal.grds.length > 0) {
+						//个人信息中的年级列表
+						var tempClass = [].concat(personal.grds);
+						//去重
+						tempClass = tempClass.unique('grdid');
+						console.log('tempClass:' + JSON.stringify(tempClass));
+						for(var i = 0; i < tempClass.length; i++) {
+							var tempModel = tempClass[i];
+							tempGradeId = tempGradeId + ',' + tempModel.grdid;
 						}
-					} else {
-						$.toast(data.RspTxt, "cancel");
 					}
-				});
+					//如果班级中有人，也获取
+					if(personal.clss.length > 0) {
+						//个人信息中的班级列表
+						var tempClass1 = [].concat(personal.clss);
+						//去重
+						tempClass1 = tempClass1.unique('grdid');
+						console.log('tempClass1:' + JSON.stringify(tempClass1));
+						for(var i = 0; i < tempClass1.length; i++) {
+							var tempModel = tempClass1[i];
+							tempGradeId = tempGradeId + ',' + tempModel.grdid;
+						}
+					}
+					//去掉第一个，
+					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
+					if (tempGradeId.length == 0) {
+						return;
+					}
+					var enData0 = {};
+					//不需要加密的数据
+					var comData0 = {
+						uuid: publicParameter.uuid, //用户设备号
+						utoken: personal.utoken, //用户令牌
+						gradeids: tempGradeId, //需要查询的年级ID，多个代码用英文逗号隔开
+						appid: publicParameter.appid //系统所分配的应用ID
+					}
+					//发送网络请求，data为网络返回值
+					postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
+						if(data.RspCode == 0) {
+							if(data.RspData) {
+								var tempClassId = ''; //需要查询的年级ID
+								for(var i = 0; i < data.RspData.clss.length; i++) {
+									var tempModel = data.RspData.clss[i];
+									tempClassId = tempClassId + ',' + tempModel.clsid;
+								}
+								//去掉第一个，
+								tempClassId = tempClassId.substr(1, tempClassId.length);
+								var tempClassModel = {
+									clsname: '任教年级教师',
+									clsid: tempClassId,
+									peopleArray: []
+								}
+								selectPeopleData.departmentArray.unshift(tempClassModel);
+							}
+						} else {
+							$.toast(data.RspTxt, "cancel");
+						}
+					});
+				}
 			}
 
 			//给数组去重
