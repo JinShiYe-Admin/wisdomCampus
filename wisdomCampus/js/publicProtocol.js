@@ -265,7 +265,7 @@ var getNoticeByIdPro = function(data0, callback) {
 //15.撤销事务及文件申请
 var setAffairApplyUndoPro = function(data0, callback) {
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'setAffairApplyUndo', data0, callback);
+	xhrPost(tempAttendUrl1 + 'setAffairApplyUndo', data0, callback);
 }
 
 //16.审批事务及文件申请
