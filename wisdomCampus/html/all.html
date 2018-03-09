@@ -229,6 +229,7 @@
 			var title_id = utils.getSessionStorageByUrlsKey();
 			console.log(title_id);
 			if(title_id == 2) {
+				current_key.title = 'apply'
 				document.getElementById("ntitle").innerHTML = "事务审批"
 				document.getElementById("notice").className = "mui-control-item"
 				document.getElementById("apply").className = "mui-control-item mui-active"
@@ -490,13 +491,33 @@
 						var closeId = this.id;
 						mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
 							if(e.index == 1) {
-								var tempData = {
-									noticeId: guid
+								if(current_key.title == 'notice') {
+									var tempData = {
+										noticeId: guid
+									}
+									setNoticeUndoPro(tempData, function function_name(data) {
+										console.log(JSON.stringify(data))
+										if(data.RspCode == 0) {
+											var li = document.getElementById(guid)
+											li.innerHTML = li.innerHTML.replace("撤销", '')
+											li.innerHTML = li.innerHTML.replace("新建", '已撤销')
+											li.innerHTML = li.innerHTML.replace("68bc31", 'c9c9c9')
+										}
+									});
+								} else {
+									var tempData = {
+										applyId: guid
+									}
+									setAffairApplyUndoPro(tempData, function function_name(data) {
+										console.log(JSON.stringify(data))
+										if(data.RspCode == 0) {
+											var li = document.getElementById(guid)
+											li.innerHTML = li.innerHTML.replace("撤销", '')
+											li.innerHTML = li.innerHTML.replace("新建", '已撤销')
+											li.innerHTML = li.innerHTML.replace("68bc31", 'c9c9c9')
+										}
+									});
 								}
-								var li= document.getElementById(guid)
-								li.innerHTML = li.innerHTML.replace("撤销",'')
-								li.innerHTML = li.innerHTML.replace("新建",'已撤销')
-								li.innerHTML = li.innerHTML.replace("68bc31",'c9c9c9')
 
 							}
 						});
@@ -605,7 +626,7 @@
 
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
-				console.log(456)
+
 				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
 				var data = {
 					id: this.id,
@@ -623,6 +644,9 @@
 					utils.mOpenWithData("check-detail.html", data)
 					//					utils.hrefSessionStorage("check-detail.html", data)
 				}
+				var li = document.getElementById(this.parentElement.id)
+				li.innerHTML = li.innerHTML.replace("未阅", '已阅')
+				li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
 
 			})
 		</script>
