@@ -9,6 +9,10 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/weui.min.css">
+		<link rel="stylesheet" href="../css/jquery-weui.css">
+		<link rel="stylesheet" href="../css/demos.css">
+		<link rel="stylesheet" href="../css/weui-extra.min.css" />
 		<style>
 			html,
 			body {
@@ -158,7 +162,8 @@
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
+		<script src="../js/demoCssJs/jquery-weui.js"></script>
 		<script src="../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../js/utils/mui.pullToRefresh.material.js"></script>
 		<script src="../js/utils/storageutil.js"></script>
@@ -350,16 +355,16 @@
 				}
 
 			};
-			(function($) {
+			(function($1) {
 				//阻尼系数
 				var deceleration = mui.os.ios ? 0.003 : 0.0009;
-				$('.mui-scroll-wrapper').scroll({
+				$1('.mui-scroll-wrapper').scroll({
 					bounce: false,
 					indicators: true, //是否显示滚动条
 					deceleration: deceleration
 				});
 				var getNotice = function(title, sendFlag, callback) { //10.获取发送的通知公告列表
-
+$.showLoading();
 					var k = current_key.title + '_' + current_key.send_recevice
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
@@ -381,6 +386,7 @@
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
+								$.hideLoading();
 								datasource.notice_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_send.refreshObj.refreshFlag == 0) {
@@ -394,6 +400,7 @@
 							}
 						});
 					} else if(title == "notice" && sendFlag == "recevice") {
+						
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendMan: '', //发送人ID
@@ -409,6 +416,8 @@
 						getReceiveNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
+								$.hideLoading();
+								
 								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
@@ -437,6 +446,7 @@
 						getAffairApplyPro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
+								$.hideLoading();
 								datasource.apply_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_send.refreshObj.refreshFlag == 0) {
@@ -466,6 +476,7 @@
 						getAffairApprovePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
+								$.hideLoading();
 								datasource.apply_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_recevice.refreshObj.refreshFlag == 0) {
@@ -481,7 +492,7 @@
 					}
 					//					$.hideLoading();
 				}
-				$.ready(function() {
+				$1.ready(function() {
 					mui('.mui-table-view').on('tap', '.del', function() {
 
 						window.event.stopPropagation()
@@ -541,8 +552,8 @@
 						ul.appendChild(createFragment(ul, 1, data));
 					});
 					//循环初始化所有下拉刷新，上拉加载。
-					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-						$(pullRefreshEl).pullToRefresh({
+					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						$1(pullRefreshEl).pullToRefresh({
 							down: {
 								callback: function() {
 									var self = this;
