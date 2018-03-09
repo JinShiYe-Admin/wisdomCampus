@@ -4,7 +4,9 @@
 			"html/all.html",
 			"html/login.html"
 		],
-		"resources": []
+		"resources": [
+			"html/all.html"
+		]
 	},
 	"html/all.html": {
 		"refer": [

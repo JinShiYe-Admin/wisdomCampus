@@ -210,8 +210,9 @@
 					selectPepole: function() {
 						var data = {
 							flag: 1 ,//1 通知公告
-							selectPepople:message.selectPeople
+							selectPeople:message.selectPeople
 						}
+						console.log(JSON.stringify(data));
 						utils.mOpenWithData("selectPeople.html", data)
 					}
 				}
