@@ -231,7 +231,7 @@
 			}
 
 			mui.init();
-			var title_id = utils.getSessionStorageByUrlsKey();
+			var title_id = utils.getDataFromUrl(window.location.href);
 			console.log(title_id);
 			if(title_id == 2) {
 				current_key.title = 'apply'
