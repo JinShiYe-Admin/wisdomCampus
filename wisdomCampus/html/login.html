@@ -107,7 +107,25 @@
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
 								$.hideLoading();
 								if(data1.RspCode == 0) {
-//									console.log('data1.RspData:' + data1.RspData);
+									if (data1.RspData.dpts == null) {
+										data1.RspData.dpts = [];
+									}
+									if (data1.RspData.grds == null) {
+										data1.RspData.grds = [];
+									}
+									if (data1.RspData.clss == null) {
+										data1.RspData.clss = [];
+									}
+									if (data1.RspData.subs == null) {
+										data1.RspData.subs = [];
+									}
+//									if (data1.RspData.clss.length>0) {
+//										data1.RspData.grds = data1.RspData.grds.concat(data1.RspData.clss);
+//									}
+									if (data1.RspData.urolestr == null) {
+										data1.RspData.urolestr = '00000000000000000000000000000';
+									}
+									
 									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
 								} else {
