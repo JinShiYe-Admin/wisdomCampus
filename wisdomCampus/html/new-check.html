@@ -453,6 +453,7 @@
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						$.hideLoading();
+						mui.toast("发布成功")
 						mui.back();
 					} else {
 
