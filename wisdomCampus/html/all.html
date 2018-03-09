@@ -385,8 +385,9 @@ $.showLoading();
 						}
 						getSendNoticePro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
+							$.hideLoading();
 							if(data.RspCode == 0) {
-								$.hideLoading();
+								
 								datasource.notice_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_send.refreshObj.refreshFlag == 0) {
@@ -414,9 +415,10 @@ $.showLoading();
 							pageSize: '10' //每页记录数
 						}
 						getReceiveNoticePro(tempData, function function_name(data) {
+							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								$.hideLoading();
+								
 								
 								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
@@ -445,8 +447,9 @@ $.showLoading();
 
 						getAffairApplyPro(tempData, function function_name(data) {
 							console.log(JSON.stringify(data))
+							$.hideLoading();
 							if(data.RspCode == 0) {
-								$.hideLoading();
+								
 								datasource.apply_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_send.refreshObj.refreshFlag == 0) {
@@ -474,9 +477,10 @@ $.showLoading();
 						}
 
 						getAffairApprovePro(tempData, function function_name(data) {
+							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								$.hideLoading();
+								
 								datasource.apply_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_recevice.refreshObj.refreshFlag == 0) {
