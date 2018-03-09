@@ -55,18 +55,16 @@
 	<script src="../js/jquery-weui.min.js"></script>
 	<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
-		$(function() {
-			setUUID();
-		});
-		var tempModel = {
-			uuid: '',
-			appid: ''
-		}
+//		$(function() {
+//			
+//		});
+		var tempModel = {};
 		mui.plusReady(function() {
 			tempModel = {
 				uuid: plus.device.uuid,
 				appid: plus.runtime.appid
 			}
+			setUUID();
 		});
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");

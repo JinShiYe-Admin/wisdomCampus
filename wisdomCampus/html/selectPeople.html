@@ -94,22 +94,6 @@
 		<script src="../js/utils/storageutil.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var curPage = utils.getDataFromUrl(window.location.href);
-			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
-			if(systemFlag == 1) { //如果是通知公告，加入数组
-				selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
-			}
-			var PrivilegeStr = 0; //权限
-			var requestFlag = 0; //记录发送权限请求的次数
-			//获取个人信息
-			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			console.log('personal:' + JSON.stringify(personal));
-			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			$(function() {
-				//根据个人信息，获取权限等
-				getData();
-			});
-
 			var selectPeopleData = new Vue({
 				el: "#selectPeopleData",
 				data: {
@@ -238,12 +222,28 @@
 					}
 				}
 			});
+			var curPage = utils.getDataFromUrl(window.location.href);
+			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
+			if(systemFlag == 1) { //如果是通知公告，加入数组
+				selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
+				console.log('curPage.selectPeople:' + JSON.stringify(curPage.selectPeople));
+			}
+			var PrivilegeStr = 0; //权限
+			var requestFlag = 0; //记录发送权限请求的次数
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
+			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			$(function() {
+				//根据个人信息，获取权限等
+				getData();
+			});
 
 			//根据个人信息，获取权限等
 			var getData = function() {
 				var tempFlag = 0;
 				//判断是否年级领导
-				if(personal.grds.length>0) {
+				if(personal.grds.length > 0) {
 					requestFlag++;
 					tempFlag++;
 					//24.获取角色对应的菜单权限
@@ -266,7 +266,7 @@
 					});
 				}
 				//判断是否是班主任或任课老师
-				if(personal.clss.length>0) {
+				if(personal.clss.length > 0) {
 					requestFlag++;
 					tempFlag++;
 					var b = 0;
@@ -316,7 +316,7 @@
 					}
 				}
 				//判断是否是科任组长
-				if(personal.subs.length>0) {
+				if(personal.subs.length > 0) {
 					requestFlag++;
 					tempFlag++;
 					//24.获取角色对应的菜单权限
@@ -488,7 +488,7 @@
 					}
 					//去掉第一个，
 					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
-					if (tempGradeId.length == 0) {
+					if(tempGradeId.length == 0) {
 						return;
 					}
 					var enData0 = {};
