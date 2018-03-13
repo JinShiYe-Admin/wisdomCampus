@@ -193,12 +193,12 @@
                 "android": {
                     "mdpi": "", /*普通屏启动图片，分辨率：240x282*/
                     "ldpi": "", /*大屏启动图片，分辨率：320x442*/
-                    "hdpi": "/Users/a111/Downloads/智慧校园启动页iOS/640960.png", /*高分屏启动图片，分辨率：480x762*/
-                    "xhdpi": "/Users/a111/Downloads/智慧校园启动页iOS/7501334.png", /*720P高分屏启动图片，分辨率：720x1242*/
-                    "xxhdpi": "/Users/a111/Downloads/智慧校园启动页iOS/12422208.png"/*1080P高分屏启动图片，分辨率：1080x1882*/
+                    "hdpi": "/Users/a111/Downloads/智慧校园启动页/480 762.png", /*高分屏启动图片，分辨率：480x762*/
+                    "xhdpi": "/Users/a111/Downloads/智慧校园启动页/720 1242.png", /*720P高分屏启动图片，分辨率：720x1242*/
+                    "xxhdpi": "/Users/a111/Downloads/智慧校园启动页/1080 1882.png"/*1080P高分屏启动图片，分辨率：1080x1882*/
                 }
             }
-        }
+        },"ads":{"rp":false,"splash":false,"push":false},"adid":""
     },
 	"dependencies": {
 		"pages": {

@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 0; 
+	mod.key = 1; 
 	var exLog = console.log;
 	console.log = function(hint, object) {
 		if(mod.key === 0) {
@@ -20,13 +20,12 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/';//孔工接口
 			break;
-		case 0: //发布
-			mod.SCHOOLID = 100005;//学校ID
+		case 1: //发布
+			mod.SCHOOLID = 100008;//学校ID
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/';//顾工接口
-			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/';//孔工接口
+			mod.INTERFACEGU = 'https://zhxyapi.jiaobaowang.net:8501/api/Data/';//顾工接口
+			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolOAService/';//孔工接口
 			break;
-
 		default:
 			break;
 	}
