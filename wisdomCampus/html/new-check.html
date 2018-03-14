@@ -270,7 +270,7 @@
 							}
 							$('#uploaderInput').val('');
 							$.toast("请选择png,jpg,jpeg类型的图片", "cancel");
-							
+
 						}
 					}
 				}
@@ -406,60 +406,64 @@
 					$.toast("内容不能超过500字", "cancel");
 					return;
 				}
+				//判断输入是否符合要求
+				if(checkInput(message.title)) {
+					if(checkInput(message.content)) {
+						//附件数组
+						var nameArr = [];
+						var addrArr = []
 
-				//附件数组
-				var nameArr = [];
-				var addrArr = []
+						for(var i = 0; i < message.uploadedFiles.length; i++) {
+							var tempValue = message.uploadedFiles[i];
+							nameArr.push(tempValue.NewName);
+							addrArr.push(tempValue.ImgUrl);
+						}
+						var noticEncName = nameArr.join("|")
+						var noticeEncAddr = addrArr.join("|")
+						var smsSync = message.smsSync == true ? 1 : 0
 
-				for(var i = 0; i < message.uploadedFiles.length; i++) {
-					var tempValue = message.uploadedFiles[i];
-					nameArr.push(tempValue.NewName);
-					addrArr.push(tempValue.ImgUrl);
-				}
-				var noticEncName = nameArr.join("|")
-				var noticeEncAddr = addrArr.join("|")
-				var smsSync = message.smsSync == true ? 1 : 0
-				
-				var personal = store.get(window.storageKeyName.PERSONALINFO);
-				var ids = [];
-				var codes = [];
-				var names = [];
-				for(var i = 0; i < message.flowMan_arr.length; i++) {
-					var model = message.flowMan_arr[i];
-					ids.push(model.ManId)
-					codes.push("")
-					names.push(model.ManName)
-				}
-				if(ids.length == 0) {
-					$.toast("请选择接收人", "cancel");
-					return;
-				}
-				$.showLoading('加载中...');
+						var personal = store.get(window.storageKeyName.PERSONALINFO);
+						var ids = [];
+						var codes = [];
+						var names = [];
+						for(var i = 0; i < message.flowMan_arr.length; i++) {
+							var model = message.flowMan_arr[i];
+							ids.push(model.ManId)
+							codes.push("")
+							names.push(model.ManName)
+						}
+						if(ids.length == 0) {
+							$.toast("请选择接收人", "cancel");
+							return;
+						}
+						$.showLoading('加载中...');
 
-				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
-					applyTitle: message.title, //标题
-					applyContent: message.content, //内容
-					applyEncName: noticEncName, //附件名称
-					applyEncAddr: noticeEncAddr, //附件地址
-					applyManId: personal.utid, //发布人ID
-					applyManCode: personal.uid, //发布人账号
-					applyManName: personal.utname, //发布人姓名
-					approveManIds: ids, //接收人人ID
-					approveManCodes: codes, //接收人账号
-					approveManNames: names //接收人姓名
-				}
-				addAffairApplyPro(tempData, function function_name(data) {
-					$.hideLoading();
-					console.log(JSON.stringify(data))
-					if(data.RspCode == 0) {
-						
-						mui.toast("发布成功")
-						mui.back();
-					} else {
+						var tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							applyTitle: message.title, //标题
+							applyContent: message.content, //内容
+							applyEncName: noticEncName, //附件名称
+							applyEncAddr: noticeEncAddr, //附件地址
+							applyManId: personal.utid, //发布人ID
+							applyManCode: personal.uid, //发布人账号
+							applyManName: personal.utname, //发布人姓名
+							approveManIds: ids, //接收人人ID
+							approveManCodes: codes, //接收人账号
+							approveManNames: names //接收人姓名
+						}
+						addAffairApplyPro(tempData, function function_name(data) {
+							$.hideLoading();
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
 
+								mui.toast("发布成功")
+								mui.back();
+							} else {
+
+							}
+						});
 					}
-				});
+				}
 			}
 
 			function getSelWorkFlow() {
@@ -494,7 +498,7 @@
 				getWorkFlowListByIdPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
-						message.flowMan_arr =message.flowMan_arr.concat(data.RspData.Data) ;
+						message.flowMan_arr = message.flowMan_arr.concat(data.RspData.Data);
 
 					} else {
 
@@ -531,15 +535,31 @@
 					var tempData = {
 						ManName: model.utname,
 						ManId: model.utid,
-
 					}
 					tempArr.push(tempData)
-
 				}
-
 				message.flowMan_arr = message.flowMan_arr.concat(tempArr);
+			});
+			//判断是否输入了值
+			var checkInput = function(text) {
+				if(text.trim().length == 0) {
+					mui.toast('请输入标题或内容');
+					return false;
+				}
+				if(isNull(text)) {
+					mui.toast('请输入标题或内容');
+					return false;
+				}
+				return true;
+			}
 
-			})
+			//判断输入字符串是否为空或者全部都是空格
+			function isNull(str) {
+				if(str == "") return true;
+				var regu = "^[ ]+$";
+				var re = new RegExp(regu);
+				return re.test(str);
+			}
 		</script>
 	</body>
 
