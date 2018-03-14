@@ -394,7 +394,7 @@
 				return upToken;
 			}
 			var addAffairApply = function() {
-				if(message.title.length == 0 || message.content.length == 0) {
+				if(message.title.trim().length == 0 || message.content.trim().length == 0) {
 					$.toast("请填写具体内容后再发布", "cancel");
 					return;
 				}
