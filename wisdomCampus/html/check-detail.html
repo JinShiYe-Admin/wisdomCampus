@@ -202,7 +202,7 @@
 					<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
 						<p class="check-reply-title">批复内容</p>
 						<div class="textarea-container">
-							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
+							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words+';'" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
 							</p>
 							<textarea rows="3" v-model.trim="replyContent">
 						

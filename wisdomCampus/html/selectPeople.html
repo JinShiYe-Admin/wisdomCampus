@@ -385,6 +385,7 @@
 								var tempModel = data.RspData.dpts[i];
 								tempModel.peopleArray = [];
 							}
+							selectPeopleData.flag = 1;
 							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.dpts);
 						}
 						//给数组去重
@@ -516,6 +517,7 @@
 									peopleArray: []
 								}
 								selectPeopleData.departmentArray.unshift(tempClassModel);
+								selectPeopleData.flag = 1;
 							}
 						} else {
 							$.toast(data.RspTxt, "cancel");
