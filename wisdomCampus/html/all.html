@@ -277,7 +277,7 @@
 							readcolor = '#c9c9c9';
 						} else if(noticep == "新建/撤销") {
 							noticep = '新建';
-							noYes = '<a class="del mui-pull-right" guid=' + li.id + ' type="button">撤销</a>'
+							noYes = '<button class="del mui-pull-right" guid=' + li.id + ' style="color:rgb(60,155,254);border-color:rgb(60,155,254);border-width:1px;height:25px;line-height:10px">撤销</button>'
 							//															<button  onclick="download(this)" type="button" class="mui-btn mui-btn-warning mui-btn-outlined mui-pull-right">下载</button>
 
 							readcolor = '#68bc31';
@@ -314,7 +314,7 @@
 						} else if(Progress == "新建/撤销") {
 							Progress = '新建';
 							readcolor = '#68bc31';
-							noYes = '<a class="del mui-pull-right" guid=' + li.id + ' type="button">撤销</a>'
+							noYes = '<button class="del mui-pull-right" guid=' + li.id + ' style="color:rgb(60,155,254);border-color:rgb(60,155,254);border-width:1px;height:25px;line-height:10px">撤销</button>'
 						} else {
 							readcolor = '#c9c9c9';
 						}
@@ -332,6 +332,7 @@
 				}
 				return fragment;
 			};
+			var p = []
 			var send_receive = function(flag) {
 				var flag2 = 1 - flag;
 				$('#a' + flag).css({
@@ -340,6 +341,17 @@
 				$('#a' + flag2).css({
 					'color': 'black'
 				});
+				if(current_key.title=='notice'){
+					p[0].endPullUpToRefresh();
+					p[0].refresh(true);
+					
+				}else{
+					p[1].endPullUpToRefresh();
+					p[1].refresh(true); 
+					
+				}
+				
+				
 				if(flag == 0) {
 					var ul0 = document.getElementById(current_key.title + "_" + "recevice");
 					ul0.className = "mui-table-view";
@@ -514,7 +526,7 @@ $.showLoading();
 										console.log(JSON.stringify(data))
 										if(data.RspCode == 0) {
 											var li = document.getElementById(guid)
-											li.innerHTML = li.innerHTML.replace("撤销", '')
+											li.innerHTML = li.innerHTML.replace("del mui-pull-right", 'del mui-pull-right mui-hidden')
 											li.innerHTML = li.innerHTML.replace("新建", '已撤销')
 											li.innerHTML = li.innerHTML.replace("68bc31", 'c9c9c9')
 										}
@@ -527,7 +539,7 @@ $.showLoading();
 										console.log(JSON.stringify(data))
 										if(data.RspCode == 0) {
 											var li = document.getElementById(guid)
-											li.innerHTML = li.innerHTML.replace("撤销", '')
+											li.innerHTML = li.innerHTML.replace("del mui-pull-right", 'del mui-pull-right mui-hidden')
 											li.innerHTML = li.innerHTML.replace("新建", '已撤销')
 											li.innerHTML = li.innerHTML.replace("68bc31", 'c9c9c9')
 										}
@@ -555,12 +567,15 @@ $.showLoading();
 						var ul = document.getElementById("apply_recevice");
 						ul.appendChild(createFragment(ul, 1, data));
 					});
+					
 					//循环初始化所有下拉刷新，上拉加载。
 					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-						$1(pullRefreshEl).pullToRefresh({
+						
+						var b = $1(pullRefreshEl).pullToRefresh({
 							down: {
 								callback: function() {
 									var self = this;
+									console.log('33333333333'+self)
 									var k = current_key.title + '_' + current_key.send_recevice
 									var current_data = datasource[k];
 									var refreshObj = current_data.refreshObj
@@ -570,7 +585,7 @@ $.showLoading();
 										var ul = document.getElementById(k);
 										ul.innerHTML = '';
 										ul.appendChild(createFragment(ul, index, data));
-										self.endPullDownToRefresh();
+										b.endPullDownToRefresh();
 										self.refresh(true);
 
 									})
@@ -595,13 +610,14 @@ $.showLoading();
 									} else {
 										console.log(refreshObj.pageIndex)
 										console.log(refreshObj.TotalPage)
-										mui.toast('没有更多了')
-										self.endPullUpToRefresh(false);
+//										mui.toast('没有更多了')
+										self.endPullUpToRefresh(true);
 									}
 
 								}
 							}
 						});
+						p.push(b);
 					});
 
 				});
