@@ -669,6 +669,9 @@ $.showLoading();
 				var b = this.parentElement.id.indexOf("notice") >= 0
 
 				if(b) {
+					var li = document.getElementById(this.id)
+				li.innerHTML = li.innerHTML.replace("未阅", '已阅')
+				li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
 					utils.mOpenWithData("noticeDetails.html", data)
 					//					utils.hrefSessionStorage("noticeDetails.html", data)
 
@@ -676,9 +679,7 @@ $.showLoading();
 					utils.mOpenWithData("check-detail.html", data)
 					//					utils.hrefSessionStorage("check-detail.html", data)
 				}
-				var li = document.getElementById(this.parentElement.id)
-				li.innerHTML = li.innerHTML.replace("未阅", '已阅')
-				li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
+				
 
 			})
 		</script>
