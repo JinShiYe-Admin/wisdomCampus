@@ -87,7 +87,7 @@ var postDataEncry1 = function(encryData, commonData, flag) {
  * @param {Object} callback 回调
  */
 var xhrPost = function(url, commonData, callback) {
-//	console.log('XHRP-Url:', url);
+	console.log('XHRP-Url:', url);
 //	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1({}, commonData, 0);
@@ -258,7 +258,7 @@ var getReceiveNoticePro = function(data0, callback) {
 	xhrPost(tempAttendUrl + 'getReceiveNotice', data0, callback);
 }
 
-//12.通过ID获取通知公告
+//12.通过通知公告ID获取通知公告(我发送的)
 var getNoticeByIdPro = function(data0, callback) {
 	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
@@ -314,6 +314,15 @@ var getPrivilegeByRolePro = function(data0, callback) {
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl2 + 'getPrivilegeByRole', data0, callback);
 }
+
+//25.通过通知接收表ID获取通知公告(我接收的)
+var getNoticeByReceiveIdPro = function(data0, callback) {
+	var tempAttendUrl2 = window.storageKeyName.INTERFACEKONG + 'notice/';//获取权限
+	data0 = extendParameter(data0);
+	//判断是通知公告还是事务
+	xhrPost(tempAttendUrl2 + 'getNoticeByReceiveId', data0, callback);
+}
+
 var addAffairApplyPro = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
