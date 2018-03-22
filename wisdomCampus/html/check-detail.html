@@ -178,8 +178,11 @@
 					<p>{{leaveDetail.ApplyContent}}</p>
 					<div>
 						<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
-							<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
-							<p class="display-inline prev-down"><button v-on:click.stop="checkEnc(0,index)" class="prev-btn">预览</button></p>
+							<!--<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
+							<p class="display-inline prev-down"><button v-on:click.stop="checkEnc(0,index)" class="prev-btn">预览</button></p>-->
+							<p class="encName" v-show="extraFile">附件:
+								<a class="" style="font-size: 12px;color: #3c9bfe;" v-on:click="checkEnc(0,index)">{{extraFile}}</a>
+							</p>
 						</template>
 					</div>
 					<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
@@ -202,7 +205,7 @@
 					<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
 						<p class="check-reply-title">批复内容</p>
 						<div class="textarea-container">
-							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words+';'" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
+							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words+'；'" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
 							</p>
 							<textarea rows="3" v-model.trim="replyContent">
 						

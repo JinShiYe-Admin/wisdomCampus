@@ -2,10 +2,10 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 2; 
+	mod.key = 0; 
 	var exLog = console.log;
 	console.log = function(hint, object) {
-		if(mod.key === 2) {
+		if(mod.key === 0) {
 			var argus = hint;
 			if(typeof(object)!=='undefined') {
 				argus = hint + JSON.stringify(object);

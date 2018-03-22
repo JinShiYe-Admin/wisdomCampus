@@ -107,31 +107,48 @@
 				</p>-->
 				<template v-for="(extraFile,index) in detailModel.NoticeEncName" v-show="detailModel.NoticeEncName.length>0">
 					<p class="encName" v-show="extraFile">附件:
-						<a class="encTitle">{{extraFile}}
-							<p class="encName"><button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button></p>
-						</a>
+						<a class="" style="font-size: 12px;color: #3c9bfe;" v-on:click="checkEnc(0,index)">{{extraFile}}</a>
+						<!--<button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button>-->
 						<!--<button v-on:click.stop="checkEnc(1,index)" type="button" class="mui-btn-primary down-btn">下载</button>-->
 					</p>
 				</template>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+				<p class="titleCSS" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;">接收列表(未读{{detailModel.NoReadCnt}}人/共{{detailModel.NoReadCnt+detailModel.ReadCnt}}人)</p>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" v-for="(replyModel,index) in detailModel.Data">
+						<a class="" style="font-size: 13px;color: #666;">
+							{{replyModel.ReceiveManName}}
+							<span v-if="replyModel.ReplyContent.length>0" style="color: #666;font-size: 12px;">:{{replyModel.ReplyContent}}
+				                	<div style="text-align: right;font-size: 12px;color: #999;">--{{replyModel.ReadTime}}</div>
+				                </span>
+							<span v-else-if="replyModel.IsRead==1" style="color: #ccc;font-size: 12px;">【已读】</span>
+						</a>
+					</li>
+				</ul>
+				<!--<div class="same div" style="font-size: 0;">
+					<input type="text" class="same text" style="display: inline;float: left;"><button class="same btn">查询</button>
+				</div>-->
+				<!--<input v-model="" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" placeholder="请输入标题" />-->
+				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;padding-right: 200px;display: inline;font-size: 12px;" placeholder="请输入要回复的内容" />
+				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn">确定</button>
 				<!--滑动组件-->
-				<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+				<!--<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
 						已读({{detailModel.ReadCnt}})
 					</a>
 					<a id="item2" class="mui-control-item readPeople" href="#div-unfinish">
 						未读({{detailModel.NoReadCnt}})
 					</a>
-				</div>
+				</div>-->
 				<!--滑动内容-->
-				<div class="mui-slider-group" style="min-height: 200px;">
+				<!--<div class="mui-slider-group" style="min-height: 200px;">
 					<div id="div-finished" class="mui-slider-item mui-control-content mui-active">
 						<div class="contentCSS">{{detailModel.ReadNames}}</div>
 					</div>
 					<div id="div-unfinish" class="mui-slider-item mui-control-content">
 						<div class="contentCSS">{{detailModel.NoReadNames}}</div>
 					</div>
-				</div>
+				</div>-->
 			</template>
 
 		</div>
@@ -156,34 +173,73 @@
 
 		<script type="text/javascript">
 			//获取个人信息
-				var personal = store.get(window.storageKeyName.PERSONALINFO);
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			var curPage = {};
 			mui.plusReady(function() {
 				//				var curPage = utils.getSessionStorageByUrlsKey();
-				var curPage = utils.getDataFromUrl(window.location.href);
+				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
 				//				var curPage = {
 				//					"id": "17", //通知ID
 				//					"flag": 0//1我发送的，0发给我的
 				//				}
 				//获取当前人员信息
-				getNoticeDetail(curPage.id);
+				getDetailFunction();
 			});
+			
+			var getDetailFunction = function(){
+				if(curPage.flag == 0) { //0发给我的
+					getNoticeByReceiveIdDetail(curPage.id);
+				} else { //1我发送的
+					getNoticeDetail(curPage.id);
+				}
+			}
 
 			var noticeDetailData = new Vue({
 				el: "#noticeDetailData",
 				data: {
 					flag: 0,
-					detailModel: ''
+					detailModel: '',
+					content: ''
 				},
 				methods: {
 					checkEnc: function(tempFlag, index) {
 						console.log('tempFlag:' + tempFlag);
 						var tempUrl = noticeDetailData.detailModel.NoticeEncAddr[index];
 						plus.runtime.openURL(tempUrl);
+					},
+					replyContent: function() {
+						if(noticeDetailData.content.trim().length == 0) {
+							$.toast("请输入回复内容", "cancel");
+							return;
+						}
+						if(noticeDetailData.content.length >= 50) {
+							$.toast("回复内容不能超过50字", "cancel");
+							return;
+						}
+						//9.修改阅读状态
+						var tempData1 = {
+							noticeId: curPage.id, //通知ID
+							receiveManId: personal.utid, //阅读人ID
+							replyContent: noticeDetailData.content //回复内容
+						}
+						$.showLoading();
+						//9.阅读通知公告
+						setNoticeReadPro(tempData1, function function_name(data) {
+							$.hideLoading();
+							if(data.RspCode == 0) {
+								noticeDetailData.content = '';
+								$.toast('成功');
+								getDetailFunction();
+							} else {
+								$.toast(data.RspTxt);
+							}
+						});
 					}
 				}
 			});
-			//获取通知详情
+
+			//12.通过通知公告ID获取通知公告(我发送的)
 			var getNoticeDetail = function(id) {
 				$.showLoading();
 				//12.通过ID获取通知公告
@@ -201,14 +257,49 @@
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
 						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
-						//修改阅读状态
+						//9.修改阅读状态
 						var tempData1 = {
 							noticeId: id, //通知ID
-							receiveManId: personal.utid
+							receiveManId: personal.utid, //阅读人ID
+							replyContent: '' //回复内容
 						}
 						//9.阅读通知公告
 						setNoticeReadPro(tempData1, function function_name(data) {
-							
+
+						});
+					} else {
+						$.toast(data.RspTxt);
+					}
+				});
+			}
+
+			//25.通过通知接收表ID获取通知公告(我接收的)
+			var getNoticeByReceiveIdDetail = function(id) {
+				$.showLoading();
+				//12.通过ID获取通知公告
+				var tempData = {
+					noticeManId: id //通知ID
+				}
+				getNoticeByReceiveIdPro(tempData, function function_name(data) {
+					$.hideLoading();
+					console.log('data:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						if(data.RspData.NoticeEncName) {
+							data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
+							data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");
+						}
+						noticeDetailData.flag = 1;
+						noticeDetailData.detailModel = data.RspData;
+						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
+						//9.修改阅读状态
+						var tempData1 = {
+							noticeId: id, //通知ID
+							receiveManId: personal.utid, //阅读人ID
+							replyContent: '' //回复内容
+						}
+						//9.阅读通知公告
+						setNoticeReadPro(tempData1, function function_name(data) {
+
 						});
 					} else {
 						$.toast(data.RspTxt);
