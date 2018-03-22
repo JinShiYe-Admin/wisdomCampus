@@ -9,6 +9,18 @@
 		<link href="../css/weui.min.css" rel="stylesheet" />
 
 		<style type="text/css">
+			.mui-badge {
+				font-size: 12px;
+				line-height: 1;
+				display: inline-block;
+				padding: 3px 6px;
+				color: white;
+				border-radius: 100px;
+				background-color: red;
+				margin-top: -40px;
+				margin-left: -20px;
+			}
+			
 			.circular-square {
 				border-radius: 50%;
 				width: 56px;
@@ -182,14 +194,13 @@
 				var id = this.parentElement.id
 				if(id == 1 || id == 2) {
 					//检查是否有权限
-					if (checkPermission()) {
+					if(checkPermission()) {
 						console.log('1111');
 						mui.toast("无此权限");
-					} else{
+					} else {
 						console.log('22222');
 						utils.mOpenWithData("all.html", id)
 					}
-					
 
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
@@ -229,9 +240,9 @@
 				if(tempStr1 == 1) {
 					tempFlag++;
 				}
-				if (tempFlag == 0) {
+				if(tempFlag == 0) {
 					return true;
-				} else{
+				} else {
 					return false;
 				}
 			}
