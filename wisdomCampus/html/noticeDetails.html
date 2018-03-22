@@ -129,8 +129,13 @@
 					<input type="text" class="same text" style="display: inline;float: left;"><button class="same btn">查询</button>
 				</div>-->
 				<!--<input v-model="" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" placeholder="请输入标题" />-->
-				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;padding-right: 200px;display: inline;font-size: 12px;" placeholder="请输入要回复的内容" />
-				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn">确定</button>
+				<nav class="mui-bar mui-bar-tab">
+				<div style="padding-top: 5px;">
+				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
+				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
+				</div>
+				</nav>
+				
 				<!--滑动组件-->
 				<!--<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
