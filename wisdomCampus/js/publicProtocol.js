@@ -343,4 +343,15 @@ var getWorkFlowListByIdPro = function(data0, callback) {
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl3 + 'getWorkFlowListById', data0, callback);
 }
-
+//26.获取未读的通知公告数量
+var getNoReadCntByManPro = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl + 'getNoReadCntByMan', data0, callback)
+}
+//27.获取未批的事务及文件审批数量
+var getNoApproveCntByManPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getNoApproveCntByMan', data0, callback);
+}
