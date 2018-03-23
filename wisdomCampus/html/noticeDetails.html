@@ -88,6 +88,12 @@
 				color: #3C9BFE;
 				background-color: transparent;
 			}
+			.mui-content {
+				height: 100%;
+				padding: 44px 0px 50px 0px;
+				overflow: auto;
+				background-color: #eaeaea;
+			}
 		</style>
 	</head>
 
@@ -96,7 +102,7 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">通知详情</h1>
 		</header>
-		<nav class="mui-bar mui-bar-tab" style="padding-bottom: 0px;" id="noticeReplyContent">
+		<nav class="mui-bar mui-bar-tab" id="noticeReplyContent">
 					<div style="padding-top: 5px;">
 						<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
 						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
