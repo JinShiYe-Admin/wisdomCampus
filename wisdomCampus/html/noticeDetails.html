@@ -129,13 +129,13 @@
 					<input type="text" class="same text" style="display: inline;float: left;"><button class="same btn">查询</button>
 				</div>-->
 				<!--<input v-model="" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" placeholder="请输入标题" />-->
-				<nav class="mui-bar mui-bar-tab">
-				<div style="padding-top: 5px;">
-				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
-				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
-				</div>
+				<nav class="mui-bar mui-bar-tab" style="margin-bottom: 0px;">
+					<div style="padding-top: 5px;">
+						<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
+						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
+					</div>
 				</nav>
-				
+
 				<!--滑动组件-->
 				<!--<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
 					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
@@ -191,8 +191,8 @@
 				//获取当前人员信息
 				getDetailFunction();
 			});
-			
-			var getDetailFunction = function(){
+
+			var getDetailFunction = function() {
 				if(curPage.flag == 0) { //0发给我的
 					getNoticeByReceiveIdDetail(curPage.id);
 				} else { //1我发送的
@@ -262,16 +262,19 @@
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
 						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
-						//9.修改阅读状态
-						var tempData1 = {
-							noticeId: id, //通知ID
-							receiveManId: personal.utid, //阅读人ID
-							replyContent: '' //回复内容
-						}
-						//9.阅读通知公告
-						setNoticeReadPro(tempData1, function function_name(data) {
+						//判断是否阅读过，
+						if(data.RspData.ReadStatus == 0) { //已读状态,1 已读,0 未读
+							//9.修改阅读状态
+							var tempData1 = {
+								noticeId: id, //通知ID
+								receiveManId: personal.utid, //阅读人ID
+								replyContent: '' //回复内容
+							}
+							//9.阅读通知公告
+							setNoticeReadPro(tempData1, function function_name(data) {
 
-						});
+							});
+						}
 					} else {
 						$.toast(data.RspTxt);
 					}
@@ -295,16 +298,19 @@
 						noticeDetailData.flag = 1;
 						noticeDetailData.detailModel = data.RspData;
 						console.log('noticeDetailData.detailModel:' + JSON.stringify(noticeDetailData.detailModel));
-						//9.修改阅读状态
-						var tempData1 = {
-							noticeId: id, //通知ID
-							receiveManId: personal.utid, //阅读人ID
-							replyContent: '' //回复内容
-						}
-						//9.阅读通知公告
-						setNoticeReadPro(tempData1, function function_name(data) {
+						//判断是否阅读过，
+						if(data.RspData.ReadStatus == 0) { //已读状态,1 已读,0 未读
+							//9.修改阅读状态
+							var tempData1 = {
+								noticeId: id, //通知ID
+								receiveManId: personal.utid, //阅读人ID
+								replyContent: '' //回复内容
+							}
+							//9.阅读通知公告
+							setNoticeReadPro(tempData1, function function_name(data) {
 
-						});
+							});
+						}
 					} else {
 						$.toast(data.RspTxt);
 					}
