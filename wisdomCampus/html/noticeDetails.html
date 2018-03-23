@@ -281,9 +281,8 @@
 			//25.通过通知接收表ID获取通知公告(我接收的)
 			var getNoticeByReceiveIdDetail = function(id) {
 				$.showLoading();
-				//12.通过ID获取通知公告
 				var tempData = {
-					noticeManId: id //通知ID
+					noticeManId: id //通知接收表ID
 				}
 				getNoticeByReceiveIdPro(tempData, function function_name(data) {
 					$.hideLoading();
