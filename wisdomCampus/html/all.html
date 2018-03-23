@@ -267,7 +267,8 @@
 						} else {
 							model.SendManName = model.SendManName + "|"
 							noticep = model.NoticeStatus
-							li.id = model.NoticeManId
+							li.id = model.NoticeId
+							li.setAttribute('NoticeManId',model.NoticeManId)
 						}
 
 						var readcolor = 'red';
@@ -342,17 +343,16 @@
 				$('#a' + flag2).css({
 					'color': 'black'
 				});
-				if(current_key.title=='notice'){
+				if(current_key.title == 'notice') {
 					p[0].endPullUpToRefresh();
 					p[0].refresh(true);
-					
-				}else{
+
+				} else {
 					p[1].endPullUpToRefresh();
-					p[1].refresh(true); 
-					
+					p[1].refresh(true);
+
 				}
-				
-				
+
 				if(flag == 0) {
 					var ul0 = document.getElementById(current_key.title + "_" + "recevice");
 					ul0.className = "mui-table-view";
@@ -377,7 +377,7 @@
 					deceleration: deceleration
 				});
 				var getNotice = function(title, sendFlag, callback) { //10.获取发送的通知公告列表
-$.showLoading();
+					$.showLoading();
 					var k = current_key.title + '_' + current_key.send_recevice
 					var current_data = datasource[k];
 					var refreshObj = current_data.refreshObj
@@ -400,7 +400,7 @@ $.showLoading();
 							console.log(JSON.stringify(data))
 							$.hideLoading();
 							if(data.RspCode == 0) {
-								
+
 								datasource.notice_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_send.refreshObj.refreshFlag == 0) {
@@ -414,7 +414,7 @@ $.showLoading();
 							}
 						});
 					} else if(title == "notice" && sendFlag == "recevice") {
-						
+
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendMan: '', //发送人ID
@@ -431,15 +431,14 @@ $.showLoading();
 							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								
-								
+
 								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
 									//									datasource.notice_recevice.refreshObj.pageIndex = 1;
 									datasource.notice_recevice.data = data.RspData.Data
 								} else {
-//									datasource.notice_recevice.refreshObj.pageIndex++;
+									//									datasource.notice_recevice.refreshObj.pageIndex++;
 									datasource.notice_recevice.data = datasource.notice_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -462,7 +461,7 @@ $.showLoading();
 							console.log(JSON.stringify(data))
 							$.hideLoading();
 							if(data.RspCode == 0) {
-								
+
 								datasource.apply_send.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_send.refreshObj.refreshFlag == 0) {
@@ -493,7 +492,7 @@ $.showLoading();
 							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-								
+
 								datasource.apply_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
 
 								if(datasource.apply_recevice.refreshObj.refreshFlag == 0) {
@@ -568,15 +567,15 @@ $.showLoading();
 						var ul = document.getElementById("apply_recevice");
 						ul.appendChild(createFragment(ul, 1, data));
 					});
-					
+
 					//循环初始化所有下拉刷新，上拉加载。
 					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-						
+
 						var b = $1(pullRefreshEl).pullToRefresh({
 							down: {
 								callback: function() {
 									var self = this;
-									console.log('33333333333'+self)
+									console.log('33333333333' + self)
 									var k = current_key.title + '_' + current_key.send_recevice
 									var current_data = datasource[k];
 									var refreshObj = current_data.refreshObj
@@ -611,7 +610,7 @@ $.showLoading();
 									} else {
 										console.log(refreshObj.pageIndex)
 										console.log(refreshObj.TotalPage)
-//										mui.toast('没有更多了')
+										//										mui.toast('没有更多了')
 										self.endPullUpToRefresh(true);
 									}
 
@@ -661,18 +660,29 @@ $.showLoading();
 			mui(".mui-table-view").on('tap', 'li', function() {
 
 				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
-				var data = {
-					id: this.id,
-					flag: flag //1:我发送的 0：发给我的
-				}
-				//				console.log(JSON.stringify(data))
+				var data;
+
+				
 				//				console.log(this.parentElement.id)
 				var b = this.parentElement.id.indexOf("notice") >= 0
+				if(flag == 0 && b) {
+					data = {
+						id: this.id,
+						flag: flag, //1:我发送的 0：发给我的
+						NoticeManId: this.getAttribute('NoticeManId')
+					}
 
+				} else {
+					data = {
+						id: this.id,
+						flag: flag //1:我发送的 0：发给我的
+					}
+				}
+				console.log(JSON.stringify(data))
 				if(b) {
 					var li = document.getElementById(this.id)
-				li.innerHTML = li.innerHTML.replace("未阅", '已阅')
-				li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
+					li.innerHTML = li.innerHTML.replace("未阅", '已阅')
+					li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
 					utils.mOpenWithData("noticeDetails.html", data)
 					//					utils.hrefSessionStorage("noticeDetails.html", data)
 
@@ -680,7 +690,6 @@ $.showLoading();
 					utils.mOpenWithData("check-detail.html", data)
 					//					utils.hrefSessionStorage("check-detail.html", data)
 				}
-				
 
 			})
 		</script>

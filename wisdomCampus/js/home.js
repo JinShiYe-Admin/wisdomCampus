@@ -28,16 +28,11 @@ var createGirde = function(gride, array) {
 				li.className = "mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3";
 			}
 			//子控件的innerHTML
-			var hid = '';
-			if(index==1||index==2){
-				hid = ''
-			}else{
-				hid = 'mui-hidden'
-			}
+
 			li.innerHTML = '<a href="#">' +
 				'<img class="mui-icon circular-square" src="' + map.imgUrl +
 				'" style="background-color:' + 
-				';"><span class="mui-badge '+hid+'">1</span></img>' +
+				';"><span id="noRead_'+index+'" class="mui-badge mui-hidden">1</span></img>' +
 				'<small class="mui-media-body">' + map.description + '</small>' +
 				'</a>';
 			/**
