@@ -203,12 +203,12 @@
 				if(data.RspCode == 0) {
 					var noRead = document.getElementById("noRead_1");
 					noRead.innerHTML = data.RspData.NoReadCnt;
-					if(data.RspData.NoReadCnt!=0){
+					if(data.RspData.NoReadCnt != 0) {
 						noRead.className = "mui-badge"
 					}
 				}
 			});
-			
+
 			tempData = {
 				schoolId: storageKeyName.SCHOOLID, //学校ID
 				approveManId: personal.utid
@@ -219,7 +219,7 @@
 				if(data.RspCode == 0) {
 					var noRead = document.getElementById("noRead_2");
 					noRead.innerHTML = data.RspData.NoApproveCnt;
-					if(data.RspData.NoReadCnt!=0){
+					if(data.RspData.NoReadCnt != 0) {
 						noRead.className = "mui-badge"
 					}
 				}
@@ -228,22 +228,26 @@
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id
 				if(id == 1 || id == 2) {
-					
+
 					//检查是否有权限
 					if(checkPermission()) {
 						console.log('1111');
 						mui.toast("无此权限");
 					} else {
 						console.log('22222');
-						var noRead = document.getElementById("noRead_"+id);
+						var noRead = document.getElementById("noRead_" + id);
 						noRead.className = "mui-badge mui-hidden"
 						utils.mOpenWithData("all.html", id)
 					}
 
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
-					utils.mOpenWithData("ReadQRCode.html", id)
-					mui.toast("此功能暂未开放");
+					if(id == 0) {
+						utils.mOpenWithData("ReadQRCode.html", id)
+					} else {
+						mui.toast("此功能暂未开放");
+					}
+
 				}
 			});
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);
