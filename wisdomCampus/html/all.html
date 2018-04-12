@@ -230,7 +230,14 @@
 				},
 			}
 
-			mui.init();
+			mui.init({
+				beforeback: function() {
+					//触发前往页面的自定义事件,从而进行数据刷新
+					mui.fire(plus.webview.currentWebview().opener(), 'updateNoRead');
+					//返回true，继续页面关闭逻辑
+					return true;
+				}
+			});
 			var title_id = utils.getDataFromUrl(window.location.href);
 			console.log(title_id);
 			if(title_id == 2) {
@@ -268,7 +275,7 @@
 							model.SendManName = model.SendManName + "|"
 							noticep = model.NoticeStatus
 							li.id = model.NoticeId
-							li.setAttribute('NoticeManId',model.NoticeManId)
+							li.setAttribute('NoticeManId', model.NoticeManId)
 						}
 
 						var readcolor = 'red';
@@ -431,14 +438,10 @@
 							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-
 								datasource.notice_recevice.refreshObj.TotalPage = data.RspData.TotalPage;
-
 								if(datasource.notice_recevice.refreshObj.refreshFlag == 0) {
-									//									datasource.notice_recevice.refreshObj.pageIndex = 1;
 									datasource.notice_recevice.data = data.RspData.Data
 								} else {
-									//									datasource.notice_recevice.refreshObj.pageIndex++;
 									datasource.notice_recevice.data = datasource.notice_recevice.data.concat(data.RspData.Data)
 								}
 								callback(data.RspData.Data)
@@ -662,7 +665,6 @@
 				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
 				var data;
 
-				
 				//				console.log(this.parentElement.id)
 				var b = this.parentElement.id.indexOf("notice") >= 0
 				if(flag == 0 && b) {
