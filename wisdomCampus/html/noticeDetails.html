@@ -130,7 +130,7 @@
 					<li class="mui-table-view-cell" v-for="(replyModel,index) in detailModel.Data">
 						<a class="" style="font-size: 13px;color: #666;">
 							{{replyModel.ReceiveManName}}
-							<span v-if="replyModel.ReplyContent.length>0" style="color: #666;font-size: 12px;">:{{replyModel.ReplyContent}}
+							<span v-if="replyModel.ReplyContent.length>0" style="color: #666;font-size: 12px; white-space:pre-wrap;">:{{replyModel.ReplyContent}}
 				                	<div style="text-align: right;font-size: 12px;color: #999;">--{{replyModel.ReadTime}}</div>
 				                </span>
 							<span v-else-if="replyModel.IsRead==1" style="color: #ccc;font-size: 12px;">【已读】</span>
@@ -241,15 +241,15 @@
 							$.toast("回复内容不能超过50字", "cancel");
 							return;
 						}
-						//9.修改阅读状态
+						//28.回复通知公告
 						var tempData1 = {
 							noticeId: curPage.id, //通知ID
 							receiveManId: personal.utid, //阅读人ID
 							replyContent: noticeReplyContent.content //回复内容
 						}
 						$.showLoading();
-						//9.阅读通知公告
-						setNoticeReadPro(tempData1, function function_name(data) {
+						//28.回复通知公告
+						setNoticeReplyPro(tempData1, function function_name(data) {
 							$.hideLoading();
 							if(data.RspCode == 0) {
 								noticeReplyContent.content = '';
@@ -286,8 +286,7 @@
 							//9.修改阅读状态
 							var tempData1 = {
 								noticeId: curPage.id, //通知ID
-								receiveManId: personal.utid, //阅读人ID
-								replyContent: '' //回复内容
+								receiveManId: personal.utid //阅读人ID
 							}
 							//9.阅读通知公告
 							setNoticeReadPro(tempData1, function function_name(data) {
@@ -322,8 +321,7 @@
 							//9.修改阅读状态
 							var tempData1 = {
 								noticeId: curPage.id, //通知ID
-								receiveManId: personal.utid, //阅读人ID
-								replyContent: '' //回复内容
+								receiveManId: personal.utid //阅读人ID
 							}
 							//9.阅读通知公告
 							setNoticeReadPro(tempData1, function function_name(data) {

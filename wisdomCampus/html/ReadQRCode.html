@@ -11,12 +11,12 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">扫描二维码</h1>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">扫描二维码</h1>
 		</header>
 
-		<div id="bcid" style="position: absolute;top: 44px;left: -10%;width: 120%;height: 100%;"></div>
+		<div id="bcid" style="position: absolute;top: 64px;left: -10%;width: 120%;height: 100%;"></div>
 
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/utils/events.js" type="text/javascript" charset="utf-8"></script>
@@ -30,7 +30,7 @@
 				setTimeout(startRecognize,500);
 				var barHeight=plus.navigator.getStatusbarHeight();
 				//console.log("状态栏高度："+barHeight);
-				document.getElementById("bcid").style.top=(45-barHeight)+'px';
+				document.getElementById("bcid").style.top=(45-barHeight+20)+'px';
 			});
 			// 条码识别成功事件
 			function onmarked(type, result) {
