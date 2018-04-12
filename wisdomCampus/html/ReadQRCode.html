@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/utils/common.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/utils/iconfont.css"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">扫描二维码</h1>
+		</header>
+
+		<div id="bcid" style="position: absolute;top: 64px;left: -10%;width: 120%;height: 100%;"></div>
+
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/utils/events.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			var scan = null; //扫描控件
+			mui.plusReady(function() {
+				setTimeout(startRecognize,500);
+				var barHeight=plus.navigator.getStatusbarHeight();
+				//console.log("状态栏高度："+barHeight);
+				document.getElementById("bcid").style.top=(45-barHeight+20)+'px';
+			});
+			// 条码识别成功事件
+			function onmarked(type, result) {
+				scan.cancel();
+				//console.log('扫描到的信息为:' + result);
+				var text = '未知: ';
+				switch(type) {
+					case plus.barcode.QR:
+						text = 'QR: '; // 二维码
+						break;
+					case plus.barcode.EAN13:
+						text = 'EAN13: ';
+						break;
+					case plus.barcode.EAN8:
+						text = 'EAN8: ';
+						break;
+				}
+//				utils.mOpenWithData("all.html", result);
+				plus.runtime.openURL(result);
+			}
+			// 创建扫描控件
+			function startRecognize() {
+				scan = new plus.barcode.Barcode('bcid');
+				scan.onmarked = onmarked;
+				scan.start(); //开始扫描
+			}
+		</script>
+	</body>
+
+</html>

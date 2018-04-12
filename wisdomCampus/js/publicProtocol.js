@@ -48,6 +48,8 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 
 //拼接参数
 var postDataEncry1 = function(encryData, commonData, flag) {
+	console.log('encryData:'+JSON.stringify(encryData));
+	console.log('commonData:'+JSON.stringify(commonData));
 	//循环
 	var tempStr = '';
 	for(var tempData in encryData) {
@@ -73,11 +75,25 @@ var postDataEncry1 = function(encryData, commonData, flag) {
 	for(var item in commonData) {
 		arr1.push(item + '=' + commonData[item]);
 	};
+	console.log('拼接参数arr0:'+arr0);
+	console.log('拼接参数arr1:'+arr1);
 	//合并数组
 	var signArr = arr0.concat(arr1);
+	console.log('拼接参数:'+signArr);
 	//拼接登录需要的签名
 	var signTemp = signArr.sort().join('&');
 	return signTemp;
+}
+
+//修改数组，改变格式
+var arrayToStr = function(array) {
+	if (array == null) {
+		return '[]'
+	}
+	var tempStr = '';
+	tempStr = array.join(',');
+	tempStr = '[' + tempStr + ']';
+	return tempStr;
 }
 
 /**
@@ -91,7 +107,7 @@ var xhrPost = function(url, commonData, callback) {
 //	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1({}, commonData, 0);
-//	console.log('signTemp000:' + signTemp);
+	console.log('signTemp000:' + signTemp);
 	//生成签名，返回值sign则为签名
 	signHmacSHA1.sign(signTemp, 'jsy309', function(sign) {
 		//组装发送握手协议需要的data
@@ -343,15 +359,24 @@ var getWorkFlowListByIdPro = function(data0, callback) {
 	//判断是通知公告还是事务
 	xhrPost(tempAttendUrl3 + 'getWorkFlowListById', data0, callback);
 }
+
 //26.获取未读的通知公告数量
 var getNoReadCntByManPro = function(data0, callback) {
 	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl + 'getNoReadCntByMan', data0, callback)
 }
+
 //27.获取未批的事务及文件审批数量
 var getNoApproveCntByManPro = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getNoApproveCntByMan', data0, callback);
+}
+
+//28.回复通知公告
+var setNoticeReplyPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'notice/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'setNoticeReply', data0, callback);
 }

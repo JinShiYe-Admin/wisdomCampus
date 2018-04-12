@@ -242,7 +242,12 @@
 
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
-					mui.toast("此功能暂未开放");
+					if(id == 0) {
+						utils.mOpenWithData("ReadQRCode.html", id)
+					} else {
+						mui.toast("此功能暂未开放");
+					}
+
 				}
 			});
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);

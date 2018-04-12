@@ -206,8 +206,10 @@
 								}
 							}
 						}
-						//去重
-						selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
+						if (selectPeopleData.selectPeopleArray.length>0) {
+							//去重
+							selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
+						}
 					},
 					clickSubmitBtn: function() {
 						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
@@ -388,8 +390,10 @@
 							selectPeopleData.flag = 1;
 							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.dpts);
 						}
-						//给数组去重
+						if (selectPeopleData.departmentArray.length>0) {
+							//给数组去重
 						selectPeopleData.departmentArray = selectPeopleData.departmentArray.unique('dptid');
+						}
 					} else {
 						$.toast(data.RspTxt, "cancel");
 					}
@@ -548,6 +552,7 @@
 						}
 					}
 				}
+				console.log('n:'+n);
 				return n;
 			}
 		</script>
