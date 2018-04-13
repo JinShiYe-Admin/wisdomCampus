@@ -325,6 +325,39 @@
 					}
 				}
 			})
+			window.addEventListener('updateNoRead', function(data) {
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					receiveManId: personal.utid
+				}
+				getNoReadCntByManPro(tempData, function function_name(data) {
+					console.log(JSON.stringify(data))
+					if(data.RspCode == 0) {
+						var noRead = document.getElementById("noRead_1");
+						noRead.innerHTML = data.RspData.NoReadCnt;
+						if(data.RspData.NoReadCnt != 0) {
+							noRead.className = "mui-badge"
+						}
+					}
+				});
+
+				tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					approveManId: personal.utid
+				}
+				getNoApproveCntByManPro(tempData, function function_name(data) {
+					console.log(JSON.stringify(data))
+					if(data.RspCode == 0) {
+						var noRead = document.getElementById("noRead_2");
+						noRead.innerHTML = data.RspData.NoApproveCnt;
+						if(data.RspData.NoReadCnt != 0) {
+							noRead.className = "mui-badge"
+						}
+					}
+				});
+
+			});
 		</script>
 	</body>
 
