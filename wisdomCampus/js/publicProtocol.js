@@ -48,8 +48,6 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 
 //拼接参数
 var postDataEncry1 = function(encryData, commonData, flag) {
-	console.log('encryData:'+JSON.stringify(encryData));
-	console.log('commonData:'+JSON.stringify(commonData));
 	//循环
 	var tempStr = '';
 	for(var tempData in encryData) {
@@ -75,11 +73,8 @@ var postDataEncry1 = function(encryData, commonData, flag) {
 	for(var item in commonData) {
 		arr1.push(item + '=' + commonData[item]);
 	};
-	console.log('拼接参数arr0:'+arr0);
-	console.log('拼接参数arr1:'+arr1);
 	//合并数组
 	var signArr = arr0.concat(arr1);
-	console.log('拼接参数:'+signArr);
 	//拼接登录需要的签名
 	var signTemp = signArr.sort().join('&');
 	return signTemp;
