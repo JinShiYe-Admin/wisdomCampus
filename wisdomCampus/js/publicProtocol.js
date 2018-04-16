@@ -71,6 +71,13 @@ var postDataEncry1 = function(encryData, commonData, flag) {
 	};
 	var arr1 = [];
 	for(var item in commonData) {
+//		if (typeof commonData[item] == 'string') {
+//			console.log('000');
+//			arr1.push(item + '="' + commonData[item]+'"');
+//		} else{
+//			console.log('001');
+//			arr1.push(item + '=' + commonData[item]);
+//		}
 		arr1.push(item + '=' + commonData[item]);
 	};
 	//合并数组
