@@ -207,7 +207,8 @@
 					"html/all.html"
 				],
 				"refer": [
-					"html/login.html"
+					"html/login.html",
+					"html/all-list.html"
 				],
 				"priority": 0
 			},
@@ -266,6 +267,13 @@
 				"refer": [
 					"html/new_message.html",
 					"html/new-check.html"
+				],
+				"priority": 0
+			},
+			"html/all-list.html": {
+				"resources": [],
+				"refer": [
+					"html/new_message.html"
 				],
 				"priority": 0
 			}
