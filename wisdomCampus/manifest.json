@@ -273,7 +273,8 @@
 			"html/all-list.html": {
 				"resources": [],
 				"refer": [
-					"html/new_message.html"
+					"html/new_message.html",
+					"html/new-check.html"
 				],
 				"priority": 0
 			}
