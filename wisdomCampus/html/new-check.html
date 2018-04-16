@@ -429,8 +429,8 @@
 						for(var i = 0; i < message.flowMan_arr.length; i++) {
 							var model = message.flowMan_arr[i];
 							ids.push(model.ManId)
-							codes.push("")
-							names.push(model.ManName)
+							codes.push('""')
+							names.push('"'+model.ManName+'"')
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");
@@ -447,9 +447,9 @@
 							applyManId: personal.utid, //发布人ID
 							applyManCode: personal.uid, //发布人账号
 							applyManName: personal.utname, //发布人姓名
-							approveManIds: ids, //接收人人ID
-							approveManCodes: codes, //接收人账号
-							approveManNames: names //接收人姓名
+							approveManIds: arrayToStr(ids), //接收人人ID
+							approveManCodes: arrayToStr(codes), //接收人账号
+							approveManNames: arrayToStr(names) //接收人姓名
 						}
 						addAffairApplyPro(tempData, function function_name(data) {
 							$.hideLoading();

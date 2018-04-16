@@ -426,8 +426,8 @@
 						for(var i = 0; i < selectPeople_arr.length; i++) {
 							var model = selectPeople_arr[i];
 							ids.push(model.utid)
-							codes.push('')
-							names.push(model.utname)
+							codes.push('""')
+							names.push('"'+ model.utname+'"')
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");
@@ -444,9 +444,9 @@
 							sendManId: personal.utid, //发布人ID
 							sendManCode: personal.uid, //发布人账号
 							sendManName: personal.utname, //发布人姓名
-							receiveManIds: ids, //接收人人ID
-							receiveManCodes: codes, //接收人账号
-							receiveManNames: names //接收人姓名
+							receiveManIds: arrayToStr(ids), //接收人人ID
+							receiveManCodes: arrayToStr(codes), //接收人账号
+							receiveManNames: arrayToStr(names) //接收人姓名
 						}
 						addNoticePro(tempData, function function_name(data) {
 							$.hideLoading();
