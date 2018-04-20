@@ -604,13 +604,10 @@
 
 			})
 			mui(".mui-table-view").on('tap', 'li', function() {
-
-				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
+				var flag = this.parentElement.id.indexOf("ul4") >= 0 ? 1 : 0;
 				var data;
 
-				//				console.log(this.parentElement.id)
-				var b = this.parentElement.id.indexOf("notice") >= 0
-				if(flag == 0 && b) {
+				if(flag == 0 && title_id==1) {
 					data = {
 						id: this.id,
 						flag: flag, //1:我发送的 0：发给我的
@@ -624,7 +621,7 @@
 					}
 				}
 				console.log(JSON.stringify(data))
-				if(b) {
+				if(title_id==1) {
 					var li = document.getElementById(this.id)
 					li.innerHTML = li.innerHTML.replace("未阅", '已阅')
 					li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')

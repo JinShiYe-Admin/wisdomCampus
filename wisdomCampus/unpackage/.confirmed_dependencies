@@ -59,7 +59,8 @@
 		"refer": [
 			"html/new_message.html",
 			"html/new-check.html",
-			"html/check-detail.html"
+			"html/check-detail.html",
+			"html/noticeDetails.html"
 		]
 	}
 }
