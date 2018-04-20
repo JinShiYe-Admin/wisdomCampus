@@ -51,7 +51,6 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">新建通知</h1>
-			<!--<a class="mui-icon mui-pull-right right-cancel">取消</a>-->
 		</header>
 		<div id="message" class="mui-content">
 			<div class="weui-cells" style="margin-top: 0px;">
@@ -60,40 +59,41 @@
 					<div class="weui-cell__bd">
 						<input v-model="title" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
 					</div>
-					<!--<div class="weui-cell__ft">0/64</div>-->
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
 						<textarea v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
-						<!--<div class="weui-textarea-counter">
-		    				<span>0</span>
-		    				/500
-		    			</div>-->
+
 					</div>
 				</div>
 			</div>
-			<div class="weui-cells weui-cells_form">
+			<div class="weui-cells weui-cells_form" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__bd">
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
-								<p class="weui-uploader__title">文件上传</p>
-								<!--<div class="weui-uploader__info">0/5</div>-->
-							</div>
-							<div class="weui-uploader__bd">
-								<ul class="weui-uploader__files" id="uploaderFiles">
-									<li v-for="(file,index) of uploadedFiles" @click="clickImg(index)" v-bind:class="['weui-uploader__file']" v-bind:style="{'background-image':'url('+file.ImgUrl+')'}"></li>
-								</ul>
-								<div class="weui-uploader__input-box" :style="displayAddBtn">
-									<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)">
+								<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;">@上传附件</span>
+
+								<div class="weui-cell__ft" style="padding-left: 80px;margin-top: -5px;">
+									<input v-model="smsSync" type="checkbox" />
 								</div>
+								<div class="weui-cell__bd" style="font-size: 15px;padding-left: 10px;margin-top: -5px;">是否短信同步</div>
+
 							</div>
+
 						</div>
+
 					</div>
 				</div>
+				<div  v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
+					<ol>
+						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
+						</li>
+					</ol>
+				</div>
 			</div>
-			<div class="weui-cells">
+			<div class="weui-cells" style="margin-top: 0px;">
 				<div @click="selectPepole()" class="weui-cell weui-cell_access">
 					<div class="weui-cell__bd">
 						接收人
@@ -102,12 +102,17 @@
 						{{peopleNum}}
 					</div>
 				</div>
-				<div class="weui-cell weui-cell_switch">
+				<!--<div class="weui-cell weui-cell_switch">
 					<div class="weui-cell__bd">是否短信同步</div>
 					<div class="weui-cell__ft">
 						<input v-model="smsSync" class="weui-switch" type="checkbox" />
 					</div>
-				</div>
+				</div>-->
+			</div>
+			<div style="margin: 10px;">
+				{{'已选('+selectPeople.length+'人）:'}}<span  v-for="(people,index) of selectPeople">
+					{{people.utname}}
+				</span>
 			</div>
 			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
 			<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
@@ -427,7 +432,7 @@
 							var model = selectPeople_arr[i];
 							ids.push(model.utid)
 							codes.push('""')
-							names.push('"'+ model.utname+'"')
+							names.push('"' + model.utname + '"')
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");

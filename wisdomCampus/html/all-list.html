@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>通知公告</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/weui.min.css">
+		<link rel="stylesheet" href="../css/jquery-weui.css">
+		<link rel="stylesheet" href="../css/demos.css">
+		<link rel="stylesheet" href="../css/weui-extra.min.css" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			
+			.mui-pull-top-tips {
+				position: absolute;
+				top: -20px;
+				left: 50%;
+				margin-left: -25px;
+				width: 40px;
+				height: 40px;
+				border-radius: 100%;
+				z-index: 1;
+			}
+			
+			.mui-bar~.mui-pull-top-tips {
+				top: 24px;
+			}
+			
+			.mui-pull-top-wrapper {
+				width: 42px;
+				height: 42px;
+				display: block;
+				text-align: center;
+				background-color: #efeff4;
+				border: 1px solid #ddd;
+				border-radius: 25px;
+				background-clip: padding-box;
+				box-shadow: 0 4px 10px #bbb;
+				overflow: hidden;
+			}
+			
+			.mui-pull-top-tips.mui-transitioning {
+				-webkit-transition-duration: 200ms;
+				transition-duration: 200ms;
+			}
+			
+			.mui-pull-top-tips .mui-pull-loading {
+				/*-webkit-backface-visibility: hidden;
+				-webkit-transition-duration: 400ms;
+				transition-duration: 400ms;*/
+				margin: 0;
+			}
+			
+			.mui-pull-top-wrapper .mui-icon,
+			.mui-pull-top-wrapper .mui-spinner {
+				margin-top: 7px;
+			}
+			
+			.mui-pull-top-wrapper .mui-icon.mui-reverse {
+				/*-webkit-transform: rotate(180deg) translateZ(0);*/
+			}
+			
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			
+			.mui-pull-top-canvas {
+				overflow: hidden;
+				background-color: #fafafa;
+				border-radius: 40px;
+				box-shadow: 0 4px 10px #bbb;
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+			}
+			
+			.mui-pull-top-canvas canvas {
+				width: 40px;
+			}
+			
+			.mui-slider-indicator.mui-segmented-control {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="ntitle" class="mui-title" style="color: white;">通知公告</h1>
+			<a id="add" onclick="add()" class="mui-icon  mui-pull-right mui-hidden" style="color: white;font-size: 25px;">+</a>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll">
+						<a id="receive0" class="mui-control-item  mui-active" href="#item1mobile">
+							全部
+						</a>
+						<a id="receive1" class="mui-control-item" href="#item2mobile">
+							已阅
+						</a>
+						<a id="receive2" class="mui-control-item" href="#item3mobile">
+							未阅
+						</a>
+						<a id="receive3" class="mui-control-item" href="#item4mobile">
+							已回复
+						</a>
+						<a id="send" class="mui-control-item" href="#item5mobile">
+							我发出的
+						</a>
+
+					</div>
+				</div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content  mui-active">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul id="ul0" class="mui-table-view">
+
+								</ul>
+
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul id="ul1" class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul id="ul2" class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div id="item4mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul id="ul3" class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item5mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul id="ul4" class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
+		<script src="../js/demoCssJs/jquery-weui.js"></script>
+		<script src="../js/utils/mui.pullToRefresh.js"></script>
+		<script src="../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../js/utils/storageutil.js"></script>
+		<script src="../js/utils/utils.js"></script>
+		<script src='../js/utils/store.js'></script>
+		<script src="../js/publicProtocol.js"></script>
+		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../js/utils/myStorage.js"></script>
+		<script src="../js/utils/storageKeyName.js"></script>
+
+		<!--加密-->
+		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../js/lib/crypto-js/require.js'></script>
+		<script src='../js/utils/signHmacSHA1.js'></script>
+		<script src='../js/utils/sortSign.js'></script>
+		<script src='../js/utils/store.js'></script>
+		<script>
+			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+			var add = document.getElementById("add")
+			if(tempInfo00.appeditstat == 0) {
+				add.className = "mui-icon  mui-pull-right mui-hidden"
+			} else {
+				add.className = "mui-icon  mui-pull-right"
+			}
+			var datasource = {
+				receive0: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				receive1: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				receive2: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				receive3: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+				send: {
+					data: [],
+					refreshObj: {
+						refreshFlag: 0,
+						pageIndex: 1,
+						TotalPage: 1,
+					}
+
+				},
+			}
+
+			mui.init({
+				beforeback: function() {
+					//触发前往页面的自定义事件,从而进行数据刷新
+					mui.fire(plus.webview.currentWebview().opener(), 'updateNoRead');
+					//返回true，继续页面关闭逻辑
+					return true;
+				}
+			});
+			var title_id = utils.getDataFromUrl(window.location.href);
+			var title = 'receive0';
+			console.log(title_id);
+			if(title_id == 2) {
+				document.getElementById("ntitle").innerHTML = "事务审批"
+				document.getElementById("receive1").innerHTML = "已批"
+				document.getElementById("receive2").innerHTML = "等待"
+				document.getElementById("receive3").innerHTML = "未批"
+			}
+			var add = function() {
+				if(title_id == 1) {
+					utils.mOpenWithData("new_message.html", {})
+				} else {
+					utils.mOpenWithData("new-check.html", {})
+				}
+			}
+			var createFragment = function(ul, index, data) {
+				var length = ul.querySelectorAll('li').length;
+				var fragment = document.createDocumentFragment();
+				var li;
+				for(var i = 0; i < data.length; i++) {
+					var model = data[i];
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					if(index == 1) {
+						li.id = model.NoticeId
+						var noticep = '';
+						if(model.SendManName == undefined) {
+							model.SendManName = ''
+							noticep = model.NoticeProgress
+						} else {
+							model.SendManName = model.SendManName + "|"
+							noticep = model.NoticeStatus
+							li.id = model.NoticeId
+							li.setAttribute('NoticeManId', model.NoticeManId)
+						}
+
+						var readcolor = 'red';
+						var noYes = ''
+						if(noticep == "未阅") {
+							readcolor = '#ff0000';
+						} else if(noticep == "已阅" || noticep == "阅毕" || noticep == "已撤销") {
+							readcolor = '#c9c9c9';
+						} else if(noticep == "新建/撤销") {
+							noticep = '新建';
+//							noYes = '<button class="del mui-pull-right" guid=' + li.id + ' style="color:rgb(60,155,254);border-color:rgb(60,155,254);border-width:1px;height:25px;line-height:10px">撤销</button>'
+
+							readcolor = '#68bc31';
+						} else {
+							readcolor = '#68bc31';
+						}
+						li.innerHTML = '<div>' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' +
+							readcolor + ';">[' +
+							noticep + ']</span>' + model.NoticeTitle + noYes +
+							'</p>' +
+							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							model.SendManName + model.SendTime +
+							'</p>' +
+							'</div>'
+					} else if(index == 2) {
+						var myName = "";
+						var Progress = "";
+						if(ul.id == "ul4") {
+							li.id = model.ApplyId
+							myName = ""
+							Progress = model.ApplyProgress
+						} else {
+							li.id = myId = model.ApproveId
+							myName = model.ApplyManName + "|"
+							Progress = model.ApproveStatus
+						}
+						var readcolor = 'red';
+						var noYes = ''
+						if(Progress == "未批") {
+							readcolor = '#ff0000';
+						} else if(Progress == "等待") {
+							readcolor = '#68bc31';
+						} else if(Progress == "新建/撤销") {
+							Progress = '新建';
+							readcolor = '#68bc31';
+//							noYes = '<button class="del mui-pull-right" guid=' + li.id + ' style="color:rgb(60,155,254);border-color:rgb(60,155,254);border-width:1px;height:25px;line-height:10px">撤销</button>'
+						} else {
+							readcolor = '#c9c9c9';
+						}
+						li.innerHTML = '<div>' +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' + readcolor + ';">[' +
+							Progress + ']</span>' + model.ApplyTitle + noYes +
+							'</p>' +
+							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							myName + model.CreateTime +
+							'</p>' +
+							'</div>'
+					}
+
+					fragment.appendChild(li);
+				}
+				return fragment;
+			};
+			(function($1) {
+				//阻尼系数
+				var deceleration = mui.os.ios ? 0.003 : 0.0009;
+				$1('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration: deceleration
+				});
+				var getNotice = function(id, title, callback) { //10.获取发送的通知公告列表
+					$.showLoading();
+					console.log("1111111111111" + title)
+					var current_data = datasource[title];
+					var refreshObj = current_data.refreshObj
+					var tempData = {}
+					var personal = store.get(window.storageKeyName.PERSONALINFO);
+
+					if(id == "1" && title == "send") {
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							sendManId: personal.utid, //发送人ID
+							title: '', //标题
+							status: '0', //状态,0 全部,1 发出,2 撤销
+							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180127', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数
+						}
+						getSendNoticePro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							$.hideLoading();
+							if(data.RspCode == 0) {
+
+								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+
+								if(datasource[title].refreshObj.refreshFlag == 0) {
+									datasource[title].refreshObj.pageIndex = 1;
+									datasource[title].data = data.RspData.Data
+								} else {
+									//									datasource.notice_send.refreshObj.pageIndex++;
+									datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else if(id == "1" && title != "send") {
+
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							sendMan: '', //发送人ID
+							receiveManId: personal.utid, //接收人ID
+							title: '', //标题
+							status: title.replace("receive", ''), //状态,0 全部,1 发出,2 撤销
+							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180127', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数
+						}
+						getReceiveNoticePro(tempData, function function_name(data) {
+							$.hideLoading();
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+								if(datasource[title].refreshObj.refreshFlag == 0) {
+									datasource[title].data = data.RspData.Data
+								} else {
+									datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else if(id == "2" && title == "send") {
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							applyManId: personal.utid, //申请人ID
+							title: '', //标题
+							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
+							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180131', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数，0 为全部
+						}
+
+						getAffairApplyPro(tempData, function function_name(data) {
+							console.log(JSON.stringify(data))
+							$.hideLoading();
+							if(data.RspCode == 0) {
+
+								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+
+								if(datasource[title].refreshObj.refreshFlag == 0) {
+									datasource[title].refreshObj.pageIndex = 1;
+									datasource[title].data = data.RspData.Data
+								} else {
+									//									datasource.apply_send.refreshObj.pageIndex++;
+									datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					} else if(id == "2" && title != "send") {
+						tempData = {
+							schoolId: storageKeyName.SCHOOLID, //学校ID
+							approveManId: personal.utid, //审批人ID
+							title: '', //标题
+							applyMan: '', //申请人姓名
+							status: title.replace("receive", ''), //状态,0 全部,1 同意,2 退回，3 等待，4 未批
+							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
+							beginTime: '20170101', //查询开始时间
+							endTime: '30180131', //查询结束时间
+							pageIndex: refreshObj.pageIndex, //当前页数
+							pageSize: '10' //每页记录数，0 为全部
+						}
+
+						getAffairApprovePro(tempData, function function_name(data) {
+							$.hideLoading();
+							console.log(JSON.stringify(data))
+							if(data.RspCode == 0) {
+
+								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+
+								if(datasource[title].refreshObj.refreshFlag == 0) {
+									datasource[title].refreshObj.pageIndex = 1;
+									datasource[title].data = data.RspData.Data
+								} else {
+									//									datasource.apply_recevice.refreshObj.pageIndex++;
+									datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+								}
+								callback(data.RspData.Data)
+							}
+						});
+					}
+					//					$.hideLoading();
+				}
+				$1.ready(function() {
+					//					$.showLoading();
+					getNotice(title_id, 'receive0', function(data) {
+						var ul = document.getElementById("ul0");
+						ul.appendChild(createFragment(ul, title_id, data));
+					});
+					getNotice(title_id, 'receive1', function(data) {
+						var ul = document.getElementById("ul1");
+						ul.appendChild(createFragment(ul, title_id, data));
+					});
+					getNotice(title_id, 'receive2', function(data) {
+						var ul = document.getElementById("ul2");
+						ul.appendChild(createFragment(ul, title_id, data));
+					});
+					getNotice(title_id, 'receive3', function(data) {
+						var ul = document.getElementById("ul3");
+						ul.appendChild(createFragment(ul, title_id, data));
+					});
+					getNotice(title_id, 'send', function(data) {
+						var ul = document.getElementById("ul4");
+						ul.appendChild(createFragment(ul, title_id, data));
+					});
+					var p = [];
+
+					//循环初始化所有下拉刷新，上拉加载。
+					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+
+						var b = $1(pullRefreshEl).pullToRefresh({
+							down: {
+								callback: function() {
+									var self = this;
+									var current_data = datasource[title];
+									var refreshObj = current_data.refreshObj
+									refreshObj.refreshFlag = 0;
+									refreshObj.pageIndex = 1;
+									getNotice(title_id, title, function(data) {
+										var ul_id = '';
+										if(title == 'send') {
+											ul_id = "ul4"
+										} else {
+											ul_id = title.replace('receive', 'ul')
+										}
+										var ul = document.getElementById(ul_id);
+										ul.innerHTML = '';
+										ul.appendChild(createFragment(ul, title_id, data));
+										b.endPullDownToRefresh();
+										self.refresh(true);
+
+									})
+
+								}
+							},
+							up: {
+								callback: function() {
+									var self = this;
+									var current_data = datasource[title];
+									var refreshObj = current_data.refreshObj
+									console.log(JSON.stringify(refreshObj))
+									if(refreshObj.pageIndex < refreshObj.TotalPage) {
+										refreshObj.refreshFlag = 1;
+										refreshObj.pageIndex++;
+										getNotice(title_id, title, function(data) {
+											var ul_id = '';
+											if(title == 'send') {
+												ul_id = "ul4"
+											} else {
+												ul_id = title.replace('receive', 'ul')
+											}
+											var ul = document.getElementById(ul_id);
+											ul.appendChild(createFragment(ul, title_id, data));
+											self.endPullUpToRefresh();
+										})
+									} else {
+										console.log(refreshObj.pageIndex)
+										console.log(refreshObj.TotalPage)
+										//										mui.toast('没有更多了')
+										self.endPullUpToRefresh(true);
+									}
+
+								}
+							}
+						});
+						p.push(b);
+					});
+
+				});
+			})(mui);
+			mui('.mui-segmented-control').on('tap', 'a', function() {
+				title = this.id;
+			})
+			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+				var i = event.detail.slideNumber;
+				if(i == 4) {
+					title = "send"
+				} else {
+					title = "receive" + i;
+				}
+
+			})
+			mui(".mui-table-view").on('tap', 'li', function() {
+
+				var flag = this.parentElement.id.indexOf("send") >= 0 ? 1 : 0;
+				var data;
+
+				//				console.log(this.parentElement.id)
+				var b = this.parentElement.id.indexOf("notice") >= 0
+				if(flag == 0 && b) {
+					data = {
+						id: this.id,
+						flag: flag, //1:我发送的 0：发给我的
+						NoticeManId: this.getAttribute('NoticeManId')
+					}
+
+				} else {
+					data = {
+						id: this.id,
+						flag: flag //1:我发送的 0：发给我的
+					}
+				}
+				console.log(JSON.stringify(data))
+				if(b) {
+					var li = document.getElementById(this.id)
+					li.innerHTML = li.innerHTML.replace("未阅", '已阅')
+					li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
+					utils.mOpenWithData("noticeDetails.html", data)
+					//					utils.hrefSessionStorage("noticeDetails.html", data)
+
+				} else {
+					utils.mOpenWithData("check-detail.html", data)
+					//					utils.hrefSessionStorage("check-detail.html", data)
+				}
+
+			})
+		</script>
+	</body>
+
+</html>
