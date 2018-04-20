@@ -12,6 +12,23 @@
 		<link rel="stylesheet" href="../css/demos.css">
 		<link rel="stylesheet" href="../css/weui-extra.min.css" />
 		<style rel="stylesheet">
+			.weui-cell:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 0px solid #e5e5e5;
+				color: #e5e5e5;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				left: 15px;
+				z-index: 2
+			}
+			
 			.mui-title {
 				color: white;
 			}
@@ -44,8 +61,6 @@
 				background-color: #0062CC;
 				color: white;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -76,11 +91,11 @@
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
 								<div style="width: 65%;">
-								<input style="width: 200px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;font-size: 15px;">@上传附件</span>
+									<input style="width: 200px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;font-size: 15px;">@上传附件</span>
 								</div>
 								<div style="width: 35%">
 									<div style="width: 30px;"><input v-model="smsSync" type="checkbox" style="font-size: 15px;" /></div>
-										
+
 									<div style="font-size: 15px;margin-left: 20px;margin-top: -25px;width: 100px;">短信同步</div>
 								</div>
 
