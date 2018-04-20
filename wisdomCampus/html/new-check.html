@@ -79,7 +79,7 @@
 					<div class="weui-cell__bd">
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
-								<input style="width: 100px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;">@上传附件</span>
+								<input style="width: 100px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;font-size: 15px;">@上传附件</span>
 
 							</div>
 
@@ -98,7 +98,7 @@
 					<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
 					<div class="weui-cell__bd" style="margin-left: -30px;">
 						<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 11px;">选择审批人</span>
-						<div id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 15px;color: #3C9BFE; padding: 5px 5px 5px 5px;margin-top: -3px;font-size: 11px;float: right;" v-model="flowName">选择审批流程</div>
+						<div id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 15px;color: #3C9BFE; padding: 5px 5px 5px 5px;margin-top: 0px;font-size: 11px;float: right;" v-model="flowName">选择审批流程</div>
 					</div>
 					<span  style="color:#b7b7b7 ;padding-left: 5px;">></span>
 				</div>
