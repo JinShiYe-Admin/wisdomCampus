@@ -11,7 +11,7 @@
         border-radius: 5px;
         padding:2.5%;
         margin:0 0 0 2.5%;
-     /*   border: 1px solid #E4E4E4;*/
+        border: 1px solid #E4E4E4;
     }
     .chat_content_top{
     	width: 95%;
@@ -90,13 +90,13 @@
     .chat_content_left:before,
     .chat_content_left:after {
         position: absolute;
-        top: 1rem;
+        top: 0.5rem;
         left: -8px;
         width: 0;
         height: 0;
         display: block;
         content: " ";
-        border-color: transparent #ffffff transparent transparent;
+        border-color: transparent #E4E4E4 transparent transparent;
         border-style: dashed solid dashed dashed;
         border-width: 8px 8px 8px 0;
         pointer-events: none;
