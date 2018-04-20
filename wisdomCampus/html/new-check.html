@@ -74,33 +74,34 @@
 					</div>
 				</div>
 			</div>
-			<div class="weui-cells weui-cells_form">
+			<div class="weui-cells weui-cells_form" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__bd">
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
-								<p class="weui-uploader__title">文件上传</p>
-								<!--<div class="weui-uploader__info">0/5</div>-->
+								<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;">@上传附件</span>
+
 							</div>
-							<div class="weui-uploader__bd">
-								<ul class="weui-uploader__files" id="uploaderFiles">
-									<li v-for="(file,index) of uploadedFiles" @click="clickImg(index)" v-bind:class="['weui-uploader__file']" v-bind:style="{'background-image':'url('+file.ImgUrl+')'}"></li>
-								</ul>
-								<div class="weui-uploader__input-box" :style="displayAddBtn">
-									<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)">
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
+				<div v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
+					<ol>
+						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
+						</li>
+					</ol>
+				</div>
 			</div>
-			<div class="weui-cells">
+			<div class="weui-cells" style="margin-top: 0px;">
 				<div class="weui-cell">
-					<div class="weui-cell__hd"><label class="weui-label">审批流程</label></div>
-					<div class="weui-cell__bd">
-						<input id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" class="weui-input" placeholder="点击选择审批流程" v-model="flowName">
+					<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
+					<div class="weui-cell__bd" style="margin-left: -30px;">
+						<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 13px;">选择审批人</span>
+						<span id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 10px;color: #3C9BFE; padding: 7px 5px 5px;margin-top: 10px;font-size: 13px;" v-model="flowName">选择审批流程</span>
 					</div>
 				</div>
+
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
 					<div class="weui-cell__bd">
@@ -108,7 +109,7 @@
 							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">{{item.ManName}}</span>
 								<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
 							</li>
-							<li @click="selectPepole()" style="margin-top: 10px;"><span style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px;">选择审批人</span></li>
+
 						</ol>
 					</div>
 				</div>
@@ -430,7 +431,7 @@
 							var model = message.flowMan_arr[i];
 							ids.push(model.ManId)
 							codes.push('""')
-							names.push('"'+model.ManName+'"')
+							names.push('"' + model.ManName + '"')
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");
