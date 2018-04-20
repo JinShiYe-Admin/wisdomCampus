@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
 		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
+		<link rel="stylesheet" type="text/css" href="../css/utils/bubble.css"/>
 		<style type="text/css">
 			.center-horizontal {
 				text-align: center;
@@ -162,6 +163,10 @@
 			.applied-words {
 				color: green;
 			}
+			/*.titleCSS {
+				font-size: 18px;
+				color: #000;
+			}*/
 			/*.input-content {
 				width: 100%;
 				height: 20rem;
@@ -184,7 +189,7 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">审批详情</h1>
 		</header>
-		<div class="mui-content" id="checkDetailData">
+		<div class="mui-content" id="checkDetailData" style="background: white;">
 			<template v-if="leaveDetail.ApplyTitle">
 				<div class="leave-detail">
 					<h3 class="center-horizontal">{{leaveDetail.ApplyTitle}}</h3>
@@ -199,23 +204,43 @@
 							</p>
 						</template>
 					</div>
-					<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
+					<!--<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
 						<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
 						<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
-					</div>
+					</div>-->
 				</div>
 				<div class="check-flow">
-					<p>批复内容<button class="mui-btn mui-btn-danger "  v-on:click.stop="replyLeave" style="float: right;margin-top: -10px;;height:25px;line-height:10px">退回</button></p>
-					<div class="weui-cell" style="margin-left: -20px;">
-						<textarea style="width:100%" name="MSG" cols=0 rows=6 placeholder="请输入批复内容"  v-model.trim="replyContent"></textarea>
+					<p style="color: black;size: 13px;">批复内容<button class="mui-btn mui-btn-danger "  v-on:click.stop="replyLeave" style="float: right;margin-top: -10px;;height:25px;line-height:10px;">退回</button></p>
+					<div style="padding-top: 5px;height: 130px;">
+						<!--<textarea style="width:100%;border: 1px solid gainsboro;" name="MSG" cols=0 rows=6 placeholder="请输入批复内容"  v-model.trim="replyContent"></textarea>-->
+						<textarea v-model.trim="replyContent" style="border: 1px solid gainsboro;margin-left: 00px;width: 100%;" placeholder="请输入批复内容" rows="4"></textarea>
+					<!--<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: 0px;">确定</button>-->
+					<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: 0px;;height:25px;line-height:10px">批复</button>
 					</div>
-					<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: -20px;;height:25px;line-height:10px">批复</button>
+					<!--<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: -20px;;height:25px;line-height:10px">批复</button>-->
 					<!--<div class="input-content">-->
 					<!--<textarea id='content' class="mui-input-clear" placeholder="回复留言，最多300字" style="height: 200px;"></textarea>-->
 					<!--</div>-->
 
 				</div>
-				<div class="check-flow">
+				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+				<p class="" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;background-color: white;">审批流程</p>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" v-for="check in leaveDetail.ApproveList">
+						<div>
+							<img class="mui-media-object mui-pull-left" src="../img/login/headImg.png">
+							<a class="" style="font-size: 13px;color: #666;">
+								{{check.ApproveManName}} {{check.ApproveTime}}
+								<div class="chat_content_left" v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
+									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">{{check.ApproveContent}}</p>
+								</div>
+								</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+				
+				<!--<div class="check-flow">
 					<div v-for="check in leaveDetail.ApproveList">
 						<p class="check-container">
 							<span class="checker-name">{{check.ApproveManName}}</span>
@@ -225,8 +250,8 @@
 							</span>
 						</p>
 					</div>
-				</div>
-				<div class="reply-container" v-if="replyShow" v-on:click="replyShow=false">
+				</div>-->
+				<!--<div class="reply-container" v-if="replyShow" v-on:click="replyShow=false">
 					<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
 						<p class="check-reply-title">批复内容</p>
 						<div class="textarea-container">
@@ -238,7 +263,7 @@
 						</div>
 						<p style="text-align: center; margin-bottom: 0;"><button v-on:click.stop="replyLeave" class="mui-btn-primary dialog-btn">确定</button><button class="mui-btn dialog-btn" v-on:click.stop="replyShow=false">取消</button></p>
 					</div>
-				</div>
+				</div>-->
 			</template>
 		</div>
 		<script src="../js/mui.min.js"></script>

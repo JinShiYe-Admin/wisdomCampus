@@ -385,6 +385,7 @@
 					var personal = store.get(window.storageKeyName.PERSONALINFO);
 
 					if(id == "1" && title == "send") {
+						console.log('qqqqqq');
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendManId: personal.utid, //发送人ID
@@ -414,7 +415,7 @@
 							}
 						});
 					} else if(id == "1" && title != "send") {
-
+						console.log('qqqqqq');
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendMan: '', //发送人ID
