@@ -88,7 +88,7 @@
 				</div>
 				<div  v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
 					<ol>
-						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
+						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles" @click="clickImg(index)"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
 						</li>
 					</ol>
 				</div>
