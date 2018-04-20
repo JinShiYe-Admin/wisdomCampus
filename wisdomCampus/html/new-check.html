@@ -97,16 +97,17 @@
 				<div class="weui-cell">
 					<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
 					<div class="weui-cell__bd" style="margin-left: -30px;">
-						<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 13px;">选择审批人</span>
-						<span id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 10px;color: #3C9BFE; padding: 7px 5px 5px;margin-top: 10px;font-size: 13px;" v-model="flowName">选择审批流程</span>
+						<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 11px;">选择审批人</span>
+						<div id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 15px;color: #3C9BFE; padding: 5px 5px 5px 5px;margin-top: -3px;font-size: 11px;float: right;" v-model="flowName">选择审批流程</div>
 					</div>
+					<span  style="color:#b7b7b7 ;padding-left: 5px;">></span>
 				</div>
 
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
 					<div class="weui-cell__bd">
 						<ol>
-							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px darkgray;padding: 7px 5px 5px;">{{item.ManName}}</span>
+							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
 								<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
 							</li>
 

@@ -73,12 +73,14 @@
 					<div class="weui-cell__bd">
 						<div class="weui-uploader">
 							<div class="weui-uploader__hd">
-								<input style="width: 100px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;">@上传附件</span>
-
-								<div class="weui-cell__ft" style="padding-left: 80px;margin-top: -5px;">
-									<input v-model="smsSync" type="checkbox" />
+								<div style="width: 65%">
+								<input style="width: 200px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;">@上传附件</span>
 								</div>
-								<div class="weui-cell__bd" style="font-size: 15px;padding-left: 10px;margin-top: -5px;">是否短信同步</div>
+								<div style="width: 35%">
+									<div style="width: 30px;"><input v-model="smsSync" type="checkbox" style="font-size: 15px;" /></div>
+										
+									<div style="font-size: 15px;margin-left: 20px;margin-top: -25px;width: 100px;">是否短信同步</div>
+								</div>
 
 							</div>
 
@@ -86,7 +88,7 @@
 
 					</div>
 				</div>
-				<div  v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
+				<div v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
 					<ol>
 						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles" @click="clickImg(index)"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
 						</li>
@@ -110,7 +112,7 @@
 				</div>-->
 			</div>
 			<div style="margin: 10px;">
-				{{'已选('+selectPeople.length+'人）:'}}<span  v-for="(people,index) of selectPeople">
+				{{'已选('+selectPeople.length+'人）:'}}<span v-for="(people,index) of selectPeople">
 					{{people.utname}}
 				</span>
 			</div>
