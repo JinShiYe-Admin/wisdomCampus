@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
 		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
+		<link rel="stylesheet" type="text/css" href="b"/>
 		<style type="text/css">
 			.contentCSS {
 				margin-left: 15px;
@@ -88,11 +89,21 @@
 				color: #3C9BFE;
 				background-color: transparent;
 			}
+			
 			.mui-content {
 				height: 100%;
 				padding: 44px 0px 50px 0px;
 				overflow: auto;
 				background-color: #eaeaea;
+			}
+			
+			div {
+				word-break: break-all;
+			}
+			
+			div p {
+				word-break;
+				: break-all;
 			}
 		</style>
 	</head>
@@ -102,28 +113,29 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">通知详情</h1>
 		</header>
-		<nav class="mui-bar mui-bar-tab" id="noticeReplyContent">
-					<div style="padding-top: 5px;">
-						<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
-						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
-					</div>
-				</nav>
+		<!--<nav class="mui-bar mui-bar-tab" id="noticeReplyContent">
+			<div style="padding-top: 5px;">
+				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
+				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
+			</div>
+		</nav>-->
 		<div class="mui-content" id="noticeDetailData" v-show="flag>0" style="background-color: white;">
 			<template>
 				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
 				<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
 				<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
-				<!--<p class="encName" v-show="detailModel.NoticeEncName">附件:
-					<a class="encTitle">{{detailModel.NoticeEncName}}<button v-on:click.stop="checkEnc(0)" type="button" class="mui-btn mui-btn-grey clickButton" style="">预览</button><button v-on:click.stop="checkEnc(1)" type="button" class="mui-btn mui-btn-blue clickButton">下载</button></a>
-					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
-				</p>-->
 				<template v-for="(extraFile,index) in detailModel.NoticeEncName" v-show="detailModel.NoticeEncName.length>0">
 					<p class="encName" v-show="extraFile">附件:
 						<a class="" style="font-size: 12px;color: #3c9bfe;" v-on:click="checkEnc(0,index)">{{extraFile}}</a>
-						<!--<button v-on:click.stop="checkEnc(0,index)" type="button" class="prev-btn">预览</button>-->
-						<!--<button v-on:click.stop="checkEnc(1,index)" type="button" class="mui-btn-primary down-btn">下载</button>-->
 					</p>
 				</template>
+				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+				<a style="color: black;size: 15px;margin-left: 15px;">回复</a>
+					<div style="padding-top: 5px;height: 170px;">
+						<!--<textarea v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />-->
+						<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
+						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
+					</div>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<p class="titleCSS" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;">接收列表(未读{{detailModel.NoReadCnt}}人/共{{detailModel.NoReadCnt+detailModel.ReadCnt}}人)</p>
 				<ul class="mui-table-view">
@@ -137,30 +149,6 @@
 						</a>
 					</li>
 				</ul>
-				<!--<div class="same div" style="font-size: 0;">
-					<input type="text" class="same text" style="display: inline;float: left;"><button class="same btn">查询</button>
-				</div>-->
-				<!--<input v-model="" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" placeholder="请输入标题" />-->
-				
-
-				<!--滑动组件-->
-				<!--<div id="sliderSegmentedControl" class=" mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
-					<a id="item1" class="mui-control-item mui-active readPeople" href="#div-finished">
-						已读({{detailModel.ReadCnt}})
-					</a>
-					<a id="item2" class="mui-control-item readPeople" href="#div-unfinish">
-						未读({{detailModel.NoReadCnt}})
-					</a>
-				</div>-->
-				<!--滑动内容-->
-				<!--<div class="mui-slider-group" style="min-height: 200px;">
-					<div id="div-finished" class="mui-slider-item mui-control-content mui-active">
-						<div class="contentCSS">{{detailModel.ReadNames}}</div>
-					</div>
-					<div id="div-unfinish" class="mui-slider-item mui-control-content">
-						<div class="contentCSS">{{detailModel.NoReadNames}}</div>
-					</div>
-				</div>-->
 			</template>
 
 		</div>
@@ -210,34 +198,26 @@
 				el: "#noticeDetailData",
 				data: {
 					flag: 0,
-					detailModel: ''
+					detailModel: '',
+					content: ''
 				},
 				methods: {
 					checkEnc: function(tempFlag, index) {
 						console.log('tempFlag:' + tempFlag);
 						var tempUrl = noticeDetailData.detailModel.NoticeEncAddr[index];
 						plus.runtime.openURL(tempUrl);
-					}
-				}
-			});
-
-			var noticeReplyContent = new Vue({
-				el: "#noticeReplyContent",
-				data: {
-					content: ''
-				},
-				methods: {
+					},
 					replyContent: function() {
 						if(noticeDetailData.detailModel.ReplyContent.length > 0) {
-							noticeReplyContent.content = '';
+							noticeDetailData.content = '';
 							$.toast("不能重复回复", "cancel");
 							return;
 						}
-						if(noticeReplyContent.content.trim().length == 0) {
+						if(noticeDetailData.content.trim().length == 0) {
 							$.toast("请输入回复内容", "cancel");
 							return;
 						}
-						if(noticeReplyContent.content.length >= 50) {
+						if(noticeDetailData.content.length >= 50) {
 							$.toast("回复内容不能超过50字", "cancel");
 							return;
 						}
@@ -245,14 +225,14 @@
 						var tempData1 = {
 							noticeId: curPage.id, //通知ID
 							receiveManId: personal.utid, //阅读人ID
-							replyContent: noticeReplyContent.content //回复内容
+							replyContent: noticeDetailData.content //回复内容
 						}
 						$.showLoading();
 						//28.回复通知公告
 						setNoticeReplyPro(tempData1, function function_name(data) {
 							$.hideLoading();
 							if(data.RspCode == 0) {
-								noticeReplyContent.content = '';
+								noticeDetailData.content = '';
 								$.toast('成功');
 								getDetailFunction();
 							} else {
