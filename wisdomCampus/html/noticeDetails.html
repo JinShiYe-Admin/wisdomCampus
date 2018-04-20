@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
 		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
-		<link rel="stylesheet" type="text/css" href="b"/>
+		<link rel="stylesheet" type="text/css" href="../css/utils/bubble.css" />
 		<style type="text/css">
 			.contentCSS {
 				margin-left: 15px;
@@ -131,22 +131,24 @@
 				</template>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<a style="color: black;size: 15px;margin-left: 15px;">回复</a>
-					<div style="padding-top: 5px;height: 170px;">
-						<!--<textarea v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />-->
-						<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
-						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
-					</div>
+				<div style="padding-top: 5px;height: 170px;">
+					<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
+					<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
+				</div>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<p class="titleCSS" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;">接收列表(未读{{detailModel.NoReadCnt}}人/共{{detailModel.NoReadCnt+detailModel.ReadCnt}}人)</p>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" v-for="(replyModel,index) in detailModel.Data">
-						<a class="" style="font-size: 13px;color: #666;">
-							{{replyModel.ReceiveManName}}
-							<span v-if="replyModel.ReplyContent.length>0" style="color: #666;font-size: 12px; white-space:pre-wrap;">:{{replyModel.ReplyContent}}
-				                	<div style="text-align: right;font-size: 12px;color: #999;">--{{replyModel.ReadTime}}</div>
-				                </span>
-							<span v-else-if="replyModel.IsRead==1" style="color: #ccc;font-size: 12px;">【已读】</span>
-						</a>
+						<div>
+							<img class="mui-media-object mui-pull-left" src="../img/login/headImg.png">
+							<a class="" style="font-size: 13px;color: #666;">
+								{{replyModel.ReceiveManName}} {{replyModel.ReadTime}}
+								<div class="chat_content_left" v-if="replyModel.ReplyContent.length>0">
+									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">{{replyModel.ReplyContent}}</p>
+								</div>
+								</span>
+							</a>
+						</div>
 					</li>
 				</ul>
 			</template>
