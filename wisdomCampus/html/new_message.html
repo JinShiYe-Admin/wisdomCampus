@@ -44,6 +44,8 @@
 				background-color: #0062CC;
 				color: white;
 			}
+			
+			
 		</style>
 	</head>
 
@@ -57,13 +59,13 @@
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
-						<input v-model="title" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+						<input v-model="title" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
 					</div>
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						<textarea v-model="content" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 
 					</div>
 				</div>
@@ -78,7 +80,7 @@
 								<div class="weui-cell__ft" style="padding-left: 80px;margin-top: -5px;">
 									<input v-model="smsSync" type="checkbox" />
 								</div>
-								<div class="weui-cell__bd" style="font-size: 15px;padding-left: 10px;margin-top: -5px;">是否短信同步</div>
+								<div class="weui-cell__bd" style="font-size: 15px;padding-left: 10px;margin-top: -5px;">短信同步</div>
 
 							</div>
 
@@ -86,7 +88,7 @@
 
 					</div>
 				</div>
-				<div  v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
+				<div v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
 					<ol>
 						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
 						</li>
@@ -110,7 +112,7 @@
 				</div>-->
 			</div>
 			<div style="margin: 10px;">
-				{{'已选('+selectPeople.length+'人）:'}}<span  v-for="(people,index) of selectPeople">
+				{{'已选('+selectPeople.length+'人）:'}}<span v-for="(people,index) of selectPeople">
 					{{people.utname}}
 				</span>
 			</div>
