@@ -162,6 +162,20 @@
 			.applied-words {
 				color: green;
 			}
+			/*.input-content {
+				width: 100%;
+				height: 20rem;
+				background-color: white;
+				border-color: red;
+			}
+			
+			textarea {
+				border-radius: 5px 5px 0 0;
+				border-color: red;
+				border-width: 2px;
+				width: 100%;
+				height: 20rem;
+			}*/
 		</style>
 	</head>
 
@@ -189,6 +203,17 @@
 						<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
 						<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
 					</div>
+				</div>
+				<div class="check-flow">
+					<p>批复内容<button class="mui-btn mui-btn-danger "  v-on:click.stop="replyLeave" style="float: right;margin-top: -10px;;height:25px;line-height:10px">退回</button></p>
+					<div class="weui-cell" style="margin-left: -20px;">
+						<textarea style="width:100%" name="MSG" cols=0 rows=6 placeholder="请输入批复内容"  v-model.trim="replyContent"></textarea>
+					</div>
+					<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: -20px;;height:25px;line-height:10px">批复</button>
+					<!--<div class="input-content">-->
+					<!--<textarea id='content' class="mui-input-clear" placeholder="回复留言，最多300字" style="height: 200px;"></textarea>-->
+					<!--</div>-->
+
 				</div>
 				<div class="check-flow">
 					<div v-for="check in leaveDetail.ApproveList">
