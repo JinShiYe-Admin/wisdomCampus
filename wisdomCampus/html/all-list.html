@@ -111,14 +111,14 @@
 			<div id="slider" class="mui-slider mui-fullscreen">
 				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<div class="mui-scroll">
-						<a id="receive0" class="mui-control-item  mui-active" href="#item1mobile">
+						<a id="receive0" class="mui-control-item mui-active" href="#item1mobile">
 							全部
 						</a>
 						<a id="receive1" class="mui-control-item" href="#item2mobile">
-							已阅
+							未阅
 						</a>
 						<a id="receive2" class="mui-control-item" href="#item3mobile">
-							未阅
+							未回复
 						</a>
 						<a id="receive3" class="mui-control-item" href="#item4mobile">
 							已回复
@@ -126,7 +126,6 @@
 						<a id="send" class="mui-control-item" href="#item5mobile">
 							发出的
 						</a>
-
 					</div>
 				</div>
 				<div class="mui-slider-group">
@@ -136,7 +135,6 @@
 								<ul id="ul0" class="mui-table-view">
 
 								</ul>
-
 							</div>
 						</div>
 					</div>
@@ -178,7 +176,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -219,45 +216,40 @@
 					refreshObj: {
 						refreshFlag: 0,
 						pageIndex: 1,
-						TotalPage: 1,
+						TotalPage: 1
 					}
-
 				},
 				receive1: {
 					data: [],
 					refreshObj: {
 						refreshFlag: 0,
 						pageIndex: 1,
-						TotalPage: 1,
+						TotalPage: 1
 					}
-
 				},
 				receive2: {
 					data: [],
 					refreshObj: {
 						refreshFlag: 0,
 						pageIndex: 1,
-						TotalPage: 1,
+						TotalPage: 1
 					}
-
 				},
 				receive3: {
 					data: [],
 					refreshObj: {
 						refreshFlag: 0,
 						pageIndex: 1,
-						TotalPage: 1,
+						TotalPage: 1
 					}
-
 				},
 				send: {
 					data: [],
 					refreshObj: {
 						refreshFlag: 0,
 						pageIndex: 1,
-						TotalPage: 1,
+						TotalPage: 1
 					}
-
 				},
 			}
 
@@ -274,9 +266,9 @@
 			console.log(title_id);
 			if(title_id == 2) {
 				document.getElementById("ntitle").innerHTML = "事务审批"
-				document.getElementById("receive1").innerHTML = "已批"
-				document.getElementById("receive2").innerHTML = "等待"
-				document.getElementById("receive3").innerHTML = "未批"
+				document.getElementById("receive1").innerHTML = "等待"
+				document.getElementById("receive2").innerHTML = "未批"
+				document.getElementById("receive3").innerHTML = "已批"
 			}
 			var add = function() {
 				if(title_id == 1) {
@@ -401,9 +393,7 @@
 							console.log(JSON.stringify(data))
 							$.hideLoading();
 							if(data.RspCode == 0) {
-
 								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-
 								if(datasource[title].refreshObj.refreshFlag == 0) {
 									datasource[title].refreshObj.pageIndex = 1;
 									datasource[title].data = data.RspData.Data
@@ -416,12 +406,18 @@
 						});
 					} else if(id == "1" && title != "send") {
 						console.log('qqqqqq222');
+						var tempStatus = title.replace("receive", '');
+						if (tempStatus == 1) {
+							tempStatus = 2;
+						} else if (tempStatus == 2) {
+							tempStatus = 1
+						}
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							sendMan: '', //发送人ID
 							receiveManId: personal.utid, //接收人ID
 							title: '', //标题
-							status: title.replace("receive", ''), //状态,0 全部，1 已阅,2 未阅,3 已回复
+							status: tempStatus, //状态,0 全部，1 已阅,2 未阅,3 已回复
 							progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
 							beginTime: '20170101', //查询开始时间
 							endTime: '30180127', //查询结束时间
@@ -459,9 +455,7 @@
 							console.log(JSON.stringify(data))
 							$.hideLoading();
 							if(data.RspCode == 0) {
-
 								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-
 								if(datasource[title].refreshObj.refreshFlag == 0) {
 									datasource[title].refreshObj.pageIndex = 1;
 									datasource[title].data = data.RspData.Data
@@ -474,12 +468,23 @@
 						});
 					} else if(id == "2" && title != "send") {
 						console.log('qqqqqq444');
+						var tempStatus = title.replace("receive", '');
+						document.getElementById("receive1").innerHTML = "等待"
+						document.getElementById("receive2").innerHTML = "未批"
+						document.getElementById("receive3").innerHTML = "已批"
+						if (tempStatus == 1) {
+							tempStatus = 2;
+						} else if (tempStatus == 2) {
+							tempStatus = 3
+						}else if (tempStatus == 3) {
+							tempStatus = 1
+						}
 						tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							approveManId: personal.utid, //审批人ID
 							title: '', //标题
 							applyMan: '', //申请人姓名
-							status: title.replace("receive", ''), //状态,0 全部,1 同意,2 退回，3 等待，4 未批
+							status: tempStatus, //状态,0 全部,1 同意,2 退回，3 等待，4 未批
 							progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
 							beginTime: '20170101', //查询开始时间
 							endTime: '30180131', //查询结束时间
@@ -491,9 +496,7 @@
 							$.hideLoading();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
-
 								datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-
 								if(datasource[title].refreshObj.refreshFlag == 0) {
 									datasource[title].refreshObj.pageIndex = 1;
 									datasource[title].data = data.RspData.Data
@@ -533,7 +536,6 @@
 
 					//循环初始化所有下拉刷新，上拉加载。
 					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-
 						var b = $1(pullRefreshEl).pullToRefresh({
 							down: {
 								callback: function() {
@@ -554,9 +556,7 @@
 										ul.appendChild(createFragment(ul, title_id, data));
 										b.endPullDownToRefresh();
 										self.refresh(true);
-
 									})
-
 								}
 							},
 							up: {
@@ -585,7 +585,6 @@
 										//										mui.toast('没有更多了')
 										self.endPullUpToRefresh(true);
 									}
-
 								}
 							}
 						});
@@ -630,12 +629,10 @@
 					li.innerHTML = li.innerHTML.replace("ff0000", 'c9c9c9')
 					utils.mOpenWithData("noticeDetails.html", data)
 					//					utils.hrefSessionStorage("noticeDetails.html", data)
-
 				} else {
 					utils.mOpenWithData("check-detail.html", data)
 					//					utils.hrefSessionStorage("check-detail.html", data)
 				}
-
 			})
 		</script>
 	</body>
