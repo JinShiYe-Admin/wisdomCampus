@@ -12,6 +12,22 @@
 		<link rel="stylesheet" href="../css/demos.css">
 		<link rel="stylesheet" href="../css/weui-extra.min.css" />
 		<style rel="stylesheet">
+			.weui-cell:before {
+				content: " ";
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 1px;
+				border-top: 0px solid #e5e5e5;
+				color: #e5e5e5;
+				-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				left: 15px;
+				z-index: 2
+			}
 			.mui-title {
 				color: white;
 			}
@@ -54,26 +70,35 @@
 			<!--<a class="mui-icon mui-pull-right right-cancel">取消</a>-->
 		</header>
 		<div id="message" class="mui-content">
-
 			<div class="weui-cells" style="margin-top: 0px;">
+				<div class="weui-cell">
+					<div class="weui-cell__hd">标题</div>
+					<div class="weui-cell__bd">
+						<input v-model="title" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+					</div>
+				</div>
+				<div class="weui-cell" style="align-items: flex-start;">
+					<div class="weui-cell__hd">内容</div>
+					<div class="weui-cell__bd">
+						<textarea v-model="content" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+
+					</div>
+				</div>
+			</div>
+			<!--<div class="weui-cells" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
 						<input v-model="title" style="border: 0px;margin-bottom: 0px;padding-left: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
 					</div>
-					<!--<div class="weui-cell__ft">0/64</div>-->
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
 						<textarea v-model="content" class="weui-textarea" style="padding: 0;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
-						<!--<div class="weui-textarea-counter">
-		    				<span>0</span>
-		    				/500
-		    			</div>-->
 					</div>
 				</div>
-			</div>
+			</div>-->
 			<div class="weui-cells weui-cells_form" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__bd">

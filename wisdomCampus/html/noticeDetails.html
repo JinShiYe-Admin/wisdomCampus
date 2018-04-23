@@ -109,9 +109,10 @@
 	</head>
 
 	<body style="background-color: white;">
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="tempVue">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">通知详情</h1>
+			<a v-if="flag==1&&status == 1" @click="revoke()" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 10px;">撤回</a>
 		</header>
 		<!--<nav class="mui-bar mui-bar-tab" id="noticeReplyContent">
 			<div style="padding-top: 5px;">
@@ -124,18 +125,18 @@
 				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
 				<p align="center" class="name-timeCSS" style="font-size: 12px;color: #999;">{{detailModel.SendManName}} | {{detailModel.SendTime}}</p>
 				<p class="contentCSS" style="font-size: 14px;color: #666;">{{detailModel.NoticeContent}}</p>
-				<template v-for="(extraFile,index) in detailModel.NoticeEncName" v-show="detailModel.NoticeEncName.length>0">
+				<template v-for="(extraFile,index) in detailModel.NoticeEncName" v-show="detailModel.NoticeEncName.length==0">
 					<p class="encName" v-show="extraFile">附件:
 						<a class="" style="font-size: 12px;color: #3c9bfe;" v-on:click="checkEnc(0,index)">{{extraFile}}</a>
 					</p>
 				</template>
-				<template v-if="detailModel.SendManId != personal.utid">
+				<template v-if="curPage.flag == 0&&detailModel.Status<4&&detailModel.ReplyContent.length==0">
 					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
-				<a style="color: black;size: 15px;margin-left: 15px;">回复</a>
-				<div style="padding-top: 5px;height: 170px;">
-					<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
-					<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
-				</div>
+					<a style="color: black;size: 15px;margin-left: 15px;">回复</a>
+					<div style="padding-top: 5px;height: 170px;">
+						<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
+						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
+					</div>
 				</template>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<p class="titleCSS" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;">接收列表(未读{{detailModel.NoReadCnt}}人/共{{detailModel.NoReadCnt+detailModel.ReadCnt}}人)</p>
@@ -178,7 +179,7 @@
 		<script type="text/javascript">
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			console.log('personal:'+JSON.stringify(personal));
+			console.log('personal:' + JSON.stringify(personal));
 			var curPage = {};
 			mui.plusReady(function() {
 				//				var curPage = utils.getSessionStorageByUrlsKey();
@@ -199,6 +200,34 @@
 					getNoticeDetail();
 				}
 			}
+			var tempVue = new Vue({
+				el: "#tempVue",
+				data: {
+					id: 0,
+					flag: curPage.flag, //0审核 1我发送的
+					status: 0
+				},
+				methods: {
+					revoke: function() {
+						var btnArray = ['取消', '确定'];
+						var closeId = this.id;
+						mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
+							if(e.index == 1) {
+								var tempData = {
+									noticeId: tempVue.id
+								}
+								setNoticeUndoPro(tempData, function function_name(data) {
+									if(data.RspCode == 0) {
+										//获取当前人员信息
+										getDetailFunction();
+									}
+								});
+							}
+						});
+
+					}
+				}
+			});
 			var noticeDetailData = new Vue({
 				el: "#noticeDetailData",
 				data: {
@@ -259,6 +288,10 @@
 					$.hideLoading();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
+						var localSkey = utils.getDataFromUrl(window.location.href);
+						tempVue.id = localSkey.id;
+						tempVue.flag = parseInt(localSkey.flag);
+						tempVue.status = data.RspData.Status;
 						if(data.RspData.NoticeEncName) {
 							data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
 							data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");
@@ -294,6 +327,10 @@
 					$.hideLoading();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
+						var localSkey = utils.getDataFromUrl(window.location.href);
+						tempVue.id = localSkey.id;
+						tempVue.flag = parseInt(localSkey.flag);
+						tempVue.status = data.RspData.Status;
 						if(data.RspData.NoticeEncName) {
 							data.RspData.NoticeEncName = data.RspData.NoticeEncName.split("|");
 							data.RspData.NoticeEncAddr = data.RspData.NoticeEncAddr.split("|");

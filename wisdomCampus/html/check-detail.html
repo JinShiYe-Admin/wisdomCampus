@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
 		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
-		<link rel="stylesheet" type="text/css" href="../css/utils/bubble.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/utils/bubble.css" />
 		<style type="text/css">
 			.center-horizontal {
 				text-align: center;
@@ -22,7 +22,7 @@
 			}
 			
 			.check-flow {
-				margin-top: 20px;
+				margin-top: -10px;
 			}
 			
 			.color_primary {
@@ -185,9 +185,10 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color: #63BBFF;">
+		<header class="mui-bar mui-bar-nav" style="background-color: #63BBFF;" id="tempVue">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">审批详情</h1>
+			<a v-if="flag==1&&status == 1" @click="revoke()" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 10px;">撤回</a>
 		</header>
 		<div class="mui-content" id="checkDetailData" style="background: white;">
 			<template v-if="leaveDetail.ApplyTitle">
@@ -197,32 +198,23 @@
 					<p>{{leaveDetail.ApplyContent}}</p>
 					<div>
 						<template v-for="(extraFile,index) in leaveDetail.ApplyEncName">
-							<!--<p class="display-inline extral-file">附件：<span class="color_primary">{{extraFile}}</span></p>
-							<p class="display-inline prev-down"><button v-on:click.stop="checkEnc(0,index)" class="prev-btn">预览</button></p>-->
 							<p class="encName" v-show="extraFile">附件:
 								<a class="" style="font-size: 12px;color: #3c9bfe;" v-on:click="checkEnc(0,index)">{{extraFile}}</a>
 							</p>
 						</template>
 					</div>
-					<!--<div v-if="flag==0&&leaveDetail.ApproveStatus==0" class="check-reply-back">
-						<button class="mui-btn mui-btn-primary mui-btn-outlined" v-on:click="replyShow=true;approveResult=1">批复</button>
-						<button class="mui-btn-danger mui-btn-outlined" v-on:click="replyShow=true;approveResult=2">退回</button>
-					</div>-->
 				</div>
-				<div class="check-flow">
-					<p style="color: black;size: 13px;">批复内容<button class="mui-btn mui-btn-danger "  v-on:click.stop="replyLeave" style="float: right;margin-top: -10px;;height:25px;line-height:10px;">退回</button></p>
-					<div style="padding-top: 5px;height: 130px;">
-						<!--<textarea style="width:100%;border: 1px solid gainsboro;" name="MSG" cols=0 rows=6 placeholder="请输入批复内容"  v-model.trim="replyContent"></textarea>-->
-						<textarea v-model.trim="replyContent" style="border: 1px solid gainsboro;margin-left: 00px;width: 100%;" placeholder="请输入批复内容" rows="4"></textarea>
-					<!--<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: 0px;">确定</button>-->
-					<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: 0px;;height:25px;line-height:10px">批复</button>
+				<template v-if="flag==0&&leaveDetail.ApproveStatus==0">
+					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
+					<div class="check-flow">
+						<p style="color: black;size: 13px;">批复内容<button class="mui-btn mui-btn-danger " v-on:click.stop="replyLeave(approveResult=2)" style="float: right;margin-top: 0px;;height:25px;line-height:10px;">退回</button></p>
+						<div style="padding-top: 5px;height: 130px;">
+							<textarea v-model.trim="replyContent" style="border: 1px solid gainsboro;margin-left: 00px;width: 100%;" placeholder="请输入批复内容" rows="4"></textarea>
+							<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave(approveResult=1)" style="float: right;margin-top: 0px;;height:25px;line-height:10px">批复</button>
+						</div>
 					</div>
-					<!--<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave" style="float: right;margin-top: -20px;;height:25px;line-height:10px">批复</button>-->
-					<!--<div class="input-content">-->
-					<!--<textarea id='content' class="mui-input-clear" placeholder="回复留言，最多300字" style="height: 200px;"></textarea>-->
-					<!--</div>-->
+				</template>
 
-				</div>
 				<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 				<p class="" style="font-size: 13px;color: #333;margin-top: 10px;margin-left: 10px;background-color: white;">审批流程</p>
 				<ul class="mui-table-view">
@@ -239,31 +231,6 @@
 						</div>
 					</li>
 				</ul>
-				
-				<!--<div class="check-flow">
-					<div v-for="check in leaveDetail.ApproveList">
-						<p class="check-container">
-							<span class="checker-name">{{check.ApproveManName}}</span>
-							<span v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
-							<span class="reply-content">{{check.ApproveContent}}</span>
-							<span class="reply-time">----{{check.ApproveTime}}</span>
-							</span>
-						</p>
-					</div>
-				</div>-->
-				<!--<div class="reply-container" v-if="replyShow" v-on:click="replyShow=false">
-					<div class="check-reply-container" style="background-color: white;" v-on:click.stop>
-						<p class="check-reply-title">批复内容</p>
-						<div class="textarea-container">
-							<p class="check-reply-hint">快速输入:<span v-for="(words,index) in keywords" v-on:click="replyContent=words+'；'" class="check-reply-keywords">{{words}}<span v-if="index<keywords.length-1" style="color: #333333;">、</span></span>
-							</p>
-							<textarea rows="3" v-model.trim="replyContent">
-						
-						</textarea>
-						</div>
-						<p style="text-align: center; margin-bottom: 0;"><button v-on:click.stop="replyLeave" class="mui-btn-primary dialog-btn">确定</button><button class="mui-btn dialog-btn" v-on:click.stop="replyShow=false">取消</button></p>
-					</div>
-				</div>-->
 			</template>
 		</div>
 		<script src="../js/mui.min.js"></script>
@@ -286,6 +253,45 @@
 		<script src="../js/utils/storageKeyName.js"></script>
 		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
+			var curPage = {};
+			mui.plusReady(function() {
+				curPage = utils.getDataFromUrl(window.location.href);
+				console.log('2222:' + JSON.stringify(curPage));
+				//				var curPage = {
+				//					"id": "17", //通知ID
+				//					"flag": 0//1我发送的，0发给我的
+				//				}
+			});
+			var tempVue = new Vue({
+				el: "#tempVue",
+				data: {
+					id: 0,
+					flag: curPage.flag, //0审核 1我发送的
+					status: 0
+				},
+				methods: {
+					revoke: function() {
+						var btnArray = ['取消', '确定'];
+						var closeId = this.id;
+						mui.confirm('确定撤销吗？', '提醒', btnArray, function(e) {
+							if(e.index == 1) {
+								var tempData = {
+									applyId: tempVue.id
+								}
+								setAffairApplyUndoPro(tempData, function function_name(data) {
+									if(data.RspCode == 0) {
+										checkDetailData.getDetail();
+									}
+								});
+							}
+						});
+
+					}
+				}
+			});
 			var checkDetailData = new Vue({
 				el: "#checkDetailData",
 				data: {
@@ -384,6 +390,10 @@
 						getAffairApplyByIdPro(tempData, function(data) {
 							$.hideLoading();
 							if(data.RspCode == 0) {
+								var localSkey = utils.getDataFromUrl(window.location.href);
+								tempVue.status = data.RspData.Status;
+								tempVue.id = localSkey.id;
+								tempVue.flag = parseInt(localSkey.flag);
 								console.log('data:' + JSON.stringify(data));
 								if(data.RspData.ApplyEncName) {
 									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName);
@@ -405,6 +415,10 @@
 							console.log("获取的审核详情：" + JSON.stringify(data));
 							$.hideLoading();
 							if(data.RspCode == 0) {
+								var localSkey = utils.getDataFromUrl(window.location.href);
+								tempVue.id = localSkey.id;
+								tempVue.flag = parseInt(localSkey.flag);
+								tempVue.status = data.RspData.Status;
 								if(data.RspData.ApplyEncName) {
 									data.RspData.ApplyEncName = com.getExtraFileNames(data.RspData.ApplyEncName)
 									data.RspData.ApplyEncAddr = com.getExtraFileNames(data.RspData.ApplyEncAddr)
