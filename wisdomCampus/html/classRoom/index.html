@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>课堂管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/classRoom/style.css">
+		<link rel="stylesheet" href="../../css/utils/pullToRefresh.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="ntitle" class="mui-title" style="color: white;">课堂管理</h1>
+			<a class="mui-icon  mui-pull-right" style="color: white;font-size: 16px; line-height: 26px;">统计</a>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll">
+						<a v-for="(item, key) in cls" :clsid="item.id" :index="key" :class="{'mui-control-item': true,  'mui-active': key==0}" href="javascript:;" v-text="item.name"></a>
+					</div>
+				</div>
+				<div class="mui-slider-group">
+					<div v-for="(item, key) in list" class="mui-slider-item mui-control-content " :class="{'mui-active': key == 0}">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+							    <div class="mui-row students">
+							        <div v-for="student in item" class="mui-col-sm-3 mui-col-xs-4">
+							        	<div class="inner" :data="JSON.stringify(student)">
+								            <img :src="student.imgurl" alt="" />
+								            <div class="text-cut name" v-text="student.name"></div>
+							            </div>
+							        </div>
+							        
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/classRoom/mui_extends.js"></script>
+		<script src="../../js/utils/mui.pullToRefresh.js"></script>
+		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src='../../js/utils/store.js'></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script>
+			var clsList = [
+					{id: 1, name: '101班'},
+					{id: 2, name: '102班'},
+					{id: 3, name: '103班'},
+					{id: 4, name: '104班'},
+					{id: 5, name: '105班'},
+					{id: 6, name: '106班'},
+					{id: 7, name: '107班'}
+				],
+				dataList = [
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '李四', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'},
+				{name: '张三', imgurl: '../../img/classRoom/hd.png'}
+				
+			],
+			classList = new Vue({
+				el: '#slider',
+				data: {
+					cls: [],
+					list: []
+				},
+				created: function(){
+					this.cls = clsList;
+					for( var i = 0; i < this.cls.length; i++ ){
+						this.list[i] = []; 
+					}
+					this.list.splice(0, 1 ,dataList);
+				},
+				methods: {
+					add: function(item){
+						console.log(999)
+						//utils.mOpenWithData("add.html", item);
+					}
+				} 
+			}),
+			curIndex = 0;
+			
+			mui.init();
+			mui.ready(function(){
+				
+				//滚动设置
+				var deceleration = mui.os.ios ? 0.003 : 0.0009;
+				mui('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration: deceleration
+				});
+				
+				//循环初始化所有下拉刷新，上拉加载。
+				mui.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+
+					var b = mui(pullRefreshEl).pullToRefresh({
+						down: {
+							callback: function() {
+								var self = this;
+								
+								mui.later( function(){
+									getStudents(curIndex);
+									b.endPullDownToRefresh();
+								}, 1000 )
+								
+								self.refresh(true);
+							}
+						}
+					});
+				});
+				
+			});
+			
+			function getStudents(index, isTap){
+				if( classList.$data.list[index].length == 0 ){
+					mui.showLoading('正在加载..', 'div');
+					mui.later(function(){
+						classList.$data.list.splice(index, 1, dataList);
+						Vue.nextTick(function(){
+							mui.hideLoading();
+							isTap && mui('.mui-slider').slider().gotoItem(index, 0);
+						});
+					}, 1000);
+				}
+				curIndex = index;
+			}
+			
+			mui('.mui-segmented-control').on('tap', 'a', function(event) {
+				
+				var clsid = this.getAttribute('clsid'),
+					index = this.getAttribute('index');
+				getStudents(index, true);
+			});
+			
+			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+				var i = event.detail.slideNumber;
+				getStudents(i);
+			});
+			
+			mui('.students').on('tap', '.inner', function(event) {
+				utils.mOpenWithData("add.html", JSON.parse( this.getAttribute('data') ));
+			});
+			 
+		</script>
+	</body>
+
+</html>

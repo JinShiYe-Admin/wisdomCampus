@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>课堂管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/classRoom/style.css">
+		<link rel="stylesheet" href="../../css/classRoom/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/classRoom/mui.poppicker.css">
+		<link rel="stylesheet" href="../../css/utils/pullToRefresh.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+		</style>
+	</head>
+
+	<body> 
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 id="ntitle" class="mui-title" style="color: white;"></h1>
+		</header>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div class="mui-scroll-wrapper add-page" id="add">
+					<div class="mui-scroll">
+					    <ul class="mui-table-view">
+					    	<li class="mui-table-view-cell">{{now}} 
+						       
+						        <span class="mui-badge" style="background-color: #fff; color: #63BBFF; font-size: 17px; padding:8px 0;">
+						        	<span id="selectClass" style="padding: 8px 0;">
+						        		<span id="selectedLession">第1节</span><span class="mui-icon mui-icon-arrowdown" style="font-size: 20px;"></span>
+						        	</span>
+						        	<span id="selectSubject" style="padding: 8px 0;">
+						        		<span id="selectedSubject">语文</span><span class="mui-icon mui-icon-arrowdown" style="font-size: 20px;"></span>
+						        	</span>
+						        </span>
+						    </li>
+						</ul> 
+						<div class="mui-row select-type" style="background-color: #fff;">
+					        <div class="mui-col-sm-3 mui-col-xs-3">
+					            <div class="mui-input-row mui-checkbox mui-left">
+								  <label>旷课</label>
+								  <input name="checkbox1" value="Item 1" type="checkbox">
+								</div>
+					        </div>
+					        <div class="mui-col-sm-3 mui-col-xs-3">
+					            <div class="mui-input-row mui-checkbox mui-left">
+								  <label>迟到</label>
+								  <input name="checkbox2" value="Item 2" type="checkbox">
+								</div> 
+					        </div>
+					        <div class="mui-col-sm-3 mui-col-xs-3">
+					            <div class="mui-input-row mui-checkbox mui-left">
+								  <label>早退</label>
+								  <input name="checkbox3" value="Item 3" type="checkbox">
+								</div> 
+					        </div>
+					        <div class="mui-col-sm-3 mui-col-xs-3">
+					            <div class="mui-input-row mui-checkbox mui-left">
+								  <label>请假</label>
+								  <input name="checkbox4" value="Item 4" type="checkbox">
+								</div> 
+					        </div>
+					        
+					        <textarea id="hcqk" class="form" rows="5" placeholder="表现/说明"></textarea>
+					    </div>
+					    <ul class="list">
+				            <li class='mui-table-view-cell mui-media'>
+				            		<div id="testimg" style="width: 150px; height: 150px; background-size:cover; background-position: center;">
+				            			<img id="headimg1" class="headimg" src='' height="100%"  width="100%">
+				            		</div>
+				                    
+				                    <img id="headimg2" class="headimg" src=''  height="150"  width="150">
+				                    <video id="video" style="width: 40%;" autoplay controls></video>
+				                <p><a  class="imageup 1">上传图片1</a> </p><!--
+				                <p><button onclick="upload();" class='button'> 提交</button></p>-->
+				            </li>
+					    </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/classRoom/mui.picker.min.js"></script>
+		<script src="../../js/classRoom/mui.poppicker.js"></script>
+		<script src="../../js/classRoom/mui_extends.js"></script>
+		<script src="../../js/utils/mui.pullToRefresh.js"></script>
+		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src='../../js/utils/store.js'></script>
+		<script src='../../js/utils/utils.js'></script>
+		<script src="../../js/vue.min.js"></script>
+
+		<script>
+			var add = new Vue({ 
+				el: '#add',
+				data: {
+					now: mui.getDate('yyyy-MM-dd w')
+				}
+			});
+			mui.init();
+			mui.ready(function(){
+				
+				//滚动设置
+				var deceleration = mui.os.ios ? 0.003 : 0.0009;
+				mui('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration: deceleration
+				});
+				
+				//循环初始化所有下拉刷新，上拉加载。
+				mui.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+
+					var b = mui(pullRefreshEl).pullToRefresh({
+						down: {
+							callback: function() {
+								var self = this;
+								
+								mui.later( function(){
+									b.endPullDownToRefresh();
+								}, 1000 )
+								
+								self.refresh(true);
+							}
+						}
+					});
+				}); 
+				
+				//修改标题
+				var student = utils.getDataFromUrl(window.location.href);
+				mui('#ntitle')[0].innerHTML = student ? student.name : '考勤';
+			});
+			
+			mui('.select-type').on('change', 'input[type=checkbox]', function(event) {
+				var othis = this;
+				mui('.select-type input[type=checkbox]').each(function(){
+					if( this !== othis ){
+						this.checked = false;
+					}
+				});
+			});
+			
+			//选择节次
+			var userPicker = new mui.PopPicker();
+			userPicker.setData([{
+				value: '1',
+				text: '第1节 语文',
+				subject: '语文'
+			}, {
+				value: '2',
+				text: '第2节 数学',
+				subject: '数学'
+			}, {
+				value: '3',
+				text: '第3节 英语',
+				subject: '英语'
+			}, {
+				value: '4',
+				text: '第4节 物理',
+				subject: '物理'
+			}, {
+				value: '5',
+				text: '第5节 化学',
+				subject: '化学'
+			}, {
+				value: '6',
+				text: '第6节 生物',
+				subject: '生物'
+			}, {
+				value: '7',
+				text: '第7节 政治',
+				subject: '政治'
+			}]);
+			var showUserPickerButton = document.getElementById('selectClass');
+			var selectedLession = document.getElementById('selectedLession');
+			var selectedSubject = document.getElementById('selectedSubject');
+			showUserPickerButton.addEventListener('tap', function(event) {
+				userPicker.show(function(items) {
+					selectedLession.innerText = '第'+items[0].value+'节';
+					selectedSubject.innerText = items[0].subject;
+				});
+			}, false);
+			
+			//自定义科目
+			document.getElementById("selectedSubject").addEventListener('tap', function(e) {
+				e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
+				var btnArray = ['取消', '确定'];
+				mui.prompt('比如代课：英语(代)', '', '自定义课程名称', btnArray, function(e) {
+					if (e.index == 1 && !/\s+| /.test(e.value) && e.value != '' ) {
+						selectedSubject.innerText = e.value;
+					}
+				})
+			});
+			
+			//textarea阻止冒泡
+			window.addEventListener('touchmove', function(e) {
+	            var target = e.target;
+	            if (target && target.tagName.toLowerCase() === 'textarea') {
+	                e.stopPropagation();
+	            }
+	            
+       	 	}, true);
+            
+     		//扩展API完成后执行的操作
+            function plusReady(){               
+             //给选中的li增加判别class
+                mui(".list li").on("tap",".imageup",function(){
+       
+                //var $li = $(this).parents("li");
+                 console.log(this)                
+                //$li.addClass("selectLi");
+               // $li.siblings().removeClass("selectLi");              
+                 page.imgUp();
+                });
+            } 
+             
+            //弹出系统按钮选择框
+            var page=null; 
+            page={ 
+                imgUp:function(){ 
+                    var m=this; 
+                   /* console.log(m);*/
+                    plus.nativeUI.actionSheet({cancel:"取消",buttons:[ 
+                        {title:"拍照"}, 
+                        {title:"相册"},
+                        {title:"录像"} 
+                    ]}, function(e){//1 是拍照  2 从相册中选择 
+                        switch(e.index){ 
+                            case 1:appendByCamera();break; 
+                            case 2:appendByGallery();break; 
+                            case 3:appendByVideo();break;
+                        } 
+                    }); 
+                } 
+            } 
+               
+            // 拍照添加文件
+            function appendByCamera(){
+                plus.camera.getCamera().captureImage(function(e){
+                    console.log("e is" +  e);
+                    plus.io.resolveLocalFileSystemURL(e, function(entry) {
+                        var path = entry.toLocalURL();
+                        var indexa = 0
+                        console.log(path);
+                        mui(".headimg")[indexa].src = path;                
+                    }, function(e) {
+                        mui.toast("读取拍照文件错误：" + e.message);
+                    });
+     
+                });   
+            }
+            mui.previewImage();
+            // 从相册添加文件
+            function appendByGallery(){
+				console.log('从相册中选择多张图片：');
+			    plus.gallery.pick(function(e){
+			    	for(var i in e.files){
+				    	var index = Number(i) + 1;
+				    	mui('#testimg')[0].style.backgroundImage = 'url('+e.files[i]+')';
+				    	//mui("#headimg"+index)[0].src = e.files[i]; 
+				    	mui("#headimg"+index)[0].setAttribute('data-preview-src', e.files[i]);
+				    	mui("#headimg"+index)[009
+].setAttribute('data-preview-group', 1);
+				    	
+			    	}
+			    }, function(e){
+			    	console.log('取消选择图片');
+			    },{filter:'none',multiple:true});
+            }
+            
+            // 获取摄像头功能
+            function appendByVideo(){ 
+            	// 获取摄像头目录对象
+            	
+				//outSet('开始录像：');
+				var cmr = plus.camera.getCamera();
+				cmr.startVideoCapture(function(p){
+					console.log('成功：'+p);
+					plus.io.resolveLocalFileSystemURL(p, function(entry){
+						var path = entry.toLocalURL();
+						mui('#video')[0].src=path;
+						mui('#video')[0].play();
+					}, function(e){
+						console.log('读取录像文件错误：'+e.message);
+					} );
+				}, function(e){
+					console.log('失败：'+e.message);
+				}, {filename:'_doc/camera/',index:0});
+            }
+            
+            
+               
+            //服务端接口路径
+            var server = "http://www.test.cn/aaa.php";
+            //获取图片元素
+            var files = document.getElementById('headimg');
+            // 上传文件
+            function upload(){
+                var wt=plus.nativeUI.showWaiting();
+                var task=plus.uploader.createUpload(server,
+                    {method:"POST"},
+                    function(t,status){ //上传完成
+                        if(status==200){
+                            alert("上传成功："+t.responseText);
+                            wt.close(); //关闭等待提示按钮
+                        }else{
+                            alert("上传失败："+status);
+                            wt.close();//关闭等待提示按钮
+                        }
+                    }
+                );  
+                //添加其他参数
+                task.addData("name","test");
+                task.addFile(files.src,{key:"dddd"});
+                task.start();
+            } 
+             
+        
+              
+             //判断点击的是上传的第几个li             
+             function liIndex(){
+                var lis = mui(".list").children();
+                console.log(lis.length)
+                for(var i = 0; i < lis.length;i++){ 
+                    console.log($(lis[i]).attr("class"))
+                    var lisClass = $(lis[i]).attr("class").split(" ");
+                    if(lisClass[2] == "selectLi"){
+                        console.log(i);
+                        return i;
+                    }
+                }
+             }
+             
+             
+          //扩展API是否准备好，如果没有准备好则监听plusReady 
+         if(window.plus){
+                plusReady();
+            }else{
+                document.addEventListener("plusready",plusReady,false);
+            }
+            
+            
+		</script>
+	</body>
+
+</html>
