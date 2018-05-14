@@ -306,16 +306,12 @@
 							readcolor = '#c9c9c9';
 						} else if(noticep == "新建/撤销") {
 							noticep = '新建';
-//							noYes = '<button class="del mui-pull-right" guid=' + li.id + ' style="color:rgb(60,155,254);border-color:rgb(60,155,254);border-width:1px;height:25px;line-height:10px">撤销</button>'
-
 							readcolor = '#68bc31';
 						} else {
 							readcolor = '#68bc31';
 						}
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' +
-							readcolor + ';">[' +
-							noticep + ']</span>' + model.NoticeTitle + noYes +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;">' + model.NoticeTitle + noYes +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
 							model.SendManName + model.SendTime +
@@ -347,8 +343,7 @@
 							readcolor = '#c9c9c9';
 						}
 						li.innerHTML = '<div>' +
-							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><span style="color:' + readcolor + ';">[' +
-							Progress + ']</span>' + model.ApplyTitle + noYes +
+							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;">' + model.ApplyTitle + noYes +
 							'</p>' +
 							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
 							myName + model.CreateTime +

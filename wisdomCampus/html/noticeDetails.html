@@ -149,6 +149,9 @@
 								<div class="chat_content_left" v-if="replyModel.ReplyContent.length>0">
 									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">{{replyModel.ReplyContent}}</p>
 								</div>
+								<div class="" v-else-if="replyModel.IsRead==1">
+									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">【已读】</p>
+								</div>
 								</span>
 							</a>
 						</div>

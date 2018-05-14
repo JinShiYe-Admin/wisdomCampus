@@ -136,7 +136,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
+		<!--<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
 					<img class="head-portrait" src="../img/login/headImg.png" />
@@ -152,7 +152,7 @@
 					退出登录
 				</a>
 			</div>
-		</div>
+		</div>-->
 		<script type="text/javascript" src="../js/mui.min.js"></script>
 		<script type="text/javascript" src="../js/utils/utils.js"></script>
 		<script type="text/javascript" src="../js/utils/storageutil.js"></script>
@@ -180,6 +180,23 @@
 			});
 			mui.init({
 				statusBarBackground: '#63BBFF'
+			});
+			mui.plusReady(function() {
+				//安卓的连续点击两次退出程序
+				var backButtonPress = 0;
+				//重写返回键
+				mui.back = function(event) {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
 			});
 			var titles = ["", "", ""]
 			//加黑条
