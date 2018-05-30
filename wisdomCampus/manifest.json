@@ -198,7 +198,7 @@
                     "xxhdpi": "/Users/a111/Downloads/智慧校园启动页/1080 1882.png"/*1080P高分屏启动图片，分辨率：1080x1882*/
                 }
             }
-        },"ads":{"rp":false,"splash":false,"push":false},"adid":""
+        },"ads":{"rp":false,"splash":false,"push":false}
     },
 	"dependencies": {
 		"pages": {
@@ -497,5 +497,6 @@
 				"js/demoCssJs/city-data.js.bak"
 			]
 		}
-	}
+	},
+	"unpackage":[]
 }

@@ -136,7 +136,7 @@
 				</div>
 			</div>
 		</div>
-		<!--<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
+		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
 					<img class="head-portrait" src="../img/login/headImg.png" />
@@ -152,7 +152,7 @@
 					退出登录
 				</a>
 			</div>
-		</div>-->
+		</div>
 		<script type="text/javascript" src="../js/mui.min.js"></script>
 		<script type="text/javascript" src="../js/utils/utils.js"></script>
 		<script type="text/javascript" src="../js/utils/storageutil.js"></script>
@@ -178,9 +178,41 @@
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
 			});
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.init({
 				statusBarBackground: '#63BBFF'
 			});
+			document.addEventListener("plusready", function() {
+				message = document.getElementById("message");
+				// 监听点击消息事件
+				plus.push.addEventListener("click", function(msg) {
+					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+//					utils.setBadgeNumber(2, 0);
+					//获取未读数
+					getNoReadCnt();
+					// 判断是从本地创建还是离线推送的消息 
+					switch(msg.payload) {
+						case "LocalMSG":
+							//						outSet("点击本地创建消息启动：");
+							break;
+						default:
+							//						outSet("点击离线推送消息启动：");
+							break;
+					}
+				}, false);
+				// 监听在线消息事件
+				plus.push.addEventListener("receive", function(msg) { 
+					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+//					utils.setBadgeNumber(2, 0);
+					//获取未读数
+					getNoReadCnt();
+					if(msg.aps) { // Apple APNS message
+						//					outSet("接收到在线APNS消息：");
+					} else {
+						//					outSet("接收到在线透传消息：");
+					}
+				}, false);
+			}, false);
 			mui.plusReady(function() {
 				//安卓的连续点击两次退出程序
 				var backButtonPress = 0;
@@ -197,6 +229,8 @@
 					}, 1000);
 					return false;
 				};
+				//获取未读数
+				getNoReadCnt();
 			});
 			var titles = ["", "", ""]
 			//加黑条
@@ -208,38 +242,6 @@
 			//轮播开始
 			slider.slider({
 				interval: 5000
-			});
-			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			var tempData = {
-				schoolId: storageKeyName.SCHOOLID, //学校ID
-				receiveManId: personal.utid
-			}
-			getNoReadCntByManPro(tempData, function function_name(data) {
-				console.log(JSON.stringify(data))
-				$.hideLoading();
-				if(data.RspCode == 0) {
-					var noRead = document.getElementById("noRead_1");
-					noRead.innerHTML = data.RspData.NoReadCnt;
-					if(data.RspData.NoReadCnt != 0) {
-						noRead.className = "mui-badge"
-					}
-				}
-			});
-
-			tempData = {
-				schoolId: storageKeyName.SCHOOLID, //学校ID
-				approveManId: personal.utid
-			}
-			getNoApproveCntByManPro(tempData, function function_name(data) {
-				console.log(JSON.stringify(data))
-				$.hideLoading();
-				if(data.RspCode == 0) {
-					var noRead = document.getElementById("noRead_2");
-					noRead.innerHTML = data.RspData.NoApproveCnt;
-					if(data.RspData.NoReadCnt != 0) {
-						noRead.className = "mui-badge"
-					}
-				}
 			});
 
 			mui(".mui-table-view").on('tap', 'a', function() {
@@ -343,6 +345,16 @@
 				}
 			})
 			window.addEventListener('updateNoRead', function(data) {
+				console.log('执行updateNoRead回调');
+				//获取未读数
+				getNoReadCnt();
+			});
+
+			//获取未读数
+			var getNoReadCnt = function() {
+				console.log('updateNoRead0000000000000000');
+				var tempCount = 0;
+				var tempFlag = 0;
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
@@ -353,6 +365,14 @@
 					if(data.RspCode == 0) {
 						var noRead = document.getElementById("noRead_1");
 						noRead.innerHTML = data.RspData.NoReadCnt;
+						tempFlag++;
+						if(tempFlag == 2) {
+							tempCount = data.RspData.NoReadCnt + tempCount;
+							//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+							utils.setBadgeNumber(0, tempCount);
+						} else {
+							tempCount = data.RspData.NoReadCnt;
+						}
 						if(data.RspData.NoReadCnt != 0) {
 							noRead.className = "mui-badge"
 						}
@@ -368,13 +388,22 @@
 					if(data.RspCode == 0) {
 						var noRead = document.getElementById("noRead_2");
 						noRead.innerHTML = data.RspData.NoApproveCnt;
+						tempFlag++;
+						if(tempFlag == 2) {
+							tempCount = data.RspData.NoApproveCnt + tempCount;
+							//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+							utils.setBadgeNumber(0, tempCount);
+						} else {
+							tempCount = data.RspData.NoApproveCnt;
+						}
+
 						if(data.RspData.NoReadCnt != 0) {
 							noRead.className = "mui-badge"
 						}
 					}
 				});
 
-			});
+			}
 		</script>
 	</body>
 

@@ -226,7 +226,73 @@ var jQAjaxPost = function(url, data, callback) {
 		}
 	});
 }
+var tempPro = function(url,data0, callback) {
+	console.log('data0:' + JSON.stringify(data0));
+	var xhr = new XMLHttpRequest();
+		xhr.open("post", url, true);
+		xhr.timeout = 30000; //10秒超时
+		xhr.contentType = 'application/json;';
+		xhr.onload = function(e) {
+			console.log("XHRP:onload:", JSON.stringify(e));
+			console.log('this.readyState:', this.readyState);
+			console.log('this.status', this.status);
+			if(this.readyState === 4 && this.status === 200) {
+				var urlArr = url.split('/');
+				var success_data = JSON.parse(this.responseText);
+				console.log('XHRP-Success:', JSON.stringify(success_data));
+				if(success_data.RspCode == 0013) {
+					callback({
+						RspCode: 404,
+						RspData: null,
+						RspTxt: "用户没有登录或超时,关闭当前页,重新从企业管理端登录."
+					});
+				} else {
+					callback(success_data);
+				}
+			} else {
+				callback({
+					RspCode: 404,
+					RspData: null,
+					RspTxt: "网络连接失败,请重新尝试一下"
+				});
+			}
+		}
+		xhr.ontimeout = function(e) {
+			console.log("XHRP:ontimeout222:", e);
+			callback({
+				RspCode: 404,
+				RspData: null,
+				RspTxt: "网络连接失败,请重新尝试一下"
+			});
+		};
+		xhr.onerror = function(e) {
+			console.log("XHRP:onerror111:", e);
+			callback({
+				RspCode: 404,
+				RspData: null,
+				RspTxt: "网络连接失败,请重新尝试一下"
+			});
+		};
+		xhr.send(JSON.stringify(data0));
+}
+//1.绑定
+var bindPro = function(data0, callback) {
+	var url = 'http://jbyj.jiaobaowang.net/GeTuiPushServer/bind';
+	tempPro(url,data0, callback);
+//	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'schoolNotice/';
+//	data0 = extendParameter(data0);
+//	xhrPost('http://jbyj.jiaobaowang.net/GeTuiPushServer/bind', data0, callback);
 
+}
+
+//1.解绑
+var unbindPro = function(data0, callback) {
+//	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'schoolNotice/';
+//	data0 = extendParameter(data0);
+//	xhrPost('http://jbyj.jiaobaowang.net/GeTuiPushServer/unbind', data0, callback);
+	var url = 'http://jbyj.jiaobaowang.net/GeTuiPushServer/unbind';
+	tempPro(url,data0, callback);
+}
 //智慧校园协议
 
 //合并参数

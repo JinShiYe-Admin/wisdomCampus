@@ -311,7 +311,8 @@
 							}
 							//9.阅读通知公告
 							setNoticeReadPro(tempData1, function function_name(data) {
-
+								//触发前往页面的自定义事件,从而进行数据刷新
+								mui.fire(plus.webview.currentWebview().opener(), 'updateNoRead00');
 							});
 						}
 					} else {
@@ -350,7 +351,8 @@
 							}
 							//9.阅读通知公告
 							setNoticeReadPro(tempData1, function function_name(data) {
-
+								//触发前往页面的自定义事件,从而进行数据刷新
+								mui.fire(plus.webview.currentWebview().opener(), 'updateNoRead00');
 							});
 						}
 					} else {

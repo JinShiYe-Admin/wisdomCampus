@@ -12,6 +12,29 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
 
 //公共方法
 var utils = (function(mod) {
+	//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+	mod.setBadgeNumber = function(flag, count) {
+		console.log('setBadgeNumber:'+flag+',count:'+count);
+		if(flag == 0) {
+			store.set(window.storageKeyName.BADGENUMBER, count);
+			plus.runtime.setBadgeNumber(count);
+		} else if(flag == 1) {
+			var badgeNumber = store.get(window.storageKeyName.BADGENUMBER);
+			badgeNumber--;
+			if(badgeNumber >= 0) {
+
+			} else {
+				badgeNumber = 0;
+			}
+			store.set(window.storageKeyName.BADGENUMBER, badgeNumber);
+			plus.runtime.setBadgeNumber(badgeNumber);
+		} else if(flag == 2) {
+			var badgeNumber = store.get(window.storageKeyName.BADGENUMBER);
+			badgeNumber++;
+			store.set(window.storageKeyName.BADGENUMBER, badgeNumber);
+			plus.runtime.setBadgeNumber(badgeNumber);
+		}
+	}
 
 	mod.getUUID = function() {
 		var s = [];

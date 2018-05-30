@@ -261,6 +261,9 @@
 					return true;
 				}
 			});
+			window.addEventListener('updateNoRead00', function(data) {
+				mui.fire(plus.webview.currentWebview().opener(), 'updateNoRead');
+			});
 			var title_id = utils.getDataFromUrl(window.location.href);
 			var title = 'receive0';
 			console.log(title_id);

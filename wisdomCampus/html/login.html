@@ -66,34 +66,6 @@
 			}
 			setUUID();
 		});
-		document.addEventListener("plusready", function() {
-			message = document.getElementById("message");
-			// 监听点击消息事件
-			plus.push.addEventListener("click", function(msg) {
-				// 判断是从本地创建还是离线推送的消息
-				switch(msg.payload) {
-					case "LocalMSG":
-						outSet("点击本地创建消息启动：");
-						break;
-					default:
-						outSet("点击离线推送消息启动：");
-						break;
-				}
-				// 提示点击的内容
-				plus.ui.alert(msg.content);
-				// 处理其它数据
-				logoutPushMsg(msg);
-			}, false);
-			// 监听在线消息事件
-			plus.push.addEventListener("receive", function(msg) {
-				if(msg.aps) { // Apple APNS message
-					outSet("接收到在线APNS消息：");
-				} else {
-					outSet("接收到在线透传消息：");
-				}
-				logoutPushMsg(msg);
-			}, false);
-		}, false);
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
@@ -153,6 +125,7 @@
 									}
 
 									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
+									bindInfo();
 									utils.hrefSessionStorage('home.html', {});
 								} else {
 									mui.toast(data1.RspTxt);
@@ -175,15 +148,16 @@
 		var setUUID = function(tempStr) {
 			//			var tempModel0 = $.parseJSON(tempStr);
 			store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
-			console.log('tempStr:' + tempStr);
+//			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			document.getElementById("account").value = personal.uid;
-			document.getElementById("password").value = '111111';
+			
 			//			console.log('personal:' + JSON.parse(personal));
 			if(personal.utid == 'undefined' || personal.utid == null) {
 
 			} else {
+				document.getElementById("account").value = personal.uid;
+			document.getElementById("password").value = '111111';
 				//需要参数
 				var comData = {
 					uuid: tempModel.uuid,
@@ -201,12 +175,30 @@
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
+						bindInfo();
 						utils.hrefSessionStorage('home.html', {});
 					} else {
 						mui.toast(data.RspTxt);
 					}
 				});
 			}
+		}
+		var bindInfo = function(){
+			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+			var info = plus.push.getClientInfo();
+							var tempBindData = {
+								appId: info.appid,
+								alias: tempInfo00.utid,
+								cid: info.clientid
+							}
+							bindPro(tempBindData, function function_name(data) {
+								//									events.closeWaiting();
+								if(data.RspCode == 0) {
+//									utils.hrefSessionStorage('home.html', {});
+								} else {
+									bindInfo();
+								}
+							});
 		}
 
 		//判断是否输入了值
