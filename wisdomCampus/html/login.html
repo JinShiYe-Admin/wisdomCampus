@@ -123,9 +123,7 @@
 									if(data1.RspData.urolestr == null) {
 										data1.RspData.urolestr = '00000000000000000000000000000';
 									}
-
 									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
-									bindInfo();
 									utils.hrefSessionStorage('home.html', {});
 								} else {
 									mui.toast(data1.RspTxt);
@@ -175,7 +173,7 @@
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-						bindInfo();
+						
 						utils.hrefSessionStorage('home.html', {});
 					} else {
 						mui.toast(data.RspTxt);
@@ -183,23 +181,7 @@
 				});
 			}
 		}
-		var bindInfo = function(){
-			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-			var info = plus.push.getClientInfo();
-							var tempBindData = {
-								appId: info.appid,
-								alias: tempInfo00.utid,
-								cid: info.clientid
-							}
-							bindPro(tempBindData, function function_name(data) {
-								//									events.closeWaiting();
-								if(data.RspCode == 0) {
-//									utils.hrefSessionStorage('home.html', {});
-								} else {
-									bindInfo();
-								}
-							});
-		}
+		
 
 		//判断是否输入了值
 		var checkInput = function(text) {

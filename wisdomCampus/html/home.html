@@ -187,9 +187,10 @@
 				// 监听点击消息事件
 				plus.push.addEventListener("click", function(msg) {
 					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
-//					utils.setBadgeNumber(2, 0);
+					//					utils.setBadgeNumber(2, 0);
 					//获取未读数
 					getNoReadCnt();
+					plus.device.vibrate(500);
 					// 判断是从本地创建还是离线推送的消息 
 					switch(msg.payload) {
 						case "LocalMSG":
@@ -201,11 +202,12 @@
 					}
 				}, false);
 				// 监听在线消息事件
-				plus.push.addEventListener("receive", function(msg) { 
+				plus.push.addEventListener("receive", function(msg) {
 					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
-//					utils.setBadgeNumber(2, 0);
+					//					utils.setBadgeNumber(2, 0);
 					//获取未读数
 					getNoReadCnt();
+					plus.device.vibrate(500);
 					if(msg.aps) { // Apple APNS message
 						//					outSet("接收到在线APNS消息：");
 					} else {
@@ -231,7 +233,28 @@
 				};
 				//获取未读数
 				getNoReadCnt();
+				//推送绑定
+				bindInfo();
 			});
+
+			//推送绑定
+			var bindInfo = function() {
+				var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+				var info = plus.push.getClientInfo();
+				var tempBindData = {
+					appId: info.appid,
+					alias: tempInfo00.utid,
+					cid: info.clientid
+				}
+				bindPro(tempBindData, function function_name(data) {
+					//									events.closeWaiting();
+					if(data.RspCode == 0) {
+						//									utils.hrefSessionStorage('home.html', {});
+					} else {
+//						bindInfo();
+					}
+				});
+			}
 			var titles = ["", "", ""]
 			//加黑条
 			addStrip(getImgArray())
@@ -261,12 +284,11 @@
 
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
-					if(id == 0) {
-						utils.mOpenWithData("ReadQRCode.html", id)
+					if(id == 6) {
+						utils.mOpenWithData("signIn/signInIndex.html", id);
 					} else {
 						mui.toast("此功能暂未开放");
 					}
-
 				}
 			});
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);
@@ -327,7 +349,21 @@
 				},
 				methods: {
 					quitLogin: function() { //退出登录
+						//获取个人信息
+						var personal = store.get(window.storageKeyName.PERSONALINFO);
+						//解绑个推
+						var info = plus.push.getClientInfo();
+						var tempBindData = {
+							appId: info.appid,
+							alias: personal.utid,
+							cid: info.clientid
+						}
+						unbindPro(tempBindData, function function_name(data) {
+							if(data.RspCode == 0) {} else {}
+						});
 						store.remove(window.storageKeyName.PERSONALINFO);
+						//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
+						utils.setBadgeNumber(0, 0);
 						//将个人信息存入原生app
 						if(utils.getSystem() == 'Android') {
 

@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#map {
+				width: 100%;
+				position: fixed;
+				top: 45px;
+				bottom: 0px;
+				line-height: 200px;
+				text-align: center;
+				background: #FFFFFF;
+			}
+			
+			.mui-title {
+				color: white;
+			}
+			.right-position{
+				color: white;
+				font-size: 15px;
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新建审批</h1>
+			<a id="position111" class="mui-pull-right right-position">重新定位</a>
+		</header>
+		<div id="map">地图加载中...</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			//			var ws = plus.webview.currentWebview();
+			//			var wm = plus.webview.getWebviewById(plus.runtime.appid);
+			//			wm && wm.evalJS("preateClear()");
+			//			clicked('maps_map.html', false, true);
+
+			var ws = null,
+				wo = null;
+			var em = null,
+				map = null,
+				pcenter = null;
+			// H5 plus事件处理
+			function plusReady() {
+				if(!em || ws) {
+					return
+				};
+				// 获取窗口对象
+				ws = plus.webview.currentWebview();
+				wo = ws.opener();
+				//高德地图坐标为(116.3974357341,39.9085574220), 百度地图坐标为(116.3975,39.9074)
+				pcenter = new plus.maps.Point(116.3975, 39.9074);
+				setTimeout(function() {
+					map = new plus.maps.Map("map");
+					map.centerAndZoom(pcenter, 12);
+					createMarker();
+					// 创建子窗口
+//					createSubview();
+				}, 300);
+				// 显示页面并关闭等待框
+				ws.show("pop-in");
+//				userLocation();
+			}
+			if(window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener("plusready", plusReady, false);
+			}
+			// DOMContentloaded事件处理
+			document.addEventListener("DOMContentLoaded", function() {
+				em = document.getElementById("map");
+				window.plus && plusReady();
+			}, false);
+
+			document.getElementById('position111').addEventListener('tap',function () {
+			        map.showUserLocation(true);
+				map.getUserLocation(function(state, pos) {
+					if(0 == state) {
+						map.setCenter(pos);
+					}
+				});
+			})
+			function userLocation() {
+				map.showUserLocation(true);
+				map.getUserLocation(function(state, pos) {
+					if(0 == state) {
+						map.setCenter(pos);
+					}
+				});
+			}
+
+			function createMarker() {
+				//高德地图坐标为(116.3406445236,39.9630878208), 百度地图坐标为(116.347292,39.968716
+				var marker = new plus.maps.Marker(new plus.maps.Point(116.347292, 39.968716));
+//				marker.setIcon("");
+				marker.setLabel("位置");
+				var bubble = new plus.maps.Bubble("打造最好的HTML5移动开发工具");
+				marker.setBubble(bubble);
+				map.addOverlay(marker);
+			}
+
+			function createSubview() {
+				// 创建加载内容窗口
+				var topoffset = '44px';
+//				if(plus.navigator.isImmersedStatusbar()) { // 兼容immersed状态栏模式
+//					topoffset = (Math.round(plus.navigator.getStatusbarHeight()) + 44) + 'px';
+//				}
+				var wsub = plus.webview.create('maps_map_sub.html', 'sub', {
+					top: topoffset,
+					height: '60px',
+					position: 'absolute',
+					scrollIndicator: 'none',
+					background: 'transparent'
+				});
+				ws.append(wsub);
+			}
+
+			function resetMap() {
+				//map.centerAndZoom(pcenter,12);
+				map.reset();
+			}
+		</script>
+	</body>
+
+</html>

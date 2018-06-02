@@ -1,66 +1,66 @@
 {
-	"html/home.html": {
-		"refer": [
-			"html/all.html",
-			"html/login.html",
-			"html/all-list.html"
-		],
-		"resources": [
-			"html/all.html"
-		]
-	},
-	"html/all.html": {
-		"refer": [
-			"html/home.html",
-			"html/new_message.html",
-			"html/new-check.html",
-			"html/noticeDetails.html",
-			"html/check-detail.html"
-		],
-		"resources": [
-			"img/firstPage/loading.gif"
-		]
-	},
-	"html/new_message.html": {
-		"refer": [
-			"html/all.html",
-			"html/selectPeople.html"
-		],
-		"resources": []
-	},
-	"html/login.html": {
-		"refer": [
-			"html/home.html"
-		]
-	},
-	"html/new-check.html": {
-		"refer": [
-			"html/all.html",
-			"html/selectPeople.html"
-		]
-	},
-	"html/noticeDetails.html": {
-		"refer": [
-			"html/all.html"
-		]
-	},
-	"html/check-detail.html": {
-		"refer": [
-			"html/all.html"
-		]
-	},
-	"html/selectPeople.html": {
-		"refer": [
-			"html/new_message.html",
-			"html/new-check.html"
-		]
-	},
-	"html/all-list.html": {
-		"refer": [
-			"html/new_message.html",
-			"html/new-check.html",
-			"html/check-detail.html",
-			"html/noticeDetails.html"
-		]
-	}
+  "html/home.html": {
+    "refer": [
+      "html/all.html",
+      "html/login.html",
+      "html/all-list.html"
+    ],
+    "resources": [
+      "html/all.html"
+    ]
+  },
+  "html/all.html": {
+    "refer": [
+      "html/home.html",
+      "html/new_message.html",
+      "html/new-check.html",
+      "html/noticeDetails.html",
+      "html/check-detail.html"
+    ],
+    "resources": [
+      "img/firstPage/loading.gif"
+    ]
+  },
+  "html/new_message.html": {
+    "refer": [
+      "html/all.html",
+      "html/selectPeople.html"
+    ],
+    "resources": []
+  },
+  "html/login.html": {
+    "refer": [
+      "html/home.html"
+    ]
+  },
+  "html/new-check.html": {
+    "refer": [
+      "html/all.html",
+      "html/selectPeople.html"
+    ]
+  },
+  "html/noticeDetails.html": {
+    "refer": [
+      "html/all.html"
+    ]
+  },
+  "html/check-detail.html": {
+    "refer": [
+      "html/all.html"
+    ]
+  },
+  "html/selectPeople.html": {
+    "refer": [
+      "html/new_message.html",
+      "html/new-check.html"
+    ]
+  },
+  "html/all-list.html": {
+    "refer": [
+      "html/new_message.html",
+      "html/new-check.html",
+      "html/check-detail.html",
+      "html/noticeDetails.html"
+    ]
+  }
 }
