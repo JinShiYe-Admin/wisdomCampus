@@ -223,6 +223,9 @@
 									if(data.RspCode == 0) {
 										//获取当前人员信息
 										getDetailFunction();
+									}else{
+										$.toast(data.RspTxt);
+										tempVue.status = 0;
 									}
 								});
 							}

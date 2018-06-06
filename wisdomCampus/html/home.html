@@ -251,7 +251,7 @@
 					if(data.RspCode == 0) {
 						//									utils.hrefSessionStorage('home.html', {});
 					} else {
-//						bindInfo();
+						//						bindInfo();
 					}
 				});
 			}
@@ -270,16 +270,20 @@
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id
 				if(id == 1 || id == 2) {
-
-					//检查是否有权限
-					if(checkPermission()) {
-						console.log('1111');
-						mui.toast("无此权限");
+					var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+					if(tempInfo00.appxxtservstat == 1) {
+						//检查是否有权限
+						if(checkPermission()) {
+							console.log('1111');
+							mui.toast("无此权限");
+						} else {
+							console.log('22222');
+							var noRead = document.getElementById("noRead_" + id);
+							noRead.className = "mui-badge mui-hidden"
+							utils.mOpenWithData("all-list.html", id)
+						}
 					} else {
-						console.log('22222');
-						var noRead = document.getElementById("noRead_" + id);
-						noRead.className = "mui-badge mui-hidden"
-						utils.mOpenWithData("all-list.html", id)
+						mui.toast("此功能被关闭");
 					}
 
 					//					utils.hrefSessionStorage("all.html", id);
@@ -401,6 +405,11 @@
 					if(data.RspCode == 0) {
 						var noRead = document.getElementById("noRead_1");
 						noRead.innerHTML = data.RspData.NoReadCnt;
+						if(data.RspData.NoReadCnt == 0) {
+							noRead.style = 'display:none';
+						} else {
+							noRead.style = 'display:';
+						}
 						tempFlag++;
 						if(tempFlag == 2) {
 							tempCount = data.RspData.NoReadCnt + tempCount;
@@ -410,7 +419,7 @@
 							tempCount = data.RspData.NoReadCnt;
 						}
 						if(data.RspData.NoReadCnt != 0) {
-							noRead.className = "mui-badge"
+							noRead.className = "mui-badge";
 						}
 					}
 				});
@@ -424,6 +433,11 @@
 					if(data.RspCode == 0) {
 						var noRead = document.getElementById("noRead_2");
 						noRead.innerHTML = data.RspData.NoApproveCnt;
+						if(data.RspData.NoApproveCnt == 0) {
+							noRead.style = 'display:none';
+						} else {
+							noRead.style = 'display:';
+						}
 						tempFlag++;
 						if(tempFlag == 2) {
 							tempCount = data.RspData.NoApproveCnt + tempCount;
