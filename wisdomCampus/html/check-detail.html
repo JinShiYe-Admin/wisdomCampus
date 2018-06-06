@@ -224,7 +224,8 @@
 							<a class="" style="font-size: 13px;color: #666;">
 								{{check.ApproveManName}} {{check.ApproveTime}}
 								<div class="chat_content_left" v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
-									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">{{check.ApproveContent}}</p>
+									<p v-if="check.ApproveStatus==2" style="color: red;font-size: 12px; white-space:pre-wrap;">{{check.ApproveContent}}</p>
+									<p v-else="" style="color: #666;font-size: 12px; white-space:pre-wrap;">{{check.ApproveContent}}</p>
 								</div>
 								</span>
 							</a>
@@ -284,6 +285,9 @@
 								setAffairApplyUndoPro(tempData, function function_name(data) {
 									if(data.RspCode == 0) {
 										checkDetailData.getDetail();
+									}else{
+										$.toast(data.RspTxt);
+										tempVue.status = 0;
 									}
 								});
 							}

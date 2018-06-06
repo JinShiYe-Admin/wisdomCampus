@@ -74,6 +74,18 @@
 			//判断输入是否符合要求
 			if(checkInput(tempName)) {
 				if(checkInput(tempPW)) {
+					loginPro(tempName,tempPW);
+				} else {
+
+				}
+			} else {
+
+			}
+		});
+		
+		//登录协议
+		var loginPro = function(tempName,tempPW){
+			
 					//握手
 					var enData0 = {};
 					//不需要加密的数据
@@ -123,6 +135,8 @@
 									if(data1.RspData.urolestr == null) {
 										data1.RspData.urolestr = '00000000000000000000000000000';
 									}
+									data1.RspData.userName0 = tempName;
+									data1.RspData.passWord0 = tempPW;
 									store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 									utils.hrefSessionStorage('home.html', {});
 								} else {
@@ -134,13 +148,8 @@
 							mui.toast(data.RspTxt);
 						}
 					});
-				} else {
-
-				}
-			} else {
-
-			}
-		});
+				
+		}
 
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
@@ -154,31 +163,35 @@
 			if(personal.utid == 'undefined' || personal.utid == null) {
 
 			} else {
-				document.getElementById("account").value = personal.uid;
-			document.getElementById("password").value = '111111';
-				//需要参数
-				var comData = {
-					uuid: tempModel.uuid,
-					utid: personal.utid,
-					utoken: personal.utoken,
-					appid: tempModel.appid,
-					schid: personal.schid,
-					utname: personal.utname
-				};
-				$.showLoading();
-				//令牌续订
-				postDataEncry('TokenReset', {}, comData, 0, function(data) {
-					$.hideLoading();
-					if(data.RspCode == 0) {
-						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.utoken = data.RspData;
-						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-						
-						utils.hrefSessionStorage('home.html', {});
-					} else {
-						mui.toast(data.RspTxt);
-					}
-				});
+				if (personal.userName0.length>0) {
+					loginPro(personal.userName0,personal.passWord0);
+				}
+				
+//				document.getElementById("account").value = personal.uid;
+//			document.getElementById("password").value = '111111';
+//				//需要参数
+//				var comData = {
+//					uuid: tempModel.uuid,
+//					utid: personal.utid,
+//					utoken: personal.utoken,
+//					appid: tempModel.appid,
+//					schid: personal.schid,
+//					utname: personal.utname
+//				};
+//				$.showLoading();
+//				//令牌续订
+//				postDataEncry('TokenReset', {}, comData, 0, function(data) {
+//					$.hideLoading();
+//					if(data.RspCode == 0) {
+//						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
+//						tempInfo00.utoken = data.RspData;
+//						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
+//						
+//						utils.hrefSessionStorage('home.html', {});
+//					} else {
+//						mui.toast(data.RspTxt);
+//					}
+//				});
 			}
 		}
 		
