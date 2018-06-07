@@ -163,7 +163,8 @@
 			if(personal.utid == 'undefined' || personal.utid == null) {
 
 			} else {
-				if (personal.userName0.length>0) {
+				if (personal.userName0) {
+					console.log('you name');
 					loginPro(personal.userName0,personal.passWord0);
 				}
 				
