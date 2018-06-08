@@ -31,6 +31,23 @@
 				background-color: #0062CC;
 				color: white;
 			}
+			
+			.mui-table-view:after {
+			    position: absolute;
+			    right: 0;
+			    bottom: 0;
+			    left: 0;
+			    height: 0px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			}
+			
+			.mui-table-view-cell:last-child:after, .mui-table-view-cell:last-child:before {
+			    height: 1px;
+			}
+			
 		</style>
 	</head>
 
@@ -43,8 +60,8 @@
 			<nav class="mui-bar mui-bar-tab" style="margin-top: 5px;">
 					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
 					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
-				</nav>
-			<ul class="mui-table-view mui-table-view-chevron" style="">
+			</nav>
+			<ul class="mui-table-view mui-table-view-chevron" style="padding-bottom: 60px;">
 				<li class="mui-table-view-cell mui-collapse keep-unfold" v-for='(department,index) in departmentArray' @click.stop="clickDepartment(department,index)">
 					<template v-if='department.dptname'>
 						<a class="mui-input-row mui-checkbox mui-left mui-navigate-right">
@@ -76,7 +93,6 @@
 					</template>
 				</li>
 			</ul>
-			
 		</div>
 		<!--<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
 			<template>
