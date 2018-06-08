@@ -177,7 +177,7 @@
 			}			
 			//拍照
 			function getImage(){
-				var cmr = plus.camera.getCamera();
+				var cmr = plus.camera.getCamera();   
 				cmr.captureImage(function(p){
 					plus.io.resolveLocalFileSystemURL(p, function(entry){
 						var img =  document.getElementById('headimg');
