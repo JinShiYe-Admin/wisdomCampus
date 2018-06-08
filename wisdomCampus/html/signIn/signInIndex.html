@@ -55,10 +55,10 @@
 			}
 			.refresh{
 				color:#63BBFF;
-				font-size: 18px;
+				font-size: 20px;
 				float: left;
 				margin-bottom: 5px;
-				margin-top: 5px;
+				margin-top: 15px;
 				font-weight: 900;
 			}
 		</style>
@@ -146,27 +146,31 @@
 				//end
 			}
 			
+			//百度地图定位
+			var map = new BMap.Map("map");
+			var point = new BMap.Point(116.331398,39.897445);
+			map.centerAndZoom(point,15);
+			refresh();
+			
 			//重新定位
 			function refresh(){
-				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
-					outSet( "获取定位位置信息失败："+e.message );
-				},{geocode:true});
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function(r){
+					if(this.getStatus() == BMAP_STATUS_SUCCESS){
+						var mk = new BMap.Marker(r.point);
+						map.addOverlay(mk);
+						map.panTo(r.point);
+					}
+					else {
+						alert('failed'+this.getStatus());
+					}        
+				});
 			}
 			
 			//获取定位信息
 			function geoInf( position ) {
 				var curr_position=document.getElementById('curr-position');
 				curr_position.innerHTML='当前位置：' + position.addresses;
-				var codns = position.coords;//获取地理坐标信息；
-				var lat = codns.latitude;//获取到当前位置的纬度；
-				var longt = codns.longitude;//获取到当前位置的经度
-				//baiduMap				
-				var map = new BMap.Map("map");
-				var point = new BMap.Point(longt, lat); 
-				map.centerAndZoom(point, 15); 
-				var marker = new BMap.Marker(point);      
-				map.addOverlay(marker);   
-				
 			}			
 			//拍照
 			function getImage(){
