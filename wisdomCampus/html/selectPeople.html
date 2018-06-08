@@ -11,7 +11,7 @@
 		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
 		<style type="text/css">
 			.tableView {
-				padding-bottom: 65px;
+				/*padding-bottom: 65px;*/
 			}
 			
 			.mui-bar-nav {
@@ -39,16 +39,55 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">选择接收人</h1>
 		</header>
-		<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
+		<div class="mui-content mui-fullscreen" id="selectPeopleData"  style="background-color: white;">
+			<nav class="mui-bar mui-bar-tab" style="margin-top: 5px;">
+					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+				</nav>
+			<ul class="mui-table-view mui-table-view-chevron" style="">
+				<li class="mui-table-view-cell mui-collapse keep-unfold" v-for='(department,index) in departmentArray' @click.stop="clickDepartment(department,index)">
+					<template v-if='department.dptname'>
+						<a class="mui-input-row mui-checkbox mui-left mui-navigate-right">
+						<label>{{department.dptname}}</label>
+						<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 12px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
+					</a>
+						<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
+							<a class="mui-input-row mui-checkbox mui-left">
+								<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
+								<input name="checkbox1" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+							</a>
+						</li>
+					</ul>
+					</template>
+					<template v-else>
+						<a class="mui-input-row mui-checkbox mui-left mui-navigate-right">
+						<label>{{department.clsname}}</label>
+						<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 12px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
+					</a>
+						<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
+							<a class="mui-input-row mui-checkbox mui-left">
+								<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
+								<input name="checkbox" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+							</a>
+						</li>
+					</ul>
+					</template>
+				</li>
+			</ul>
+			
+		</div>
+		<!--<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
 			<template>
 				<ul class="mui-table-view tableView">
-					<li class="mui-table-view-cell mui-collapse mui-checkbox mui-left" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)" style="background-color: white;">
+					<li class="mui-table-view-cell mui-collapse mui-checkbox mui-left keep-unfold" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)" style="background-color: white;">
 						<template v-if='department.dptname'>
 							<input name="checkbox2" value="Item 2" type="checkbox" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
 							<a class="mui-navigate-right" style="padding-left: 17px;">{{department.dptname}}</a>
 							<div class="mui-collapse-content">
 								<form class="mui-input-group mui-table-view-chevron" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)">
-									<div class="mui-input-row mui-checkbox" style="height: 50px;">
+									<div class="mui-input-row mui-checkbox" style="height: 50px;padding-top: 5px;">
 										<label>{{peopleModel.utname}}</label>
 										<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
 									</div>
@@ -60,7 +99,7 @@
 							<a class="mui-navigate-right" style="padding-left: 17px;">{{department.clsname}}</a>
 							<div class="mui-collapse-content">
 								<form class="mui-input-group mui-table-view-chevron" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)">
-									<div class="mui-input-row mui-checkbox" style="height: 50px;">
+									<div class="mui-input-row mui-checkbox" style="height: 50px;padding-top: 5px;">
 										<label>{{peopleModel.utname}}</label>
 											<input name="checkbox1" value="Item 3" type="checkbox" v-model="peopleModel.flag">
 									</div>
@@ -74,8 +113,8 @@
 					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
 				</nav>
 			</template>
-		</div>
-		<script src="../js/mui.min.js"></script>
+		</div>-->
+		<script src="../js/mui.js"></script>
 		<script src="../js/vue.min.js"></script>
 		<!--加密-->
 		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
@@ -110,6 +149,7 @@
 						} else {
 							clickFlag = 0; //点击部门0，点击人员1，防止事件乱传
 							console.log('clickDepartment1111');
+							model.departFlag = !model.departFlag;
 							//点击部门，包括点击是否选择部门
 							clickDepartmentSelect(model, index, 0);
 						}
@@ -142,7 +182,7 @@
 						}
 					},
 					clickDepartmentSelect1: function(model, index) { //点击是否选择部门按钮
-						console.log('点击部门按钮');
+						console.log('点击部门选择按钮');
 						clickFlag = 1; //点击部门0，点击人员1，防止事件乱传
 						//点击部门，包括点击是否选择部门,flag=1点击选中部门，flag=2取消选中部门
 						if(model.departFlag == false) { //如果是选择
@@ -382,9 +422,13 @@
 								}
 								//点击人员时，判断部门是否应该选中状态
 								judgeDepartmentSelect();
+							}else{
+//								if (model.departFlag==1) {
+//									mui.toast('当前部门没有人员');
+//								}
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							
 						}
 					});
 				} else if(model.clsname && model.peopleArray.length == 0) {
@@ -436,7 +480,9 @@
 								}
 								//点击人员时，判断部门是否应该选中状态
 								judgeDepartmentSelect();
-							}
+							}else {
+//							mui.toast('当前部门没有人员');
+						}
 						} else {
 							$.toast(data.RspTxt, "cancel");
 						}

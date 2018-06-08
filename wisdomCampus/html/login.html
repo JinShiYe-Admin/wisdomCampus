@@ -59,12 +59,27 @@
 		//			
 		//		});
 		var tempModel = {};
+		var loginFlag = 0; //0自动登录，1不自动登录//判断上次有没有登录，如果登录，就不执行登录协议
 		mui.plusReady(function() {
 			tempModel = {
 				uuid: plus.device.uuid,
 				appid: plus.runtime.appid
 			}
 			setUUID();
+			document.addEventListener("netchange", wainshow, false);
+
+			function wainshow() {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+					mui.toast("网络异常，请检查网络设置！");
+				} else {
+					mui.toast("已接入网络");
+					//判断上次有没有登录，如果登录，就不执行登录协议
+					if(loginFlag == 0) {
+						loginFlag = 1;
+						setUUID();
+					}
+				}
+			}
 		});
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");
@@ -117,6 +132,7 @@
 							postDataEncry('Login', enData1, comData1, 0, function(data1) {
 								$.hideLoading();
 								if(data1.RspCode == 0) {
+									loginFlag = 1;
 									if(data1.RspData.dpts == null) {
 										data1.RspData.dpts = [];
 									}

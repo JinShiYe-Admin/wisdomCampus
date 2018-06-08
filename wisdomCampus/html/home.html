@@ -178,6 +178,7 @@
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
 			});
+			var noticeCheckFlag = 0;//通知、事务，是否有权限
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.init({
 				statusBarBackground: '#63BBFF'
@@ -235,7 +236,38 @@
 				getNoReadCnt();
 				//推送绑定
 				bindInfo();
+				//12.获取学校资源平台信息
+				getSchoolInfoSource();
 			});
+			
+			//12.获取学校资源平台信息
+			var getSchoolInfoSource = function(){
+				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				var enData0 = {};
+				//不需要加密的数据
+				var comData0 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				}
+				//发送网络请求，data为网络返回值
+				postDataEncry('SchInfoSoure', enData0, comData0, 0, function(data) {
+					console.log("12.获取学校资源平台信息:" + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						//是否有权限的字段,字段是被，分割，数字4，代表有行政管理事务权限，即通知、事务
+						var tempArray = data.RspData.baseapps.split(',')
+						//如果里面有数字4，即有权限
+						for (var i = 0; i < tempArray.length; i++) {
+							if (tempArray[i] ==4) {
+								console.log('noticeCheckFlag++;');
+								noticeCheckFlag++;
+							}
+						}
+					} else {
+						
+					}
+				});
+			}
 
 			//推送绑定
 			var bindInfo = function() {
@@ -268,10 +300,9 @@
 			});
 
 			mui(".mui-table-view").on('tap', 'a', function() {
-				var id = this.parentElement.id
+				var id = this.parentElement.id;
 				if(id == 1 || id == 2) {
-					var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-					if(tempInfo00.appxxtservstat == 1) {
+					if(noticeCheckFlag > 0) {
 						//检查是否有权限
 						if(checkPermission()) {
 							console.log('1111');
@@ -279,7 +310,7 @@
 						} else {
 							console.log('22222');
 							var noRead = document.getElementById("noRead_" + id);
-							noRead.className = "mui-badge mui-hidden"
+							noRead.className = "mui-badge mui-hidden";
 							utils.mOpenWithData("all-list.html", id)
 						}
 					} else {

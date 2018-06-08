@@ -129,9 +129,11 @@
 				</div>-->
 			</div>
 			<div style="margin: 10px;color: gray;">
-				{{'已选('+selectPeople.length+'人）:'}}<span v-for="(people,index) of selectPeople">
-					{{people.utname}}
-				</span>
+				{{'已选('+selectPeople.length+'人）:'}}
+				<!--<span v-for="(people,index) of selectPeople">-->
+					{{showSelectPeople}}
+					<!--{{people.utname}}-->
+				<!--</span>-->
 			</div>
 			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
 			<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
@@ -168,7 +170,7 @@
 			var message = new Vue({
 				el: '#message',
 				data: {
-
+					showSelectPeople:'',
 					title: '',
 					content: '',
 					smsSync: false,
@@ -489,7 +491,12 @@
 			window.addEventListener('selectPeople', function(data) {
 				console.log("data" + JSON.stringify(data.detail.peopleArray))
 				message.selectPeople = data.detail.peopleArray;
-
+				var tempPeople = [];
+				for (var i = 0; i < message.selectPeople.length; i++) {
+					var tempModel = message.selectPeople[i];
+					tempPeople.push(tempModel.utname);
+				}
+				message.showSelectPeople = tempPeople.join(',');
 			});
 			//判断是否输入了值
 			var checkInput = function(text) {
