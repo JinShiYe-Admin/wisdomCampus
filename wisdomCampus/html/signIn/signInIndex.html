@@ -6,11 +6,34 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/preview.css" rel="stylesheet" />
 		<style type="text/css">
+			
+			body{
+				background-color: #ffffff;
+			}
+			.mui-content{
+				background-color: #ffffff;
+			}
+			
+			.position{
+				padding: 0 10px 0 15px;
+				height: 50px;
+			}
+			.position>p{
+				margin-top: 5px;
+				margin-bottom: 5px;
+				font-size: 14px;
+				color: #0D0D0D;
+			}
+			
+			.location-map{
+				height: 300px;
+			}
+			
 			#map {
 				width: 100%;
-				position: fixed;
-				top: 45px;
+				position: relative;
 				bottom: 0px;
 				line-height: 200px;
 				text-align: center;
@@ -25,50 +48,105 @@
 				font-size: 15px;
 				margin-top: 10px;
 			}
+			.select-color{
+				color:#676767;
+			}
 		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;"> 
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">新建审批</h1>
 			<a id="position111" class="mui-pull-right right-position">重新定位</a>
 		</header>
-		<div id="map">地图加载中...</div>
+		 <div class="mui-content">
+		 	<div class="mui-row">
+		 		<div class="position">
+		            <p id="curr-position">
+		              	正在获取当前位置...
+		            </p>
+		    	</div>
+		 	</div>
+		 	<div class="mui-row">
+		 		<div id="map" class="location-map">地图加载中...</div>
+		 	</div>
+		 	<div class="mui-row">
+		 		<form class="mui-input-group">
+					<div class="mui-input-row">
+						<label>考勤类型</label>
+						<select class="select-color">
+							<option>--考勤类型--</option>
+							<option>上午上班</option>
+							<option>上午下班</option>
+							<option>下午上班</option>
+							<option>下午下班</option>
+						</select>
+					</div>
+					<div class="mui-input-row">
+						<label>部门</label>
+						<select class="select-color">
+							<option>--选择部门--</option>
+							<option>部门1</option>
+							<option>部门2</option>
+							<option>部门3</option>
+							<option>很长很长很长很长很长很长的部门4</option>
+						</select>
+					</div>
+					<div class="mui-input-row">
+						<label>考勤地点</label>
+						<select class="select-color">
+							<option>--选择考勤地点--</option>
+							<option>地点1</option>
+							<option>地点2</option>
+							<option>地点3</option>
+							<option>很长很长很长很长很长很长很长很长很长很长很长很长很长很长的地点4</option>
+						</select>
+					</div>
+				</form>
+		 	</div>
+		 	<div class="mui-row" style="    padding: 11px 15px;">
+		 		 <p><a href="javascript:void(0);" onclick="getImage()" style="font-size: 15px;">上传照片</a> </p>
+		 		 <img id="headimg" data-preview-src="" src="" style="display: none;" onclick="imgView()"  height="150"  width="150">
+		 	</div>
+		 </div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			//			var ws = plus.webview.currentWebview();
-			//			var wm = plus.webview.getWebviewById(plus.runtime.appid);
-			//			wm && wm.evalJS("preateClear()");
-			//			clicked('maps_map.html', false, true);
-
 			var ws = null,
 				wo = null;
 			var em = null,
 				map = null,
 				pcenter = null;
-			// H5 plus事件处理
+			// H5 plus事件处理 
 			function plusReady() {
+				//获取当前位置 start
+				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
+					outSet( "获取定位位置信息失败："+e.message );
+				},{geocode:true});
+				//end
+				
 				if(!em || ws) {
 					return
 				};
 				// 获取窗口对象
 				ws = plus.webview.currentWebview();
 				wo = ws.opener();
-				//高德地图坐标为(116.3974357341,39.9085574220), 百度地图坐标为(116.3975,39.9074)
-				pcenter = new plus.maps.Point(116.3975, 39.9074);
+				pcenter = new plus.maps.Point(116.3975,39.9074);
 				setTimeout(function() {
 					map = new plus.maps.Map("map");
-					map.centerAndZoom(pcenter, 12);
-					createMarker();
-					// 创建子窗口
-//					createSubview();
+					map.centerAndZoom(pcenter, 16);
 				}, 300);
 				// 显示页面并关闭等待框
 				ws.show("pop-in");
-//				userLocation();
+				//模拟点击
+				setTimeout(function() {
+					var defaultTab = document.getElementById("position111");
+					mui.trigger(defaultTab, 'tap');
+				}, 1000);
 			}
 			if(window.plus) {
 				plusReady();
@@ -89,6 +167,8 @@
 					}
 				});
 			})
+			
+			
 			function userLocation() {
 				map.showUserLocation(true);
 				map.getUserLocation(function(state, pos) {
@@ -98,35 +178,37 @@
 				});
 			}
 
-			function createMarker() {
-				//高德地图坐标为(116.3406445236,39.9630878208), 百度地图坐标为(116.347292,39.968716
-				var marker = new plus.maps.Marker(new plus.maps.Point(116.347292, 39.968716));
-//				marker.setIcon("");
-				marker.setLabel("位置");
-				var bubble = new plus.maps.Bubble("打造最好的HTML5移动开发工具");
-				marker.setBubble(bubble);
-				map.addOverlay(marker);
-			}
-
-			function createSubview() {
-				// 创建加载内容窗口
-				var topoffset = '44px';
-//				if(plus.navigator.isImmersedStatusbar()) { // 兼容immersed状态栏模式
-//					topoffset = (Math.round(plus.navigator.getStatusbarHeight()) + 44) + 'px';
-//				}
-				var wsub = plus.webview.create('maps_map_sub.html', 'sub', {
-					top: topoffset,
-					height: '60px',
-					position: 'absolute',
-					scrollIndicator: 'none',
-					background: 'transparent'
-				});
-				ws.append(wsub);
-			}
 
 			function resetMap() {
-				//map.centerAndZoom(pcenter,12);
 				map.reset();
+			}
+			
+			
+			function geoInf( position ) {
+				var curr_position=document.getElementById('curr-position');
+				curr_position.innerHTML='当前位置：' + position.addresses;
+			}			
+			
+			//拍照
+			function getImage(){
+				var cmr = plus.camera.getCamera();
+				cmr.captureImage(function(p){
+					plus.io.resolveLocalFileSystemURL(p, function(entry){
+						var img =  document.getElementById('headimg');
+						img.style.display='inherit';
+					    img.src=entry.toLocalURL();
+					}, function(e){
+						console.log('读取拍照文件错误：'+e.message);
+					});
+				}, function(e){
+					console.log('失败：'+e.message);
+				}, {filename:'_doc/camera/',index:1});
+			}
+			
+			//预览图片
+			function imgView(){
+				var previewImage = mui.previewImage();
+				previewImage.open(document.getElementById("headimg"));
 			}
 		</script>
 	</body>

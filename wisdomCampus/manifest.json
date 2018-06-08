@@ -111,7 +111,7 @@
         "popGesture": "close",/*设置应用默认侧滑返回关闭Webview窗口，"none"为无侧滑返回功能，"hide"为侧滑隐藏Webview窗口。参考http://ask.dcloud.net.cn/article/102*/
         "runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
         "signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
-        "distribute": {"plugins":{"push":{"igexin":{"appid":"rzMQZq71G2ATOk0drueaE6","appkey":"PM3wC8cqTa9LwF3jbNuAg8","appsecret":"BSl2t3PZCj9t4NuBmBMks1"}}},
+        "distribute": {"plugins":{"maps":{"baidu":{"appkey_ios":"","appkey_android":"spWlTg3MA0GhA0OBDNZ4CM5Qw62nTtvq","appkey":"","description":""}},"push":{"igexin":{"appid":"rzMQZq71G2ATOk0drueaE6","appkey":"PM3wC8cqTa9LwF3jbNuAg8","appsecret":"BSl2t3PZCj9t4NuBmBMks1"}}},
             "apple": {
                 "appid": "",/*iOS应用标识，苹果开发网站申请的appid，如io.dcloud.HelloH5*/
                 "mobileprovision": "",/*iOS应用打包配置文件*/
@@ -208,7 +208,8 @@
 				],
 				"refer": [
 					"html/login.html",
-					"html/all-list.html"
+					"html/all-list.html",
+					"html/signIn/signInIndex.html"
 				],
 				"priority": 0
 			},
@@ -277,6 +278,13 @@
 					"html/new-check.html",
 					"html/check-detail.html",
 					"html/noticeDetails.html"
+				],
+				"priority": 0
+			},
+			"html/signIn/signInIndex.html": {
+				"resources": [],
+				"refer": [
+					"html/signIn/camera_image.html"
 				],
 				"priority": 0
 			}
