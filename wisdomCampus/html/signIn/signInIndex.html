@@ -25,6 +25,8 @@
 				margin-bottom: 5px;
 				font-size: 14px;
 				color: #0D0D0D;
+				width: 90%;
+				float: left;
 			}
 			
 			.location-map{
@@ -51,6 +53,14 @@
 			.select-color{
 				color:#676767;
 			}
+			.refresh{
+				color:#63BBFF;
+				font-size: 18px;
+				float: left;
+				margin-bottom: 5px;
+				margin-top: 5px;
+				font-weight: 900;
+			}
 		</style>
 	</head>
 
@@ -58,14 +68,15 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;"> 
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">新建审批</h1>
-			<a id="position111" class="mui-pull-right right-position">重新定位</a>
+			<a id="position111" class="mui-pull-right right-position">查询</a>
 		</header>
 		 <div class="mui-content">
 		 	<div class="mui-row">
 		 		<div class="position">
-		            <p id="curr-position">
+		            <p id="curr-position" style="">
 		              	正在获取当前位置...
 		            </p>
+		            <span onclick="refresh()" class="mui-icon mui-icon-loop refresh"></span>
 		    	</div>
 		 	</div>
 		 	<div class="mui-row">
@@ -114,13 +125,18 @@
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
 		<script src="../../js/mui.zoom.js"></script>
 		<script src="../../js/mui.previewimage.js"></script>
+		
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=HnBMVcOKRZ5b8MdZp1sqxEPgvXkTeKfH"></script>
+		
 		<script type="text/javascript">
 			mui.init();
-			var ws = null,
-				wo = null;
-			var em = null,
-				map = null,
-				pcenter = null;
+				
+			if(window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener("plusready", plusReady, false);
+			}
+			
 			// H5 plus事件处理 
 			function plusReady() {
 				//获取当前位置 start
@@ -128,67 +144,30 @@
 					outSet( "获取定位位置信息失败："+e.message );
 				},{geocode:true});
 				//end
-				
-				if(!em || ws) {
-					return
-				};
-				// 获取窗口对象
-				ws = plus.webview.currentWebview();
-				wo = ws.opener();
-				pcenter = new plus.maps.Point(116.3975,39.9074);
-				setTimeout(function() {
-					map = new plus.maps.Map("map");
-					map.centerAndZoom(pcenter, 16);
-				}, 300);
-				// 显示页面并关闭等待框
-				ws.show("pop-in");
-				//模拟点击
-				setTimeout(function() {
-					var defaultTab = document.getElementById("position111");
-					mui.trigger(defaultTab, 'tap');
-				}, 1000);
-			}
-			if(window.plus) {
-				plusReady();
-			} else {
-				document.addEventListener("plusready", plusReady, false);
-			}
-			// DOMContentloaded事件处理
-			document.addEventListener("DOMContentLoaded", function() {
-				em = document.getElementById("map");
-				window.plus && plusReady();
-			}, false);
-
-			document.getElementById('position111').addEventListener('tap',function () {
-			        map.showUserLocation(true);
-				map.getUserLocation(function(state, pos) {
-					if(0 == state) {
-						map.setCenter(pos);
-					}
-				});
-			})
-			
-			
-			function userLocation() {
-				map.showUserLocation(true);
-				map.getUserLocation(function(state, pos) {
-					if(0 == state) {
-						map.setCenter(pos);
-					}
-				});
-			}
-
-
-			function resetMap() {
-				map.reset();
 			}
 			
+			//重新定位
+			function refresh(){
+				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
+					outSet( "获取定位位置信息失败："+e.message );
+				},{geocode:true});
+			}
 			
+			//获取定位信息
 			function geoInf( position ) {
 				var curr_position=document.getElementById('curr-position');
 				curr_position.innerHTML='当前位置：' + position.addresses;
+				var codns = position.coords;//获取地理坐标信息；
+				var lat = codns.latitude;//获取到当前位置的纬度；
+				var longt = codns.longitude;//获取到当前位置的经度
+				//baiduMap				
+				var map = new BMap.Map("map");
+				var point = new BMap.Point(longt, lat); 
+				map.centerAndZoom(point, 15); 
+				var marker = new BMap.Marker(point);      
+				map.addOverlay(marker);   
+				
 			}			
-			
 			//拍照
 			function getImage(){
 				var cmr = plus.camera.getCamera();
@@ -204,7 +183,6 @@
 					console.log('失败：'+e.message);
 				}, {filename:'_doc/camera/',index:1});
 			}
-			
 			//预览图片
 			function imgView(){
 				var previewImage = mui.previewImage();
