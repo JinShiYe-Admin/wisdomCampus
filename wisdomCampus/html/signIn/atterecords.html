@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link href="../../css/classRoom/mui.picker.min.css" rel="stylesheet"/>
+		<link href="../../css/preview.css" rel="stylesheet" />
 		<style type="text/css">
 			
 			body{
@@ -131,8 +132,7 @@
 		 	<div class="mui-row">
 			 	<ul class="mui-table-view" >
 					<li class="mui-table-view-cell mui-media">
-						<a href="javascript:void(0);" class="mui-active">
-							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 							<div class="mui-media-body">
 								<span class='mui-ellipsis left-p'>时间：</span>
 								<span class="right-p">2018年6月11日</span>
@@ -149,11 +149,9 @@
 								<span class='mui-ellipsis left-p'>结果：</span>
 								<span class="right-p">迟到</span>
 							</div>
-						</a>
 					</li>
 					<li class="mui-table-view-cell mui-media">
-						<a href="javascript:void(0);">
-							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<img id="item2" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 							<div class="mui-media-body">
 								<span class='mui-ellipsis left-p'>时间：</span>
 								<span class="right-p">2018年6月11日</span>
@@ -170,11 +168,9 @@
 								<span class='mui-ellipsis left-p'>结果：</span>
 								<span class="right-p">迟到</span>
 							</div>
-						</a>
 					</li>
 					<li class="mui-table-view-cell mui-media">
-						<a href="javascript:void(0);">
-							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<img id="item3"  data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 							<div class="mui-media-body">
 								<span class='mui-ellipsis left-p'>时间：</span>
 								<span class="right-p">2018年6月11日</span>
@@ -191,7 +187,6 @@
 								<span class='mui-ellipsis left-p'>结果：</span>
 								<span class="right-p">迟到</span>
 							</div>
-						</a>
 					</li>
 				</ul>
 			</div>
@@ -200,6 +195,8 @@
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
 		<script src="../../js/classRoom/mui.picker.min.js"></script>
 		<script src="../../js/jquery.min.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
 		<script type="text/javascript">
 			//mui初始化 start
 			mui.init();
@@ -262,6 +259,13 @@
 			        return true;  
 			    }  
 			    return false;  
+			}
+			
+			//预览图片
+			function imgView(obj){
+				var id = obj.getAttribute('id');
+				var previewImage = mui.previewImage();
+				previewImage.open(document.getElementById(id));
 			}
 			
 		</script>
