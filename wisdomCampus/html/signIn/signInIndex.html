@@ -120,16 +120,13 @@
 		 	</div>
 		 	<div class="mui-row">
 		 		<form class="mui-input-group">
-					<div class="mui-input-row">
+					<div  class="mui-input-row">
 						<label>考勤类型</label>
-						<select class="select-color">
+						<select id="cwork" class="select-color">
 							<option>--考勤类型--</option>
-							<option>上午上班</option>
-							<option>上午下班</option>
-							<option>下午上班</option>
-							<option>下午下班</option>
+							<option v-for="item in cworkList" >{{item.lx}}</option>
 						</select>
-					</div>
+					</div> 
 					<div class="mui-input-row">
 						<label>部门</label>
 						<select class="select-color">
@@ -162,15 +159,22 @@
 		 	</div>
 		 </div>
 		<script src="../../js/mui.min.js"></script>
+			<script src="../../js/vue.min.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
 		<script src="../../js/mui.zoom.js"></script>
 		<script src="../../js/mui.previewimage.js"></script>
-		
+		<script src="../../js/publicProtocol.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/lib/jquery.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/utils/myStorage.js"></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=HnBMVcOKRZ5b8MdZp1sqxEPgvXkTeKfH"></script>
-		
 		<script type="text/javascript">
 			mui.init();
-				
 			if(window.plus) {
 				plusReady();
 			} else {
@@ -179,18 +183,14 @@
 			
 			// H5 plus事件处理 
 			function plusReady() {
-				//获取当前位置 start
-				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
-					document.getElementById('curr-position').innerHTML="获取定位位置信息失败："+e.message ;
-				},{geocode:true});
-				//end
+				refresh();
+				getType();
 			}
 			
 			//百度地图定位
 			var map = new BMap.Map("map");
 			var point = new BMap.Point(116.331398,39.897445);
 			map.centerAndZoom(point,15);
-			refresh();
 			
 			//重新定位
 			function refresh(){
@@ -238,6 +238,36 @@
 				var previewImage = mui.previewImage();
 				previewImage.open(document.getElementById("headimg"));
 			}
+			
+			
+			//12.获取考勤类型
+			function getType(){
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					pageIndex: 1, //当前页数
+					pageSize: 0 //每页记录数
+				}
+				getAttendTypePro(tempData, function function_name(data) {
+					//$.hideLoading();
+					console.log('1111111111111'+JSON.stringify(data))
+					if(data.RspCode == 0) { 
+					} else {
+						mui.toast(data.RspTxt)
+					}
+				});
+			}
+			 
+			var cwork =new Vue({
+				el:"#cwork",
+				data:{
+					cworkList:[
+						{id:0,lx:'上午上班'}
+						,{id:1,lx:'上午下班'}
+						,{id:2,lx:'下午上班'}
+						,{id:3,lx:'下午下班'}
+					]
+				}
+			});
 		</script>
 	</body>
 
