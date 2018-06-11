@@ -1,0 +1,274 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/classRoom/mui.picker.min.css" rel="stylesheet"/>
+		<link href="../../css/preview.css" rel="stylesheet" />
+		<style type="text/css">
+			
+			body{
+				background-color: #ffffff;
+			}
+			.mui-content{
+				background-color: #ffffff;
+			}
+			
+			.mui-title {
+				color: white;
+			}
+			.right-position{
+				color: white;
+				font-size: 18px;
+				margin-top: 10px;
+				font-weight: bold;
+			}
+			
+			.btn-style{
+    			margin: 10px 0 10px 15px;
+			}
+			
+			.mui-input-group:after {
+	    		position: absolute;
+			    right: 0;
+			    bottom: 0;
+			    left: 0;
+			    height: 0px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			}
+			
+			.mui-table-view .mui-media-object {
+			    line-height: 42px;
+			    max-width: 80px;
+			    height: 80px;
+			}
+			
+			.left-p{
+				width: 60px;
+			    font-size: 14px;
+			    margin-top: 0;
+			    margin-bottom: 10px;
+			    color: #8f8f94;
+			}
+			.right-p{
+				font-size: 14px;
+				margin-top: 0;
+			    margin-bottom: 10px;
+				color: #000000;
+				word-break:normal;
+				width:auto;
+				white-space:pre-wrap;
+				word-wrap:break-word;
+				overflow: hidden ;
+			}
+			
+			.mui-table-view:before {
+			    position: absolute;
+			    right: 0;
+			    left: 15px;
+			    height: 1px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			    top: -1px;
+			}
+			
+			.mui-table-view:after {
+			    position: absolute;
+			    right: 0;
+			    bottom: 0;
+			    left: 15px;
+			    height: 1px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			}
+			
+			.mui-table-view .mui-media-object.mui-pull-left {
+    			 margin-right: 0px; 
+			}
+			
+			.mui-media-body {
+			    overflow: hidden;
+			    margin-left: 80px;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+			    background-color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;"> 
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">获取考勤记录</h1>
+			<a id="position111" class="mui-pull-right right-position">· · ·</a>
+		</header>
+		 <div class="mui-content">
+		 	<div class="mui-row">
+		 		<form class="mui-input-group">
+					<div class="mui-input-row">
+						<label>开始日期</label>
+						<input id="start" type="text" value=""  onclick="getTime(this)"  data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择开始查询日期"/>
+					</div>
+					<div class="mui-input-row">
+						<label>结束日期</label>
+						<input id="end" type="text"  value="" onclick="getTime(this)"  data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择结束查询日期"/>
+					</div>
+				</form>
+		 	</div>
+		 	<div class="mui-row">
+		 		<button class="mui-btn mui-btn-success btn-style" id="select">查询</button>
+		 	</div>
+		 	<div class="mui-row">
+			 	<ul class="mui-table-view" >
+					<li class="mui-table-view-cell mui-media">
+							<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>时间：</span>
+								<span class="right-p">2018年6月11日</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>地点：</span>
+								<span class="right-p">很长很长很长很长很长很长很长很长很很长很长很长很长很长很长很长很长很长很长长很长很长很长的定位地点</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>类型：</span>
+								<span class="right-p">上午上班</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>结果：</span>
+								<span class="right-p">迟到</span>
+							</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+							<img id="item2" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>时间：</span>
+								<span class="right-p">2018年6月11日</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>地点：</span>
+								<span class="right-p">山东省济南市天桥区大明湖西南门明湖秀门票兑换处</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>类型：</span>
+								<span class="right-p">上午上班</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>结果：</span>
+								<span class="right-p">迟到</span>
+							</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+							<img id="item3"  data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>时间：</span>
+								<span class="right-p">2018年6月11日</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>地点：</span>
+								<span class="right-p">济南大明湖</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>类型：</span>
+								<span class="right-p">上午上班</span>
+							</div>
+							<div class="mui-media-body">
+								<span class='mui-ellipsis left-p'>结果：</span>
+								<span class="right-p">迟到</span>
+							</div>
+					</li>
+				</ul>
+			</div>
+		 </div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
+		<script src="../../js/classRoom/mui.picker.min.js"></script>
+		<script src="../../js/jquery.min.js"></script>
+		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.previewimage.js"></script>
+		<script type="text/javascript">
+			//mui初始化 start
+			mui.init();
+			
+			var mObj;
+			(function($) {
+				$.init();
+				mObj=$;
+			})(mui);
+			//end
+			
+			mui.plusReady(function() {
+				//查询按钮点击事件
+				mui(".mui-row").on('tap','button',function() {
+					var startTime=$('#start').val();
+					var endTime=$('#end').val();
+					if(startTime==''){
+						alert('请选择开始查询日期')
+					}else if(endTime==''){
+						alert('请选择结束查询日期')
+					}else{
+						//TODO 查询
+					}
+				});
+			});
+			
+			//选择时间
+			function getTime(obj){
+				var optionsJson = obj.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var id = obj.getAttribute('id');
+				obj.picker = new mObj.DtPicker(options);
+				obj.picker.show(function(rs) {
+					if(id=='start'){
+						$('#'+id).val(rs.text)
+					}else{
+						//判断结束时间≥开始时间
+						var startTime = $('#start').val();
+						var endTime=rs.text;
+						if(startTime==''){
+							alert('请先选择开始日期');
+							return
+						}
+						if(checkTime(startTime,endTime)){
+							$('#'+id).val(rs.text)
+						}else{
+							alert('结束日期必须大于晚于开始日期');
+						}
+					}
+					obj.picker.dispose();
+					obj.picker = null;
+				});
+			}
+			
+			//判断日期
+			function checkTime(startTime,endTime){
+			    var start=new Date(startTime.replace("-", "/").replace("-", "/"));  
+			    var end=new Date(endTime.replace("-", "/").replace("-", "/"));  
+			    if(end>=start){  
+			        return true;  
+			    }  
+			    return false;  
+			}
+			
+			//预览图片
+			function imgView(obj){
+				var id = obj.getAttribute('id');
+				var previewImage = mui.previewImage();
+				previewImage.open(document.getElementById(id));
+			}
+			
+		</script>
+	</body>
+
+</html>
