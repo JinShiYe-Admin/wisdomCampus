@@ -5,8 +5,8 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="../css/mui.min.css" rel="stylesheet" />
-		<link href="../css/weui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/weui.min.css" rel="stylesheet" />
 
 		<style type="text/css">
 			.mui-badge {
@@ -115,7 +115,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
-			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" src="../img/login/headImg.png" /></a>
+			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" src="../../img/login/headImg.png" /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
@@ -139,7 +139,7 @@
 		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow" style="display: none;">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
-					<img class="head-portrait" src="../img/login/headImg.png" />
+					<img class="head-portrait" src="../../img/login/headImg.png" />
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
@@ -153,32 +153,32 @@
 				</a>
 			</div>
 		</div>
-		<script type="text/javascript" src="../js/mui.min.js"></script>
-		<script type="text/javascript" src="../js/utils/utils.js"></script>
-		<script type="text/javascript" src="../js/utils/storageutil.js"></script>
-		<script type="text/javascript" src="../js/vue.js"></script>
-		<script type="text/javascript" src="../js/utils/myStorage.js"></script>
-		<script type="text/javascript" src="../js/utils/storageKeyName.js"></script>
-		<script src='../js/lib/vconsole/vconsole.min.js'></script>
-		<script src="../js/home.js"></script>
-		<script src="../js/publicProtocol.js"></script>
-		<script src="../js/demoCssJs/jquery-2.1.4.js"></script>
-		<script src="../js/demoCssJs/jquery-weui.js"></script>
+		<script type="text/javascript" src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/utils.js"></script>
+		<script type="text/javascript" src="../../js/utils/storageutil.js"></script>
+		<script type="text/javascript" src="../../js/vue.js"></script>
+		<script type="text/javascript" src="../../js/utils/myStorage.js"></script>
+		<script type="text/javascript" src="../../js/utils/storageKeyName.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/home.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
+		<script src="../../js/demoCssJs/jquery-weui.js"></script>
 		<!--加密-->
-		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
 		<!---->
-		<script src='../js/lib/crypto-js/require.js'></script>
-		<script src='../js/utils/signHmacSHA1.js'></script>
-		<script src='../js/utils/sortSign.js'></script>
-		<script src='../js/utils/store.js'></script>
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src='../../js/utils/store.js'></script>
 		<script>
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
 			});
-			var noticeCheckFlag = 0;//通知、事务，是否有权限
+			var noticeCheckFlag = 0; //通知、事务，是否有权限
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.init({
 				statusBarBackground: '#63BBFF'
@@ -234,40 +234,23 @@
 				};
 				document.addEventListener("netchange", wainshow, false);
 
-			function wainshow() {
-				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-					mui.toast("网络异常，请检查网络设置！");
-				} else {
-					mui.toast("已接入网络");
+				function wainshow() {
+					if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+						mui.toast("网络异常，请检查网络设置！");
+					} else {
+						mui.toast("已接入网络");
+					}
 				}
-			}
 				//获取未读数
 				getNoReadCnt();
 				//推送绑定
 				bindInfo();
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
-				//12.获取考勤类型
-//				tempType();
 			});
-			
-			//12.获取考勤类型
-			var tempType = function(){
-				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
-					pageIndex:1,
-					pageSize: 0
-				}
-				getAttendTypePro(tempData, function function_name(data) {
-					console.log('12.获取考勤类型:'+JSON.stringify(data));
-					if(data.RspCode == 0) {
-						
-					}
-				});
-			}
-			
+
 			//12.获取学校资源平台信息
-			var getSchoolInfoSource = function(){
+			var getSchoolInfoSource = function() {
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var enData0 = {};
 				//不需要加密的数据
@@ -283,14 +266,14 @@
 						//是否有权限的字段,字段是被，分割，数字4，代表有行政管理事务权限，即通知、事务
 						var tempArray = data.RspData.baseapps.split(',')
 						//如果里面有数字4，即有权限
-						for (var i = 0; i < tempArray.length; i++) {
-							if (tempArray[i] ==4) {
+						for(var i = 0; i < tempArray.length; i++) {
+							if(tempArray[i] == 4) {
 								console.log('noticeCheckFlag++;');
 								noticeCheckFlag++;
 							}
 						}
 					} else {
-						
+
 					}
 				});
 			}
@@ -335,9 +318,9 @@
 							mui.toast("无此权限");
 						} else {
 							console.log('22222');
-//							var noRead = document.getElementById("noRead_" + id);
-//							noRead.className = "mui-badge mui-hidden";
-							utils.mOpenWithData("all-list.html", id)
+							//							var noRead = document.getElementById("noRead_" + id);
+							//							noRead.className = "mui-badge mui-hidden";
+							utils.mOpenWithData("../../html/checkNotice/all-list.html", id)
 						}
 					} else {
 						mui.toast("此功能被关闭");
@@ -346,10 +329,10 @@
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
 					if(id == 6) {
-						utils.mOpenWithData("signIn/signInIndex.html", id);
-					}else if(id == 7){
-						utils.mOpenWithData("signIn/atterecords.html", id);
-					}else {
+						utils.mOpenWithData("../../html/signIn/signInIndex.html", id);
+					} else if(id == 7) {
+						utils.mOpenWithData("../../html/signIn/atterecords.html", id);
+					} else {
 						mui.toast("此功能暂未开放");
 					}
 				}

@@ -8,7 +8,7 @@ var signHmacSHA1=(function(mod){
 				baseUrl:"",
 				waitSeconds:5,
 				paths:{
-					'crypto-js':"../js/lib/crypto-js/crypto-js"
+					'crypto-js':"../../js/lib/crypto-js/crypto-js"
 				}
 			});
 			console.log('sssssttttttt');

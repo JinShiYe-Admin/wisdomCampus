@@ -74,14 +74,14 @@ var getHomeCircle = function(id) {
 	//九宫格底部标题数组
 	var chars = ["基础信息", "通知公告", "事务审批", "班级管理", "课堂管理", "访客", "请假", "敬请期待"];
 	//九宫格图片地址数组
-	var imgUrls = ["../img/firstPage/firstPage0.png",
-		"../img/firstPage/firstPage1.png",
-		"../img/firstPage/firstPage2.png",
-		"../img/firstPage/firstPage3.png",
-		"../img/firstPage/firstPage4.png",
-		"../img/firstPage/firstPage5.png",
-		"../img/firstPage/firstPage6.png",
-		"../img/firstPage/firstPage7.png"
+	var imgUrls = ["../../img/firstPage/firstPage0.png",
+		"../../img/firstPage/firstPage1.png",
+		"../../img/firstPage/firstPage2.png",
+		"../../img/firstPage/firstPage3.png",
+		"../../img/firstPage/firstPage4.png",
+		"../../img/firstPage/firstPage5.png",
+		"../../img/firstPage/firstPage6.png",
+		"../../img/firstPage/firstPage7.png"
 	];
 	//点击跳转的html地址数组
 	var urls = ['all.html', 'all.html', 'all.html', 'all.html', 'all.html', 'all.html', 'all.html', 'all.html'];
@@ -162,8 +162,8 @@ var addDiv = function(imgUrl, title, group) {
  */
 var getImgArray = function() {
 	var imgArray = new Array();
-	imgArray.push("../img/firstPage/u292.png")
-	imgArray.push("../img/firstPage/u296.png")
-	imgArray.push("../img/firstPage/u298.png")
+	imgArray.push("../../img/firstPage/u292.png")
+	imgArray.push("../../img/firstPage/u296.png")
+	imgArray.push("../../img/firstPage/u298.png")
 	return imgArray;
 }

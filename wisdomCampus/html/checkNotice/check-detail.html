@@ -5,11 +5,11 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../js/demoCssJs/weui.min.css">
-		<link rel="stylesheet" href="../js/demoCssJs/jquery-weui.css">
-		<link rel="stylesheet" href="../js/demoCssJs/demos.css">
-		<link rel="stylesheet" type="text/css" href="../css/utils/bubble.css" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../js/demoCssJs/weui.min.css">
+		<link rel="stylesheet" href="../../js/demoCssJs/jquery-weui.css">
+		<link rel="stylesheet" href="../../js/demoCssJs/demos.css">
+		<link rel="stylesheet" type="text/css" href="../../css/utils/bubble.css" />
 		<style type="text/css">
 			.center-horizontal {
 				text-align: center;
@@ -220,7 +220,7 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" v-for="check in leaveDetail.ApproveList">
 						<div>
-							<img class="mui-media-object mui-pull-left" src="../img/login/headImg.png">
+							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 							<a class="" style="font-size: 13px;color: #666;">
 								{{check.ApproveManName}} {{check.ApproveTime}}
 								<div class="chat_content_left" v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
@@ -234,25 +234,25 @@
 				</ul>
 			</template>
 		</div>
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/vue.js"></script>
-		<script src="../js/publicProtocol.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/utils/utils.js"></script>
-		<script src="../js/utils/storageutil.js"></script>
-		<script src='../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script src="../../js/publicProtocol.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/demoCssJs/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/utils/storageutil.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<!--加密-->
-		<script src="../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
 		<!---->
-		<script src='../js/lib/crypto-js/require.js'></script>
-		<script src='../js/utils/signHmacSHA1.js'></script>
-		<script src='../js/utils/sortSign.js'></script>
-		<script src="../js/utils/storageKeyName.js"></script>
-		<script src="../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);

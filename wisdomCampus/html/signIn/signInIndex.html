@@ -124,7 +124,7 @@
 						<label>考勤类型</label>
 						<select id="cwork" class="select-color">
 							<option>--考勤类型--</option>
-							<option v-for="item in cworkList" >{{item.lx}}</option>
+							<option v-for="item in cworkList" >{{item.AttendTypeNote}}</option>
 						</select>
 					</div> 
 					<div class="mui-input-row">
@@ -159,7 +159,7 @@
 		 	</div>
 		 </div>
 		<script src="../../js/mui.min.js"></script>
-			<script src="../../js/vue.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
 		<script src="../../js/mui.zoom.js"></script>
 		<script src="../../js/mui.previewimage.js"></script>
@@ -175,16 +175,37 @@
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=HnBMVcOKRZ5b8MdZp1sqxEPgvXkTeKfH"></script>
 		<script type="text/javascript">
 			mui.init();
-			if(window.plus) {
-				plusReady();
-			} else {
-				document.addEventListener("plusready", plusReady, false);
-			}
+//			if(window.plus) {
+//				plusReady();
+//			} else {
+//				document.addEventListener("plusready", plusReady, false);
+//			}
 			
 			// H5 plus事件处理 
-			function plusReady() {
+//			function plusReady() {
+//				refresh();
+//				getType();
+//			}
+			
+			mui.plusReady(function() {
 				refresh();
-				getType();
+				//12.获取考勤类型
+				tempType();
+			});
+			
+			//12.获取考勤类型
+			var tempType = function(){
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					pageIndex:1,
+					pageSize: 0
+				}
+				getAttendTypePro(tempData, function function_name(data) {
+					console.log('12.获取考勤类型:'+JSON.stringify(data));
+					if(data.RspCode == 0) {
+						cwork.cworkList = data.RspData.Data;
+					}
+				});
 			}
 			
 			//百度地图定位
@@ -260,12 +281,7 @@
 			var cwork =new Vue({
 				el:"#cwork",
 				data:{
-					cworkList:[
-						{id:0,lx:'上午上班'}
-						,{id:1,lx:'上午下班'}
-						,{id:2,lx:'下午上班'}
-						,{id:3,lx:'下午下班'}
-					]
+					cworkList:[]
 				}
 			});
 		</script>
