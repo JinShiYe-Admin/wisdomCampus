@@ -209,7 +209,8 @@
 				"refer": [
 					"html/login.html",
 					"html/all-list.html",
-					"html/signIn/signInIndex.html"
+					"html/signIn/signInIndex.html",
+					"html/signIn/atterecords.html"
 				],
 				"priority": 0
 			},

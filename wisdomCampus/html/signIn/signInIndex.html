@@ -141,7 +141,7 @@
 			function plusReady() {
 				//获取当前位置 start
 				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
-					outSet( "获取定位位置信息失败："+e.message );
+					document.getElementById('curr-position').innerHTML="获取定位位置信息失败："+e.message ;
 				},{geocode:true});
 				//end
 			}
@@ -166,7 +166,7 @@
 					}        
 				});
 				plus.geolocation.getCurrentPosition( geoInf, function ( e ) {
-					outSet( "获取定位位置信息失败："+e.message );
+					document.getElementById('curr-position').innerHTML="获取定位位置信息失败："+e.message ;
 				},{geocode:true});
 			}
 			
