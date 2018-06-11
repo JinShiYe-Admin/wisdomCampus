@@ -451,35 +451,35 @@ var setNoticeReplyPro = function(data0, callback) {
 
 //10.新增考勤记录
 var addAttendPro = function(data0, callback) {
-	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'addAttend', data0, callback);
 }
 
 //12.获取考勤类型
 var getAttendTypePro = function(data0, callback) {
-	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttendType', data0, callback);
 }
 
 //13.获取考勤时间段
 var getAttendTimePro = function(data0, callback) {
-	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttendTime', data0, callback);
 }
 
 //14.获取考勤地点
 var getAttendAreaPro = function(data0, callback) {
-	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttendArea', data0, callback);
 }
 
 //15.获取考勤记录
 var getAttendPro = function(data0, callback) {
-	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttend', data0, callback);
 }

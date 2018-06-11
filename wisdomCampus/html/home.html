@@ -247,7 +247,24 @@
 				bindInfo();
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
+				//12.获取考勤类型
+//				tempType();
 			});
+			
+			//12.获取考勤类型
+			var tempType = function(){
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					pageIndex:1,
+					pageSize: 0
+				}
+				getAttendTypePro(tempData, function function_name(data) {
+					console.log('12.获取考勤类型:'+JSON.stringify(data));
+					if(data.RspCode == 0) {
+						
+					}
+				});
+			}
 			
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function(){
