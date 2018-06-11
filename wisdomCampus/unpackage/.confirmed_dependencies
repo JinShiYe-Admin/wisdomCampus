@@ -4,8 +4,12 @@
       "html/all.html",
       "html/login.html",
       "html/all-list.html",
+<<<<<<< HEAD
       "html/signIn/signInIndex.html",
       "html/signIn/atterecords.html"
+=======
+      "html/signIn/signInIndex.html"
+>>>>>>> cd6c2e51a17c52f3f076175cd8658cb194a1e5f3
     ],
     "resources": [
       "html/all.html"

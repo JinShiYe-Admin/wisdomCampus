@@ -50,11 +50,13 @@
 			}
 			
 			.weui-btn_blue {
+				position: relative;
 				background-color: #3C9BFE;
 				color: white;
+				width: 90%;
 				margin-top: 16px;
-				margin-left: 5%;
-				margin-right: 5%;
+				/*margin-left: 10px;
+				margin-right: 10px;*/
 			}
 			
 			.weui-btn_blue:hover {
@@ -74,13 +76,13 @@
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
-						<input v-model="title" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+						<input v-model="title" maxlength="50" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
 					</div>
 				</div>
 				<div class="weui-cell" style="align-items: flex-start;">
 					<div class="weui-cell__hd">内容</div>
 					<div class="weui-cell__bd">
-						<textarea v-model="content" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						<textarea v-model="content" maxlength="300" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 
 					</div>
 				</div>
@@ -135,7 +137,7 @@
 					<!--{{people.utname}}-->
 				<!--</span>-->
 			</div>
-			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
+			<a id="sengMsg" @click.stop="clickSubmitBtn()" class="weui-btn weui-btn_blue" style="height: 45px;padding-top: 0px;">发布</a>
 			<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
 				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
 				<div class="weui-gallery__opr">
@@ -230,8 +232,8 @@
 						});
 					},
 					clickSubmitBtn: function() {
-						addNotice()
-
+						$('#sengMsg').attr('disabled',"true");
+						addNotice();
 					},
 					selectPepole: function() {
 						var data = {
@@ -420,12 +422,12 @@
 					$.toast("请填写具体内容后再发布", "cancel");
 					return;
 				}
-				if(message.title.length >= 50) {
+				if(message.title.length > 50) {
 					$.toast("标题不能超过50字", "cancel");
 					return;
 				}
-				if(message.content.length >= 500) {
-					$.toast("内容不能超过500字", "cancel");
+				if(message.content.length > 300) {
+					$.toast("内容不能超过300字", "cancel");
 					return;
 				}
 				//判断输入是否符合要求
@@ -437,7 +439,10 @@
 
 						for(var i = 0; i < message.uploadedFiles.length; i++) {
 							var tempValue = message.uploadedFiles[i];
-							nameArr.push(tempValue.NewName);
+//							console.log('tempValue:'+JSON.stringify(tempValue));
+							var tempName = tempValue.NewName+'('+cloudutil.transformSize(tempValue.FileSize)+')';
+//							console.log('tempName:'+tempName);
+							nameArr.push(tempName);
 							addrArr.push(tempValue.ImgUrl);
 						}
 						var noticEncName = nameArr.join("|")

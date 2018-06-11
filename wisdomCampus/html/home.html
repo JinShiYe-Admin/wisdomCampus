@@ -136,7 +136,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow">
+		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow" style="display: none;">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
 					<img class="head-portrait" src="../img/login/headImg.png" />
@@ -232,6 +232,15 @@
 					}, 1000);
 					return false;
 				};
+				document.addEventListener("netchange", wainshow, false);
+
+			function wainshow() {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+					mui.toast("网络异常，请检查网络设置！");
+				} else {
+					mui.toast("已接入网络");
+				}
+			}
 				//获取未读数
 				getNoReadCnt();
 				//推送绑定
@@ -309,8 +318,8 @@
 							mui.toast("无此权限");
 						} else {
 							console.log('22222');
-							var noRead = document.getElementById("noRead_" + id);
-							noRead.className = "mui-badge mui-hidden";
+//							var noRead = document.getElementById("noRead_" + id);
+//							noRead.className = "mui-badge mui-hidden";
 							utils.mOpenWithData("all-list.html", id)
 						}
 					} else {
