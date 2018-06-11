@@ -123,7 +123,7 @@ var xhrPost = function(url, commonData, callback) {
 
 		var xhr = new XMLHttpRequest();
 		xhr.open("post", url, true);
-		xhr.timeout = 30000; //10秒超时
+		xhr.timeout = 10000; //10秒超时
 		xhr.contentType = 'application/json;';
 		xhr.onload = function(e) {
 			console.log("XHRP:onload:", JSON.stringify(e));
@@ -177,7 +177,7 @@ var jQAjaxPost = function(url, data, callback) {
 		url: url,
 		type: "POST",
 		data: data,
-		timeout: 30000,
+		timeout: 10000,
 		dataType: "json",
 		contentType: "application/json",
 		async: true,
@@ -230,7 +230,7 @@ var tempPro = function(url,data0, callback) {
 	console.log('data0:' + JSON.stringify(data0));
 	var xhr = new XMLHttpRequest();
 		xhr.open("post", url, true);
-		xhr.timeout = 30000; //10秒超时
+		xhr.timeout = 10000; //10秒超时
 		xhr.contentType = 'application/json;';
 		xhr.onload = function(e) {
 			console.log("XHRP:onload:", JSON.stringify(e));
@@ -447,4 +447,39 @@ var setNoticeReplyPro = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'setNoticeReply', data0, callback);
+}
+
+//10.新增考勤记录
+var addAttendPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'addAttend', data0, callback);
+}
+
+//12.获取考勤类型
+var getAttendTypePro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getAttendType', data0, callback);
+}
+
+//13.获取考勤时间段
+var getAttendTimePro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getAttendTime', data0, callback);
+}
+
+//14.获取考勤地点
+var getAttendAreaPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getAttendArea', data0, callback);
+}
+
+//15.获取考勤记录
+var getAttendPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getAttend', data0, callback);
 }

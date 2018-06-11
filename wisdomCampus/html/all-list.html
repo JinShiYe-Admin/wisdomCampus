@@ -536,6 +536,7 @@
 					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
 						var b = $1(pullRefreshEl).pullToRefresh({
 							down: {
+								auto:true,
 								callback: function() {
 									var self = this;
 									var current_data = datasource[title];

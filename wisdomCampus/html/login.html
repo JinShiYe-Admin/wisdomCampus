@@ -180,12 +180,13 @@
 
 			} else {
 				if (personal.userName0) {
+					document.getElementById("account").value = personal.userName0;
+					document.getElementById("password").value = personal.passWord0;
 					console.log('you name');
 					loginPro(personal.userName0,personal.passWord0);
 				}
 				
-//				document.getElementById("account").value = personal.uid;
-//			document.getElementById("password").value = '111111';
+				
 //				//需要参数
 //				var comData = {
 //					uuid: tempModel.uuid,
