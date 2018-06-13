@@ -1,1 +1,30 @@
-null
+{
+	"html/index/login.html": {
+		"refer": [
+			"html/index/home.html"
+		]
+	},
+	"html/index/home.html": {
+		"refer": [
+			"html/checkNotice/all-list.html"
+		]
+	},
+	"html/checkNotice/all-list.html": {
+		"refer": [
+			"html/checkNotice/new_message.html",
+			"html/checkNotice/new-check.html",
+			"html/checkNotice/noticeDetails.html",
+			"html/checkNotice/check-detail.html"
+		]
+	},
+	"html/checkNotice/new_message.html": {
+		"refer": [
+			"html/checkNotice/selectPeople.html"
+		]
+	},
+	"html/checkNotice/new-check.html": {
+		"refer": [
+			"html/checkNotice/selectPeople.html"
+		]
+	}
+}

@@ -20,32 +20,12 @@ function generateUUID() {
 	return uuid;
 };
 
-//设置头像，如果有，用本身的，没有给默认值
-function setImg(imgURL) {
-	var tempUrl = '';
-	if (imgURL==null||imgURL.length==0) {
-		tempUrl = '../../img/login/headImg.png';
-	} else{
-		tempUrl = imgURL;
-	}
-//	console.log('tempUrl000:'+tempUrl);
-	return tempUrl;
-}
-
 //url,
 //encryData,需要加密的字段
 //commonData,不需要加密的对象
 //flag,0表示不需要合并共用数据，1为添加uuid、utid、token、appid普通参数，2为uuid、appid、token
 //callback,返回值
 var postDataEncry = function(url, encryData, commonData, flag, callback) {
-	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-		callback({
-			RspCode: 404,
-			RspData: null,
-			RspTxt: "网络连接失败,请重新尝试一下"
-		});
-		return;
-	}
 	var tempUrl = window.storageKeyName.INTERFACEGU;
 	url = tempUrl + url;
 	console.log('url:', url);
@@ -125,14 +105,6 @@ var arrayToStr = function(array) {
  * @param {Object} callback 回调
  */
 var xhrPost = function(url, commonData, callback) {
-	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-		callback({
-			RspCode: 404,
-			RspData: null,
-			RspTxt: "网络连接失败,请重新尝试一下"
-		});
-		return;
-	}
 	console.log('XHRP-Url:', url);
 	//	console.log('XHRP-Data:', commonData);
 	//拼接登录需要的签名
@@ -199,14 +171,6 @@ var xhrPost = function(url, commonData, callback) {
 }
 
 var jQAjaxPost = function(url, data, callback) {
-	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-		callback({
-			RspCode: 404,
-			RspData: null,
-			RspTxt: "网络连接失败,请重新尝试一下"
-		});
-		return;
-	}
 	console.log('jQAP-Url:', url);
 	console.log('jQAP-Data:', data);
 	jQuery.ajax({
@@ -263,14 +227,6 @@ var jQAjaxPost = function(url, data, callback) {
 	});
 }
 var tempPro = function(url, data0, callback) {
-	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-		callback({
-			RspCode: 404,
-			RspData: null,
-			RspTxt: "网络连接失败,请重新尝试一下"
-		});
-		return;
-	}
 	console.log('data0:' + JSON.stringify(data0));
 	var xhr = new XMLHttpRequest();
 	xhr.open("post", url, true);

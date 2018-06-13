@@ -28,6 +28,7 @@
 				left: 15px;
 				z-index: 2
 			}
+			
 			.mui-title {
 				color: white;
 			}
@@ -70,22 +71,23 @@
 			<!--<a class="mui-icon mui-pull-right right-cancel">取消</a>-->
 		</header>
 		<div id="message" class="mui-content">
-			<div class="weui-cells" style="margin-top: 0px;">
-				<div class="weui-cell">
-					<div class="weui-cell__hd">标题</div>
-					<div class="weui-cell__bd">
-						<input v-model="title" maxlength="50" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+			<template>
+				<div class="weui-cells" style="margin-top: 0px;">
+					<div class="weui-cell">
+						<div class="weui-cell__hd">标题</div>
+						<div class="weui-cell__bd">
+							<input v-model="title" maxlength="50" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+						</div>
 					</div>
-				</div>
-				<div class="weui-cell" style="align-items: flex-start;">
-					<div class="weui-cell__hd">内容</div>
-					<div class="weui-cell__bd">
-						<textarea v-model="content" maxlength="300" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+					<div class="weui-cell" style="align-items: flex-start;">
+						<div class="weui-cell__hd">内容</div>
+						<div class="weui-cell__bd">
+							<textarea v-model="content" maxlength="300" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
 
+						</div>
 					</div>
 				</div>
-			</div>
-			<!--<div class="weui-cells" style="margin-top: 0px;">
+				<!--<div class="weui-cells" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
 					<div class="weui-cell__bd">
@@ -99,57 +101,58 @@
 					</div>
 				</div>
 			</div>-->
-			<div class="weui-cells weui-cells_form" style="margin-top: 0px;">
-				<div class="weui-cell">
-					<div class="weui-cell__bd">
-						<div class="weui-uploader">
-							<div class="weui-uploader__hd">
-								<input style="width: 100px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;font-size: 15px;">@上传附件</span>
+				<div class="weui-cells weui-cells_form" style="margin-top: 0px;">
+					<div class="weui-cell">
+						<div class="weui-cell__bd">
+							<div class="weui-uploader">
+								<div class="weui-uploader__hd">
+									<input style="width: 100px;" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" v-on:change="selectFile($event)"><span style="color: dodgerblue;font-size: 15px;">@上传附件</span>
+
+								</div>
 
 							</div>
-
 						</div>
 					</div>
-				</div>
-				<div v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
-					<ol>
-						<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles" @click="clickImg(index)"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
-						</li>
-					</ol>
-				</div>
-			</div>
-			<div class="weui-cells" style="margin-top: 0px;">
-				<div class="weui-cell">
-					<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
-					<div class="weui-cell__bd" style="margin-left: -30px;">
-						<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 11px;">选择审批人</span>
-						<div id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 15px;color: #3C9BFE; padding: 5px 5px 5px 5px;margin-top: 0px;font-size: 11px;float: right;" v-model="flowName">选择审批流程</div>
-					</div>
-					<span  style="color:#b7b7b7 ;padding-left: 5px;">></span>
-				</div>
-
-				<div class="weui-cell" style="align-items: flex-start;">
-					<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
-					<div class="weui-cell__bd">
+					<div v-if="uploadedFiles.length>0" class="weui-cell__bd" style="margin-left: 5px;margin-bottom: 5px;">
 						<ol>
-							<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
-								<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
+							<li v-if="uploadedFiles.length>0" v-for="(file,index) of uploadedFiles" @click="clickImg(index)"><span style="padding: 7px 5px 5px;">{{file.NewName}}</span>
 							</li>
-
 						</ol>
 					</div>
 				</div>
-			</div>
+				<div class="weui-cells" style="margin-top: 0px;">
+					<div class="weui-cell">
+						<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
+						<div class="weui-cell__bd" style="margin-left: -30px;">
+							<span @click="selectPepole()" style="border: solid 1px #3C9BFE;color: #3C9BFE; padding: 7px 5px 5px 5px;margin-top: 10px;font-size: 11px;">选择审批人</span>
+							<div id="workFlow" :data_id="flowId" onclick="selectWorkFlow(this)" style="border: solid 1px #3C9BFE;border-radius: 15px;color: #3C9BFE; padding: 5px 5px 5px 5px;margin-top: 0px;font-size: 11px;float: right;" v-model="flowName">选择审批流程</div>
+						</div>
+						<span style="color:#b7b7b7 ;padding-left: 5px;">></span>
+					</div>
 
-			<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
-			<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
-				<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
-				<div class="weui-gallery__opr">
-					<a href="javascript:" class="weui-gallery__del">
-						<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
-					</a>
+					<div class="weui-cell" style="align-items: flex-start;">
+						<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
+						<div class="weui-cell__bd">
+							<ol>
+								<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
+									<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
+								</li>
+
+							</ol>
+						</div>
+					</div>
 				</div>
-			</div>
+
+				<a @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">发布</a>
+				<div class="weui-gallery" :style="displayGallery" style="z-index: 99;position:absolute;">
+					<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
+					<div class="weui-gallery__opr">
+						<a href="javascript:" class="weui-gallery__del">
+							<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
+						</a>
+					</div>
+				</div>
+			</template>
 		</div>
 		<input id="qnInput" style="display: none;">
 
@@ -174,10 +177,14 @@
 		<script src='../../js/utils/signHmacSHA1.js'></script>
 
 		<script type="text/javascript">
-			getSelWorkFlow();
+			
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
-			initQNUploader();
+			var sendFlag = 0;//0是未按确定按钮，1按确定按钮，防止多次触发
+			mui.plusReady(function(){
+				getSelWorkFlow();
+				initQNUploader();
+			});
 			var message = new Vue({
 				el: '#message',
 				data: {
@@ -235,8 +242,10 @@
 						});
 					},
 					clickSubmitBtn: function() {
-						addAffairApply()
-
+						if (sendFlag == 0) {
+							sendFlag = 1;
+							addAffairApply();
+						}
 					},
 					delPeople: function(index) {
 						message.flowMan_arr.splice(index, 1);
@@ -254,7 +263,7 @@
 			//从相册中选择照片后，上传
 			//index--从相册选择照片回调里面，照片的索引，files--选择的照片信息，filesSum--选择照片之前，现存的照片张数
 			function uploadFiles(index, files, filesSum) {
-				console.log('index:' + index + ',files.count:' + files.length + ',filesSum.length:' + filesSum.length);
+				console.log('index:' + index + ',files.count:' + files.length + ',filesSum.length:' + filesSum);
 				if(index < files.length) {
 					if(filesSum + index > 8) {
 						$.toast("最多只能上传9张照片", "cancel");
@@ -291,7 +300,7 @@
 								reader.readAsDataURL(file);
 							});
 						} else {
-							if(index + 1 < filesSum.length) {
+							if(index + 1 < filesSum) {
 								index++;
 								uploadFiles(index, files, filesSum);
 							}
@@ -423,14 +432,17 @@
 			var addAffairApply = function() {
 				if(message.title.trim().length == 0 || message.content.trim().length == 0) {
 					$.toast("请填写具体内容后再发布", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				if(message.title.length > 50) {
 					$.toast("标题不能超过50字", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				if(message.content.length > 300) {
 					$.toast("内容不能超过300字", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				//判断输入是否符合要求
@@ -442,7 +454,8 @@
 
 						for(var i = 0; i < message.uploadedFiles.length; i++) {
 							var tempValue = message.uploadedFiles[i];
-							nameArr.push(tempValue.NewName);
+							var tempName = tempValue.NewName + '(' + cloudutil.transformSize(tempValue.FileSize) + ')';
+							nameArr.push(tempName);
 							addrArr.push(tempValue.ImgUrl);
 						}
 						var noticEncName = nameArr.join("|")
@@ -453,14 +466,21 @@
 						var ids = [];
 						var codes = [];
 						var names = [];
+						var pics = [];
 						for(var i = 0; i < message.flowMan_arr.length; i++) {
 							var model = message.flowMan_arr[i];
-							ids.push(model.ManId)
-							codes.push('""')
-							names.push('"' + model.ManName + '"')
+							ids.push(model.ManId);
+							codes.push('""');
+							names.push('"' + model.ManName + '"');
+							if (model.imgurl == null) {
+								pics.push('""');
+							}else{
+								pics.push('"' + model.imgurl + '"');
+							}
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");
+							sendFlag = 0;
 							return;
 						}
 						$.showLoading('加载中...');
@@ -474,8 +494,10 @@
 							applyManId: personal.utid, //发布人ID
 							applyManCode: personal.uid, //发布人账号
 							applyManName: personal.utname, //发布人姓名
+							applyManPic: personal.imgurl, //申请人头像
 							approveManIds: arrayToStr(ids), //接收人人ID
 							approveManCodes: arrayToStr(codes), //接收人账号
+							approveManPics: arrayToStr(pics), //审批人头像
 							approveManNames: arrayToStr(names) //接收人姓名
 						}
 						addAffairApplyPro(tempData, function function_name(data) {
@@ -486,7 +508,7 @@
 								mui.toast("发布成功")
 								mui.back();
 							} else {
-
+								sendFlag = 0;
 							}
 						});
 					}
@@ -562,6 +584,7 @@
 					var tempData = {
 						ManName: model.utname,
 						ManId: model.utid,
+						imgurl:model.imgurl
 					}
 					tempArr.push(tempData)
 				}
@@ -571,10 +594,12 @@
 			var checkInput = function(text) {
 				if(text.trim().length == 0) {
 					mui.toast('请输入标题或内容');
+					sendFlag = 0;
 					return false;
 				}
 				if(isNull(text)) {
 					mui.toast('请输入标题或内容');
+					sendFlag = 0;
 					return false;
 				}
 				return true;
