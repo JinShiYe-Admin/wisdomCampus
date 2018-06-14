@@ -95,7 +95,7 @@
 			.select-btn:after {
 			    position: absolute;
 			    right: 0;
-			    top: 176px;
+			    top: 178px;
 			    left: 15px;
 			    height: 1px;
 			    content: '';
@@ -115,6 +115,22 @@
 			    transform: scaleY(.5);
 			    background-color: #c8c7cc;
 			}
+			
+			.mui-input-group:before {
+			    position: absolute;
+			    top: 0;
+			    right: 0;
+			    left: 0;
+			    height: 0;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			}
+			
+			.mui-content {
+			    background-color: #ffffff;
+			}
 		</style>
 	</head>
 
@@ -124,137 +140,62 @@
 			<h1 class="mui-title">获取考勤记录</h1>
 			<a id="position111" class="mui-pull-right right-position">· · ·</a>
 		</header>
-		
-		
 		<div id='scroll' class="mui-content">
-			<div class="row">
+			<div class="mui-row" style="margin-top: 2px;">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label>开始日期</label>
-						<input id="start" type="text" value=""  onclick="getTime(this)"  data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择开始查询日期"/>
+						<input id="start" type="text" value="" onclick="getTime(this)"   data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择开始查询日期"/>
 					</div>
 					<div class="mui-input-row">
 						<label>结束日期</label>
-						<input id="end" type="text"  value="" onclick="getTime(this)"  data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择结束查询日期"/>
+						<input id="end" type="text"  value=""  onclick="getTime(this)"  data-options='{"type":"date"}' readonly="true" class="mui-input-clear" placeholder="请选择结束查询日期"/>
 					</div>
 				</form>
 				<div class="select-btn">
 		 			<button class="mui-btn mui-btn-success btn-style" id="select">查询</button>
 		 		</div>
 		    </div>
-		    <div class="row">
-		    	<div id='attend' >
+		    <div id="second-row" class="mui-row">
+		    	<div id='attend'>
 					<!-- class="mui-content mui-scroll-wrapper" -->
-					<div class="mui-scroll">
+					<div id="ulList" style="display: none;" class="mui-scroll">
 					 	<ul class="mui-table-view" >
-							<li class="mui-table-view-cell" >
-									<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<li class="mui-table-view-cell" v-for="(item,index) in attendList">
+									<img id="item1" data-preview-src=""  class="mui-media-object mui-pull-left" src="" :src="item.AttendPic">
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>时间：</span>
-										<span class="right-p">2018年6月11日</span>
+										<span class="right-p">{{item.AttendTime}}</span>
 									</div>
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>地点：</span>
-										<span class="right-p">长长很长很长长很长很长很长的定位地点</span>
+										<span class="right-p">{{item.AttendArea}}</span>
 									</div>
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">上午上班</span>
+										<span class="right-p">{{item.AttendType}}</span>
 									</div>
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>结果：</span>
-										<span class="right-p">迟到</span>
-									</div>
-							</li>
-							<li class="mui-table-view-cell" >
-									<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>时间：</span>
-										<span class="right-p">2018年6月11日</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>地点：</span>
-										<span class="right-p">长长很长很长长很长很长很长的定位地点</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">上午上班</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>结果：</span>
-										<span class="right-p">迟到</span>
-									</div>
-							</li>
-							<li class="mui-table-view-cell" >
-									<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>时间：</span>
-										<span class="right-p">2018年6月11日</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>地点：</span>
-										<span class="right-p">长长很长很长长很长很长很长的定位地点</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">上午上班</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>结果：</span>
-										<span class="right-p">迟到</span>
-									</div>
-							</li>
-							<li class="mui-table-view-cell" >
-									<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>时间：</span>
-										<span class="right-p">2018年6月11日</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>地点：</span>
-										<span class="right-p">长长很长很长长很长很长很长的定位地点</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">上午上班</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>结果：</span>
-										<span class="right-p">迟到</span>
-									</div>
-							</li>
-							<li class="mui-table-view-cell" >
-									<img id="item1" data-preview-src=""  onclick="imgView(this)" class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>时间：</span>
-										<span class="right-p">2018年6月11日</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>地点：</span>
-										<span class="right-p">长长很长很长长很长很长很长的定位地点</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">上午上班</span>
-									</div>
-									<div class="mui-media-body">
-										<span class='mui-ellipsis left-p'>结果：</span>
-										<span class="right-p">迟到</span>
+										<span class="right-p">{{item.AttendResult}}</span>
 									</div>
 							</li>
 						</ul>
 					</div>
 				</div>
-		    </div>
+				<div id="nodata" style="text-align: center;margin-top: 100px;display: none;">
+					<img src="../../img/classRoom/nodata.png" style="width: 200px;"/>
+				</div> 
+		    </div> 
 		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh2.js"></script>
-		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/utils/mui.pullToRefresh.material2.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
 		<script src="../../js/classRoom/mui.picker.min.js"></script>
 		<script src="../../js/jquery.min.js"></script>
-		<script src="../../js/mui.zoom.js"></script>
+		<script src="../../js/mui.zoom.js"></script> 
 		<script src="../../js/mui.previewimage.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
@@ -268,6 +209,16 @@
 		<script>
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
+			var _beginTime = '19900101',
+			    _endTime ='30180614';
+			
+			//获取部门id集合
+			var dpts=personal.dpts;
+			var dptid=[];
+			$.each(dpts,function(i,item){
+				dptid.push(item.dptid)
+		　　	});
+			
 			mui.init({
 				pullRefresh: {
 					container: '#scroll',
@@ -277,11 +228,11 @@
 						height: '50px', //可选,默认50px.下拉刷新控件的高度,
 						range: '100px', //可选 默认100px,控件可下拉拖拽的范围
 						offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
+						auto: true,
 						callback: pulldownRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 					},
 					up: { 
 						height: 50, //可选.默认50.触发上拉加载拖动距离
-						auto: true, //可选,默认false.自动上拉加载一次
 						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
 						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
 						callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
@@ -290,23 +241,26 @@
 			});
 			
 			function pulldownRefresh() {
-					mui('#scroll').pullRefresh().endPulldownToRefresh(); //refresh completed
+				attend.flag = 0;
 				getAttendList();
 			}
-			var count = 0;
+			
 			function pullupRefresh() {
+				attend.flag = 1;
 				attend.pageIndex = 1;
 				getAttendList();
 			}
 			
-			
+			//初始化时间选择控件
 			var mObj;
 			(function($) {
 				mObj=$;
 			})(mui);
 			
 			mui.plusReady(function() {
-				getAttendList();
+				var bodyHeight = plus.display.resolutionHeight;
+				document.getElementById('second-row').style.minHeight=(bodyHeight-177)+'px';
+				
 				//查询按钮点击事件
 				mui(".mui-row").on('tap','button',function() {
 					var startTime=$('#start').val();
@@ -316,17 +270,16 @@
 					}else if(endTime==''){
 						alert('请选择结束查询日期')
 					}else{ 
-						//TODO 查询
+						getAttendList();
 					}
 				}); 
 			});
-			
 			
 			var attend =new Vue({
 				el:'#attend'
 				,data:{
 					attendList:[]
-					,showFlag: 0 //1有数据，0无数据
+					,flag: 0 //0刷新，1加载更多
 					,pageIndex: 1
 				}
 			});
@@ -335,10 +288,10 @@
 			function getAttendList(){
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID //学校ID
-					,deptId:['195','39']
-					,userId:personal.uid
-					,beginTime:'20180613'
-					,endTime:'20180613'
+					,deptId:'['+dptid+']'
+					,userId:'['+personal.utid+']'
+					,beginTime:_beginTime
+					,endTime:_endTime
 					,attendResultId:0
 					,attendTypeId:0
 					,attendAreaId:0
@@ -347,23 +300,41 @@
 				}
 				getAttendPro(tempData, function function_name(data) {
 					console.log('15.获取考勤记录'+JSON.stringify(data));
+					mui('#scroll').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+					mui('#scroll').pullRefresh().endPulldownToRefresh();
 					if(data.RspCode == 0) {
 						attend.pageIndex++;
-						attend.attendList = data.RspData.Data;
+						if(attend.flag == 0) { //刷新
+							attend.attendList = data.RspData.Data;
+							if(data.RspData.Data.length == 0) {
+								mui.toast('数据为空');
+								$('#nodata').show();
+							}else{
+								$('#nodata').hide();
+							}
+						} else { //加载更多
+							attend.attendList = attend.attendList.concat(data.RspData.Data);
+							if(data.RspData.Data.length == 0) {
+								mui.toast('已加载全部');
+								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
+							}
+						}
+						$("#ulList").show();
 					}
 				});
 			}
 			
-			
 			//选择时间
 			function getTime(obj){
+				 mui('#scroll').pullRefresh().scrollTo(0,1,100);
 				var optionsJson = obj.getAttribute('data-options') || '{}';
 				var options = JSON.parse(optionsJson);
 				var id = obj.getAttribute('id');
 				obj.picker = new mObj.DtPicker(options);
 				obj.picker.show(function(rs) {
 					if(id=='start'){
-						$('#'+id).val(rs.text)
+						$('#'+id).val(rs.text);
+						_beginTime=rs.y.text+rs.m.text+rs.d.text;
 					}else{
 						//判断结束时间≥开始时间
 						var startTime = $('#start').val();
@@ -374,14 +345,16 @@
 						}
 						if(checkTime(startTime,endTime)){
 							$('#'+id).val(rs.text)
+							_endTime=rs.y.text+rs.m.text+rs.d.text
 						}else{
 							alert('结束日期必须大于晚于开始日期');
 						}
 					}
+					mui('#scroll').pullRefresh().scrollTo(0,0,100);
 					obj.picker.dispose();
-					obj.picker = null;
+					obj.picker = null; 
 				});
-			}
+			} 
 			
 			//判断日期
 			function checkTime(startTime,endTime){
@@ -399,7 +372,6 @@
 				var previewImage = mui.previewImage();
 				previewImage.open(document.getElementById(id));*/
 			}
-			
 		</script>
 	</body>
 
