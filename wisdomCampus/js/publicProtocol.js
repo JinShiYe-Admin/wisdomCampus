@@ -527,3 +527,10 @@ var getAttendPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttend', data0, callback);
 }
+
+//17.获取选择用考勤类型
+var getAttendTypeForSelPro = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.INTERFACESIGNINKONG + 'attendance/';
+	data0 = extendParameter(data0);
+	xhrPost(tempAttendUrl1 + 'getAttendTypeForSel', data0, callback);
+}

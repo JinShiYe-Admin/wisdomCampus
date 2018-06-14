@@ -103,7 +103,7 @@
 			<h1 class="mui-title">签到考勤</h1>
 			<a id="position111" class="mui-pull-right right-position">查询</a>
 		</header>
-		<div class="weui-tab mui-content" id="wrapper">
+		<div class="weui-tab mui-content" id="wrapper" style="background: white;">
 			<div class="weui-tab__bd">
 				<div class="weui-tab__bd-item weui-tab__bd-item--active" id="tab0">
 					<p></p>
@@ -302,15 +302,14 @@
 				console.log('签到')
 			}
 
-			//12.获取考勤类型
+			//17.获取选择用考勤类型
 			function getAttendType() {
-
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
 					pageIndex: '1', //当前页数
 					pageSize: '0' //每页记录数，0 为全部
 				}
-				getAttendTypePro(tempData, function function_name(data) {
+				getAttendTypeForSelPro(tempData, function function_name(data) {
 					console.log('12.获取考勤类型:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						for(var i = 0; i < data.RspData.Data.length; i++) {
