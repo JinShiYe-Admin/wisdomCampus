@@ -298,7 +298,8 @@
 				"resources": [],
 				"refer": [
 					"html/checkNotice/all-list.html",
-					"html/signIn/atterecords.html"
+					"html/signIn/atterecords.html",
+					"html/signIn/signInIndex.html"
 				],
 				"priority": 0
 			},

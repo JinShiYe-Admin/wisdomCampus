@@ -138,7 +138,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;"> 
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">获取考勤记录</h1>
-			<a id="position111" class="mui-pull-right right-position">· · ·</a>
+			<!--<a id="position111" class="mui-pull-right right-position">· · ·</a>-->
 		</header>
 		<div id='scroll' class="mui-content">
 			<div class="mui-row" style="margin-top: 2px;">
@@ -233,7 +233,7 @@
 					},
 					up: { 
 						height: 50, //可选.默认50.触发上拉加载拖动距离
-						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentrefresh: "<span class='mui-spinner'></span>正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
 						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
 						callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 					}
@@ -305,18 +305,21 @@
 					if(data.RspCode == 0) {
 						attend.pageIndex++;
 						if(attend.flag == 0) { //刷新
-							attend.attendList = data.RspData.Data;
 							if(data.RspData.Data.length == 0) {
-								mui.toast('数据为空');
+//								mui.toast('数据为空');
 								$('#nodata').show();
 							}else{
 								$('#nodata').hide();
+								attend.attendList = data.RspData.Data;
 							}
 						} else { //加载更多
-							attend.attendList = attend.attendList.concat(data.RspData.Data);
 							if(data.RspData.Data.length == 0) {
-								mui.toast('已加载全部');
+//								mui.toast('已加载全部');
+								$('#nodata').show();
 								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
+							}else{
+								$('#nodata').hide();
+								attend.attendList = attend.attendList.concat(data.RspData.Data);
 							}
 						}
 						$("#ulList").show();
