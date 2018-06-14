@@ -242,12 +242,12 @@
 			
 			function pulldownRefresh() {
 				attend.flag = 0;
+				attend.pageIndex = 1;
 				getAttendList();
 			}
 			
 			function pullupRefresh() {
 				attend.flag = 1;
-				attend.pageIndex = 1;
 				getAttendList();
 			}
 			
@@ -308,17 +308,16 @@
 							if(data.RspData.Data.length == 0) {
 //								mui.toast('数据为空');
 								$('#nodata').show();
+								attend.attendList=[];
 							}else{
 								$('#nodata').hide();
 								attend.attendList = data.RspData.Data;
 							}
 						} else { //加载更多
 							if(data.RspData.Data.length == 0) {
-//								mui.toast('已加载全部');
-								$('#nodata').show();
+								mui.toast('已加载全部');
 								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
 							}else{
-								$('#nodata').hide();
 								attend.attendList = attend.attendList.concat(data.RspData.Data);
 							}
 						}
@@ -336,8 +335,21 @@
 				obj.picker = new mObj.DtPicker(options);
 				obj.picker.show(function(rs) {
 					if(id=='start'){
-						$('#'+id).val(rs.text);
-						_beginTime=rs.y.text+rs.m.text+rs.d.text;
+						var endTime = $('#end').val();
+						//判断结束时间≥开始时间
+						if(endTime!=''){
+							if(checkTime(rs.text,endTime)){
+								isTimeChange(id,rs.text);
+								$('#'+id).val(rs.text)
+								_endTime=rs.y.text+rs.m.text+rs.d.text
+							}else{
+								mui.toast('结束日期必须大于晚于开始日期');
+							}
+						}else{
+							isTimeChange(id,rs.text);
+							$('#'+id).val(rs.text)
+							_endTime=rs.y.text+rs.m.text+rs.d.text
+						}
 					}else{
 						//判断结束时间≥开始时间
 						var startTime = $('#start').val();
@@ -347,6 +359,7 @@
 							return
 						}
 						if(checkTime(startTime,endTime)){
+							isTimeChange(id,rs.text);
 							$('#'+id).val(rs.text)
 							_endTime=rs.y.text+rs.m.text+rs.d.text
 						}else{
@@ -367,6 +380,14 @@
 			        return true;  
 			    }  
 			    return false;  
+			}
+			
+			//检查时间是否发生变化
+			function isTimeChange(id,time){
+				var _time=$('#'+id).val();
+				if(_time!=time){//发生变化页数归1
+					attend.pageIndex = 1;
+				}
 			}
 			
 			//预览图片
