@@ -136,7 +136,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;"> 
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#ffffff"></a>
 			<h1 class="mui-title">获取考勤记录</h1>
 			<!--<a id="position111" class="mui-pull-right right-position">· · ·</a>-->
 		</header>
@@ -183,9 +183,6 @@
 						</ul>
 					</div>
 				</div>
-				<div id="nodata" style="text-align: center;margin-top: 100px;display: none;">
-					<img src="../../img/classRoom/nodata.png" style="width: 200px;"/>
-				</div> 
 		    </div> 
 		</div>
 		<script src="../../js/mui.min.js"></script>
@@ -265,6 +262,8 @@
 				mui(".mui-row").on('tap','button',function() {
 					var startTime=$('#start').val();
 					var endTime=$('#end').val();
+					attend.flag = 0;
+					attend.pageIndex=1;
 					if(startTime==''){
 						mui.toast('请选择开始查询日期');
 					}else if(endTime==''){
@@ -303,22 +302,19 @@
 					mui('#scroll').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
 					mui('#scroll').pullRefresh().endPulldownToRefresh();
 					if(data.RspCode == 0) {
-						attend.pageIndex++;
+						console.log('attend.flag========'+attend.flag)
+						attend.pageIndex++
 						if(attend.flag == 0) { //刷新
+							attend.attendList = data.RspData.Data;
 							if(data.RspData.Data.length == 0) {
-//								mui.toast('数据为空');
-								$('#nodata').show();
-								attend.attendList=[];
-							}else{
-								$('#nodata').hide();
-								attend.attendList = data.RspData.Data;
+								mui.toast('暂无数据');
 							}
 						} else { //加载更多
+							
+							attend.attendList = attend.attendList.concat(data.RspData.Data);
 							if(data.RspData.Data.length == 0) {
 								mui.toast('已加载全部');
-								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
-							}else{
-								attend.attendList = attend.attendList.concat(data.RspData.Data);
+//								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
 							}
 						}
 						$("#ulList").show();
@@ -339,16 +335,14 @@
 						//判断结束时间≥开始时间
 						if(endTime!=''){
 							if(checkTime(rs.text,endTime)){
-								isTimeChange(id,rs.text);
 								$('#'+id).val(rs.text)
-								_endTime=rs.y.text+rs.m.text+rs.d.text
+								_beginTime=rs.y.text+rs.m.text+rs.d.text
 							}else{
 								mui.toast('结束日期必须大于晚于开始日期');
 							}
 						}else{
-							isTimeChange(id,rs.text);
 							$('#'+id).val(rs.text)
-							_endTime=rs.y.text+rs.m.text+rs.d.text
+							_beginTime=rs.y.text+rs.m.text+rs.d.text
 						}
 					}else{
 						//判断结束时间≥开始时间
@@ -359,7 +353,6 @@
 							return
 						}
 						if(checkTime(startTime,endTime)){
-							isTimeChange(id,rs.text);
 							$('#'+id).val(rs.text)
 							_endTime=rs.y.text+rs.m.text+rs.d.text
 						}else{
@@ -380,14 +373,6 @@
 			        return true;  
 			    }  
 			    return false;  
-			}
-			
-			//检查时间是否发生变化
-			function isTimeChange(id,time){
-				var _time=$('#'+id).val();
-				if(_time!=time){//发生变化页数归1
-					attend.pageIndex = 1;
-				}
 			}
 			
 			//预览图片

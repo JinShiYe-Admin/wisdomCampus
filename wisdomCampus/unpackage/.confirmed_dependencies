@@ -8,7 +8,8 @@
 		"refer": [
 			"html/checkNotice/all-list.html",
 			"html/signIn/atterecords.html",
-			"html/signIn/signInIndex.html"
+			"html/signIn/signInIndex.html",
+			"html/signIn/signInIndex1.html"
 		]
 	},
 	"html/checkNotice/all-list.html": {
@@ -27,6 +28,11 @@
 	"html/checkNotice/new-check.html": {
 		"refer": [
 			"html/checkNotice/selectPeople.html"
+		]
+	},
+	"html/signIn/signInIndex1.html": {
+		"refer": [
+			"html/signIn/atterecords.html"
 		]
 	}
 }
