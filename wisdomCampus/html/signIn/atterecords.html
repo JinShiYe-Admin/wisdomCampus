@@ -266,9 +266,9 @@
 					var startTime=$('#start').val();
 					var endTime=$('#end').val();
 					if(startTime==''){
-						alert('请选择开始查询日期')
+						mui.toast('请选择开始查询日期');
 					}else if(endTime==''){
-						alert('请选择结束查询日期')
+						mui.toast('请选择结束查询日期');
 					}else{ 
 						getAttendList();
 					}
@@ -343,14 +343,14 @@
 						var startTime = $('#start').val();
 						var endTime=rs.text;
 						if(startTime==''){
-							alert('请先选择开始日期');
+							mui.toast('请先选择开始日期');
 							return
 						}
 						if(checkTime(startTime,endTime)){
 							$('#'+id).val(rs.text)
 							_endTime=rs.y.text+rs.m.text+rs.d.text
 						}else{
-							alert('结束日期必须大于晚于开始日期');
+							mui.toast('结束日期必须大于晚于开始日期');
 						}
 					}
 					mui('#scroll').pullRefresh().scrollTo(0,0,100);
