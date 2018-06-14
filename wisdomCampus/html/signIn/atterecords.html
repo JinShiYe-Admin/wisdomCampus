@@ -126,7 +126,7 @@
 		</header>
 		
 		
-		<div id='attend' class="mui-content">
+		<div id='scroll' class="mui-content">
 			<div class="row">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
@@ -143,7 +143,7 @@
 		 		</div>
 		    </div>
 		    <div class="row">
-		    	<div id='scroll' >
+		    	<div id='attend' >
 					<!-- class="mui-content mui-scroll-wrapper" -->
 					<div class="mui-scroll">
 					 	<ul class="mui-table-view" >
@@ -268,9 +268,9 @@
 		<script>
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
-			mui.init(
+			mui.init({
 				pullRefresh: {
-					container: '#attend',
+					container: '#scroll',
 					down: {
 						style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
 						color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
@@ -279,7 +279,7 @@
 						offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
 						callback: pulldownRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 					},
-					up: {
+					up: { 
 						height: 50, //可选.默认50.触发上拉加载拖动距离
 						auto: true, //可选,默认false.自动上拉加载一次
 						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
@@ -287,7 +287,38 @@
 						callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 					}
 				}
-			);
+			});
+			
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for (var i = cells.length, len = i + 3; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+						//下拉刷新，新纪录插到最前面；
+						table.insertBefore(li, table.firstChild);
+					}
+					mui('#scroll').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#scroll').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for (var i = cells.length, len = i + 5; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+						table.appendChild(li);
+					}
+				}, 1500);
+			}
+			
+			
 			var mObj;
 			(function($) {
 				mObj=$;
