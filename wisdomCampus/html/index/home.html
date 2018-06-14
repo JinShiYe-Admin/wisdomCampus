@@ -114,10 +114,11 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
-			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" src="../../img/login/headImg.png" /></a>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="mine1">
+			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" :src=userImg /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
+		
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
 			<div class="mui-scroll">
 				<div class="mui-content">
@@ -139,7 +140,7 @@
 		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow" style="display: none;">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
-					<img class="head-portrait" src="../../img/login/headImg.png" />
+					<img class="head-portrait" :src=userImg />
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
@@ -376,10 +377,16 @@
 					return false;
 				}
 			}
+			var mine1 = new Vue({
+				el: "#mine1",
+				data: {
+					userImg:setImg(personal.imgurl)
+				}});
 			var mine = new Vue({
 				el: "#mine",
 				data: {
 					userName: tempName,
+					userImg:setImg(personal.imgurl),
 					settings: [
 						//					{
 						//						name: "密码修改",

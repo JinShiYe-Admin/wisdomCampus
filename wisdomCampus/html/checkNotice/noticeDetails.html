@@ -105,6 +105,12 @@
 				word-break;
 				: break-all;
 			}
+			
+			.peopleImg {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+			}
 		</style>
 	</head>
 
@@ -134,7 +140,7 @@
 					<p class="" style="height: 10px;background-color: #f2f2f2;"></p>
 					<a style="color: black;size: 15px;margin-left: 15px;">回复</a>
 					<div style="padding-top: 5px;height: 170px;">
-						<textarea v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
+						<textarea maxlength="50" v-model="content" style="border: 1px solid gainsboro;margin-left: 10px;width: 95%;" placeholder="请输入要回复的内容" rows="4"></textarea>
 						<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="float: right;margin-right: 15px;margin-top: -10px;">确定</button>
 					</div>
 				</template>
@@ -143,7 +149,7 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" v-for="(replyModel,index) in detailModel.Data">
 						<div>
-							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<img class="mui-media-object mui-pull-left peopleImg" :src=setImg(replyModel.ReceiManPic)>
 							<a class="" style="font-size: 13px;color: #666;">
 								{{replyModel.ReceiveManName}} {{replyModel.ReadTime}}
 								<div class="chat_content_left" v-if="replyModel.ReplyContent.length>0">
@@ -257,7 +263,7 @@
 							$.toast("请输入回复内容", "cancel");
 							return;
 						}
-						if(noticeDetailData.content.length >= 50) {
+						if(noticeDetailData.content.length > 50) {
 							$.toast("回复内容不能超过50字", "cancel");
 							return;
 						}

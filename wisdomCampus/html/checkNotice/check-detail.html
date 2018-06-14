@@ -163,6 +163,12 @@
 			.applied-words {
 				color: green;
 			}
+			
+			.peopleImg {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+			}
 			/*.titleCSS {
 				font-size: 18px;
 				color: #000;
@@ -209,7 +215,7 @@
 					<div class="check-flow">
 						<p style="color: black;size: 13px;">批复内容<button class="mui-btn mui-btn-danger " v-on:click.stop="replyLeave(approveResult=2)" style="float: right;margin-top: 0px;;height:25px;line-height:10px;">退回</button></p>
 						<div style="padding-top: 5px;height: 130px;">
-							<textarea v-model.trim="replyContent" style="border: 1px solid gainsboro;margin-left: 00px;width: 100%;" placeholder="请输入批复内容" rows="4"></textarea>
+							<textarea maxlength="50" v-model.trim="replyContent" style="border: 1px solid gainsboro;margin-left: 00px;width: 100%;" placeholder="请输入批复内容" rows="4"></textarea>
 							<button class="mui-btn mui-btn-primary " v-on:click.stop="replyLeave(approveResult=1)" style="float: right;margin-top: 0px;;height:25px;line-height:10px">批复</button>
 						</div>
 					</div>
@@ -220,7 +226,8 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" v-for="check in leaveDetail.ApproveList">
 						<div>
-							<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+							<img v-if="check.ApproveManPic==null||check.ApproveManPic.length==0" class="mui-media-object mui-pull-left peopleImg" src='../../img/login/headImg.png'>
+							<img v-else="" class="mui-media-object mui-pull-left peopleImg" :src=check.ApproveManPic>
 							<a class="" style="font-size: 13px;color: #666;">
 								{{check.ApproveManName}} {{check.ApproveTime}}
 								<div class="chat_content_left" v-if="check.ApproveTime" class="check-reply" v-bind:class="[{'applied-words':check.ApproveStatus==1},{'refused-words':check.ApproveStatus==2}]">
@@ -255,17 +262,20 @@
 		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			//获取个人信息
-			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			console.log('personal:' + JSON.stringify(personal));
+			var personal = {};
 			var curPage = {};
 			mui.plusReady(function() {
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:' + JSON.stringify(personal));
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
 				//				var curPage = {
 				//					"id": "17", //通知ID
 				//					"flag": 0//1我发送的，0发给我的
 				//				}
+				checkDetailData.getDetail();
 			});
+			
 			var tempVue = new Vue({
 				el: "#tempVue",
 				data: {
@@ -285,7 +295,7 @@
 								setAffairApplyUndoPro(tempData, function function_name(data) {
 									if(data.RspCode == 0) {
 										checkDetailData.getDetail();
-									}else{
+									} else {
 										$.toast(data.RspTxt);
 										tempVue.status = 0;
 									}

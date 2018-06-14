@@ -72,6 +72,7 @@
 			<h1 class="mui-title">新建通知</h1>
 		</header>
 		<div id="message" class="mui-content">
+			<template v-if="dataFlag>0">
 			<div class="weui-cells" style="margin-top: 0px;">
 				<div class="weui-cell">
 					<div class="weui-cell__hd">标题</div>
@@ -146,6 +147,7 @@
 					</a>
 				</div>
 			</div>
+			</template>
 		</div>
 		<input id="qnInput" style="display: none;">
 		<script src="../../js/weui.min.js"></script>
@@ -172,6 +174,7 @@
 			var message = new Vue({
 				el: '#message',
 				data: {
+					dataFlag :0,//是否加载完
 					showSelectPeople:'',
 					title: '',
 					content: '',
@@ -209,6 +212,7 @@
 						console.log(message.uploadedFiles[index].ImgUrl)
 						message.selectIndex = index;
 						message.selectImgPath = message.uploadedFiles[index].ImgUrl;
+						console.log('message.selectImgPath:'+message.selectImgPath);
 						message.displayGallery = {
 							display: 'block'
 						};
@@ -232,8 +236,10 @@
 						});
 					},
 					clickSubmitBtn: function() {
-						$('#sengMsg').attr('disabled',"true");
-						addNotice();
+						if (sendFlag == 0) {
+							sendFlag = 1;
+							addNotice();
+						}
 					},
 					selectPepole: function() {
 						var data = {
@@ -247,12 +253,16 @@
 			})
 			var uptokenData;
 			var qnFileUploader; //七牛上传控件对象
-			initQNUploader();
+			var sendFlag = 0;//0是未按确定按钮，1按确定按钮，防止多次触发
+			mui.plusReady(function(){
+				initQNUploader();
+				message.dataFlag = 1;
+			});
 
 			//从相册中选择照片后，上传
 			//index--从相册选择照片回调里面，照片的索引，files--选择的照片信息，filesSum--选择照片之前，现存的照片张数
 			function uploadFiles(index, files, filesSum) {
-				console.log('index:' + index + ',files.count:' + files.length + ',filesSum.length:' + filesSum.length);
+				console.log('index:' + index + ',files.count:' + files.length + ',filesSum:' + filesSum);
 				if(index < files.length) {
 					if(filesSum + index > 8) {
 						$.toast("最多只能上传9张照片", "cancel");
@@ -289,7 +299,7 @@
 								reader.readAsDataURL(file);
 							});
 						} else {
-							if(index + 1 < filesSum.length) {
+							if(index + 1 < filesSum) {
 								index++;
 								uploadFiles(index, files, filesSum);
 							}
@@ -420,14 +430,17 @@
 			var addNotice = function() {
 				if(message.title.trim().length == 0 || message.content.trim().length == 0) {
 					$.toast("请填写具体内容后再发布", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				if(message.title.length > 50) {
 					$.toast("标题不能超过50字", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				if(message.content.length > 300) {
 					$.toast("内容不能超过300字", "cancel");
+					sendFlag = 0;
 					return;
 				}
 				//判断输入是否符合要求
@@ -454,14 +467,22 @@
 						var ids = [];
 						var codes = [];
 						var names = [];
+						var pics = [];
 						for(var i = 0; i < selectPeople_arr.length; i++) {
 							var model = selectPeople_arr[i];
 							ids.push(model.utid)
-							codes.push('""')
-							names.push('"' + model.utname + '"')
+							codes.push('""');
+							names.push('"' + model.utname + '"');
+//							pics.push('"' + model.imgurl + '"');
+							if (model.imgurl == null) {
+								pics.push('""');
+							}else{
+								pics.push('"' + model.imgurl + '"');
+							}
 						}
 						if(ids.length == 0) {
 							$.toast("请选择接收人", "cancel");
+							sendFlag = 0;
 							return;
 						}
 						$.showLoading('加载中...');
@@ -475,8 +496,10 @@
 							sendManId: personal.utid, //发布人ID
 							sendManCode: personal.uid, //发布人账号
 							sendManName: personal.utname, //发布人姓名
+							sendManPic: personal.imgurl, //发布人头像
 							receiveManIds: arrayToStr(ids), //接收人人ID
 							receiveManCodes: arrayToStr(codes), //接收人账号
+							receiveManPics:arrayToStr(pics),//接收人头像
 							receiveManNames: arrayToStr(names) //接收人姓名
 						}
 						addNoticePro(tempData, function function_name(data) {
@@ -488,6 +511,7 @@
 								mui.back();
 							} else {
 								mui.toast(data.RspTxt)
+								sendFlag = 0;
 							}
 						});
 					}
@@ -507,10 +531,12 @@
 			var checkInput = function(text) {
 				if(text.trim().length == 0) {
 					mui.toast('请输入标题或内容');
+					sendFlag = 0;
 					return false;
 				}
 				if(isNull(text)) {
 					mui.toast('请输入标题或内容');
+					sendFlag = 0;
 					return false;
 				}
 				return true;

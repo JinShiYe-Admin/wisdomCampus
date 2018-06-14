@@ -287,19 +287,41 @@
 				],
 				"priority": 0
 			},
-			"html/index/home.html": {
-				"resources": [],
-				"refer": [
-					"html/signIn/signInIndex.html",
-					"html/signIn/atterecords.html",
-					"html/checkNotice/all-list.html"
-				],
-				"priority": 0
-			},
 			"html/index/login.html": {
 				"resources": [],
 				"refer": [
 					"html/index/home.html"
+				],
+				"priority": 0
+			},
+			"html/index/home.html": {
+				"resources": [],
+				"refer": [
+					"html/checkNotice/all-list.html"
+				],
+				"priority": 0
+			},
+			"html/checkNotice/all-list.html": {
+				"resources": [],
+				"refer": [
+					"html/checkNotice/new_message.html",
+					"html/checkNotice/new-check.html",
+					"html/checkNotice/noticeDetails.html",
+					"html/checkNotice/check-detail.html"
+				],
+				"priority": 0
+			},
+			"html/checkNotice/new_message.html": {
+				"resources": [],
+				"refer": [
+					"html/checkNotice/selectPeople.html"
+				],
+				"priority": 0
+			},
+			"html/checkNotice/new-check.html": {
+				"resources": [],
+				"refer": [
+					"html/checkNotice/selectPeople.html"
 				],
 				"priority": 0
 			}

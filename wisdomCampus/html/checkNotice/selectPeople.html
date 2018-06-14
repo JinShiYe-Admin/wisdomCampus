@@ -58,42 +58,42 @@
 		</header>
 		<div class="mui-content mui-fullscreen" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
 			<template>
-			<nav class="mui-bar mui-bar-tab" style="margin-top: 5px;">
-				<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
-				<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
-			</nav>
-			<ul class="mui-table-view mui-table-view-chevron" style="padding-bottom: 60px;">
-				<li class="mui-table-view-cell mui-collapse keep-unfold mui-checkbox mui-left" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
-					<template v-if='department.dptname'>
-						<a class="mui-input-row mui-checkbox mui-left">
-							<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.dptname}}</a>
-							<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
-						</a>
-						<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
-							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
-								<a class="mui-input-row mui-checkbox mui-left">
-									<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
-									<input name="checkbox1" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+				<nav class="mui-bar mui-bar-tab" style="margin-top: 5px;">
+					<a v-if="selectPeopleArray.length > 0" @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+					<a v-else @click="clickSubmitBtn()" class="weui-btn weui-btn_blue">确定({{selectPeopleArray.length}}人)</a>
+				</nav>
+				<ul class="mui-table-view mui-table-view-chevron" style="padding-bottom: 60px;">
+					<li class="mui-table-view-cell mui-collapse keep-unfold mui-checkbox mui-left" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
+						<template v-if='department.dptname'>
+							<a class="mui-input-row mui-checkbox mui-left">
+								<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.dptname}}</a>
+								<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
+							</a>
+							<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
+								<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
+									<a class="mui-input-row mui-checkbox mui-left">
+										<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
+										<input name="checkbox1" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+									</a>
+								</li>
+							</ul>
+						</template>
+						<template v-else>
+							<a class="mui-input-row mui-checkbox mui-left">
+								<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.clsname}}</label>
+									<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
 								</a>
-							</li>
-						</ul>
-					</template>
-					<template v-else>
-						<a class="mui-input-row mui-checkbox mui-left">
-							<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.clsname}}</label>
-							<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
-						</a>
-						<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
-							<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
-								<a class="mui-input-row mui-checkbox mui-left">
-									<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
-									<input name="checkbox" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
-								</a>
-							</li>
-						</ul>
-					</template>
-				</li>
-			</ul>
+								<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
+									<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
+										<a class="mui-input-row mui-checkbox mui-left">
+											<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
+											<input name="checkbox" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+										</a>
+									</li>
+								</ul>
+						</template>
+					</li>
+				</ul>
 			</template>
 		</div>
 		<!--<div class="mui-content" id="selectPeopleData" v-show="flag>0" style="background-color: white;">
@@ -210,20 +210,24 @@
 					}
 				}
 			});
-			var curPage = utils.getDataFromUrl(window.location.href);
-			var systemFlag = curPage.flag; //1 通知公告,2 事务及文件
-			if(systemFlag == 1) { //如果是通知公告，加入数组
-				selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
-				console.log('curPage.selectPeople:' + JSON.stringify(curPage.selectPeople));
-			}
+			var systemFlag = 0; //1 通知公告,2 事务及文件
+
 			var PrivilegeStr = 0; //权限
 			var requestFlag = 0; //记录发送权限请求的次数
 			var clickFlag = 0; //点击部门0，点击人员1，防止事件乱传
 			//获取个人信息
-			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			console.log('personal:' + JSON.stringify(personal));
-			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			$(function() {
+			var personal = {};
+			var publicParameter = {};
+			mui.plusReady(function() {
+				var curPage = utils.getDataFromUrl(window.location.href);
+				systemFlag = curPage.flag; //1 通知公告,2 事务及文件
+				if(systemFlag == 1) { //如果是通知公告，加入数组
+					selectPeopleData.selectPeopleArray = [].concat(curPage.selectPeople);
+					console.log('curPage.selectPeople:' + JSON.stringify(curPage.selectPeople));
+				}
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:' + JSON.stringify(personal));
+				publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				//根据个人信息，获取权限等
 				getData();
 			});
