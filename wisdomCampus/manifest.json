@@ -286,6 +286,22 @@
 					"html/signIn/camera_image.html"
 				],
 				"priority": 0
+			},
+			"html/index/home.html": {
+				"resources": [],
+				"refer": [
+					"html/signIn/signInIndex.html",
+					"html/signIn/atterecords.html",
+					"html/checkNotice/all-list.html"
+				],
+				"priority": 0
+			},
+			"html/index/login.html": {
+				"resources": [],
+				"refer": [
+					"html/index/home.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

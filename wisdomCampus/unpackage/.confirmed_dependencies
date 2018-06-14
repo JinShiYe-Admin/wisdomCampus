@@ -1,1 +1,14 @@
-null
+{
+	"html/index/home.html": {
+		"refer": [
+			"html/signIn/signInIndex.html",
+			"html/signIn/atterecords.html",
+			"html/checkNotice/all-list.html"
+		]
+	},
+	"html/index/login.html": {
+		"refer": [
+			"html/index/home.html"
+		]
+	}
+}

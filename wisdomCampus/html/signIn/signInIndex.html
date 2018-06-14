@@ -119,32 +119,26 @@
 		 		<div id="map" class="location-map">地图加载中...</div>
 		 	</div>
 		 	<div class="mui-row">
-		 		<form class="mui-input-group">
+		 		<form id="form" class="mui-input-group">
 					<div  class="mui-input-row">
 						<label>考勤类型</label>
-						<select id="cwork" class="select-color">
-							<option>--考勤类型--</option>
-							<option v-for="item in cworkList" >{{item.AttendTypeNote}}</option>
+						<select name="attend" class="select-color">
+							<option disabled="disabled" selected="true">考勤类型</option>
+							<option v-for="item in attendList" v-if="form.attendList.length" :value="item.AttendTypeId">{{item.AttendTypeNote}}</option>
 						</select>
 					</div> 
 					<div class="mui-input-row">
 						<label>部门</label>
-						<select class="select-color">
-							<option>--选择部门--</option>
-							<option>部门1</option>
-							<option>部门2</option>
-							<option>部门3</option>
-							<option>很长很长很长很长很长很长的部门4</option>
+						<select name="depart" class="select-color">
+							<option disabled="disabled" selected="true">选择部门</option>
+							<option v-for="item in departList" v-if="form.departList.length" :value="item.dptid">{{item.dptname}}</option>
 						</select>
 					</div>
 					<div class="mui-input-row">
 						<label>考勤地点</label>
-						<select class="select-color">
-							<option>--选择考勤地点--</option>
-							<option>地点1</option>
-							<option>地点2</option>
-							<option>地点3</option>
-							<option>很长很长很长很长很长很长很长很长很长很长很长很长很长很长的地点4</option>
+						<select name="area" class="select-color">
+							<option disabled="disabled" selected="true">选择考勤地点</option>
+							<option v-for="item in areaList"  v-if="form.areaList.length"  :value="item.AttendAreaId">{{item.AreaName}}</option>
 						</select>
 					</div>
 				</form>
@@ -155,7 +149,7 @@
 		 		 <img id="headimg" data-preview-src="" src="" style="display: none;" onclick="imgView()"  height="150"  width="150">
 		 	</div>
 		 	<div class="mui-row">
-		 		<button class="mui-btn mui-btn-success qdbtn"> 签 到 </button>
+		 		<button class="mui-btn mui-btn-success qdbtn" onclick="signIn()"> 签 到 </button>
 		 	</div>
 		 </div>
 		<script src="../../js/mui.min.js"></script>
@@ -179,23 +173,13 @@
 			mui.plusReady(function() {
 				refresh();
 				//12.获取考勤类型
-				tempType();
+				attend();
+				//部门列表
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				form.departList=personal.dpts
+				//14.获取考勤地点
+				area();
 			});
-			
-			//12.获取考勤类型
-			var tempType = function(){
-				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
-					pageIndex:1,
-					pageSize: 0
-				}
-				getAttendTypePro(tempData, function function_name(data) {
-					console.log('12.获取考勤类型:'+JSON.stringify(data));
-					if(data.RspCode == 0) {
-						cwork.cworkList = data.RspData.Data;
-					}
-				});
-			}
 			
 			//百度地图定位
 			var map = new BMap.Map("map");
@@ -249,12 +233,61 @@
 				previewImage.open(document.getElementById("headimg"));
 			}
 			
-			var cwork =new Vue({
-				el:"#cwork",
+			var form =new Vue({
+				el:"#form",
 				data:{
-					cworkList:[]
+					attendList:[]
+					,departList:[]
+					,areaList:[]
 				}
 			});
+			
+			
+			//12.获取考勤类型
+			var attend = function(){
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					pageIndex:1,
+					pageSize: 0
+				}
+				getAttendTypePro(tempData, function function_name(data) {
+					console.log('12.获取考勤类型:'+JSON.stringify(data));
+					if(data.RspCode == 0) {
+						form.attendList = data.RspData.Data;
+					}
+				});
+			}
+			
+			//14.获取考勤地点
+			var area = function(){
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					stat:0,
+					pageIndex:1,
+					pageSize: 0
+				}
+				getAttendAreaPro(tempData, function function_name(data) {
+					console.log('14.获取考勤地点:'+JSON.stringify(data));
+					if(data.RspCode == 0) {
+						form.areaList = data.RspData.Data;
+					}
+				});
+			}
+			
+			//签到
+			function signIn(){
+				var params=$('#form').serialize();
+				if(params.indexOf('attend')==-1){
+					alert('请选择考勤类型')
+				}else if(params.indexOf('depart')==-1){
+					alert('请选择部门')
+				}else if(params.indexOf('area')==-1){
+					alert('请选择考勤地点')
+				}else{
+					console.log("**************"+params);
+				}
+			}
+			
 		</script>
 	</body>
 
