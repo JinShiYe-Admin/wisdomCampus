@@ -290,32 +290,13 @@
 			});
 			
 			function pulldownRefresh() {
-				setTimeout(function() {
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for (var i = cells.length, len = i + 3; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-						//下拉刷新，新纪录插到最前面；
-						table.insertBefore(li, table.firstChild);
-					}
 					mui('#scroll').pullRefresh().endPulldownToRefresh(); //refresh completed
-				}, 1500);
+				getAttendList();
 			}
 			var count = 0;
 			function pullupRefresh() {
-				setTimeout(function() {
-					mui('#scroll').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for (var i = cells.length, len = i + 5; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-						table.appendChild(li);
-					}
-				}, 1500);
+				attend.pageIndex = 1;
+				getAttendList();
 			}
 			
 			
@@ -354,7 +335,7 @@
 			function getAttendList(){
 				var tempData = {
 					schoolId: storageKeyName.SCHOOLID //学校ID
-					,deptId:195
+					,deptId:['195','39']
 					,userId:personal.uid
 					,beginTime:'20180613'
 					,endTime:'20180613'
