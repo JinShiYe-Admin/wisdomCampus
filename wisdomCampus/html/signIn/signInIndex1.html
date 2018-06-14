@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../js/demoCssJs/weui.min.css">
+		<link rel="stylesheet" href="../../js/demoCssJs/jquery-weui.css">
+		<link rel="stylesheet" href="../../js/demoCssJs/demos.css">
+		<link rel="stylesheet" href="../../css/demos.css" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			body,
+			html {
+				/*overflow: auto;*/
+				/*-webkit-overflow-scrolling: touch;*/
+			}
+			
+			#allmap {
+				width: 100%;
+				height: 50%;
+			}
+			
+			p {
+				margin-left: 5px;
+				font-size: 14px;
+			}
+			
+			.wrap {
+				width: 30px;
+				position: relative;
+			}
+			
+			.img {
+				width: 27px;
+				height: 27px;
+			}
+			
+			.notice {
+				width: 15px;
+				height: 15px;
+				line-height: 15px;
+				font-size: 10px;
+				color: #fff;
+				text-align: center;
+				background-color: #f00;
+				border-radius: 50%;
+				position: absolute;
+				right: -7px;
+				top: -7px;
+			}
+			
+			.lines {
+				height: 1px;
+				border-top: 10px solid #f5f1f1;
+				text-align: center;
+				margin: 10px 0px 0px 0px;
+			}
+			
+			.weui-popup__container {
+				z-index: 1000;
+			}
+			
+			.owerid {
+				background: #f89fbc;
+			}
+			
+			.weui-media-box__hd {
+				width: 80px;
+				height: 60px;
+				overflow: hidden;
+			}
+			
+			.weui-media-box__hd img {
+				max-width: 80px;
+				_width: expression(this.width > 80 ? "80px": this.width);
+			}
+			
+			.mui-title {
+				color: white;
+			}
+			
+			.right-position {
+				color: white;
+				font-size: 15px;
+				margin-top: 10px;
+			}
+			/*.weui-tab {
+            margin-top:-30px;
+        }*/
+		</style>
+		<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=VPMK2gwQeEtGyV24Py1Gb4GTpukyjm6y"></script>-->
+		<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&services=true&ak=VPMK2gwQeEtGyV24Py1Gb4GTpukyjm6y"></script>
+		<!--加载鼠标绘制工具-->
+		<script type="text/javascript" src="https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+		<link rel="stylesheet" href="https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+		<title>签到考勤</title>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title">签到考勤</h1>
+			<a id="position111" class="mui-pull-right right-position">查询</a>
+		</header>
+		<div class="weui-tab mui-content" id="wrapper">
+			<div class="weui-tab__bd">
+				<div class="weui-tab__bd-item weui-tab__bd-item--active" id="tab0">
+					<p></p>
+					<div>
+						<span>当前位置：</span><span id="tempAddress"></span>
+						<span><a onclick="refresh()"><img style="vertical-align: bottom;"  height="25px" width="25px" src="../../img/classRoom/refsh.png" /></a></span>
+					</div>
+					<p></p>
+
+					<div id="allmap"></div>
+
+					<div class="weui-cell">
+						<div class="weui-cell__hd"><label class="weui-label">考勤类型</label></div>
+						<div class="weui-cell__bd">
+							<input id="attendType" data_id="" onclick="selectAttendType(this)" class="weui-input" placeholder="请选择考勤类型">
+						</div>
+					</div>
+					<div class="weui-cell">
+						<div class="weui-cell__hd"><label class="weui-label">部门</label></div>
+						<div class="weui-cell__bd">
+							<input id="depart" data_id="" onclick="selectDepart(this)" class="weui-input" placeholder="请选择部门">
+						</div>
+					</div>
+
+					<div class="weui-cell">
+						<div class="weui-cell__hd"><label class="weui-label">考勤地点</label></div>
+						<div class="weui-cell__bd">
+							<input id="attendArea" data_id="" onclick="selectAttendArea(this)" class="weui-input" placeholder="请选择考勤地点">
+						</div>
+					</div>
+
+					<div id="submitHomework">
+						<div class="weui-cells weui-cells_form">
+							<div class="weui-cell">
+								<div class="weui-cell__bd">
+									<div class="weui-uploader">
+										<div class="weui-uploader__hd">
+											<p class="weui-uploader__title">上传照片</p>
+										</div>
+										<div class="weui-uploader__bd">
+											<ul class="weui-uploader__files" id="uploaderFiles">
+												<li v-for="(file,index) of uploadedFiles" @click="clickImg(index)" v-bind:class="['weui-uploader__file']" v-bind:style="{'background-image':'url('+file.ImgUrl+')'}"></li>
+											</ul>
+											<div class="weui-uploader__input-box" :style="displayAddBtn">
+												<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" capture="camera" v-on:change="selectFile($event)">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input id="qnInput" style="display: none;">
+						<div class="weui-gallery" :style="displayGallery">
+							<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
+							<div class="weui-gallery__opr">
+								<a href="javascript:" class="weui-gallery__del">
+									<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div>
+						<a style="width: 95%;" id="save" href="javascript:;" class="weui-btn weui-btn_primary" onclick="save()">签到</a>
+					</div>
+					<br /><br />
+
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/demoCssJs/jquery-2.1.4.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/demoCssJs/iscroll.js"></script>
+		<script src="../../js/demoCssJs/jquery-weui.js"></script>
+		<script src="../../js/weui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/utils/storageutil.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<!--<script src='../../js/lib/jquery.js'></script>-->
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/utils/myStorage.js"></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../../js/appweb/choose-file.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/consts.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script type="text/javascript">
+			document.write("<s" + "cript type='text/javascript' src='../../js/lib/exif/exif.min.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/lib/plupload/moxie.min.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/lib/plupload/plupload.full.min.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/lib/qiniu/qiniu.min.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/utils/cryption.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/utils/cloudutil.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/utils/compress.js?" + Math.random() + "'></s" + "cript>");
+			document.write("<s" + "cript type='text/javascript' src='../../js/utils/pluploadutil.js?" + Math.random() + "'></s" + "cript>");
+		</script>
+
+		<script type="text/javascript">
+			var uptokenData;
+			var personal;
+			var qnFileUploader; //七牛上传控件对象
+			var submitHomework = new Vue({
+				el: '#submitHomework',
+				data: {
+
+					displayGallery: {
+						display: 'none'
+					},
+					displayAddBtn: {
+						display: 'block'
+					},
+
+					selectIndex: 0,
+					selectImgPath: '',
+					uploadedFiles: []
+				},
+				methods: {
+					selectFile: function(event) { //从手机中选择图片后到界面的回调
+						// 如果没有选中文件，直接返回  
+						var files = event.target.files;
+						if(files.length === 0) {
+							$.hideLoading();
+							return;
+						} else {
+							uploadFiles(0, files, submitHomework.uploadedFiles.length);
+						}
+					},
+
+					clickImg: function(index) { //点击列表中的附件，给别的地方赋值
+						submitHomework.selectIndex = index;
+						submitHomework.selectImgPath = submitHomework.uploadedFiles[index].ImgUrl;
+						submitHomework.displayGallery = {
+							display: 'block'
+						};
+					},
+					clickGigImg: function() { //点击放大后的图片，隐藏显示
+						submitHomework.displayGallery = {
+							display: 'none'
+						};
+					},
+					deleteImg: function() { //删除图片
+						$.confirm({
+							title: '提示',
+							text: '确认删除？',
+							onOK: function() {
+								submitHomework.displayGallery = {
+									display: 'none'
+								};
+								submitHomework.uploadedFiles.splice(submitHomework.selectIndex, 1);
+								displayAddBtnFun();
+							}
+						});
+					}
+				}
+			});
+			
+			document.getElementById('position111').addEventListener('tap',function () {
+			       utils.mOpenWithData("../../html/signIn/atterecords.html", 'id');
+			});
+
+			var userList = [];
+			var userInfo = {};
+			var attendType = {
+				tempAttendType: '',
+				attendTypeList: []
+			}
+			var attendTime = {
+				tempAttendTime: '',
+				attendTimeList: []
+			}
+			var attendArea = {
+				tempAttendArea: {},
+				attendAreaList: []
+			}
+			mui.plusReady(function() {
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:' + JSON.stringify(personal));
+				setMap();
+				initQNUploader();
+				//12.获取考勤类型
+				getAttendType();
+				getAttendArea();
+				getDepart();
+			});
+
+			//签到
+			function save() {
+				addAttend(attendType.tempAttendType);
+				console.log('签到')
+			}
+
+			//12.获取考勤类型
+			function getAttendType() {
+
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					pageIndex: '1', //当前页数
+					pageSize: '0' //每页记录数，0 为全部
+				}
+				getAttendTypePro(tempData, function function_name(data) {
+					console.log('12.获取考勤类型:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						for(var i = 0; i < data.RspData.Data.length; i++) {
+							var model = data.RspData.Data[i];
+							model.label = model.AttendTypeNote;
+							model.value = model.AttendTypeId;
+							attendType.attendTypeList.push(model);
+
+						}
+						console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
+					}
+				});
+				//		console.log('获取考勤类型参数:' + JSON.stringify(tempData));
+				//		getAttendTypeForSelPro(tempData, function(data) {
+				//			console.log('获取考勤类型数据:' + JSON.stringify(data));
+				//			if(data.RspCode == 0) {
+				//
+				//				for(var i = 0; i < data.RspData.Data.length; i++) {
+				//					var model = data.RspData.Data[i];
+				//					model.label = model.AttendTypeNote;
+				//					model.value = model.AttendTypeId;
+				//					attendType.attendTypeList.push(model);
+				//
+				//				}
+				//				console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
+				//
+				//			} else {
+				//				mui.toast(data.RspTxt);
+				//			}
+				//		});
+			};
+
+			function getAttendArea() {
+				var tempData = {
+					schoolId: storageKeyName.SCHOOLID, //学校ID
+					stat: 1,
+					pageIndex: 1,
+					pageSize: 0
+				}
+				getAttendAreaPro(tempData, function function_name(data) {
+					console.log('14.获取考勤地点:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						for(var i = 0; i < data.RspData.Data.length; i++) {
+							var model = data.RspData.Data[i];
+							model.label = model.AreaName;
+							model.value = model.AttendAreaId;
+							attendArea.attendAreaList.push(model);
+						}
+					}
+				});
+			}
+			
+			//10.新增考勤记录
+			function addAttend(tempAttendType) {
+				var attendTypeId = document.getElementById("attendType").data_id;
+				var departId = document.getElementById("depart").data_id;
+				var deptName = document.getElementById("depart").value;
+				var attendAreaId = document.getElementById("attendArea").data_id;
+
+				if(attendTypeId == undefined || attendTypeId == "") {
+					mui.toast("请选择考勤类型");
+					return;
+				}
+				if(departId == undefined || departId == "") {
+					mui.toast("请选择部门");
+					return;
+				}
+				if(attendAreaId == undefined || attendAreaId == "") {
+					mui.toast("请选择考勤地点");
+					return;
+				}
+				//附件数组
+				var tempEncs = [];
+				for(var i = 0; i < submitHomework.uploadedFiles.length; i++) {
+					var tempValue = submitHomework.uploadedFiles[i];
+					var tempModel = {
+						oldname: tempValue.OldName,
+						newname: tempValue.NewName,
+						saveurl: tempValue.SaveUrl,
+						filesize: tempValue.FileSize,
+						imgurl: tempValue.ImgUrl
+					}
+					tempEncs.push(tempModel);
+				}
+				if(tempEncs.length == 0) {
+					mui.toast("请添加照片");
+					return;
+				}
+				var tempData = {
+					schoolId: personal.schid,//学校ID
+					deptId: departId,//部门ID
+					deptName: deptName,//部门名称
+					userId: personal.utid,//签到人ID
+					userName: personal.utname,//签到人姓名
+					attendType: attendTypeId,//考勤类型
+					attendArea: attendAreaId,//考勤地点
+					attendAreaX: attendArea.tempAttendArea.lng,//签到地点X坐标
+					attendAreaY: attendArea.tempAttendArea.lat,//签到地点Y坐标
+					attendPic: tempEncs[0].imgurl,//签到拍照
+					attendNote: '签到考勤',//考勤备注
+				}
+				console.log('添加考勤参数：' + JSON.stringify(tempData));
+				//10.新增考勤记录
+				addAttendPro(tempData, function(data) {
+					console.log('添加考勤：' + JSON.stringify(data))
+					if(data.RspCode == 0) {
+						document.getElementById("depart").value = "";
+						document.getElementById("attendType").value = "";
+						document.getElementById("attendArea").value = "";
+						document.getElementById("depart").data_id = "";
+						document.getElementById("attendType").data_id = "";
+						document.getElementById("attendArea").data_id = "";
+						submitHomework.displayGallery = {
+							display: 'none'
+						};
+						submitHomework.uploadedFiles.splice(submitHomework.selectIndex, 1);
+						displayAddBtnFun();
+						mui.toast('添加成功')
+//						sendmsg(data.RspData);
+
+					} else {
+						mui.toast(data.RspTxt)
+					}
+				})
+			}
+
+			function sendmsg(msgObj) {
+				var tempData = {
+					cmd: 'msg',
+					type: 'text',
+					touser: userInfo.userid,
+					toparty: '',
+					totag: '',
+					msgtype: '',
+					safe: 0,
+					content: msgObj.AttendMsg,
+					tousername: userInfo.name,
+					topartyname: '',
+					totagname: '',
+				}
+				//		getAttendType();
+				//		getAttendArea();
+				console.log("发送短信参数：" + JSON.stringify(tempData))
+				unitWebsitePro(tempData, function(data) {
+					console.log('发送短信数据：' + JSON.stringify(data.RspData))
+					if(data.RspCode == 0) {} else {
+						mui.toast(data.RspTxt)
+					}
+				})
+			}
+
+			//			function getUserInfo() {
+			//				var tempData = {
+			//					cmd: 'userinfo',
+			//					type: 'findpage',
+			//					colv: ''
+			//				}
+			//				//				getAttendType();
+			//				//		getAttendArea();
+			//				console.log(JSON.stringify(tempData))
+			//				unitWebsitePro(tempData, function(data) {
+			//					console.log('获取当前人员信息' + JSON.stringify(data.RspData))
+			//					if(data.RspCode == 0) {
+			//						userInfo = JSON.parse(data.RspData);
+			//						//				getDepart();
+			//						getAttendType();
+			//						getAttendArea();
+			//					} else {
+			//						mui.toast(data.RspTxt)
+			//					}
+			//				})
+			//			}
+
+			function selectDepart(input_item) {
+				document.activeElement.blur();
+				var self = input_item;
+				if(userInfo.depart_array == undefined || userInfo.depart_array.length == 0) {
+					mui.toast("暂无部门")
+				}
+
+				weui.picker(userInfo.depart_array, {
+					onChange: function(result) {
+						//						console.log(result);
+					},
+					onConfirm: function(result) {
+						document.getElementById("depart").value = result[0].label;
+						document.getElementById("depart").data_id = result[0].value;
+					}
+				});
+			}
+
+			function selectAttendArea(input_item) {
+				document.activeElement.blur();
+				var self = input_item;
+				if(attendArea.attendAreaList.length == 0) {
+					mui.toast("暂无考勤地点")
+				}
+				weui.picker(attendArea.attendAreaList, {
+					onChange: function(result) {
+						//						console.log(result);
+					},
+					onConfirm: function(result) {
+						document.getElementById("attendArea").value = result[0].label;
+						document.getElementById("attendArea").data_id = result[0].value;
+					}
+				});
+			}
+
+			function selectAttendType(input_item) {
+				document.activeElement.blur();
+				var self = input_item;
+				if(attendType.attendTypeList.length == 0) {
+					mui.toast("暂无考勤类型")
+				}
+				weui.picker(attendType.attendTypeList, {
+					onChange: function(result) {
+						//						console.log(result);
+					},
+					onConfirm: function(result) {
+
+						document.getElementById("attendType").value = result[0].label;
+						document.getElementById("attendType").data_id = result[0].value;
+					}
+				});
+			}
+
+			function getDepart() {
+				userInfo.depart_array = [];
+				for(var i = 0; i < personal.dpts.length; i++) {
+					var model = personal.dpts[i];
+					model.label = model.dptname;
+					model.value = model.dptid;
+					userInfo.depart_array.push(model);
+				}
+				console.log('重组部门:' + JSON.stringify(userInfo.depart_array));
+			}
+			var map = new BMap.Map("allmap"); // 创建地图实例
+			var mk = new BMap.Marker(0, 0);
+
+			function setMap() {
+				// 百度地图API功能
+
+				var geolocation = new BMap.Geolocation();
+
+				geolocation.getCurrentPosition(function(r) {
+					if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+						//				mk = new BMap.Marker(r.point);
+						mk.setPosition(r.point);
+						map.addOverlay(mk);
+						map.panTo(r.point);
+						var myGeo = new BMap.Geocoder();
+
+						myGeo.getLocation(r.point, function(result) {
+							if(result) {
+								map.centerAndZoom(r.point, 15); // 初始化地图，设置中心点坐标和地图级别
+								map.enableScrollWheelZoom();
+								map.addControl(new BMap.NavigationControl()); //添加默认缩放平移控件
+								var addComp = result.addressComponents;
+								attendArea.tempAttendArea = r.point;
+								document.getElementById("tempAddress").innerHTML = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+
+								//						document.getElementById("longitude").innerHTML = r.point.lng;
+								//						document.getElementById("latitude").innerHTML = r.point.lat;
+								//						document.getElementById("distance").innerHTML = map.getDistance(r.point, new BMap.Point(117.021629, 36.681578));
+							}
+						});
+
+						//			mui.toast('您的位置：' + r.point.lng + ',' + r.point.lat);
+					} else {
+						mui.toast('failed' + this.getStatus());
+					}
+				}, {
+					enableHighAccuracy: true
+				})
+
+			}
+
+			function refresh() {
+				console.log('刷新')
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function(r) {
+					if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+						//				mk = new BMap.Marker(r.point);
+						//				map.addOverlay(mk);
+						mk.setPosition(r.point);
+						//				map.addOverlay(mk);
+						map.panTo(r.point);
+						var myGeo = new BMap.Geocoder();
+						myGeo.getLocation(r.point, function(result) {
+							if(result) {
+								var addComp = result.addressComponents;
+								attendArea.tempAttendArea = r.point;
+								document.getElementById("tempAddress").innerHTML = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+
+								//						document.getElementById("longitude").innerHTML = r.point.longitude;
+								//						document.getElementById("latitude").innerHTML = r.point.latitude;
+								//						document.getElementById("distance").innerHTML = map.getDistance(r.point, new BMap.Point(117.021629, 36.681578));
+							}
+						});
+
+						//			mui.toast('您的位置：' + r.point.lng + ',' + r.point.lat);
+					} else {
+						mui.toast('failed' + this.getStatus());
+					}
+				}, {
+					enableHighAccuracy: true
+				})
+			}
+
+			//从相册中选择照片后，上传
+			//index--从相册选择照片回调里面，照片的索引，files--选择的照片信息，filesSum--选择照片之前，现存的照片张数
+			function uploadFiles(index, files, filesSum) {
+				console.log('index:' + index + ',files.count:' + files.length + ',filesSum:' + filesSum);
+				if(index < files.length) {
+					if(filesSum + index > 0) {
+						mui.toast("最多只能上传1张照片");
+					} else {
+						var file = files[index];
+						var types = file.type.toLowerCase().split("/");
+						console.log("types:" + types);
+						if(types[1] == "png" || types[1] == "jpg" || types[1] == "jpeg") {
+							EXIF.getData(file, function() {
+								//								$.showLoading('加载中...');
+								var orientation = EXIF.getTag(this, 'Orientation'); //获取旋转信息
+								console.log('orientation:' + JSON.stringify(orientation));
+								//显示文件
+								var reader = new FileReader();
+								reader.onload = function() {
+									var result = this.result;
+									var maxSize = 2 * 1024 * 1024;
+									compress.getImgInfo(result, function(img, imgInfo) {
+										console.log("获取的文件信息：" + JSON.stringify(imgInfo));
+										console.log("原图尺寸：" + result.length);
+										var newDataUrl = compress.getCanvasDataUrl(img, compress.getSuitableSize(imgInfo, Math.ceil(result.length / maxSize)), orientation);
+										var blob = compress.base64ToBlob(newDataUrl, 'image/jpeg');
+										console.log("blob.type:" + blob.type);
+										console.log('要传递的文件大小：' + blob.size);
+										blob.lastModifiedDate = new Date();
+										qnFileUploader.addFile(blob, Date.now() + '.jpg');
+										index++;
+										uploadFiles(index, files, filesSum);
+										if(index == files.length - 1) {
+											$('#uploaderInput').val('');
+										}
+									});
+								}
+								reader.readAsDataURL(file);
+							});
+						} else {
+							if(index + 1 < filesSum) {
+								index++;
+								uploadFiles(index, files, filesSum);
+							}
+							$('#uploaderInput').val('');
+							$.toast("请选择png,jpg,jpeg类型的图片");
+						}
+					}
+				}
+			}
+
+			/**
+			 * 初始化上传
+			 */
+			function initQNUploader() {
+				qnFileUploader = Qiniu.uploader({
+					disable_statistics_report: false, // 禁止自动发送上传统计信息到七牛，默认允许发送
+					runtimes: 'html5,flash,html4', // 上传模式,依次退化
+					browse_button: 'qnInput', // 上传选择的点选按钮，**必需**
+					uptoken_func: function(file) { // 在需要获取 uptoken 时，该方法会被调用
+						uptokenData = null;
+						uptokenData = getQNUpToken(file);
+						console.log("获取uptoken回调:" + JSON.stringify(uptokenData));
+						if(uptokenData && uptokenData.code) { //成功
+							return uptokenData.data.Data[0].Token;
+						} else {
+							qnFileUploader.stop();
+						}
+					},
+					unique_names: false, // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
+					save_key: false, // 默认 false。若在服务端生成 uptoken 的上传策略中指定了 `save_key`，则开启，SDK在前端将不对key进行任何处理
+					get_new_uptoken: true, // 设置上传文件的时候是否每次都重新获取新的 uptoken
+					domain: storageutil.QNPBDOMAIN, // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
+					max_file_size: '4mb', // 最大文件体积限制
+					flash_swf_url: 'https://jsypay.jiaobaowang.net/wxthadmin/js/lib/plupload/Moxie.swf', //引入 flash,相对路径
+					max_retries: 0, // 上传失败最大重试次数
+					dragdrop: false, // 开启可拖曳上传
+					chunk_size: '4mb', // 分块上传时，每块的体积
+					auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+					init: {
+						'FilesAdded': function(up, files) {
+							console.log("FilesAdded0:", files);
+							plupload.each(files, function(file) {
+								// 文件添加进队列后,处理相关的事情
+								console.log("FilesAdded:", file);
+							});
+						},
+						'BeforeUpload': function(up, file) {
+							$.showLoading('加载中...');
+							// 每个文件上传前,处理相关的事情
+							console.log("BeforeUpload:");
+						},
+						'UploadProgress': function(up, file) {
+							// 每个文件上传时,处理相关的事情
+							console.log("UploadProgress:" + file.percent);
+						},
+						'FileUploaded': function(up, file, info) {
+							// 每个文件上传成功后,处理相关的事情
+							console.log("FileUploaded:");
+							$.hideLoading();
+							if(info.status == 200) {
+								var tempModel = {
+									ImgUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
+									SaveUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
+									OldName: file.name,
+									NewName: file.name,
+									FileSize: file.size
+								}
+								submitHomework.uploadedFiles.push(tempModel);
+								displayAddBtnFun();
+								console.log("success:" + storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key);
+							}
+						},
+						'Error': function(up, err, errTip) {
+							//上传出错时,处理相关的事情
+							console.log("Error:", err, errTip);
+							$.hideLoading();
+						},
+						'UploadComplete': function() {
+							//队列文件处理完毕后,处理相关的事情
+							console.log("UploadComplete:");
+						},
+						'Key': function(up, file) {
+							console.log('得到token0:' + JSON.stringify(uptokenData));
+							// 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+							// 该配置必须要在 unique_names: false , save_key: false 时才生效
+							if(uptokenData && uptokenData.code) { //成功
+								console.log('得到token:' + JSON.stringify(uptokenData));
+								return uptokenData.data.Data[0].Key;
+							}
+						}
+					}
+				});
+			}
+
+			//判断照片添加按钮是否显示，大于9张时隐藏
+			function displayAddBtnFun() {
+				if(submitHomework.uploadedFiles.length >= 1) {
+					submitHomework.displayAddBtn = {
+						display: 'none'
+					};
+				} else {
+					submitHomework.displayAddBtn = {
+						display: 'block'
+					};
+				}
+			}
+			/**
+			 * 获取七牛上传token
+			 */
+			function getQNUpToken(file) {
+				var myDate = new Date();
+				var fileName = myDate.getTime() + "" + parseInt(Math.random() * 1000);
+				var types = file.name.split(".");
+				fileName = fileName + "." + types[types.length - 1];
+				var getTokenData = {
+					appId: storageutil.QNQYWXKID,
+					mainSpace: storageutil.QNPUBSPACE,
+					saveSpace: storageutil.QNSSPACEWEBCON,
+					fileArray: [{
+						qnFileName: fileName,
+					}]
+				}
+				var upToken;
+				cloudutil.getFileUpTokens(getTokenData, function(data) {
+					upToken = data;
+				});
+				return upToken;
+			}
+		</script>
+	</body>
+
+</html>

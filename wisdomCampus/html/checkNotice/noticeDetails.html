@@ -149,7 +149,7 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" v-for="(replyModel,index) in detailModel.Data">
 						<div>
-							<img class="mui-media-object mui-pull-left peopleImg" :src=setImg(replyModel.ReceiManPic)>
+							<img class="mui-media-object mui-pull-left peopleImg" :src=setImg(replyModel.ReceiveManPic)>
 							<a class="" style="font-size: 13px;color: #666;">
 								{{replyModel.ReceiveManName}} {{replyModel.ReadTime}}
 								<div class="chat_content_left" v-if="replyModel.ReplyContent.length>0">
