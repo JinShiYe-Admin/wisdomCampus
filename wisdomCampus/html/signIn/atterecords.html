@@ -10,128 +10,7 @@
 
 		<link rel="stylesheet" href="../../css/mui.min.css">
 		<link href="../../css/classRoom/mui.picker.min.css" rel="stylesheet"/>
-		<style>
-			html,
-			body {
-				background-color: #ffffff;
-			}
-			
-			.left-p{
-				width: 60px;
-			    font-size: 14px;
-			    margin-top: 0;
-			    margin-bottom: 10px;
-			    color: #8f8f94;
-			}
-			.right-p{
-				font-size: 14px;
-				margin-top: 0;
-			    margin-bottom: 10px;
-				color: #000000;
-				word-break:normal;
-				width:auto;
-				white-space:pre-wrap;
-				word-wrap:break-word;
-				overflow: hidden ;
-			}
-			
-			.mui-table-view:before {
-			    position: absolute;
-			    right: 0;
-			    left: 15px;
-			    height: 1px;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
-			    top: -1px;
-			}
-			
-			.mui-table-view:after {
-			    position: absolute;
-			    right: 0;
-			    bottom: 0;
-			    left: 15px;
-			    height: 1px;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
-			}
-			
-			.mui-title {
-				color: white;
-			}
-			.right-position{
-				color: white;
-				font-size: 18px;
-				margin-top: 10px;
-				font-weight: bold;
-			}
-			
-			.mui-media-body {
-			    overflow: hidden;
-			    margin-left: 80px;
-			}
-			
-			.mui-table-view .mui-media-object {
-			    line-height: 42px;
-			    max-width: 80px;
-			    height: 80px;
-			}
-			
-			.mui-table-view .mui-media-object.mui-pull-left {
-			    margin-right: -10px;
-			}
-			
-			.btn-style{
-    			margin: 10px 0 10px 15px;
-			}
-			
-			.select-btn{
-				width: 100%;
-				background: #fff;
-			}
-			.select-btn:after {
-			    position: absolute;
-			    right: 0;
-			    top: 178px;
-			    left: 15px;
-			    height: 1px;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
-			}
-			
-			.mui-input-group:after {
-			    position: absolute;
-			    right: 0;
-			    bottom: 0;
-			    left: 0;
-			    height: 0;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
-			}
-			
-			.mui-input-group:before {
-			    position: absolute;
-			    top: 0;
-			    right: 0;
-			    left: 0;
-			    height: 0;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
-			}
-			
-			.mui-content {
-			    background-color: #ffffff;
-			}
-		</style>
+		<link href="../../css/atterecords/atterecords.css" rel="stylesheet"/>
 	</head>
 
 	<body>
@@ -158,11 +37,10 @@
 		    </div>
 		    <div id="second-row" class="mui-row">
 		    	<div id='attend'>
-					<!-- class="mui-content mui-scroll-wrapper" -->
 					<div id="ulList" style="display: none;" class="mui-scroll">
 					 	<ul class="mui-table-view" >
 							<li class="mui-table-view-cell" v-for="(item,index) in attendList">
-									<img id="item1" data-preview-src=""  class="mui-media-object mui-pull-left" src="" :src="item.AttendPic">
+									<img id="" :id="index"  data-preview-src="" onclick="imgView(this)"  class="mui-media-object mui-pull-left" src="" :src="item.AttendPic">
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>时间：</span>
 										<span class="right-p">{{item.AttendTime}}</span>
@@ -183,9 +61,9 @@
 						</ul>
 					</div>
 				</div>
-		    </div> 
+		    </div>
 		</div>
-		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh2.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material2.js"></script>
@@ -193,7 +71,7 @@
 		<script src="../../js/classRoom/mui.picker.min.js"></script>
 		<script src="../../js/jquery.min.js"></script>
 		<script src="../../js/mui.zoom.js"></script> 
-		<script src="../../js/mui.previewimage.js"></script>
+		<script src="../../js/mui.previewimage2.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src='../../js/lib/crypto-js/require.js'></script>
@@ -324,7 +202,7 @@
 			
 			//选择时间
 			function getTime(obj){
-				 mui('#scroll').pullRefresh().scrollTo(0,1,100);
+				scrollDown();
 				var optionsJson = obj.getAttribute('data-options') || '{}';
 				var options = JSON.parse(optionsJson);
 				var id = obj.getAttribute('id');
@@ -359,7 +237,7 @@
 							mui.toast('结束日期必须大于晚于开始日期');
 						}
 					}
-					mui('#scroll').pullRefresh().scrollTo(0,0,100);
+					scrollUp();
 					obj.picker.dispose();
 					obj.picker = null; 
 				});
@@ -377,11 +255,26 @@
 			
 			//预览图片
 			function imgView(obj){
-				/*var id = obj.getAttribute('id');
-				var previewImage = mui.previewImage();
-				previewImage.open(document.getElementById(id));*/
+				scrollDown()
+				var id = obj.getAttribute('id');
+				//重写图片预览方法，增加关闭回调
+				var previewImage = mui.previewImage('',function(img){
+					scrollUp()
+				});
+				previewImage.open(document.getElementById(id));
 			}
-		</script>
+			//解决选择日期和图片预览  与 下拉刷新冲突，在选择日期或图片预览时，页面滚动1像素，下拉刷新监听会失效。结束日期选择或图片预览，页面回滚1像素，下拉刷新恢复。
+			function scrollDown(){
+				 $('html, body').animate({scrollTop:1}, 'slow');
+				 mui('#scroll').pullRefresh().disablePullupToRefresh();//禁用上拉加载
+			}
+			function scrollUp(){
+//				mui('#scroll').pullRefresh().scrollTo(0,0,100);
+				$('html, body').animate({scrollTop:0}, 'slow');
+				mui('#scroll').pullRefresh().enablePullupToRefresh();//启用上拉加载
+			}
+			
+		</script> 
 	</body>
 
 </html>
