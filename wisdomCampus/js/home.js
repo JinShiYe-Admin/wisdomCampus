@@ -72,7 +72,7 @@ var createArray = function(chars, imgUrls, urls) {
  */
 var getHomeCircle = function(id) {
 	//九宫格底部标题数组
-	var chars = ["基础信息", "通知公告", "事务审批", "班级管理", "课堂管理", "访客", "请假", "敬请期待"];
+	var chars = ["基础信息", "通知公告", "事务审批", "班级管理", "课堂管理", "访客", "签到考勤", "敬请期待"];
 	//九宫格图片地址数组
 	var imgUrls = ["../../img/firstPage/firstPage0.png",
 		"../../img/firstPage/firstPage1.png",

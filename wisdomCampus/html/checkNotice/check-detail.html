@@ -296,7 +296,7 @@
 									if(data.RspCode == 0) {
 										checkDetailData.getDetail();
 									} else {
-										$.toast(data.RspTxt);
+										mui.toast(data.RspTxt);
 										tempVue.status = 0;
 									}
 								});
@@ -353,7 +353,7 @@
 					replyLeave: function() {
 						console.log('approveResult:' + checkDetailData.approveResult);
 						if(!this.replyContent) {
-							$.toast("请输入审批内容！");
+							mui.toast("请输入审批内容！");
 							return
 						}
 						var com = this;
@@ -372,7 +372,7 @@
 								com.getDetail();
 								com.replyShow = false;
 							} else {
-								$.alert(data.RspTxt);
+								mui.toast(data.RspTxt);
 							}
 						});
 
@@ -385,7 +385,7 @@
 							this.id = localSkey.id;
 							this.flag = parseInt(localSkey.flag);
 						} else {
-							$.alert("程序内部参数错误，请返回上一界面！", function() {
+							mui.toast("程序内部参数错误，请返回上一界面！", function() {
 								history.go(-1);
 							});
 							return;
@@ -417,7 +417,7 @@
 								}
 								com.leaveDetail = data.RspData;
 							} else {
-								$.alert(data.RspTxt);
+								mui.toast(data.RspTxt);
 							}
 						});
 					},
@@ -441,7 +441,7 @@
 								}
 								com.leaveDetail = data.RspData;
 							} else {
-								$.alert(data.RspTxt);
+								mui.toast(data.RspTxt);
 							}
 						})
 					}

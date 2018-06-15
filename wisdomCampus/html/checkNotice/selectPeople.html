@@ -151,6 +151,7 @@
 		<script src="../../js/utils/store.js"></script>
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/utils/storageutil.js"></script>
+		<script src='../../js/utils/events.js'></script>
 		<script type="text/javascript">
 			mui.init();
 			var selectPeopleData = new Vue({
@@ -189,7 +190,7 @@
 					},
 					clickSubmitBtn: function() {
 						if(selectPeopleData.selectPeopleArray.length == 0) { //判断有没有勾选人
-							$.toast('请选择人员', "cancel");
+							mui.toast('请选择人员', "cancel");
 						} else {
 							console.log(1111111)
 							mui.fire(plus.webview.currentWebview().opener(), 'selectPeople', {
@@ -239,7 +240,7 @@
 				if(personal.grds.length > 0) {
 					requestFlag++;
 					tempFlag++;
-					$.showLoading();
+					events.showWaiting();
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
@@ -247,7 +248,7 @@
 						roleType: 2 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 					}
 					getPrivilegeByRolePro(tempData, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						requestFlag--;
 						if(data.RspCode == 0) {
 							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
@@ -256,7 +257,7 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 				}
@@ -265,7 +266,7 @@
 					requestFlag++;
 					tempFlag++;
 					var b = 0;
-					$.showLoading();
+					events.showWaiting();
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
@@ -273,7 +274,7 @@
 						roleType: 4 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 					}
 					getPrivilegeByRolePro(tempData, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						requestFlag--;
 						if(data.RspCode == 0) {
 							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
@@ -282,7 +283,7 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 					for(var i = 0; i < personal.clss.length; i++) {
@@ -306,7 +307,7 @@
 										getSchDepart();
 									}
 								} else {
-									$.toast(data.RspTxt, "cancel");
+									mui.toast(data.RspTxt, "cancel");
 								}
 							});
 						}
@@ -316,7 +317,7 @@
 				if(personal.subs.length > 0) {
 					requestFlag++;
 					tempFlag++;
-					$.showLoading();
+					events.showWaiting();
 					//24.获取角色对应的菜单权限
 					var tempData = {
 						schoolId: personal.schid, //学校ID
@@ -324,7 +325,7 @@
 						roleType: 1 //1 科任组长,2 年级领导,3 班主任,4 任课教师,5 其他教师
 					}
 					getPrivilegeByRolePro(tempData, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						requestFlag--;
 						if(data.RspCode == 0) {
 							PrivilegeStr = PrivilegeStr + parseInt(data.RspData.PrivilegeStr);
@@ -333,7 +334,7 @@
 								getSchDepart();
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 				}
@@ -405,10 +406,10 @@
 						uidstat: 1, //需要查询的用户类型,-1全部,0无账号,1有账号
 						appid: publicParameter.appid //系统所分配的应用ID
 					}
-					$.showLoading();
+					events.showWaiting();
 					//发送网络请求，data为网络返回值
 					postDataEncry('DepartUser', enData0, comData0, 0, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								//默认不选中
@@ -445,7 +446,7 @@
 								judgeDepartmentSelect();
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 				} else if(model.clsname && model.peopleArray.length == 0) {
@@ -457,10 +458,10 @@
 						classids: model.clsid, //需要查询的班级ID,多个代码用英文逗号隔开
 						appid: publicParameter.appid //系统所分配的应用ID
 					}
-					$.showLoading();
+					events.showWaiting();
 					//发送网络请求，data为网络返回值
 					postDataEncry('ClassTec', enData0, comData0, 0, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								//去重
@@ -499,7 +500,7 @@
 								judgeDepartmentSelect();
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 				} else { //部门里有人，直接改人和部门的选中状态
@@ -533,10 +534,10 @@
 					utoken: personal.utoken, //用户令牌
 					appid: publicParameter.appid //系统所分配的应用ID
 				}
-				$.showLoading();
+				events.showWaiting();
 				//发送网络请求，data为网络返回值
 				postDataEncry('SchDepart', enData0, comData0, 0, function(data) {
-					$.hideLoading();
+					events.closeWaiting();
 					selectPeopleData.departmentArray = [];
 					if(data.RspCode == 0) {
 						//将个人信息中的部门列表，根据此协议，添加成完整的model
@@ -573,7 +574,7 @@
 							selectPeopleData.departmentArray = selectPeopleData.departmentArray.unique('dptid');
 						}
 					} else {
-						$.toast(data.RspTxt, "cancel");
+						mui.toast(data.RspTxt, "cancel");
 					}
 				});
 			}
@@ -685,10 +686,10 @@
 						gradeids: tempGradeId, //需要查询的年级ID，多个代码用英文逗号隔开
 						appid: publicParameter.appid //系统所分配的应用ID
 					}
-					$.showLoading();
+					events.showWaiting();
 					//发送网络请求，data为网络返回值
 					postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
-						$.hideLoading();
+						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								var tempClassId = ''; //需要查询的年级ID
@@ -708,7 +709,7 @@
 								selectPeopleData.flag = 1;
 							}
 						} else {
-							$.toast(data.RspTxt, "cancel");
+							mui.toast(data.RspTxt, "cancel");
 						}
 					});
 				}

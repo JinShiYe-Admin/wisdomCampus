@@ -87,6 +87,35 @@ var events = (function(mod) {
 	mod.setSessionObject = function(key, object) {
 		sessionStorage.setItem(key, JSON.stringify(object));
 	}
+	
+	/**
+	 * 返回一个安卓手机返回键无法关闭的等待框
+	 * @author 莫尚霖
+	 * @param {Object} string 等待框显示的文字，默认'加载中...'
+	 */
+	mod.showWaiting = function(string) {
+		var title = '加载中...';
+		if(string) {
+			title = string;
+		}
+		var showWaiting = plus.nativeUI.showWaiting(title, {
+			back: 'none'
+		});
+		return showWaiting;
+	}
+
+	/**
+	 * 关闭一个或所有的等待框
+	 * @author 莫尚霖
+	 * @param {Object} waiting 等待框对象
+	 */
+	mod.closeWaiting = function(waiting) {
+		if(waiting) {
+			waiting.close();
+		} else {
+			plus.nativeUI.closeWaiting();
+		}
+	}
 	/**
 	 * 	获取参数
 	 * @param {Object} url_string

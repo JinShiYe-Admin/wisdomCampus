@@ -169,6 +169,7 @@
 		<script src="../../js/publicProtocol.js"></script>
 		<script src='../../js/lib/crypto-js/require.js'></script>
 		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/events.js'></script>
 
 		<script type="text/javascript">
 			var message = new Vue({
@@ -202,7 +203,7 @@
 						// 如果没有选中文件，直接返回  
 						var files = event.target.files;
 						if(files.length === 0) {
-							$.hideLoading();
+							events.closeWaiting();
 							return;
 						} else {
 							uploadFiles(0, files, message.uploadedFiles.length);
@@ -265,14 +266,14 @@
 				console.log('index:' + index + ',files.count:' + files.length + ',filesSum:' + filesSum);
 				if(index < files.length) {
 					if(filesSum + index > 8) {
-						$.toast("最多只能上传9张照片", "cancel");
+						mui.toast("最多只能上传9张照片", "cancel");
 					} else {
 						var file = files[index];
 						var types = file.type.toLowerCase().split("/");
 						console.log("types:" + types);
 						if(types[1] == "png" || types[1] == "jpg" || types[1] == "jpeg") {
 							EXIF.getData(file, function() {
-								$.showLoading('加载中...');
+								events.showWaiting();
 								var orientation = EXIF.getTag(this, 'Orientation'); //获取旋转信息
 								console.log('orientation:' + JSON.stringify(orientation));
 								//显示文件
@@ -304,7 +305,7 @@
 								uploadFiles(index, files, filesSum);
 							}
 							$('#uploaderInput').val('');
-							$.toast("请选择png,jpg,jpeg类型的图片", "cancel");
+							mui.toast("请选择png,jpg,jpeg类型的图片", "cancel");
 						}
 					}
 				}
@@ -346,7 +347,7 @@
 							});
 						},
 						'BeforeUpload': function(up, file) {
-							$.showLoading('加载中...');
+							events.showWaiting();
 							// 每个文件上传前,处理相关的事情
 							console.log("BeforeUpload:");
 						},
@@ -357,7 +358,7 @@
 						'FileUploaded': function(up, file, info) {
 							// 每个文件上传成功后,处理相关的事情
 							console.log("FileUploaded:");
-							$.hideLoading();
+							events.closeWaiting();
 							if(info.status == 200) {
 								var tempModel = {
 									ImgUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
@@ -374,7 +375,7 @@
 						'Error': function(up, err, errTip) {
 							//上传出错时,处理相关的事情
 							console.log("Error:", err, errTip);
-							$.hideLoading();
+							events.closeWaiting();
 						},
 						'UploadComplete': function() {
 							//队列文件处理完毕后,处理相关的事情
@@ -429,17 +430,17 @@
 			}
 			var addNotice = function() {
 				if(message.title.trim().length == 0 || message.content.trim().length == 0) {
-					$.toast("请填写具体内容后再发布", "cancel");
+					mui.toast("请填写具体内容后再发布", "cancel");
 					sendFlag = 0;
 					return;
 				}
 				if(message.title.length > 50) {
-					$.toast("标题不能超过50字", "cancel");
+					mui.toast("标题不能超过50字", "cancel");
 					sendFlag = 0;
 					return;
 				}
 				if(message.content.length > 300) {
-					$.toast("内容不能超过300字", "cancel");
+					mui.toast("内容不能超过300字", "cancel");
 					sendFlag = 0;
 					return;
 				}
@@ -481,11 +482,11 @@
 							}
 						}
 						if(ids.length == 0) {
-							$.toast("请选择接收人", "cancel");
+							mui.toast("请选择接收人", "cancel");
 							sendFlag = 0;
 							return;
 						}
-						$.showLoading('加载中...');
+						events.showWaiting();
 						var tempData = {
 							schoolId: storageKeyName.SCHOOLID, //学校ID
 							noticeTitle: message.title, //标题
@@ -503,7 +504,7 @@
 							receiveManNames: arrayToStr(names) //接收人姓名
 						}
 						addNoticePro(tempData, function function_name(data) {
-							$.hideLoading();
+							events.closeWaiting();
 							console.log(JSON.stringify(data))
 							if(data.RspCode == 0) {
 

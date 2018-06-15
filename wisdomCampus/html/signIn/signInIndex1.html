@@ -103,7 +103,7 @@
 			<h1 class="mui-title">签到考勤</h1>
 			<a id="position111" class="mui-pull-right right-position">查询</a>
 		</header>
-		<div class="weui-tab mui-content" id="wrapper" style="background: white;">
+		<div class="weui-tab mui-content" style="background: white;">
 			<div class="weui-tab__bd">
 				<div class="weui-tab__bd-item weui-tab__bd-item--active" id="tab0">
 					<p></p>
@@ -232,7 +232,7 @@
 						// 如果没有选中文件，直接返回  
 						var files = event.target.files;
 						if(files.length === 0) {
-							$.hideLoading();
+							events.closeWaiting();
 							return;
 						} else {
 							uploadFiles(0, files, submitHomework.uploadedFiles.length);
@@ -298,6 +298,7 @@
 
 			//签到
 			function save() {
+				events.showWaiting();
 				addAttend(attendType.tempAttendType);
 				console.log('签到')
 			}
@@ -322,24 +323,6 @@
 						console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
 					}
 				});
-				//		console.log('获取考勤类型参数:' + JSON.stringify(tempData));
-				//		getAttendTypeForSelPro(tempData, function(data) {
-				//			console.log('获取考勤类型数据:' + JSON.stringify(data));
-				//			if(data.RspCode == 0) {
-				//
-				//				for(var i = 0; i < data.RspData.Data.length; i++) {
-				//					var model = data.RspData.Data[i];
-				//					model.label = model.AttendTypeNote;
-				//					model.value = model.AttendTypeId;
-				//					attendType.attendTypeList.push(model);
-				//
-				//				}
-				//				console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
-				//
-				//			} else {
-				//				mui.toast(data.RspTxt);
-				//			}
-				//		});
 			};
 
 			function getAttendArea() {
@@ -371,14 +354,17 @@
 
 				if(attendTypeId == undefined || attendTypeId == "") {
 					mui.toast("请选择考勤类型");
+					events.closeWaiting();
 					return;
 				}
 				if(departId == undefined || departId == "") {
 					mui.toast("请选择部门");
+					events.closeWaiting();
 					return;
 				}
 				if(attendAreaId == undefined || attendAreaId == "") {
 					mui.toast("请选择考勤地点");
+					events.closeWaiting();
 					return;
 				}
 				//附件数组
@@ -396,6 +382,7 @@
 				}
 				if(tempEncs.length == 0) {
 					mui.toast("请添加照片");
+					events.closeWaiting();
 					return;
 				}
 				var tempData = {
@@ -414,6 +401,7 @@
 				console.log('添加考勤参数：' + JSON.stringify(tempData));
 				//10.新增考勤记录
 				addAttendPro(tempData, function(data) {
+					events.closeWaiting();
 					console.log('添加考勤：' + JSON.stringify(data))
 					if(data.RspCode == 0) {
 						document.getElementById("depart").value = "";
@@ -428,60 +416,11 @@
 						submitHomework.uploadedFiles.splice(submitHomework.selectIndex, 1);
 						displayAddBtnFun();
 						mui.toast('添加成功')
-//						sendmsg(data.RspData);
-
 					} else {
-						mui.toast(data.RspTxt)
+						mui.toast(data.RspTxt);
 					}
 				})
 			}
-
-			function sendmsg(msgObj) {
-				var tempData = {
-					cmd: 'msg',
-					type: 'text',
-					touser: userInfo.userid,
-					toparty: '',
-					totag: '',
-					msgtype: '',
-					safe: 0,
-					content: msgObj.AttendMsg,
-					tousername: userInfo.name,
-					topartyname: '',
-					totagname: '',
-				}
-				//		getAttendType();
-				//		getAttendArea();
-				console.log("发送短信参数：" + JSON.stringify(tempData))
-				unitWebsitePro(tempData, function(data) {
-					console.log('发送短信数据：' + JSON.stringify(data.RspData))
-					if(data.RspCode == 0) {} else {
-						mui.toast(data.RspTxt)
-					}
-				})
-			}
-
-			//			function getUserInfo() {
-			//				var tempData = {
-			//					cmd: 'userinfo',
-			//					type: 'findpage',
-			//					colv: ''
-			//				}
-			//				//				getAttendType();
-			//				//		getAttendArea();
-			//				console.log(JSON.stringify(tempData))
-			//				unitWebsitePro(tempData, function(data) {
-			//					console.log('获取当前人员信息' + JSON.stringify(data.RspData))
-			//					if(data.RspCode == 0) {
-			//						userInfo = JSON.parse(data.RspData);
-			//						//				getDepart();
-			//						getAttendType();
-			//						getAttendArea();
-			//					} else {
-			//						mui.toast(data.RspTxt)
-			//					}
-			//				})
-			//			}
 
 			function selectDepart(input_item) {
 				document.activeElement.blur();
@@ -551,9 +490,7 @@
 
 			function setMap() {
 				// 百度地图API功能
-
 				var geolocation = new BMap.Geolocation();
-
 				geolocation.getCurrentPosition(function(r) {
 					if(this.getStatus() == BMAP_STATUS_SUCCESS) {
 						//				mk = new BMap.Marker(r.point);
@@ -570,14 +507,8 @@
 								var addComp = result.addressComponents;
 								attendArea.tempAttendArea = r.point;
 								document.getElementById("tempAddress").innerHTML = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-
-								//						document.getElementById("longitude").innerHTML = r.point.lng;
-								//						document.getElementById("latitude").innerHTML = r.point.lat;
-								//						document.getElementById("distance").innerHTML = map.getDistance(r.point, new BMap.Point(117.021629, 36.681578));
 							}
 						});
-
-						//			mui.toast('您的位置：' + r.point.lng + ',' + r.point.lat);
 					} else {
 						mui.toast('failed' + this.getStatus());
 					}
@@ -603,14 +534,8 @@
 								var addComp = result.addressComponents;
 								attendArea.tempAttendArea = r.point;
 								document.getElementById("tempAddress").innerHTML = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-
-								//						document.getElementById("longitude").innerHTML = r.point.longitude;
-								//						document.getElementById("latitude").innerHTML = r.point.latitude;
-								//						document.getElementById("distance").innerHTML = map.getDistance(r.point, new BMap.Point(117.021629, 36.681578));
 							}
 						});
-
-						//			mui.toast('您的位置：' + r.point.lng + ',' + r.point.lat);
 					} else {
 						mui.toast('failed' + this.getStatus());
 					}
@@ -632,7 +557,7 @@
 						console.log("types:" + types);
 						if(types[1] == "png" || types[1] == "jpg" || types[1] == "jpeg") {
 							EXIF.getData(file, function() {
-								//								$.showLoading('加载中...');
+								//								events.showWaiting();
 								var orientation = EXIF.getTag(this, 'Orientation'); //获取旋转信息
 								console.log('orientation:' + JSON.stringify(orientation));
 								//显示文件
@@ -664,7 +589,7 @@
 								uploadFiles(index, files, filesSum);
 							}
 							$('#uploaderInput').val('');
-							$.toast("请选择png,jpg,jpeg类型的图片");
+							mui.toast("请选择png,jpg,jpeg类型的图片");
 						}
 					}
 				}
@@ -707,7 +632,7 @@
 							});
 						},
 						'BeforeUpload': function(up, file) {
-							$.showLoading('加载中...');
+							events.showWaiting();
 							// 每个文件上传前,处理相关的事情
 							console.log("BeforeUpload:");
 						},
@@ -718,7 +643,7 @@
 						'FileUploaded': function(up, file, info) {
 							// 每个文件上传成功后,处理相关的事情
 							console.log("FileUploaded:");
-							$.hideLoading();
+							events.closeWaiting();
 							if(info.status == 200) {
 								var tempModel = {
 									ImgUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
@@ -735,7 +660,7 @@
 						'Error': function(up, err, errTip) {
 							//上传出错时,处理相关的事情
 							console.log("Error:", err, errTip);
-							$.hideLoading();
+							events.closeWaiting();
 						},
 						'UploadComplete': function() {
 							//队列文件处理完毕后,处理相关的事情

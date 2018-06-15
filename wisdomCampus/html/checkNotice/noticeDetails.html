@@ -230,7 +230,7 @@
 										//获取当前人员信息
 										getDetailFunction();
 									}else{
-										$.toast(data.RspTxt);
+										mui.toast(data.RspTxt);
 										tempVue.status = 0;
 									}
 								});
@@ -256,15 +256,15 @@
 					replyContent: function() {
 						if(noticeDetailData.detailModel.ReplyContent.length > 0) {
 							noticeDetailData.content = '';
-							$.toast("不能重复回复", "cancel");
+							mui.toast("不能重复回复", "cancel");
 							return;
 						}
 						if(noticeDetailData.content.trim().length == 0) {
-							$.toast("请输入回复内容", "cancel");
+							mui.toast("请输入回复内容", "cancel");
 							return;
 						}
 						if(noticeDetailData.content.length > 50) {
-							$.toast("回复内容不能超过50字", "cancel");
+							mui.toast("回复内容不能超过50字", "cancel");
 							return;
 						}
 						//28.回复通知公告
@@ -279,10 +279,10 @@
 							$.hideLoading();
 							if(data.RspCode == 0) {
 								noticeDetailData.content = '';
-								$.toast('成功');
+								mui.toast('成功');
 								getDetailFunction();
 							} else {
-								$.toast(data.RspTxt);
+								mui.toast(data.RspTxt);
 							}
 						});
 					}
@@ -325,7 +325,7 @@
 							});
 						}
 					} else {
-						$.toast(data.RspTxt);
+						mui.toast(data.RspTxt);
 					}
 				});
 			}
@@ -365,7 +365,7 @@
 							});
 						}
 					} else {
-						$.toast(data.RspTxt);
+						mui.toast(data.RspTxt);
 					}
 				});
 			}
