@@ -134,17 +134,11 @@
 		<script src="../../js/utils/storageKeyName.js"></script>
 		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			var dptid;
 			mui.plusReady(function() {
 				//获取当前人员信息
 				//				getUserInfo();
 				attendData.userInfo = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(attendData.userInfo));
-				var dpts = attendData.userInfo.dpts;
-				var dptid = [];
-				$.each(dpts, function(i, item) {
-					dptid.push(item.dptid)　　
-				});
 				getAttend(0);
 			});
 
@@ -260,6 +254,11 @@
 					}, 1000); //模拟延迟
 					return false;
 				}
+				var dpts = attendData.userInfo.dpts;
+				var dptid = [];
+				$.each(dpts, function(i, item) {
+					dptid.push(item.dptid)　　
+				});
 				var tempPage = 1;
 				if(flag == 0) {
 					tempPage = 1;
@@ -272,8 +271,8 @@
 				if(beginTime.length > 0) {
 					tempData = {
 						schoolId: attendData.userInfo.schid, //单位ID
-						deptId: '["7","16","39","41","65"]', //部门ID，例如：[“1”, “2”, “3”]
-						userId: '["150"]', //用户ID,例如：[“1”, “2”, “3”]
+						deptId: arrayToStr(dptid), //部门ID，例如：[“1”, “2”, “3”]
+						userId: '["'+attendData.userInfo.utid +'"]', //用户ID,例如：[“1”, “2”, “3”]
 						beginTime: beginTime, //统计开始时间,年月日共八位如：20011010
 						endTime: endTime, //统计结束时间,年月日共八位如：20011010
 						attendResultId: '0', //0：全部,1: 正常,2：迟到,3：早退
@@ -287,8 +286,8 @@
 					var endTime = myDate.toString().replace(/-/g, '');
 					tempData = {
 						schoolId: attendData.userInfo.schid, //单位ID
-						deptId: '["7","16","39","41","65"]', //部门ID，例如：[“1”, “2”, “3”]
-						userId: '["150"]', //用户ID,例如：[“1”, “2”, “3”]
+						deptId: arrayToStr(dptid), //部门ID，例如：[“1”, “2”, “3”]
+						userId: '["'+attendData.userInfo.utid +'"]', //用户ID,例如：[“1”, “2”, “3”]
 						beginTime: '19900101', //统计开始时间,年月日共八位如：20011010
 						endTime: endTime, //统计结束时间,年月日共八位如：20011010
 						attendResultId: '0', //0：全部,1: 正常,2：迟到,3：早退

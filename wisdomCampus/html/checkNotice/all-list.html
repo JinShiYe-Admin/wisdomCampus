@@ -328,7 +328,7 @@
 						if(model.SendManName == undefined) {
 							model.SendManName = tempInfo00.utname;
 							noticep = model.NoticeProgress
-							model.SendManPic = tempInfo00.imgurl;
+//							model.SendManPic = tempInfo00.imgurl;
 						} else {
 							model.SendManName = model.SendManName;
 							noticep = model.NoticeStatus
@@ -363,7 +363,7 @@
 							li.id = model.ApplyId
 							myName = tempInfo00.utname;
 							Progress = model.ApplyProgress;
-							model.ApplyManPic = tempInfo00.imgurl;
+//							model.ApplyManPic = tempInfo00.imgurl;
 						} else {
 							li.id = myId = model.ApproveId
 							myName = model.ApplyManName;
@@ -666,7 +666,7 @@
 				} else {
 					tempUrl = imgURL;
 				}
-				console.log('tempUrl:' + tempUrl);
+//				console.log('tempUrl:' + tempUrl);
 				return tempUrl;
 			};
 			mui('.mui-segmented-control').on('tap', 'a', function() {
