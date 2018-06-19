@@ -300,7 +300,8 @@
 					"html/checkNotice/all-list.html",
 					"html/signIn/atterecords.html",
 					"html/signIn/signInIndex.html",
-					"html/signIn/signInIndex1.html"
+					"html/signIn/signInIndex1.html",
+					"html/index/login.html"
 				],
 				"priority": 0
 			},
@@ -331,7 +332,8 @@
 			"html/signIn/signInIndex1.html": {
 				"resources": [],
 				"refer": [
-					"html/signIn/atterecords.html"
+					"html/signIn/atterecords.html",
+					"html/signIn/atterecords1.html"
 				],
 				"priority": 0
 			}
