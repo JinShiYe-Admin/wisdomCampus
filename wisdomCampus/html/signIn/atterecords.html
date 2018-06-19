@@ -51,7 +51,7 @@
 									</div>
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>类型：</span>
-										<span class="right-p">{{item.AttendType}}</span>
+										<span class="right-p">{{item.AttendTypeNote}}</span>
 									</div>
 									<div class="mui-media-body">
 										<span class='mui-ellipsis left-p'>结果：</span>
@@ -118,12 +118,15 @@
 			function pulldownRefresh() {
 				attend.flag = 0;
 				attend.pageIndex = 1;
+				attend.canTap=false;
 				getAttendList();
 			}
 			
 			function pullupRefresh() {
-				attend.flag = 1;
-				getAttendList();
+				if(attend.canTap){
+					attend.flag = 1;
+					getAttendList();
+				}
 			}
 			
 			//初始化时间选择控件
@@ -135,7 +138,6 @@
 			mui.plusReady(function() {
 				var bodyHeight = plus.display.resolutionHeight;
 				document.getElementById('second-row').style.minHeight=(bodyHeight-177)+'px';
-				
 				//查询按钮点击事件
 				mui(".mui-row").on('tap','button',function() {
 					var startTime=$('#start').val();
@@ -157,7 +159,8 @@
 				,data:{
 					attendList:[]
 					,flag: 0 //0刷新，1加载更多
-					,pageIndex: 1
+					,pageIndex: 1 //当前页数
+					,canTap:true //下拉刷新时，上拉加载能否使用 true
 				}
 			});
 			
@@ -177,8 +180,8 @@
 				}
 				getAttendPro(tempData, function function_name(data) {
 					console.log('15.获取考勤记录'+JSON.stringify(data));
-					mui('#scroll').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
 					mui('#scroll').pullRefresh().endPulldownToRefresh();
+					mui('#scroll').pullRefresh().endPullupToRefresh(); 
 					if(data.RspCode == 0) {
 						console.log('attend.flag========'+attend.flag)
 						attend.pageIndex++
@@ -187,12 +190,11 @@
 							if(data.RspData.Data.length == 0) {
 								mui.toast('暂无数据');
 							}
+							attend.canTap=true;
 						} else { //加载更多
-							
 							attend.attendList = attend.attendList.concat(data.RspData.Data);
 							if(data.RspData.Data.length == 0) {
 								mui.toast('已加载全部');
-//								mui('#scroll').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
 							}
 						}
 						$("#ulList").show();
