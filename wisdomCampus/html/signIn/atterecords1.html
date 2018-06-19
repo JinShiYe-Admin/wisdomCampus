@@ -41,8 +41,16 @@
 			}
 			
 			.weui-input{
-				margin-top: 5px;
-				margin-bottom: 5px;
+				margin-top: 15px;
+				padding-bottom: 5px;
+			}
+			
+			.weui-cell__hd{
+				/*height: 60px;*/
+			}
+			
+			.weui-cell1{
+				height: 60px;
 			}
 		</style>
 	</head>
@@ -50,9 +58,9 @@
 	<body ontouchstart>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
-			<h1 class="mui-title">签到考勤</h1>
+			<h1 class="mui-title" style="color: white;">签到考勤</h1>
 		</header>
-		<div class="weui-tab mui-content" id="attendData">
+		<div class="weui-tab mui-content" id="attendData" style="margin-top: -6px;">
 			<div class="weui-tab__bd">
 				<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active  weui-pull-to-refresh infinite" style="width: 100%;">
 					<div class="weui-pull-to-refresh__layer">
@@ -62,14 +70,14 @@
 						<div class="up">释放刷新</div>
 						<div class="refresh">正在刷新</div>
 					</div>
-					<div class="weui-cells" style="margin-top: 0px;">
-						<div class="weui-cell">
+					<div class="weui-cells" style="">
+						<div class="weui-cell weui-cell1">
 							<div class="weui-cell__hd"><label for="date" class="weui-label">开始日期</label></div>
 							<div class="weui-cell__bd">
 								<input class="weui-input" id="date" value='' type="text" placeholder="请选择开始查询日期">
 							</div>
 						</div>
-						<div class="weui-cell">
+						<div class="weui-cell weui-cell1">
 							<div class="weui-cell__hd"><label for="date1" class="weui-label">结束日期</label></div>
 							<div class="weui-cell__bd">
 								<input class="weui-input" id="date1" value='' type="text" placeholder="请选择结束查询日期">
