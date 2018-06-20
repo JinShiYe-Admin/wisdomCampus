@@ -28,11 +28,15 @@ var createGirde = function(gride, array) {
 				li.className = "mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3";
 			}
 			//子控件的innerHTML
-
+			if (map.grideShow == 0) {
+				li.style.display = 'none';
+			} else{
+				
+			}
 			li.innerHTML = '<a href="#">' +
 				'<img class="mui-icon circular-square" src="' + map.imgUrl +
-				'" style="background-color:' + 
-				';"><span id="noRead_'+index+'" class="mui-badge mui-hidden">1</span></img>' +
+				'" style="background-color:' +
+				';"><span id="noRead_' + index + '" class="mui-badge mui-hidden">1</span></img>' +
 				'<small class="mui-media-body">' + map.description + '</small>' +
 				'</a>';
 			/**
@@ -55,7 +59,8 @@ var createArray = function(chars, imgUrls, urls) {
 	//遍历
 	for(i = 0; i < chars.length; i++) {
 		var value = {
-			description: chars[i],
+			grideShow:chars[i].grideShow,
+			description: chars[i].grideName,
 			imgUrl: imgUrls[i],
 			tarUrl: urls[i]
 		}
@@ -72,7 +77,32 @@ var createArray = function(chars, imgUrls, urls) {
  */
 var getHomeCircle = function(id) {
 	//九宫格底部标题数组
-	var chars = ["基础信息", "通知公告", "事务审批", "班级管理", "课堂管理", "访客", "签到考勤", "敬请期待"];
+//	var chars = ["基础信息", "通知公告", "事务审批", "班级管理", "课堂管理", "访客", "签到考勤", "敬请期待"];
+	var chars = [{
+		grideName: '基础信息',
+		grideShow: 0
+	}, {
+		grideName: '通知公告',
+		grideShow: 1
+	}, {
+		grideName: '事务审批',
+		grideShow: 1
+	}, {
+		grideName: '班级管理',
+		grideShow: 0
+	}, {
+		grideName: '课堂管理',
+		grideShow: 0
+	}, {
+		grideName: '访客',
+		grideShow: 0
+	}, {
+		grideName: '签到考勤',
+		grideShow: 1
+	}, {
+		grideName: '敬请期待',
+		grideShow: 0
+	}];
 	//九宫格图片地址数组
 	var imgUrls = ["../../img/firstPage/firstPage0.png",
 		"../../img/firstPage/firstPage1.png",

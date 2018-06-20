@@ -119,7 +119,7 @@
 			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
 		
-		<div class="mui-scroll-wrapper" style="margin-top: 45px;">
+		<div class="mui-scroll-wrapper" style="margin-top: 45px;background: white;">
 			<div class="mui-scroll">
 				<div class="mui-content">
 					<!--轮播控件-->
@@ -140,7 +140,7 @@
 		<div id="mine" class="weui-cells mine-container" v-on:click="isMineShow=false" v-show="isMineShow" style="display: none;">
 			<div class="mine-left-container" v-on:click.stop="">
 				<div class="user-info">
-					<img class="head-portrait" :src=userImg />
+					<img v-on:click="clickHeadImg()" class="head-portrait" :src=userImg />
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
@@ -386,15 +386,17 @@
 					userName: tempName,
 					userImg:setImg(personal.imgurl),
 					settings: [
-						//					{
-						//						name: "密码修改",
-						//						icon: "",
-						//						href: ""
-						//					}, {
-						//						name: "关于我们",
-						//						icon: "",
-						//						href: ""
-						//					}
+											{
+												name: "密码修改",
+												icon: "",
+												href: "",
+												tempID:0
+											}, {
+												name: "关于我们",
+												icon: "",
+												href: "",
+												tempID:1
+											}
 					],
 					isMineShow: false //屏蔽或显示我的界面
 				},
@@ -427,7 +429,16 @@
 					jumpToDetail: function(setting) {
 						console.log("dfffff")
 						this.isMineShow = false;
-						location.href = setting.href;
+//						location.href = setting.href;
+						if (setting.tempID ==0) {
+							utils.mOpenWithData("../../html/mine/modifyPassword.html", setting);
+						} else if (setting.tempID ==1) {
+							utils.mOpenWithData("../../html/mine/about.html", setting);
+						}
+					},
+					clickHeadImg:function(){
+						this.isMineShow = false;
+						utils.mOpenWithData("../../html/mine/headImg.html", {});
 					}
 				}
 			})
