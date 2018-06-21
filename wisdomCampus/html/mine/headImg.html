@@ -10,6 +10,18 @@
 			.mui-bar-nav {
 				background-color: #63BBFF;
 			}
+			
+			.mui-ellipsis {
+				margin-top: 10px;
+				color: black;
+				font-size: 16px;
+			}
+			
+			.headName {
+				margin-top: 5px;
+				color: black;
+				font-size: 16px;
+			}
 		</style>
 	</head>
 
@@ -18,9 +30,76 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">账号信息</h1>
 		</header>
+		<div class="mui-content mui-fullscreen" id="peopleInfo">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media" @click="modifyImg()">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-right" :src=peopleHeadImg style="border-radius: 50%;">
+						<p class="mui-ellipsis">头像</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<p class="mui-ellipsis mui-pull-right headName">{{peopleName}}</p>
+						<p class="mui-ellipsis headName">账号</p>
+					</a>
+				</li>
+			</ul>
+		</div>
 		<script src="../../js/mui.min.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/vue.min.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
+			//获取个人信息
+			var personal = {};
+			mui.plusReady(function() {
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:' + JSON.stringify(personal));
+
+				peopleInfo.peopleHeadImg = setImg(personal.imgurl);
+				peopleInfo.peopleName = personal.utname;
+			});
+			var peopleInfo = new Vue({
+				el: "#peopleInfo",
+				data: {
+					flag: 0,
+					peopleHeadImg: '../../img/login/headImg.png',
+					peopleName: ''
+				},
+				methods: {
+					modifyImg: function() {
+						var btnArray = [{
+							title: "拍照"
+						}, {
+							title: "从相册选"
+						}];
+						plus.nativeUI.actionSheet({
+							title: "选择修改头像的方式",
+							cancel: "取消",
+							buttons: btnArray
+						}, function(e) {
+							var index = e.index;
+							var text = "你刚点击了\"";
+							switch(index) {
+								case 0:
+									text += "取消";
+									break;
+								case 1:
+									text += "拍照或录像";
+									break;
+								case 2:
+									text += "选取现有的";
+									break;
+							}
+							console.log('text:'+text);
+						});
+					}
+				}
+			});
 		</script>
 	</body>
 
