@@ -304,7 +304,8 @@
 					"html/index/login.html",
 					"html/mine/modifyPassword.html",
 					"html/mine/about.html",
-					"html/mine/redirectPassword.html"
+					"html/mine/redirectPassword.html",
+					"html/mine/headImg.html"
 				],
 				"priority": 0
 			},
