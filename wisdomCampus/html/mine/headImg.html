@@ -121,42 +121,47 @@
 			
 			//上传附件
 			function uploadFile(path,index){
-			    var files=[];
-			    //服务器地址
-			    var server="http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid="+personal.utid;
-			    var wt=plus.nativeUI.showWaiting();
-			    var task=plus.uploader.createUpload(server,{method:"POST"},function(t,status){
-			            //上传完成
-			            if(status==200){
-			                wt.close();
-			                //服务端返回的结果
-			                var result = JSON.parse(t.responseText);
-				            if(result.RspCode =='0000'){
-					            console.log("result："+t.responseText);
-					            // 设置头像
-					           setHeadImg(result);
-				            }else{
-				                console.log("上传失败 ："+t.responseText);
-				                wt.close();
-				            }
-			            }else{
-			                console.log("上传失败 not 200："+status);
-			                wt.close();
-			            }
-			        }
-			    );
-			    var fileName='';
-			    var filePath='';
-			    if(index == 1 ){//拍照。从对象中获取文件路径和文件名
-			    	fileName=path.name;
-			    	filePath=path.toLocalURL();
-			    }else{//相册 。从路径中获取文件路径和文件名
-			    	fileName=path.substring(path.lastIndexOf('/')+1,path.length);
-			    	filePath=path;
-			    }
-			    //将文件集合添加到上传队列中
-			    task.addFile(filePath,{key:fileName});
-			    task.start();
+				var btnArray = ['否', '是']; 
+				mui.confirm('确认作为头像使用吗？', '提示', btnArray, function(e) {
+					if (e.index == 1) {
+					    var files=[];
+					    //服务器地址
+					    var server="http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid="+personal.utid;
+					    var wt=plus.nativeUI.showWaiting();
+					    var task=plus.uploader.createUpload(server,{method:"POST"},function(t,status){
+					            //上传完成
+					            if(status==200){
+					                wt.close();
+					                //服务端返回的结果
+					                var result = JSON.parse(t.responseText);
+						            if(result.RspCode =='0000'){
+							            console.log("result："+t.responseText);
+							            // 设置头像
+							           setHeadImg(result);
+						            }else{
+						                console.log("上传失败 ："+t.responseText);
+						                wt.close();
+						            }
+					            }else{
+					                console.log("上传失败 not 200："+status);
+					                wt.close();
+					            }
+					        }
+					    );
+					    var fileName='';
+					    var filePath='';
+					    if(index == 1 ){//拍照。从对象中获取文件路径和文件名
+					    	fileName=path.name;
+					    	filePath=path.toLocalURL();
+					    }else{//相册 。从路径中获取文件路径和文件名
+					    	fileName=path.substring(path.lastIndexOf('/')+1,path.length);
+					    	filePath=path;
+					    }
+					    //将文件集合添加到上传队列中
+					    task.addFile(filePath,{key:fileName});
+					    task.start();
+				    } 
+				})
 			}
 			
 			function setHeadImg(result){
