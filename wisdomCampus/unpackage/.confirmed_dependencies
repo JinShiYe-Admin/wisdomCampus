@@ -10,7 +10,10 @@
 			"html/signIn/atterecords.html",
 			"html/signIn/signInIndex.html",
 			"html/signIn/signInIndex1.html",
-			"html/index/login.html"
+			"html/index/login.html",
+			"html/mine/modifyPassword.html",
+			"html/mine/about.html",
+			"html/mine/redirectPassword.html"
 		]
 	},
 	"html/checkNotice/all-list.html": {

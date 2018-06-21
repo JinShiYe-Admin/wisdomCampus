@@ -118,7 +118,7 @@
 			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" :src=userImg /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
-
+		
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;background: white;">
 			<div class="mui-scroll">
 				<div class="mui-content">
@@ -133,6 +133,7 @@
 					<div class="background-white">
 						<ul id="circler" class="mui-table-view mui-grid-view mui-grid-9 "></ul>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -143,14 +144,9 @@
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
-					<div class="weui-cell__hd">
-						<img style="width: 20px;height: 20px;margin-top: 5px;" :src=setting.icon></div>
 					<div class="weui-cell__bd">
-						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top: 10px;">{{setting.name}}</p>
-					</div>
-					<!--<div class="weui-cell__bd">
 						<p><span></span>{{setting.name}}</p>
-					</div>-->
+					</div>
 					<div class="weui-cell__ft"></div>
 				</a>
 				<a class="weui-btn weui-btn_warn" v-on:click="quitLogin">
@@ -335,7 +331,7 @@
 				} else {
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
-					} else {
+					}  else {
 						mui.toast("此功能暂未开放");
 					}
 				}
@@ -382,25 +378,26 @@
 			var mine1 = new Vue({
 				el: "#mine1",
 				data: {
-					userImg: setImg(personal.imgurl)
-				}
-			});
+					userImg:setImg(personal.imgurl)
+				}});
 			var mine = new Vue({
 				el: "#mine",
 				data: {
 					userName: tempName,
-					userImg: setImg(personal.imgurl),
-					settings: [{
-						name: "密码修改",
-						icon: "../../img/login/lock.png",
-						href: "",
-						tempID: 0
-					}, {
-						name: "关于我们",
-						icon: "../../img/login/mine.png",
-						href: "",
-						tempID: 1
-					}],
+					userImg:setImg(personal.imgurl),
+					settings: [
+											{
+												name: "密码修改",
+												icon: "",
+												href: "",
+												tempID:0
+											}, {
+												name: "关于我们",
+												icon: "",
+												href: "",
+												tempID:1
+											}
+					],
 					isMineShow: false //屏蔽或显示我的界面
 				},
 				methods: {
@@ -432,14 +429,14 @@
 					jumpToDetail: function(setting) {
 						console.log("dfffff")
 						this.isMineShow = false;
-						//						location.href = setting.href;
-						if(setting.tempID == 0) {
-							utils.mOpenWithData("../../html/mine/modifyPassword.html", setting);
-						} else if(setting.tempID == 1) {
+//						location.href = setting.href;
+						if (setting.tempID ==0) {
+							utils.mOpenWithData("../../html/mine/redirectPassword.html", setting);
+						} else if (setting.tempID ==1) {
 							utils.mOpenWithData("../../html/mine/about.html", setting);
 						}
 					},
-					clickHeadImg: function() {
+					clickHeadImg:function(){
 						this.isMineShow = false;
 						utils.mOpenWithData("../../html/mine/headImg.html", {});
 					}
