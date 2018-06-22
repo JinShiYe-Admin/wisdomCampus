@@ -144,10 +144,11 @@
 					<p class="user-name">{{userName}}</p>
 				</div>
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
-					<div class="weui-cell__bd">
-						<p><span></span>{{setting.name}}</p>
-					</div>
-					<div class="weui-cell__ft"></div>
+					<div class="weui-cell__hd">
+						<img style="width: 20px;height: 20px;margin-top: 5px;" :src=setting.icon></div>
+ 					<div class="weui-cell__bd">
+						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top: 10px;">{{setting.name}}</p>
+ 					</div>
 				</a>
 				<a class="weui-btn weui-btn_warn" v-on:click="quitLogin">
 					退出登录
@@ -391,20 +392,18 @@
 				el: "#mine",
 				data: {
 					userName: tempName,
-					userImg:setImg(personal.imgurl),
-					settings: [
-											{
-												name: "密码修改",
-												icon: "",
-												href: "",
-												tempID:0
-											}, {
-												name: "关于我们",
-												icon: "",
-												href: "",
-												tempID:1
-											}
-					],
+					userImg: setImg(personal.imgurl),
+					settings: [{
+						name: "密码修改",
+						icon: "../../img/login/lock.png",
+						href: "",
+						tempID: 0
+					}, {
+						name: "关于我们",
+						icon: "../../img/login/mine.png",
+						href: "",
+						tempID: 1
+					}],
 					isMineShow: false //屏蔽或显示我的界面
 				},
 				methods: {
