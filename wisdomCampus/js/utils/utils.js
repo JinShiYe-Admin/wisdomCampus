@@ -89,7 +89,13 @@ var utils = (function(mod) {
 		var ids = url.split("/");
 		var dataStr = JSON.stringify(data);
 		console.log("mOpen " + url + ' ' + dataStr);
-		mui.openWindow(url + "?v=" + Math.random() + "&data=" + encodeURIComponent(dataStr), ids[ids.length - 1]);
+		mui.openWindow({
+			url:	url + "?v=" + Math.random() + "&data=" + encodeURIComponent(dataStr)
+			,id:ids[ids.length - 1]
+			,waiting:{
+		      autoShow:false,//自动显示等待框，默认为true
+		    }
+		});
 	}
 
 	/**
