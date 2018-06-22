@@ -50,7 +50,17 @@
 			}
 			
 			.mui-table-view-cell>a:not(.mui-btn).mui-active {
-			    background-color: #fff;
+				background-color: #fff;
+			}
+			
+			.mui-pull-left{
+				margin-left: -50px;
+			}
+			
+			.mui-ellipsis{
+				font-size: 16px;
+				color: black;
+				margin-top: 10px;
 			}
 		</style>
 	</head>
@@ -69,10 +79,15 @@
 				<ul class="mui-table-view mui-table-view-chevron" style="padding-bottom: 60px;">
 					<li class="mui-table-view-cell mui-collapse keep-unfold mui-checkbox mui-left" v-for='(department,index) in departmentArray' @tap="clickDepartment(department,index)">
 						<template v-if='department.dptname'>
-							<a class="mui-input-row mui-checkbox mui-left">
+							<a href="javascript:;" style="margin-left: -50px;">
+								<img v-if="department.departFlag==0" class="mui-media-object mui-pull-left" @tap.stop="clickDepartmentSelect1(department,index)" src="../../img/firstPage/unselect.png">
+								<img v-if="department.departFlag==1" class="mui-media-object mui-pull-left" @tap.stop="clickDepartmentSelect1(department,index)" src="../../img/firstPage/select.png">
+								<p class="mui-ellipsis">{{department.dptname}}</p>
+							</a>
+							<!--<a class="mui-input-row mui-checkbox mui-left">
 								<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.dptname}}</a>
 								<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
-							</a>
+							</a>-->
 							<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
 								<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
 									<a class="mui-input-row mui-checkbox mui-left">
@@ -83,18 +98,23 @@
 							</ul>
 						</template>
 						<template v-else>
-							<a class="mui-input-row mui-checkbox mui-left">
-								<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.clsname}}</label>
-									<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
-								</a>
-								<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
-									<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
-										<a class="mui-input-row mui-checkbox mui-left">
-											<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
-											<input name="checkbox" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
-										</a>
-									</li>
-								</ul>
+							<a href="javascript:;" style="margin-left: -50px;">
+								<img v-if="department.departFlag==0" class="mui-media-object mui-pull-left" @tap.stop="clickDepartmentSelect1(department,index)" src="../../img/firstPage/unselect.png">
+								<img v-if="department.departFlag==1" class="mui-media-object mui-pull-left" @tap.stop="clickDepartmentSelect1(department,index)" src="../../img/firstPage/select.png">
+								<p class="mui-ellipsis">{{department.clsname}}</p>
+							</a>
+							<!--<a class="mui-input-row mui-checkbox mui-left">
+								<a class=" mui-navigate-right" style="margin-left: -60px;margin-top: -20px;">{{department.clsname}}</a>
+								<input name="checkbox2" value="Item 1" type="checkbox" style="padding-top: 3px;" v-model="department.departFlag" @tap="clickDepartmentSelect1(department,index)">
+							</a>-->
+							<ul class="mui-table-view mui-table-view-chevron" style="margin-left: -60px;">
+								<li class="mui-table-view-cell" v-for="(peopleModel,index) in department.peopleArray" @tap="clickPeople(peopleModel,index)" style="height: 50px;">
+									<a class="mui-input-row mui-checkbox mui-left">
+										<label style="padding-top: 6px;padding-left: 40px;">{{peopleModel.utname}}</label>
+										<input name="checkbox" value="Item 2" type="checkbox" style="padding-top: 7px;margin-left: 10px;" v-model="peopleModel.flag">
+									</a>
+								</li>
+							</ul>
 						</template>
 					</li>
 				</ul>
