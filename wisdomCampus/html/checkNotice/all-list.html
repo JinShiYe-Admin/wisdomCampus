@@ -223,6 +223,7 @@
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../../js/utils/myStorage.js"></script>
 		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/events.js"></script>
 
 		<!--加密-->
 		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
@@ -408,7 +409,7 @@
 
 				$1.ready(function() {
 					var getNotice = function(pullRefresh,id, title, callback) { //10.获取发送的通知公告列表
-						//					events.showWaiting();
+						events.showWaiting();
 						console.log("1111111111111" + title)
 						var current_data = datasource[title];
 						var refreshObj = current_data.refreshObj
@@ -430,7 +431,7 @@
 							}
 							getSendNoticePro(tempData, function function_name(data) {
 								console.log(JSON.stringify(data))
-								//							events.closeWaiting();
+								events.closeWaiting();
 								if(data.RspCode == 0) {
 									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
 									if(datasource[title].refreshObj.refreshFlag == 0) {
@@ -467,7 +468,7 @@
 								pageSize: '10' //每页记录数
 							}
 							getReceiveNoticePro(tempData, function function_name(data) {
-								//							events.closeWaiting();
+								events.closeWaiting();
 								console.log(JSON.stringify(data))
 								if(data.RspCode == 0) {
 									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
@@ -498,7 +499,7 @@
 
 							getAffairApplyPro(tempData, function function_name(data) {
 								console.log(JSON.stringify(data))
-								//							events.closeWaiting();
+								events.closeWaiting();
 								if(data.RspCode == 0) {
 									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
 									if(datasource[title].refreshObj.refreshFlag == 0) {
@@ -541,7 +542,7 @@
 							}
 
 							getAffairApprovePro(tempData, function function_name(data) {
-								//							events.closeWaiting();
+								events.closeWaiting();
 								console.log(JSON.stringify(data))
 								if(data.RspCode == 0) {
 									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
@@ -561,7 +562,7 @@
 						}
 						//					events.closeWaiting();
 					}
-					//					events.showWaiting();
+					events.showWaiting();
 					getNotice(pullRefresh,title_id, 'receive0', function(data) {
 						var ul = document.getElementById("ul0");
 						ul.appendChild(createFragment(ul, title_id, data));
