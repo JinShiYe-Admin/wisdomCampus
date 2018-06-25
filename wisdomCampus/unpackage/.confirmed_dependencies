@@ -40,5 +40,13 @@
 			"html/signIn/atterecords.html",
 			"html/signIn/atterecords1.html"
 		]
+	},
+	"html/mine/redirectPassword.html": {
+		"resources": [
+			"html/mine/test.html"
+		],
+		"refer": [
+			"html/mine/test.html"
+		]
 	}
 }
