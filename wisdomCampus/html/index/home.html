@@ -176,6 +176,7 @@
 		<script src='../../js/utils/signHmacSHA1.js'></script>
 		<script src='../../js/utils/sortSign.js'></script>
 		<script src='../../js/utils/store.js'></script>
+		<script src='../../js/lib/app-update.js'></script>
 		<script>
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
@@ -248,6 +249,8 @@
 				bindInfo();
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
+				//判断是否需要更新
+				setTimeout(appUpdate.updateApp, 5000);
 			});
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {

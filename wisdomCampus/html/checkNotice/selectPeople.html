@@ -468,6 +468,8 @@
 								}
 								//点击人员时，判断部门是否应该选中状态
 								judgeDepartmentSelect();
+							}else{
+								mui.toast('当前部门没有人');
 							}
 						} else {
 							mui.toast(data.RspTxt, "cancel");
@@ -522,6 +524,8 @@
 								}
 								//点击人员时，判断部门是否应该选中状态
 								judgeDepartmentSelect();
+							}else{
+								mui.toast('当前部门没有人');
 							}
 						} else {
 							mui.toast(data.RspTxt, "cancel");

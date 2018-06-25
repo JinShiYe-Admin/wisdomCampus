@@ -361,7 +361,7 @@
 									}
 									sendFlag = 1;
 									var wd = events.showWaiting();
-									if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
+									if(multiMedia.data.PictureArray.length == 0) { //没有传附件
 										addAffairApply(wd, '3', '', '', 0, '');
 									} else {
 										uploadFile(wd); //上传文件

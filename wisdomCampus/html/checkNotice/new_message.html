@@ -78,20 +78,20 @@
 		</header>
 		<div id="message" class="mui-content">
 			<template v-if="dataFlag>0">
-			<div class="weui-cells" style="margin-top: 0px;">
-				<div class="weui-cell">
-					<div class="weui-cell__hd">标题</div>
-					<div class="weui-cell__bd">
-						<input v-model="title" maxlength="50" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+				<div class="weui-cells" style="margin-top: 0px;">
+					<div class="weui-cell">
+						<div class="weui-cell__hd">标题</div>
+						<div class="weui-cell__bd">
+							<input v-model="title" maxlength="50" style="border: 1px solid gainsboro;margin-bottom: 0px;" type="text" class="weui-input" placeholder="请输入标题" />
+						</div>
+					</div>
+					<div class="weui-cell" style="align-items: flex-start;">
+						<div class="weui-cell__hd">内容</div>
+						<div class="weui-cell__bd">
+							<textarea v-model="content" maxlength="300" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
+						</div>
 					</div>
 				</div>
-				<div class="weui-cell" style="align-items: flex-start;">
-					<div class="weui-cell__hd">内容</div>
-					<div class="weui-cell__bd">
-						<textarea v-model="content" maxlength="300" class="weui-textarea" style="border: 1px solid gainsboro;margin-bottom: 0;" placeholder="请输入内容" rows="4"></textarea>
-					</div>
-				</div>
-			</div>
 			</template>
 			<div id="MultiMedia">
 				<div class="mui-input-row mui-checkbox mui-left" id="senMSN" style="float: right;margin-top: 3px;display: none;">
@@ -100,20 +100,21 @@
 				</div>
 			</div>
 			<template v-if="dataFlag>0">
-			<div class="weui-cells" style="margin-top: 0px;">
-				<div @click="selectPepole()" class="weui-cell weui-cell_access">
-					<div class="weui-cell__bd">
-						接收人
-					</div>
-					<div class="weui-cell__ft">
-						{{peopleNum}}
+				<div class="weui-cells" style="margin-top: 0px;">
+					<div @click="selectPepole()" class="weui-cell weui-cell_access">
+						<div class="weui-cell__bd">
+							接收人
+						</div>
+						<div class="weui-cell__ft">
+							{{peopleNum}}
+						</div>
 					</div>
 				</div>
-			</div>
-			<div style="margin: 10px;color: gray;">
-				{{'已选('+selectPeople.length+'人）:'}} {{showSelectPeople}}
-			</div>
-			<a id="sengMsg" @click.stop="clickSubmitBtn()" class="weui-btn weui-btn_blue" style="height: 45px;padding-top: 0px;">发布</a>
+				<div style="margin: 10px;color: gray;">
+					{{'已选('+selectPeople.length+'人）:'}} {{showSelectPeople}}
+				</div>
+				<a id="sengMsg" @click.stop="clickSubmitBtn()" class="weui-btn weui-btn_blue" style="height: 45px;padding-top: 0px;">发布</a>
+				<br />
 			</template>
 		</div>
 		<div id="videoPopover" class="mui-popover">
@@ -243,8 +244,8 @@
 									}
 									sendFlag = 1;
 									var wd = events.showWaiting();
-									if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
-										addNotice(wd, '3', '', '', 0,'');
+									if(multiMedia.data.PictureArray.length == 0) { //没有传附件
+										addNotice(wd, '3', '', '', 0, '');
 									} else {
 										uploadFile(wd); //上传文件
 									}
@@ -253,9 +254,17 @@
 						}
 					},
 					selectPepole: function() {
+						var tempPeople = [];
+						for(var i = 0; i < message.selectPeople.length; i++) {
+							var tempModel = {
+								utid: message.selectPeople[i].utid,
+								utname: message.selectPeople[i].utname
+							};
+							tempPeople.push(tempModel);
+						}
 						var data = {
 							flag: 1, //1 通知公告
-							selectPeople: message.selectPeople
+							selectPeople: tempPeople
 						}
 						console.log(JSON.stringify(data));
 						utils.mOpenWithData("selectPeople.html", data)
@@ -337,11 +346,11 @@
 				hideOption = events.initHideKeyBoard();
 			}
 
-			var addNotice = function(wd, encType, encAddr, encImg, encLen,encName) {
-//				console.log('encType:' + encType);
-//				console.log('encAddr:' + encAddr);
-//				console.log('encImg:' + encImg);
-//				console.log('encLen:' + encLen);
+			var addNotice = function(wd, encType, encAddr, encImg, encLen, encName) {
+				//				console.log('encType:' + encType);
+				//				console.log('encAddr:' + encAddr);
+				//				console.log('encImg:' + encImg);
+				//				console.log('encLen:' + encLen);
 				var smsSync = message.smsSync == true ? 1 : 0
 
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -458,13 +467,13 @@
 					}
 				}
 				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
-//				console.log('uploadNum:' + uploadNum);
-//				console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+				//				console.log('uploadNum:' + uploadNum);
+				//				console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
 				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
-//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
+					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
-//						console.log('上传配置 ' + JSON.stringify(data.configure));
-//						console.log('上传凭证 ' + JSON.stringify(data.data));
+						//						console.log('上传配置 ' + JSON.stringify(data.configure));
+						//						console.log('上传凭证 ' + JSON.stringify(data.data));
 						QNUptoken = data.data; //token数据
 
 						if(multiMedia.data.PictureArray.length != 0) { //图片
@@ -476,8 +485,8 @@
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];
 									if(multiMedia.data.PictureArray[j].id == fileId) {
-//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
-//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
+										//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
+										//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
 										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
 										multiMedia.data.PictureArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
 									}
@@ -598,9 +607,9 @@
 						}
 						CloudFileUtil.upload(fPath, QNUptoken.Data[i].Token, QNUptoken.Data[i].Key, function(upload, status) {
 							//上传任务完成的监听
-//														console.log('上传任务完成' + status + '|' + JSON.stringify(upload));
+							//														console.log('上传任务完成' + status + '|' + JSON.stringify(upload));
 							if(status == 200) {
-								
+
 								//console.log('上传成功');
 								QNUptoken.Data[i].task = true;
 								//QNUptoken.Data[i].persistentId = JSON.parse(upload.responseText).persistentId;
@@ -611,9 +620,9 @@
 								if(multiMedia.data.PictureArray.length !== 0) { //图片
 									pathList.push(multiMedia.data.PictureArray[num].domain);
 									var path = multiMedia.data.PictureArray[num].path.split("/");
-											var name = path[path.length - 1];
-											name = name + '(' + cloudutil.transformSize(upload.totalSize) + ')';
-											encNameList.push(name);
+									var name = path[path.length - 1];
+									name = name + '(' + cloudutil.transformSize(upload.totalSize) + ')';
+									encNameList.push(name);
 								} else if(multiMedia.data.VideoArray.length !== 0) { //视频
 									pathList.push(multiMedia.data.VideoArray[num].domain);
 									pathList.push(multiMedia.data.VideoArray[num].thumb);
@@ -631,8 +640,8 @@
 									if(multiMedia.data.PictureArray.length !== 0) { //图片
 										for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
 											encAddr.push(multiMedia.data.PictureArray[j].domain);
-//											console.log('multiMedia.data.PictureArray:'+ JSON.stringify(multiMedia.data.PictureArray[j]));
-											
+											//											console.log('multiMedia.data.PictureArray:'+ JSON.stringify(multiMedia.data.PictureArray[j]));
+
 										}
 										type = '1';
 									} else if(multiMedia.data.VideoArray.length !== 0) { //视频
@@ -653,7 +662,7 @@
 									var encAddrStr = encAddr.join('|');
 									var encImgrStr = encImg.join('|');
 									var encNameStr = encNameList.join('|');
-									addNotice(wd, type, encAddrStr, encImgrStr, encLen,encNameStr);
+									addNotice(wd, type, encAddrStr, encImgrStr, encLen, encNameStr);
 								} else {
 									taskCreate(wd);
 								}
