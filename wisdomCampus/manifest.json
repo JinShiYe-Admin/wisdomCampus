@@ -340,6 +340,13 @@
 					"html/signIn/atterecords1.html"
 				],
 				"priority": 0
+			},
+			"html/mine/redirectPassword.html": {
+				"resources": [
+					"html/mine/test.html"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
