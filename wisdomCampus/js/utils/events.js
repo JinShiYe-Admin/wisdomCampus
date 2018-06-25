@@ -148,5 +148,51 @@ var events = (function(mod) {
 			}
 		};
 	}
+	
+	/**
+	 * 将界面的焦点清除后再退出当前界面
+	 */
+	mod.blurBack = function() {
+		var oldBack = mui.back;
+		mui.back = function() {
+			document.activeElement.blur();
+			oldBack();
+		}
+	}
+	
+	/**
+	 * 初始化强制隐藏键盘
+	 * @author 莫尚霖
+	 */
+	mod.initHideKeyBoard = function() {
+		if(plus.os.name == 'Android') {
+			var Context = plus.android.importClass("android.content.Context");
+			var InputMethodManager = plus.android.importClass("android.view.inputmethod.InputMethodManager");
+			var main = plus.android.runtimeMainActivity();
+			var inputManger = main.getSystemService(Context.INPUT_METHOD_SERVICE);
+			var Focus = plus.android.invoke(main, 'getCurrentFocus');
+			////console.log('invoke ' + plus.android.invoke(main, 'getCurrentFocus'));
+			////console.log('invoke ' + plus.android.invoke(Focus, 'getWindowToken'));
+			var WindowToken = plus.android.invoke(Focus, 'getWindowToken');
+			var hideOption = {
+				manger: inputManger,
+				token: WindowToken,
+				type: InputMethodManager.HIDE_NOT_ALWAYS
+			}
+			return hideOption;
+		}
+	}
+	
+	/**
+	 * 强制隐藏键盘需要和initHideKeyBoard配合使用
+	 * @author 莫尚霖
+	 * @param {Object} hideOption initHideKeyBoard 返回的数据
+	 */
+	mod.hideKeyBoard = function(hideOption) {
+		document.activeElement.blur();
+		if(plus.os.name == 'Android') {
+			hideOption.manger.hideSoftInputFromWindow(hideOption.token, hideOption.type);
+		}
+	}
 	return mod;
 })(events || {})

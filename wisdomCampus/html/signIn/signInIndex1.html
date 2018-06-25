@@ -9,6 +9,11 @@
 		<link rel="stylesheet" href="../../js/demoCssJs/demos.css">
 		<link rel="stylesheet" href="../../css/demos.css" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/utils/common.css" />
+		<link rel="stylesheet" href="../../fonts/iconfont1.css" />
+		<link rel="stylesheet" href="../../css/utils/MultiMedia.css" />
+		<link rel="stylesheet" href="../../css/utils/preview.css" />
+		<link rel="stylesheet" href="../../css/utils/audiopopover.css" />
 		<style type="text/css">
 			body,
 			html {
@@ -18,7 +23,7 @@
 			
 			#allmap {
 				width: 100%;
-				height: 50%;
+				height: 230px;
 			}
 			
 			p {
@@ -83,8 +88,12 @@
 			.right-position {
 				color: white;
 				font-size: 15px;
-				margin-top: 10px;
+				margin-top: 0px;
 			}
+			.weui-tab__bd {
+	box-sizing: border-box;
+	 height: 410px; 
+}
 			/*.weui-tab {
             margin-top:-30px;
         }*/
@@ -103,7 +112,7 @@
 			<h1 class="mui-title">签到考勤</h1>
 			<a id="position111" class="mui-pull-right right-position">查询</a>
 		</header>
-		<div class="weui-tab mui-content" style="background: white;">
+		<div class="weui-tab mui-content mui-fullscreen" style="background: white;">
 			<div class="weui-tab__bd">
 				<div class="weui-tab__bd-item weui-tab__bd-item--active" id="tab0">
 					<p></p>
@@ -134,44 +143,38 @@
 							<input id="attendArea" data_id="" onclick="selectAttendArea(this)" class="weui-input" placeholder="请选择考勤地点">
 						</div>
 					</div>
-
-					<div id="submitHomework">
-						<div class="weui-cells weui-cells_form">
-							<div class="weui-cell">
-								<div class="weui-cell__bd">
-									<div class="weui-uploader">
-										<div class="weui-uploader__hd">
-											<p class="weui-uploader__title">上传照片</p>
-										</div>
-										<div class="weui-uploader__bd">
-											<ul class="weui-uploader__files" id="uploaderFiles">
-												<li v-for="(file,index) of uploadedFiles" @click="clickImg(index)" v-bind:class="['weui-uploader__file']" v-bind:style="{'background-image':'url('+file.ImgUrl+')'}"></li>
-											</ul>
-											<div class="weui-uploader__input-box" :style="displayAddBtn">
-												<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" capture="camera" v-on:change="selectFile($event)">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<input id="qnInput" style="display: none;">
-						<div class="weui-gallery" :style="displayGallery">
-							<span class="weui-gallery__img" @click="clickGigImg" :style="{backgroundImage:'url('+selectImgPath+')'}"></span>
-							<div class="weui-gallery__opr">
-								<a href="javascript:" class="weui-gallery__del">
-									<i class="weui-icon-delete weui-icon_gallery-delete" @click="deleteImg"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-					<br />
-					<div>
-						<a style="width: 95%;" id="save" href="javascript:;" class="weui-btn weui-btn_primary" onclick="save()">签到</a>
-					</div>
-					<br /><br />
-
 				</div>
+			</div>
+			<p style="background: #e4e4e4;height: 10px;margin-left: -10px;"></p>
+			<div id="MultiMedia" style="">
+
+			</div>
+			<br />
+			<div>
+				<a style="width: 95%;" id="save" href="javascript:;" class="weui-btn weui-btn_primary" onclick="save()">签到</a>
+			</div>
+		</div>
+		<div id="videoPopover" class="mui-popover">
+			<video id="video" style="position: absolute;z-index: 999;" controls="controls" webkit-playsinline playsinline>
+				您的浏览器不支持 video 标签。
+			</video>
+		</div>
+		<div id="audioPopover" class="mui-popover">
+			<div id="audio_show" class="audio-show-popover">
+				<span id="audio_icon" class="mui-icon mui-icon-mic audio-icon"></span>
+				<canvas id="audio_canvas" class="audio-canvas"></canvas>
+				<span id="audio_close" class="mui-icon iconfont icon-guanbi"></span>
+				<div id="audio_time" class="audio-time">00:00</div>
+				<div id="audio_control" class="audio-control">
+					<div id="audio_play" class="audio-control-background audio-control-play">
+						<div></div>
+					</div>
+					<div id="audio_pause" class="audio-control-background audio-control-pause">
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+				<audio id="audio_audio" autoplay="autoplay" preload="auto"></audio>
 			</div>
 		</div>
 
@@ -207,68 +210,44 @@
 			document.write("<s" + "cript type='text/javascript' src='../../js/utils/compress.js?" + Math.random() + "'></s" + "cript>");
 			document.write("<s" + "cript type='text/javascript' src='../../js/utils/pluploadutil.js?" + Math.random() + "'></s" + "cript>");
 		</script>
+		<!--视频、照片控件用-->
+		<script type="text/javascript" src="../../js/utils/events.js"></script>
+		<script type="text/javascript" src="../../js/utils/MultiMedia.js"></script>
+		<script type="text/javascript" src="../../js/cloud/AndroidFileSystem.js"></script>
+		<script type="text/javascript" src="../../js/lib/qiniu/qiniu.js"></script>
+		<script type="text/javascript" src="../../js/utils/cryption.js"></script>
+		<script type="text/javascript" src="../../js/utils/CloudFileUtil.js"></script>
+		<script type="text/javascript" src="../../js/utils/storageKeyName.js"></script>
+		<script type="text/javascript" src="../../js/mui.zoom.js"></script>
+		<script type="text/javascript" src="../../js/mui.previewimage.js"></script>
+		<script type="text/javascript" src="../../js/utils/compress.js"></script>
+		<script type="text/javascript" src="../../js/utils/recordvideoutil.js"></script>
+		<script type="text/javascript" src="../../js/utils/playutil.js"></script>
+		<script type="text/javascript" src="../../js/utils/showvideoutil.js"></script>
+		<script type="text/javascript" src="../../js/utils/showaudio.js"></script>
+		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
 
 		<script type="text/javascript">
 			var uptokenData;
 			var personal;
-			var qnFileUploader; //七牛上传控件对象
+			var pathList = []; //记录需要删掉的图片和缩略图
+			var encNameList = []; //附件名称
+			var QNUptoken; //token数据
+			var uploadNum = 0; //记录上传的次数
+			var hideOption; //隐藏键盘的数据
+			var multiMedia; //多媒体控件
 			var submitHomework = new Vue({
 				el: '#submitHomework',
 				data: {
-
-					displayGallery: {
-						display: 'none'
-					},
-					displayAddBtn: {
-						display: 'block'
-					},
-
-					selectIndex: 0,
-					selectImgPath: '',
-					uploadedFiles: []
+					selectIndex: 0
 				},
 				methods: {
-					selectFile: function(event) { //从手机中选择图片后到界面的回调
-						// 如果没有选中文件，直接返回  
-						var files = event.target.files;
-						if(files.length === 0) {
-							events.closeWaiting();
-							return;
-						} else {
-							uploadFiles(0, files, submitHomework.uploadedFiles.length);
-						}
-					},
-
-					clickImg: function(index) { //点击列表中的附件，给别的地方赋值
-						submitHomework.selectIndex = index;
-						submitHomework.selectImgPath = submitHomework.uploadedFiles[index].ImgUrl;
-						submitHomework.displayGallery = {
-							display: 'block'
-						};
-					},
-					clickGigImg: function() { //点击放大后的图片，隐藏显示
-						submitHomework.displayGallery = {
-							display: 'none'
-						};
-					},
-					deleteImg: function() { //删除图片
-						$.confirm({
-							title: '提示',
-							text: '确认删除？',
-							onOK: function() {
-								submitHomework.displayGallery = {
-									display: 'none'
-								};
-								submitHomework.uploadedFiles.splice(submitHomework.selectIndex, 1);
-								displayAddBtnFun();
-							}
-						});
-					}
+					
 				}
 			});
-			
-			document.getElementById('position111').addEventListener('tap',function () {
-			       utils.mOpenWithData("../../html/signIn/atterecords.html", 'id');
+
+			document.getElementById('position111').addEventListener('tap', function() {
+				utils.mOpenWithData("../../html/signIn/atterecords.html", 'id');
 			});
 
 			var userList = [];
@@ -289,18 +268,104 @@
 				personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(personal));
 				setMap();
-				initQNUploader();
 				//12.获取考勤类型
 				getAttendType();
 				getAttendArea();
 				getDepart();
+				init(); //初始化控件
 			});
+
+			/*
+			 * 初始化控件
+			 */
+			function init() {
+				events.blurBack();
+
+				//图片查看控件
+				mui.previewImage();
+
+				//多媒体控件
+				multiMedia = MultiMedia.multiMedia({
+					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
+					Picture: true, //是否显示图片图标
+					Audio: false, //是否显示音频图标
+					Video: false, //是否显示视频图标
+					TotalPicture: 1, //图片的个数
+					TotalAudio: 1, //音频的个数
+					TotalVideo: 1, //视频的个数
+					PictureTuke:false//不显示从相册选图
+				});
+				//显示发送短信按钮
+				//				document.getElementById('senMSN').style.display = 'inherit';
+				//设置底部卡片上边距-15px→10px;
+				//				document.getElementById("bootom-card").style.marginTop = "10px";
+				/**
+				 * 播放视频
+				 * @param {Object} data
+				 */
+				multiMedia.videoPlayCallBack = function(data) {
+					//console.log("videoPlayCallBack")
+					ShowVideoUtil.showVideo(document.getElementById("video"), 'videoPopover', data.path, data.localthumb);
+				}
+
+				/**
+				 * 播放音频
+				 * @param {Object} data
+				 */
+				multiMedia.audioPlayCallBack = function(data) {
+					//console.log('audioPlayCallBack ' + JSON.stringify(data));
+					ShowAudioUtil.initAudio(data, 1);
+				}
+
+				//初始化视频播放器
+				ShowVideoUtil.initVideo(document.getElementById("video"));
+				//初始化音频播放器
+				audio_option = {
+					x: localStorage.getItem('resolutionWidth') * 1.4, //圆心的x轴坐标值
+					y: (plus.screen.resolutionHeight / 3 * 2), //圆心的y轴坐标值
+					r: plus.screen.resolutionHeight * 0.25 * 1.5 //圆的半径
+				};
+				ShowAudioUtil.initAudioPopover({
+					show: document.getElementById("audio_show"),
+					icon: document.getElementById("audio_icon"),
+					canvas: document.getElementById("audio_canvas"),
+					play: document.getElementById("audio_play"),
+					pause: document.getElementById("audio_pause"),
+					time: document.getElementById("audio_time"),
+					audio: document.getElementById("audio_audio")
+				});
+				//获取配置信息
+				hideOption = events.initHideKeyBoard();
+			}
 
 			//签到
 			function save() {
-				events.showWaiting();
-				addAttend(attendType.tempAttendType);
-				console.log('签到')
+				var attendTypeId = document.getElementById("attendType").data_id;
+				var departId = document.getElementById("depart").data_id;
+				var deptName = document.getElementById("depart").value;
+				var attendAreaId = document.getElementById("attendArea").data_id;
+
+				if(attendTypeId == undefined || attendTypeId == "") {
+					mui.toast("请选择考勤类型");
+					return;
+				}
+				if(departId == undefined || departId == "") {
+					mui.toast("请选择部门");
+					return;
+				}
+				if(attendAreaId == undefined || attendAreaId == "") {
+					mui.toast("请选择考勤地点");
+					return;
+				}
+				
+				if(multiMedia.data.PictureArray.length == 0) { //没有传附件
+					mui.toast("请添加照片");
+					return;
+				} else {
+					var wd = events.showWaiting();
+					uploadFile(wd); //上传文件
+				}
 			}
 
 			//17.获取选择用考勤类型
@@ -318,7 +383,6 @@
 							model.label = model.AttendTypeNote;
 							model.value = model.AttendTypeId;
 							attendType.attendTypeList.push(model);
-
 						}
 						console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
 					}
@@ -344,59 +408,25 @@
 					}
 				});
 			}
-			
+
 			//10.新增考勤记录
-			function addAttend(tempAttendType) {
+			function addAttendfunction(wd, encType, encAddr, encImg, encLen, encName) {
 				var attendTypeId = document.getElementById("attendType").data_id;
 				var departId = document.getElementById("depart").data_id;
 				var deptName = document.getElementById("depart").value;
 				var attendAreaId = document.getElementById("attendArea").data_id;
-
-				if(attendTypeId == undefined || attendTypeId == "") {
-					mui.toast("请选择考勤类型");
-					events.closeWaiting();
-					return;
-				}
-				if(departId == undefined || departId == "") {
-					mui.toast("请选择部门");
-					events.closeWaiting();
-					return;
-				}
-				if(attendAreaId == undefined || attendAreaId == "") {
-					mui.toast("请选择考勤地点");
-					events.closeWaiting();
-					return;
-				}
-				//附件数组
-				var tempEncs = [];
-				for(var i = 0; i < submitHomework.uploadedFiles.length; i++) {
-					var tempValue = submitHomework.uploadedFiles[i];
-					var tempModel = {
-						oldname: tempValue.OldName,
-						newname: tempValue.NewName,
-						saveurl: tempValue.SaveUrl,
-						filesize: tempValue.FileSize,
-						imgurl: tempValue.ImgUrl
-					}
-					tempEncs.push(tempModel);
-				}
-				if(tempEncs.length == 0) {
-					mui.toast("请添加照片");
-					events.closeWaiting();
-					return;
-				}
 				var tempData = {
-					schoolId: personal.schid,//学校ID
-					deptId: departId,//部门ID
-					deptName: deptName,//部门名称
-					userId: personal.utid,//签到人ID
-					userName: personal.utname,//签到人姓名
-					attendType: attendTypeId,//考勤类型
-					attendArea: attendAreaId,//考勤地点
-					attendAreaX: attendArea.tempAttendArea.lng,//签到地点X坐标
-					attendAreaY: attendArea.tempAttendArea.lat,//签到地点Y坐标
-					attendPic: tempEncs[0].imgurl,//签到拍照
-					attendNote: '签到考勤',//考勤备注
+					schoolId: personal.schid, //学校ID
+					deptId: departId, //部门ID
+					deptName: deptName, //部门名称
+					userId: personal.utid, //签到人ID
+					userName: personal.utname, //签到人姓名
+					attendType: attendTypeId, //考勤类型
+					attendArea: attendAreaId, //考勤地点
+					attendAreaX: attendArea.tempAttendArea.lng, //签到地点X坐标
+					attendAreaY: attendArea.tempAttendArea.lat, //签到地点Y坐标
+					attendPic: encAddr, //签到拍照
+					attendNote: '签到考勤', //考勤备注
 				}
 				console.log('添加考勤参数：' + JSON.stringify(tempData));
 				//10.新增考勤记录
@@ -410,12 +440,8 @@
 						document.getElementById("depart").data_id = "";
 						document.getElementById("attendType").data_id = "";
 						document.getElementById("attendArea").data_id = "";
-						submitHomework.displayGallery = {
-							display: 'none'
-						};
-						submitHomework.uploadedFiles.splice(submitHomework.selectIndex, 1);
-						displayAddBtnFun();
-						mui.toast('添加成功')
+						mui.toast('添加成功');
+						multiMedia.imageRefresh();
 					} else {
 						mui.toast(data.RspTxt);
 					}
@@ -544,174 +570,276 @@
 				})
 			}
 
-			//从相册中选择照片后，上传
-			//index--从相册选择照片回调里面，照片的索引，files--选择的照片信息，filesSum--选择照片之前，现存的照片张数
-			function uploadFiles(index, files, filesSum) {
-				console.log('index:' + index + ',files.count:' + files.length + ',filesSum:' + filesSum);
-				if(index < files.length) {
-					if(filesSum + index > 0) {
-						mui.toast("最多只能上传1张照片");
+			/**
+			 * 上传文件
+			 */
+			function uploadFile(wd) {
+				var getUpTokenData = {
+					type: '0', //获取上传token的方式
+					appId: 8, //项目id
+					fileArray: [], //文件数组
+					mainSpace: window.storageKeyName.QNPUBSPACE, //文件存放在私有空间或公有空间
+					uploadSpace: window.storageKeyName.XXTNOTICE, //上传的空间
+				}
+
+				if(multiMedia.data.PictureArray.length != 0) { //图片
+					for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+						getUpTokenData.fileArray.push(multiMedia.data.PictureArray[i].path);
+					}
+				} else if(multiMedia.data.VideoArray.length != 0) { //视频
+					getUpTokenData.type = '2';
+					for(var i = 0; i < multiMedia.data.VideoArray.length; i++) {
+						getUpTokenData.fileArray.push(multiMedia.data.VideoArray[i].path);
+					}
+				} else if(multiMedia.data.AudioArray.length != 0) { //音频
+					getUpTokenData.type = '3';
+					for(var i = 0; i < multiMedia.data.AudioArray.length; i++) {
+						getUpTokenData.fileArray.push(multiMedia.data.AudioArray[i].fpath);
+					}
+				}
+				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
+				//				console.log('uploadNum:' + uploadNum);
+				//				console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
+					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
+					if(data.code == 1) {
+						//						console.log('上传配置 ' + JSON.stringify(data.configure));
+						//						console.log('上传凭证 ' + JSON.stringify(data.data));
+						QNUptoken = data.data; //token数据
+
+						if(multiMedia.data.PictureArray.length != 0) { //图片
+							//记录图片和缩略图地址
+							for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
+								for(var i = 0; i < QNUptoken.Data.length; i++) {
+									console.log(JSON.stringify(QNUptoken.Data[i]));
+									var filePath = QNUptoken.Data[i].P_Key.split("/");
+									var fileName = filePath[filePath.length - 1];
+									var fileId = fileName.split("_")[0];
+									if(multiMedia.data.PictureArray[j].id == fileId) {
+										//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
+										//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
+										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+										multiMedia.data.PictureArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
+									}
+								}
+							}
+						} else if(multiMedia.data.VideoArray.length != 0) { //视频
+							//记录视频和缩略图地址
+							for(var j = 0; j < multiMedia.data.VideoArray.length; j++) {
+								var videoPath = multiMedia.data.VideoArray[j].path.split("/");
+								var videoName = videoPath[videoPath.length - 1];
+								for(var i = 0; i < QNUptoken.Data.length; i++) {
+									////console.log(JSON.stringify(QNUptoken.Data[i]));
+									var filePath = QNUptoken.Data[i].P_Key.split("/");
+									var fileName = filePath[filePath.length - 1];
+									if(videoName == fileName) {
+										//										multiMedia.data.VideoArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+										multiMedia.data.VideoArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
+										multiMedia.data.VideoArray[j].thumb = QNUptoken.Data[i].OtherKey[data.configure.thumbKey[i]];
+									}
+								}
+							}
+						} else if(multiMedia.data.AudioArray.length != 0) {
+							//记录音频文件地址
+							for(var j = 0; j < multiMedia.data.AudioArray.length; j++) {
+								var audioPath = multiMedia.data.AudioArray[j].fpath.split("/");
+								var audioName = audioPath[audioPath.length - 1];
+								for(var i = 0; i < QNUptoken.Data.length; i++) {
+									////console.log(JSON.stringify(QNUptoken.Data[i]));
+									var filePath = QNUptoken.Data[i].P_Key.split("/");
+									var fileName = filePath[filePath.length - 1];
+									if(audioName == fileName) {
+										multiMedia.data.AudioArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+										multiMedia.data.AudioArray[j].thumb = QNUptoken.Data[i].OtherKey[data.configure.thumbKey[i]];
+									}
+								}
+							}
+						}
+						wd.setTitle('上传中...');
+						//开始执行上传任务
+						taskCreate(wd);
 					} else {
-						var file = files[index];
-						var types = file.type.toLowerCase().split("/");
-						console.log("types:" + types);
-						if(types[1] == "png" || types[1] == "jpg" || types[1] == "jpeg") {
-							EXIF.getData(file, function() {
-								//								events.showWaiting();
-								var orientation = EXIF.getTag(this, 'Orientation'); //获取旋转信息
-								console.log('orientation:' + JSON.stringify(orientation));
-								//显示文件
-								var reader = new FileReader();
-								reader.onload = function() {
-									var result = this.result;
-									var maxSize = 2 * 1024 * 1024;
-									compress.getImgInfo(result, function(img, imgInfo) {
-										console.log("获取的文件信息：" + JSON.stringify(imgInfo));
-										console.log("原图尺寸：" + result.length);
-										var newDataUrl = compress.getCanvasDataUrl(img, compress.getSuitableSize(imgInfo, Math.ceil(result.length / maxSize)), orientation);
-										var blob = compress.base64ToBlob(newDataUrl, 'image/jpeg');
-										console.log("blob.type:" + blob.type);
-										console.log('要传递的文件大小：' + blob.size);
-										blob.lastModifiedDate = new Date();
-										qnFileUploader.addFile(blob, Date.now() + '.jpg');
-										index++;
-										uploadFiles(index, files, filesSum);
-										if(index == files.length - 1) {
-											$('#uploaderInput').val('');
-										}
-									});
-								}
-								reader.readAsDataURL(file);
-							});
-						} else {
-							if(index + 1 < filesSum) {
-								index++;
-								uploadFiles(index, files, filesSum);
-							}
-							$('#uploaderInput').val('');
-							mui.toast("请选择png,jpg,jpeg类型的图片");
-						}
+						//						console.log('### ERROR ### 获取上传凭证失败 ### ');
+						document.getElementById("finish").disabled = false;
+						wd.close();
+						mui.toast('上传失败 ' + data.message);
 					}
-				}
+				});
 			}
 
 			/**
-			 * 初始化上传
+			 * 删除上传失败的文件
 			 */
-			function initQNUploader() {
-				qnFileUploader = Qiniu.uploader({
-					disable_statistics_report: false, // 禁止自动发送上传统计信息到七牛，默认允许发送
-					runtimes: 'html5,flash,html4', // 上传模式,依次退化
-					browse_button: 'qnInput', // 上传选择的点选按钮，**必需**
-					uptoken_func: function(file) { // 在需要获取 uptoken 时，该方法会被调用
-						uptokenData = null;
-						uptokenData = getQNUpToken(file);
-						console.log("获取uptoken回调:" + JSON.stringify(uptokenData));
-						if(uptokenData && uptokenData.code) { //成功
-							return uptokenData.data.Data[0].Token;
+			function BatchDelete(paths, wd) {
+				var batchDelete = {
+					appId: 8, //int 必填 项目id
+					urls: paths //array 必填 需要获取下载token文件的路径
+				}
+				/**
+				 * 七牛批量删除
+				 */
+				CloudFileUtil.BatchDelete(window.storageKeyName.QNGETTOKENDELETE, batchDelete, function(data) {
+						//console.log('七牛删除 ' + JSON.stringify(data));
+						if(data.Status == 1) {
+							pathList = [];
 						} else {
-							qnFileUploader.stop();
+							//console.log('### ERROR ### 七牛删除失败 ### ' + JSON.stringify(data));
 						}
+						wd.close();
 					},
-					unique_names: false, // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
-					save_key: false, // 默认 false。若在服务端生成 uptoken 的上传策略中指定了 `save_key`，则开启，SDK在前端将不对key进行任何处理
-					get_new_uptoken: true, // 设置上传文件的时候是否每次都重新获取新的 uptoken
-					domain: storageutil.QNPBDOMAIN, // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
-					max_file_size: '4mb', // 最大文件体积限制
-					flash_swf_url: 'https://jsypay.jiaobaowang.net/wxthadmin/js/lib/plupload/Moxie.swf', //引入 flash,相对路径
-					max_retries: 0, // 上传失败最大重试次数
-					dragdrop: false, // 开启可拖曳上传
-					chunk_size: '4mb', // 分块上传时，每块的体积
-					auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
-					init: {
-						'FilesAdded': function(up, files) {
-							console.log("FilesAdded0:", files);
-							plupload.each(files, function(file) {
-								// 文件添加进队列后,处理相关的事情
-								console.log("FilesAdded:", file);
-							});
-						},
-						'BeforeUpload': function(up, file) {
-							events.showWaiting();
-							// 每个文件上传前,处理相关的事情
-							console.log("BeforeUpload:");
-						},
-						'UploadProgress': function(up, file) {
-							// 每个文件上传时,处理相关的事情
-							console.log("UploadProgress:" + file.percent);
-						},
-						'FileUploaded': function(up, file, info) {
-							// 每个文件上传成功后,处理相关的事情
-							console.log("FileUploaded:");
-							events.closeWaiting();
-							if(info.status == 200) {
-								var tempModel = {
-									ImgUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
-									SaveUrl: storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key,
-									OldName: file.name,
-									NewName: file.name,
-									FileSize: file.size
-								}
-								submitHomework.uploadedFiles.push(tempModel);
-								displayAddBtnFun();
-								console.log("success:" + storageutil.QNPBDOMAIN + JSON.parse(info["response"]).key);
-							}
-						},
-						'Error': function(up, err, errTip) {
-							//上传出错时,处理相关的事情
-							console.log("Error:", err, errTip);
-							events.closeWaiting();
-						},
-						'UploadComplete': function() {
-							//队列文件处理完毕后,处理相关的事情
-							console.log("UploadComplete:");
-						},
-						'Key': function(up, file) {
-							console.log('得到token0:' + JSON.stringify(uptokenData));
-							// 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-							// 该配置必须要在 unique_names: false , save_key: false 时才生效
-							if(uptokenData && uptokenData.code) { //成功
-								console.log('得到token:' + JSON.stringify(uptokenData));
-								return uptokenData.data.Data[0].Key;
-							}
-						}
+					function(xhr, type, errorThrown) {
+						//console.log('### ERROR ### 请求七牛删除失败 ### ' + JSON.stringify(type));
+						wd.close();
 					}
-				});
+				);
 			}
 
-			//判断照片添加按钮是否显示，大于9张时隐藏
-			function displayAddBtnFun() {
-				if(submitHomework.uploadedFiles.length >= 1) {
-					submitHomework.displayAddBtn = {
-						display: 'none'
-					};
-				} else {
-					submitHomework.displayAddBtn = {
-						display: 'block'
-					};
-				}
-			}
 			/**
-			 * 获取七牛上传token
+			 * 创建上传任务并且逐个任务执行
 			 */
-			function getQNUpToken(file) {
-				var myDate = new Date();
-				var fileName = myDate.getTime() + "" + parseInt(Math.random() * 1000);
-				var types = file.name.split(".");
-				fileName = fileName + "." + types[types.length - 1];
-				var getTokenData = {
-					appId: storageutil.QNQYWXKID,
-					mainSpace: storageutil.QNPUBSPACE,
-					saveSpace: storageutil.QNSSPACEWEBCON,
-					fileArray: [{
-						qnFileName: fileName,
-					}]
+			function taskCreate(wd) {
+				for(var i = 0; i < QNUptoken.Data.length; i++) {
+					if(QNUptoken.Data[i].task == undefined) {
+						var filePath = QNUptoken.Data[i].P_Key.split("/");
+						var fileName = filePath[filePath.length - 1];
+						//获取路径
+						var fPath = '';
+						var num; //记录第几个文件
+						if(multiMedia.data.PictureArray.length !== 0) { //图片
+							for(var k = 0; k < multiMedia.data.PictureArray.length; k++) {
+								var path = multiMedia.data.PictureArray[k].path.split("/");
+								var name = path[path.length - 1];
+								if(fileName == name) {
+									num = k;
+									fPath = multiMedia.data.PictureArray[k].path;
+									break;
+								}
+							}
+						} else if(multiMedia.data.VideoArray.length !== 0) { //视频
+							for(var k = 0; k < multiMedia.data.VideoArray.length; k++) {
+								var path = multiMedia.data.VideoArray[k].path.split("/");
+								var name = path[path.length - 1];
+								if(fileName == name) {
+									num = k;
+									fPath = multiMedia.data.VideoArray[k].path;
+									break;
+								}
+							}
+						} else if(multiMedia.data.AudioArray.length !== 0) { //音频
+							for(var k = 0; k < multiMedia.data.AudioArray.length; k++) {
+								var path = multiMedia.data.AudioArray[k].fpath.split("/");
+								var name = path[path.length - 1];
+								if(fileName == name) {
+									num = k;
+									fPath = multiMedia.data.AudioArray[k].fpath;
+									break;
+								}
+							}
+						}
+						CloudFileUtil.upload(fPath, QNUptoken.Data[i].Token, QNUptoken.Data[i].Key, function(upload, status) {
+							//上传任务完成的监听
+							//														console.log('上传任务完成' + status + '|' + JSON.stringify(upload));
+							if(status == 200) {
+
+								//console.log('上传成功');
+								QNUptoken.Data[i].task = true;
+								//QNUptoken.Data[i].persistentId = JSON.parse(upload.responseText).persistentId;
+								uploadNum--;
+								var title = '上传 ' + (QNUptoken.Data.length - uploadNum) + "/" + (QNUptoken.Data.length);
+								wd.setTitle(title);
+								//记录失败后需要删除的文件
+								if(multiMedia.data.PictureArray.length !== 0) { //图片
+									pathList.push(multiMedia.data.PictureArray[num].domain);
+									var path = multiMedia.data.PictureArray[num].path.split("/");
+									var name = path[path.length - 1];
+									name = name + '(' + cloudutil.transformSize(upload.totalSize) + ')';
+									encNameList.push(name);
+								} else if(multiMedia.data.VideoArray.length !== 0) { //视频
+									pathList.push(multiMedia.data.VideoArray[num].domain);
+									pathList.push(multiMedia.data.VideoArray[num].thumb);
+								} else if(multiMedia.data.AudioArray.length !== 0) { //音频
+									pathList.push(multiMedia.data.AudioArray[num].domain);
+									pathList.push(multiMedia.data.AudioArray[num].thumb);
+								}
+
+								if(uploadNum == 0) {
+									//console.log('所有上传都成功');
+									var encAddr = []; //附件地址
+									var encImg = []; //附件缩略图地址
+									var encLen = 0; //音视频时长
+									var type;
+									if(multiMedia.data.PictureArray.length !== 0) { //图片
+										for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
+											encAddr.push(multiMedia.data.PictureArray[j].domain);
+											//											console.log('multiMedia.data.PictureArray:'+ JSON.stringify(multiMedia.data.PictureArray[j]));
+
+										}
+										type = '1';
+									} else if(multiMedia.data.VideoArray.length !== 0) { //视频
+										for(var j = 0; j < multiMedia.data.VideoArray.length; j++) {
+											encAddr.push(multiMedia.data.VideoArray[j].domain);
+											encImg.push(multiMedia.data.VideoArray[j].thumb);
+										}
+										type = '2';
+										encLen = multiMedia.data.VideoArray[0].duration;
+									} else if(multiMedia.data.AudioArray.length !== 0) { //音频
+										for(var j = 0; j < multiMedia.data.AudioArray.length; j++) {
+											encAddr.push(multiMedia.data.AudioArray[j].domain);
+											encImg.push(multiMedia.data.AudioArray[j].thumb);
+										}
+										type = '4';
+										encLen = multiMedia.data.AudioArray[0].time;
+									}
+									var encAddrStr = encAddr.join('|');
+									var encImgrStr = encImg.join('|');
+									var encNameStr = encNameList.join('|');
+									addAttendfunction(wd, type, encAddrStr, encImgrStr, encLen, encNameStr);
+								} else {
+									taskCreate(wd);
+								}
+							} else {
+								//console.log('### ERROR ### 上传失败 ### ' + status + ' ' + JSON.stringify(upload));
+								document.getElementById("finish").disabled = false;
+								mui.toast('上传失败 ' + status + ' ' + upload.responseText);
+								if(pathList.length != 0) {
+									BatchDelete(pathList, wd);
+								} else {
+									wd.close();
+								}
+							}
+						}, function(upload, status) {
+							switch(upload.state) {
+								case 0: //上传任务开始调度
+									//console.log('上传任务开始调度:|id:' + upload.__UUID__ + '|uploadState:' + upload.state);
+									break;
+								case 1: //上传任务开始请求
+									//console.log('上传任务开始请求:|id:' + upload.__UUID__ + '|uploadState:' + upload.state);
+									break;
+								case 2: //上传任务请求已经建立
+									//console.log('上传任务请求已经建立:|id:' + upload.__UUID__ + '|uploadState:' + upload.state);
+									break;
+								case 3: //上传任务提交数据
+									////console.log('上传任务状态监听:|id:' + upload.__UUID__ + '|uploadedSize:' + upload.uploadedSize + '|totalSize:' + upload.totalSize + '|uploadState:' + upload.state);
+									break;
+								case 4: //上传任务已完成
+									//console.log('上传任务已完成:|id:' + upload.__UUID__ + '|uploadState:' + upload.state);
+									break;
+								case 5: //上传任务已暂停
+									//console.log('上传任务已暂停:|id:' + upload.__UUID__ + '|uploadState:' + upload.state);
+									break;
+								default:
+									//console.log('上传任务状态监听:其他状态' + upload.state);
+									break;
+							}
+						}, function(task) {
+							//上传任务创建成功的回调
+							task.start();
+						});
+
+						//停止本次循环
+						break;
+					}
 				}
-				var upToken;
-				cloudutil.getFileUpTokens(getTokenData, function(data) {
-					upToken = data;
-				});
-				return upToken;
 			}
 		</script>
 	</body>
