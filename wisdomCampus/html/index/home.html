@@ -235,7 +235,6 @@
 					return false;
 				};
 				document.addEventListener("netchange", wainshow, false);
-
 				function wainshow() {
 					if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 						mui.toast("网络异常，请检查网络设置！");
@@ -250,7 +249,6 @@
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
 			});
-
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
@@ -275,18 +273,15 @@
 							}
 						}
 					} else {
-
 					}
 				});
 			}
-
 			window.addEventListener('setHeadImg', function(data) {
 				console.log("data" + JSON.stringify(data.detail.imgurl))
 				mine.userImg = data.detail.imgurl;
 				mine1.userImg = data.detail.imgurl;
 			});
 				
-
 			//推送绑定
 			var bindInfo = function() {
 				var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
@@ -316,7 +311,6 @@
 			slider.slider({
 				interval: 5000
 			});
-
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id;
 				if(id == 1 || id == 2) {
@@ -334,7 +328,6 @@
 					} else {
 						mui.toast("此功能被关闭");
 					}
-
 					//					utils.hrefSessionStorage("all.html", id);
 				} else {
 					if(id == 6) {
@@ -425,7 +418,6 @@
 						utils.setBadgeNumber(0, 0);
 						//将个人信息存入原生app
 						if(utils.getSystem() == 'Android') {
-
 						} else {
 							//							window.webkit.messageHandlers.setInfo.postMessage('');
 						}
@@ -453,7 +445,6 @@
 				//获取未读数
 				getNoReadCnt();
 			});
-
 			//获取未读数
 			var getNoReadCnt = function() {
 				console.log('updateNoRead0000000000000000');
@@ -487,7 +478,6 @@
 						}
 					}
 				});
-
 				tempData = {
 					schoolId: storageKeyName.SCHOOLID, //学校ID
 					approveManId: personal.utid
@@ -510,13 +500,11 @@
 						} else {
 							tempCount = data.RspData.NoApproveCnt;
 						}
-
 						if(data.RspData.NoReadCnt != 0) {
 							noRead.className = "mui-badge"
 						}
 					}
 				});
-
 			}
 		</script>
 	</body>
