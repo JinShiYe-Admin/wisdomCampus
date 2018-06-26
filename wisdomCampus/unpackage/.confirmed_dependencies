@@ -14,7 +14,11 @@
 			"html/mine/modifyPassword.html",
 			"html/mine/about.html",
 			"html/mine/redirectPassword.html",
-			"html/mine/headImg.html"
+			"html/mine/headImg.html",
+			"html/index/test.html"
+		],
+		"resources": [
+			"js/lib/app-update.js"
 		]
 	},
 	"html/checkNotice/all-list.html": {

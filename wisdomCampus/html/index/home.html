@@ -71,7 +71,7 @@
 				left: 0;
 				bottom: 0;
 				right: 30%;
-				background-color: #D9D9D9;
+				background-color: #F2F2F2;
 				/*display: flex;
 				display: -webkit-flex;
 				flex-direction: column;*/
@@ -82,21 +82,22 @@
 			}
 			
 			.head-portrait {
-				width: 100px;
-				height: 100px;
+				width: 60px;
+				height: 60px;
 				border-radius: 50%;
 			}
 			
 			.user-name {
-				font-size: 22px;
+				font-size: 16px;
+				margin-top: 10px;
 				color: #333333;
 			}
 			
 			.user-info {
 				background-color: white;
-				padding: 50px 0 50px 0;
+				padding: 25px 0 25px 0;
 				text-align: center;
-				margin-bottom: 20px;
+				margin-bottom: 10px;
 			}
 			
 			.weui-cell.weui-cell_access {
@@ -108,6 +109,20 @@
 				bottom: 50px;
 				margin-left: 5%;
 				width: 90%;
+				height: 40px;
+			}
+			
+			.weui-btn {
+			    line-height: 2.355556;
+			    border-radius: 4px;
+			}
+			
+			.weui-cell {
+    			padding: 5px 15px;
+			}
+			
+			.weui-cell:before {
+			    color: #e4e4e4;
 			}
 		</style>
 
@@ -147,7 +162,7 @@
 					<div class="weui-cell__hd">
 						<img style="width: 20px;height: 20px;margin-top: 5px;" :src=setting.icon></div>
  					<div class="weui-cell__bd">
-						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top: 10px;">{{setting.name}}</p>
+						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top:5px;">{{setting.name}}</p>
  					</div>
 				</a>
 				<a class="weui-btn weui-btn_warn" v-on:click="quitLogin">
@@ -250,7 +265,7 @@
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
 				//判断是否需要更新
-				setTimeout(appUpdate.updateApp, 5000);
+				setTimeout(appUpdate.updateApp(personal.schid), 5000); 
 			});
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {

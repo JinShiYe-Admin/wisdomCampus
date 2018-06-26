@@ -2,10 +2,14 @@
  * 更新版本模块
  */
 var appUpdate = (function(mod) {
+	
+	mod.androidUpdateUrl='http://192.168.20.139:8080/app/versionCode.xml';
+	mod.iosUpdateUrl='http://itunes.apple.com/lookup?id=1281905607';
+	
 	mod.fileSize;
 	mod.updateFlag = 0; //1确认升级2取消升级
 	mod.installFlag = 0; //1确认安装 2取消安装
-	mod.updateApp = function() {
+	mod.updateApp = function(school_id) {
 		plus.webview.currentWebview().canJump = false;
 		//版本升级模块
 		//47.获取APP版本号
@@ -20,18 +24,22 @@ var appUpdate = (function(mod) {
 					mod.getAppVersion(request.response.results[0]);
 				}
 			}
-			request.open("post", "http://itunes.apple.com/lookup?id=1281905607", true);
+			request.open("post", mod.iosUpdateUrl, true);
 			request.send();
 
 			return;
 		}
-		var tempVVL = 'android';
-		//所需参数
-		var comData9 = {
-			uuid: plus.device.uuid, //用户设备号
-			appid: plus.runtime.appid, //应用ID
-			vvl: tempVVL //安卓：android,苹果：ios
-		};
+		
+		//android 更新逻辑
+		getXml(school_id);
+		
+//		var tempVVL = 'android';
+//		//所需参数
+//		var comData9 = {
+//			uuid: plus.device.uuid, //用户设备号
+//			appid: plus.runtime.appid, //应用ID
+//			vvl: tempVVL //安卓：android,苹果：ios
+//		};
 		
 		// 等待的对话框
 //		var wd_0 = events.showWaiting();
@@ -45,6 +53,38 @@ var appUpdate = (function(mod) {
 //			}
 //		});
 	}
+	
+	//获取android 更新信息
+	function getXml(school_id){
+		$.ajax({
+		    url:mod.androidUpdateUrl,
+		    type: 'GET',
+		    dataType: 'xml',
+		    timeout: 3000,
+		    cache:false,
+		    error: function(xml){
+		        console.log('APP更新：连接超时,加载XML文档出错'); 
+		    },
+	        success: function(xml){ 
+	            $(xml).find("school").each(function(i){
+	            	var school_id_text=$(this).children("school_id").text();
+	          		if(school_id==school_id_text){
+			          	var update_info=$(this).children("update_info");
+				        var info={
+				        	version:update_info.children("new_version").text()
+				          	,delta:update_info.children("delta").text()
+				          	,download_url:update_info.children("download_url").text()
+				          	,update_log:update_info.children("update_log").text()
+				        }
+			            mod.getAppVersion(info);
+	                }else{
+                    	//console.log('学校ID与本APP登录不符合，不更新')
+	                }
+	            });
+	        }
+	    });
+	}
+	
 	/**
 	 * 获取版本信息后，判断是否更新
 	 * @param {Object} versionInfo 服务器返回的版本信息
@@ -52,9 +92,9 @@ var appUpdate = (function(mod) {
 	mod.getAppVersion = function(versionInfo) {
 		plus.runtime.getProperty(plus.runtime.appid, function(inf) {
 			mod.appVersion = getBigVersion(inf.version, plus.runtime.version);
-			//console.log('应用版本号:' + plus.runtime.version + ',资源升级版本号:' + inf.version)
-			//console.log("当前应用版本：" + mod.appVersion);
-			//console.log("服务端应用版本：" + JSON.stringify(versionInfo))
+			console.log('应用版本号:' + plus.runtime.version + ',资源升级版本号:' + inf.version)
+			console.log("当前应用版本：" + mod.appVersion);
+			console.log("服务端应用版本：" + JSON.stringify(versionInfo))
 			getUpCondition(versionInfo); //判断是否更新
 		});
 	}
@@ -79,31 +119,31 @@ var appUpdate = (function(mod) {
 	 * 判断是否更新
 	 * @param {Object} versionInfo
 	 */
-	var getUpCondition = function(version) {
-		//console.log("服务器版本信息：" + JSON.stringify(version))
+	var getUpCondition = function(versionInfo) {
+//		console.log("服务器版本信息：" + JSON.stringify(versionInfo))
 		var appVersions = mod.appVersion.split('.');
 		var newestVersions;
 		if(mui.os.android) { //android
-			newestVersions = version.ver.split('.');
+			newestVersions = versionInfo.version.split('.');
 			var appVersionMinMax = getMinMax(appVersions);
 			var newestVersionMinMax = getMinMax(newestVersions);
 			if(appVersionMinMax.max < newestVersionMinMax.max) { //整包更新
 				if(mod.updateFlag == 0) {
 					//询问是否更新
-					setDialog('教宝云有新版本，是否下载？', "您已取消下载", function() {
+					    setDialog('教宝云有新版本，是否下载？', "您已取消下载", function() {
 						mod.updateFlag = 1;
-						console.log("下载APK路径：" + version.baseverurl)
-						resolveFile(version.baseverurl, 1);
+						console.log("下载APK路径：" + versionInfo.download_url)
+						resolveFile(versionInfo.download_url, 1);
 					}, function() {
 						mod.updateFlag = 2;
 					})
 				} else if(mod.updateFlag == 1) {
-					resolveFile(version.baseverurl, 1);
-				}
+					resolveFile(versionInfo.download_url, 1);
+				} 
 
 			} else if(appVersionMinMax.max == newestVersionMinMax.max) {
 				if(appVersionMinMax.min < newestVersionMinMax.min) { //在线更新
-					resolveFile(version.addverurl, 0);
+					resolveFile(versionInfo.download_url, 0);
 				}
 			}
 		} else { //ios
@@ -291,7 +331,7 @@ var appUpdate = (function(mod) {
 							downWgt(fileUrl);
 						}
 					}, function(e) {
-						alert(e.message);
+						alert(e.message); 
 					});
 
 				}
