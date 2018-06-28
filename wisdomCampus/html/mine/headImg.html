@@ -88,6 +88,9 @@
 				},
 				methods: {
 					modifyImg: function() {
+						if (chenkNetwork()) {
+					return;
+				}
 						if(personal.utp == 0) { //0老师，1学生，2家长
 							var btnArray = [{
 								title: "拍照"
@@ -104,6 +107,9 @@
 									case 0:
 										break;
 									case 1:
+										if (chenkNetwork()) {
+					return;
+				}
 										var cmr = plus.camera.getCamera();
 										cmr.captureImage(function(p) { //打开相机
 											plus.io.resolveLocalFileSystemURL(p, function(entry) { //拍照
@@ -123,6 +129,9 @@
 										});
 										break;
 									case 2:
+										if (chenkNetwork()) {
+					return;
+				}
 										plus.gallery.pick(function(path) { //选照片
 											_compressImage(path, function(event) { //压缩
 												uploadFile(path, index); //上传
@@ -167,94 +176,106 @@
 					}
 				}
 			});
-			
+
 			//上传附件
-			function uploadFile(path,index){
-				var btnArray = ['否', '是']; 
+			function uploadFile(path, index) {
+				if (chenkNetwork()) {
+					return;
+				}
+				var btnArray = ['否', '是'];
 				mui.confirm('确认作为头像使用吗？', '提示', btnArray, function(e) {
-					if (e.index == 1) {
-					    var files=[];
-					    //服务器地址
-					    var server="http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid="+personal.utid;
-					    var wt=plus.nativeUI.showWaiting();
-					    var task=plus.uploader.createUpload(server,{method:"POST"},function(t,status){
-					            //上传完成
-					            if(status==200){
-					                wt.close();
-					                //服务端返回的结果
-					                var result = JSON.parse(t.responseText);
-						            if(result.RspCode =='0000'){
-							            console.log("result："+t.responseText);
-							            // 设置头像
-							           setHeadImg(result);
-						            }else{
-						                console.log("上传失败 ："+t.responseText);
-						                wt.close();
-						            }
-					            }else{
-					                console.log("上传失败 not 200："+status);
-					                wt.close();
-					            }
-					        }
-					    );
-					    var fileName='';
-					    var filePath='';
-					    if(index == 1 ){//拍照。从对象中获取文件路径和文件名
-					    	fileName=path.name;
-					    	filePath=path.toLocalURL();
-					    }else{//相册 。从路径中获取文件路径和文件名
-					    	fileName=path.substring(path.lastIndexOf('/')+1,path.length);
-					    	filePath=path;
-					    }
-					    //将文件集合添加到上传队列中
-					    task.addFile(filePath,{key:fileName});
-					    task.start();
-				    } 
+					if(e.index == 1) {
+						var files = [];
+						//服务器地址
+						var server = "http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid=" + personal.utid;
+						var wt = plus.nativeUI.showWaiting();
+						var task = plus.uploader.createUpload(server, {
+							method: "POST"
+						}, function(t, status) {
+							//上传完成
+							if(status == 200) {
+								wt.close();
+								//服务端返回的结果
+								var result = JSON.parse(t.responseText);
+								if(result.RspCode == '0000') {
+									console.log("result：" + t.responseText);
+									// 设置头像
+									setHeadImg(result);
+								} else {
+									console.log("上传失败 ：" + t.responseText);
+									wt.close();
+								}
+							} else {
+								console.log("上传失败 not 200：" + status);
+								wt.close();
+							}
+						});
+						var fileName = '';
+						var filePath = '';
+						if(index == 1) { //拍照。从对象中获取文件路径和文件名
+							fileName = path.name;
+							filePath = path.toLocalURL();
+						} else { //相册 。从路径中获取文件路径和文件名
+							fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
+							filePath = path;
+						}
+						//将文件集合添加到上传队列中
+						task.addFile(filePath, {
+							key: fileName
+						});
+						task.start();
+					}
 				})
 			}
-			
-			function setHeadImg(result){
-				 peopleInfo.peopleHeadImg='http://'+result.RspData
-	            personal.imgurl='http://'+result.RspData
-	            store.set(window.storageKeyName.PERSONALINFO, personal);
-	            mui.fire(plus.webview.currentWebview().opener(), 'setHeadImg', {
-					imgurl: 'http://'+result.RspData
+
+			function setHeadImg(result) {
+				peopleInfo.peopleHeadImg = 'http://' + result.RspData
+				personal.imgurl = 'http://' + result.RspData
+				store.set(window.storageKeyName.PERSONALINFO, personal);
+				mui.fire(plus.webview.currentWebview().opener(), 'setHeadImg', {
+					imgurl: 'http://' + result.RspData
 				});
 			}
-			
-			
-			function _compressImage(filePath,successCallBack,errorCallBack){
+
+			var chenkNetwork = function() {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+					mui.toast('网络异常，请检查网络设置！');
+					return true;
+				}
+				return false;
+			}
+
+			function _compressImage(filePath, successCallBack, errorCallBack) {
 				var options = {
 					src: filePath, //压缩转换原始图片的路径
-					dst:filePath,
-					overwrite:true,
+					dst: filePath,
+					overwrite: true,
 					format: '.jpg', //压缩转换后的图片格式
-					quality:50,
+					quality: 50,
 					width: "50%", //缩放图片的宽度
-					height:"50%"
+					height: "50%"
 				}
-				
+
 				plus.zip.compressImage(options,
 					function(event) {
 						//图片压缩成功
-//						var target = event.target; // 压缩转换后的图片url路径，以"file://"开头
-//						var size = event.size; // 压缩转换后图片的大小，单位为字节（Byte）
-//						var width = event.width; // 压缩转换后图片的实际宽度，单位为px
-//						var height = event.height; // 压缩转换后图片的实际高度，单位为px
-//						console.log('compressImageTo_xx 成功 target:' + event.target + ' size:' + event.size + ' width:' + event.width + ' height:' + event.height);
+						//						var target = event.target; // 压缩转换后的图片url路径，以"file://"开头
+						//						var size = event.size; // 压缩转换后图片的大小，单位为字节（Byte）
+						//						var width = event.width; // 压缩转换后图片的实际宽度，单位为px
+						//						var height = event.height; // 压缩转换后图片的实际高度，单位为px
+						//						console.log('compressImageTo_xx 成功 target:' + event.target + ' size:' + event.size + ' width:' + event.width + ' height:' + event.height);
 						successCallBack(event);
 					},
 					function(error) {
 						//图片压缩失败
-//						var code = error.code; // 错误编码
+						//						var code = error.code; // 错误编码
 						//var message = error.message; // 错误描述信息
-//						console.log('### ERROR ### compressImageTo_xx 失败 ' + JSON.stringify(error));
+						//						console.log('### ERROR ### compressImageTo_xx 失败 ' + JSON.stringify(error));
 						errorCallBack(error);
 					}
 				);
-				
+
 			}
-			
 		</script>
 	</body>
 

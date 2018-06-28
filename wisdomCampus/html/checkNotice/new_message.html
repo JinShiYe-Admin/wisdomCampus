@@ -455,7 +455,7 @@
 			function uploadFile(wd) {
 				var getUpTokenData = {
 					type: '0', //获取上传token的方式
-					appId: 8, //项目id
+					appId: 4, //项目id
 					fileArray: [], //文件数组
 					mainSpace: window.storageKeyName.QNPUBSPACE, //文件存放在私有空间或公有空间
 					uploadSpace: window.storageKeyName.XXTNOTICE, //上传的空间
@@ -539,7 +539,7 @@
 						taskCreate(wd);
 					} else {
 						//						console.log('### ERROR ### 获取上传凭证失败 ### ');
-						document.getElementById("finish").disabled = false;
+//						document.getElementById("finish").disabled = false;
 						wd.close();
 						mui.toast('上传失败 ' + data.message);
 					}
@@ -551,7 +551,7 @@
 			 */
 			function BatchDelete(paths, wd) {
 				var batchDelete = {
-					appId: 8, //int 必填 项目id
+					appId: 4, //int 必填 项目id
 					urls: paths //array 必填 需要获取下载token文件的路径
 				}
 				/**
@@ -678,7 +678,7 @@
 								}
 							} else {
 								//console.log('### ERROR ### 上传失败 ### ' + status + ' ' + JSON.stringify(upload));
-								document.getElementById("finish").disabled = false;
+//								document.getElementById("finish").disabled = false;
 								mui.toast('上传失败 ' + status + ' ' + upload.responseText);
 								if(pathList.length != 0) {
 									BatchDelete(pathList, wd);

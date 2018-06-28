@@ -56,14 +56,34 @@
 	<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		mui.init({
-				statusBarBackground: '#63BBFF'
-			});
+			statusBarBackground: '#63BBFF'
+		});
 		//		$(function() {
 		//			
 		//		});
 		var tempModel = {};
+
 		var loginFlag = 0; //0自动登录，1不自动登录//判断上次有没有登录，如果登录，就不执行登录协议
 		mui.plusReady(function() {
+			var wv = plus.webview.currentWebview();
+			// 关闭侧滑返回功能
+			wv.setStyle({
+				'popGesture': 'none'
+			});
+			//安卓的连续点击两次退出程序
+			var backButtonPress = 0; //重写返回键
+			mui.back = function(event) {
+				backButtonPress++;
+				if(backButtonPress > 1) {
+					plus.runtime.quit();
+				} else {
+					plus.nativeUI.toast('再按一次退出应用');
+				}
+				setTimeout(function() {
+					backButtonPress = 0;
+				}, 1000);
+				return false;
+			};
 			tempModel = {
 				uuid: plus.device.uuid,
 				appid: plus.runtime.appid
@@ -183,42 +203,32 @@
 			//			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			if(personal) {
+				if(personal.utid == 'undefined' || personal.utid == null || personal.userName0 == null) {
+
+				} else {
+					if(personal.userName0) {
+						//login登录
+						loginPro(personal.userName0, personal.passWord0);
+					} else {
+
+					}
+				}
+			} else {
+
+			}
 
 			//			console.log('personal:' + JSON.parse(personal));
-			if(personal.utid == 'undefined' || personal.utid == null) {
-
-			} else {
-				if(personal.userName0) {
-					document.getElementById("account").value = personal.userName0;
-					document.getElementById("password").value = personal.passWord0;
-					console.log('you name');
-					loginPro(personal.userName0, personal.passWord0);
-				}
-
-				//				//需要参数
-				//				var comData = {
-				//					uuid: tempModel.uuid,
-				//					utid: personal.utid,
-				//					utoken: personal.utoken,
-				//					appid: tempModel.appid,
-				//					schid: personal.schid,
-				//					utname: personal.utname
-				//				};
-				//				$.showLoading();
-				//				//令牌续订
-				//				postDataEncry('TokenReset', {}, comData, 0, function(data) {
-				//					$.hideLoading();
-				//					if(data.RspCode == 0) {
-				//						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-				//						tempInfo00.utoken = data.RspData;
-				//						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-				//						
-				//						utils.hrefSessionStorage('home.html', {});
-				//					} else {
-				//						mui.toast(data.RspTxt);
-				//					}
-				//				});
-			}
+			//			if(personal.utid == 'undefined' || personal.utid == null) {
+			//
+			//			} else {
+			//				if(personal.userName0) {
+			//					document.getElementById("account").value = personal.userName0;
+			//					document.getElementById("password").value = personal.passWord0;
+			//					console.log('you name');
+			//					loginPro(personal.userName0, personal.passWord0);
+			//				}
+			//			}
 		}
 
 		//判断是否输入了值
