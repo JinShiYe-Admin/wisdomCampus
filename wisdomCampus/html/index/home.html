@@ -71,7 +71,7 @@
 				left: 0;
 				bottom: 0;
 				right: 30%;
-				background-color: #D9D9D9;
+				background-color: #F2F2F2;
 				/*display: flex;
 				display: -webkit-flex;
 				flex-direction: column;*/
@@ -82,21 +82,22 @@
 			}
 			
 			.head-portrait {
-				width: 100px;
-				height: 100px;
+				width: 60px;
+				height: 60px;
 				border-radius: 50%;
 			}
 			
 			.user-name {
-				font-size: 22px;
+				font-size: 16px;
+				margin-top: 10px;
 				color: #333333;
 			}
 			
 			.user-info {
 				background-color: white;
-				padding: 50px 0 50px 0;
+				padding: 25px 0 25px 0;
 				text-align: center;
-				margin-bottom: 20px;
+				margin-bottom: 10px;
 			}
 			
 			.weui-cell.weui-cell_access {
@@ -108,6 +109,20 @@
 				bottom: 50px;
 				margin-left: 5%;
 				width: 90%;
+				height: 40px;
+			}
+			
+			.weui-btn {
+			    line-height: 2.355556;
+			    border-radius: 4px;
+			}
+			
+			.weui-cell {
+    			padding: 5px 15px;
+			}
+			
+			.weui-cell:before {
+			    color: #e4e4e4;
 			}
 		</style>
 
@@ -118,7 +133,7 @@
 			<a href="javascript:mine.isMineShow=true;" class="mui-icon  mui-pull-left"><img style="width: 26px;height: 26px;border-radius: 50%;" :src=userImg /></a>
 			<h1 class="mui-title common-color-white common-font-family-Bold" style="color: white;">首页</h1>
 		</header>
-
+		
 		<div class="mui-scroll-wrapper" style="margin-top: 45px;background: white;">
 			<div class="mui-scroll">
 				<div class="mui-content">
@@ -146,9 +161,9 @@
 				<a v-for="setting in settings" class="weui-cell weui-cell_access" v-on:click="jumpToDetail(setting)">
 					<div class="weui-cell__hd">
 						<img style="width: 20px;height: 20px;margin-top: 5px;" :src=setting.icon></div>
-					<div class="weui-cell__bd">
-						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top: 10px;">{{setting.name}}</p>
-					</div>
+ 					<div class="weui-cell__bd">
+						<p style="color: black;margin-left: 5px;font-size: 16px;margin-top:5px;">{{setting.name}}</p>
+ 					</div>
 				</a>
 				<a class="weui-btn weui-btn_warn" v-on:click="quitLogin">
 					退出登录
@@ -236,7 +251,6 @@
 					return false;
 				};
 				document.addEventListener("netchange", wainshow, false);
-
 				function wainshow() {
 					if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 						mui.toast("网络异常，请检查网络设置！");
@@ -251,7 +265,7 @@
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
 				//判断是否需要更新
-				setTimeout(appUpdate.updateApp, 5000);
+				setTimeout(appUpdate.updateApp(personal.schid), 5000); 
 			});
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {
@@ -276,7 +290,8 @@
 								noticeCheckFlag++;
 							}
 						}
-					} else {}
+					} else {
+					}
 				});
 			}
 			window.addEventListener('setHeadImg', function(data) {
@@ -284,7 +299,7 @@
 				mine.userImg = data.detail.imgurl;
 				mine1.userImg = data.detail.imgurl;
 			});
-
+				
 			//推送绑定
 			var bindInfo = function() {
 				var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
@@ -335,7 +350,7 @@
 				} else {
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
-					} else {
+					}  else {
 						mui.toast("此功能暂未开放");
 					}
 				}
@@ -382,9 +397,8 @@
 			var mine1 = new Vue({
 				el: "#mine1",
 				data: {
-					userImg: setImg(personal.imgurl)
-				}
-			});
+					userImg:setImg(personal.imgurl)
+				}});
 			var mine = new Vue({
 				el: "#mine",
 				data: {
@@ -421,7 +435,8 @@
 						//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
 						utils.setBadgeNumber(0, 0);
 						//将个人信息存入原生app
-						if(utils.getSystem() == 'Android') {} else {
+						if(utils.getSystem() == 'Android') {
+						} else {
 							//							window.webkit.messageHandlers.setInfo.postMessage('');
 						}
 						this.isMineShow = false;
@@ -430,18 +445,15 @@
 					jumpToDetail: function(setting) {
 						console.log("dfffff")
 						this.isMineShow = false;
-						//						location.href = setting.href;
-						if(setting.tempID == 0) {
-							var tempModel = {
-								flag: 0 //0是主动修改密码，1是判断是默认密码，自动让修改
-							}
-							utils.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
-							//							utils.mOpenWithData("../../html/mine/redirectPassword.html", setting);
-						} else if(setting.tempID == 1) {
+//						location.href = setting.href;
+						if (setting.tempID ==0) {
+							utils.mOpenWithData("../../html/mine/modifyPassword.html", setting);
+//							utils.mOpenWithData("../../html/mine/redirectPassword.html", setting);
+						} else if (setting.tempID ==1) {
 							utils.mOpenWithData("../../html/mine/about.html", setting);
 						}
 					},
-					clickHeadImg: function() {
+					clickHeadImg:function(){
 						this.isMineShow = false;
 						utils.mOpenWithData("../../html/mine/headImg.html", {});
 					}
