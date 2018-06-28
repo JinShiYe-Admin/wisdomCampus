@@ -28,10 +28,12 @@ var appUpdate = (function(mod) {
 			request.send();
 
 			return;
+		}else{
+			//android 更新逻辑
+			getXml(school_id);
 		}
 		
-		//android 更新逻辑
-		getXml(school_id);
+		
 		
 //		var tempVVL = 'android';
 //		//所需参数
