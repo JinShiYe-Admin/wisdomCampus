@@ -3,7 +3,7 @@
  */
 var appUpdate = (function(mod) {
 	
-	mod.androidUpdateUrl='http://192.168.20.139:8080/app/versionCode.xml';
+	mod.androidUpdateUrl='http://192.168.1.121:8071/app/versionCode.xml';
 	mod.iosUpdateUrl='http://itunes.apple.com/lookup?id=1281905607';
 	
 	mod.fileSize;
