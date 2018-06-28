@@ -93,12 +93,14 @@
 						</div>
 					</div>
 				</div>
+				</template>
 				<div id="MultiMedia">
 					<div class="mui-input-row mui-checkbox mui-left" id="senMSN" style="float: right;margin-top: 3px;display: none;">
 						<label style="font-size: 14px;color: #333333;">发送短信</label>
 						<input v-model="smsSync" name="checkbox1" type="checkbox">
 					</div>
 				</div>
+				<template>
 				<div class="weui-cells" style="margin-top: 0px;">
 					<div class="weui-cell">
 						<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
@@ -154,12 +156,7 @@
 		<script src="../../js/vue.min.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../../js/demoCssJs/jquery-weui.js"></script>
-
-		<!--<script src="../../js/lib/exif/exif.min.js"></script>-->
-		<script src="../../js/utils/utils.js"></script>
-		<!--<script src="../../js/lib/plupload/plupload.full.min.js"></script>-->
-		<!--<script src="../../js/utils/storageutil.js"></script>-->
-
+		
 		<!--视频、照片控件用-->
 		<script type="text/javascript" src="../../js/utils/events.js"></script>
 		<script type="text/javascript" src="../../js/utils/MultiMedia.js"></script>
@@ -177,6 +174,7 @@
 		<script type="text/javascript" src="../../js/utils/showaudio.js"></script>
 		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
 
+		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/utils/cloudutil.js"></script>
 		<script src='../../js/utils/store.js'></script>
 		<script src="../../js/publicProtocol.js"></script>
@@ -195,17 +193,7 @@
 				init(); //初始化控件
 				getSelWorkFlow();
 			});
-
-			/*
-			 * 初始化控件
-			 */
-			function init() {
-				events.blurBack();
-
-				//图片查看控件
-				mui.previewImage();
-
-				//多媒体控件
+			//多媒体控件
 				multiMedia = MultiMedia.multiMedia({
 					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
 					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
@@ -218,6 +206,17 @@
 				});
 				//显示发送短信按钮
 				document.getElementById('senMSN').style.display = 'inherit';
+
+			/*
+			 * 初始化控件
+			 */
+			function init() {
+				events.blurBack();
+
+				//图片查看控件
+				mui.previewImage();
+
+				multiMedia.initEvent();
 				//设置底部卡片上边距-15px→10px;
 				//				document.getElementById("bootom-card").style.marginTop = "10px";
 				/**

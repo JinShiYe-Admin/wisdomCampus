@@ -266,6 +266,18 @@
 				tempAttendArea: {},
 				attendAreaList: []
 			}
+			//多媒体控件
+				multiMedia = MultiMedia.multiMedia({
+					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
+					Picture: true, //是否显示图片图标
+					Audio: false, //是否显示音频图标
+					Video: false, //是否显示视频图标
+					TotalPicture: 1, //图片的个数
+					TotalAudio: 1, //音频的个数
+					TotalVideo: 1, //视频的个数
+					PictureTuke: false //不显示从相册选图
+				});
 			mui.plusReady(function() {
 				personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(personal));
@@ -285,23 +297,9 @@
 
 				//图片查看控件
 				mui.previewImage();
+				multiMedia.initEvent();
+				
 
-				//多媒体控件
-				multiMedia = MultiMedia.multiMedia({
-					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
-					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
-					Picture: true, //是否显示图片图标
-					Audio: false, //是否显示音频图标
-					Video: false, //是否显示视频图标
-					TotalPicture: 1, //图片的个数
-					TotalAudio: 1, //音频的个数
-					TotalVideo: 1, //视频的个数
-					PictureTuke: false //不显示从相册选图
-				});
-				//显示发送短信按钮
-				//				document.getElementById('senMSN').style.display = 'inherit';
-				//设置底部卡片上边距-15px→10px;
-				//				document.getElementById("bootom-card").style.marginTop = "10px";
 				/**
 				 * 播放视频
 				 * @param {Object} data

@@ -446,11 +446,14 @@
 						console.log("dfffff")
 						this.isMineShow = false;
 //						location.href = setting.href;
+						var tempModel = {
+									flag: 0 //0是主动修改密码，1是判断是默认密码，自动让修改
+								}
 						if (setting.tempID ==0) {
-							utils.mOpenWithData("../../html/mine/modifyPassword.html", setting);
+							utils.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
 //							utils.mOpenWithData("../../html/mine/redirectPassword.html", setting);
 						} else if (setting.tempID ==1) {
-							utils.mOpenWithData("../../html/mine/about.html", setting);
+							utils.mOpenWithData("../../html/mine/about.html", tempModel);
 						}
 					},
 					clickHeadImg:function(){

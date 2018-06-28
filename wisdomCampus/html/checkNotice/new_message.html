@@ -77,7 +77,7 @@
 			<h1 class="mui-title">新建通知</h1>
 		</header>
 		<div id="message" class="mui-content">
-			<template v-if="dataFlag>0">
+			<template>
 				<div class="weui-cells" style="margin-top: 0px;">
 					<div class="weui-cell">
 						<div class="weui-cell__hd">标题</div>
@@ -189,7 +189,7 @@
 					selectImgPath: '',
 					uploadedFiles: [],
 					selectPeople: [],
-					selectDepartID:[]
+					selectDepartID: []
 				},
 				computed: {
 					// 计算属性的 getter
@@ -270,7 +270,7 @@
 						}
 						var data = {
 							flag: 1, //1 通知公告
-							departArray:message.selectDepartID,
+							departArray: message.selectDepartID,
 							selectPeople: tempPeople
 						}
 						console.log(JSON.stringify(data));
@@ -290,6 +290,20 @@
 				message.dataFlag = 1;
 			});
 
+			//多媒体控件
+			multiMedia = MultiMedia.multiMedia({
+				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+				Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
+				Picture: true, //是否显示图片图标
+				Audio: false, //是否显示音频图标
+				Video: false, //是否显示视频图标
+				TotalPicture: 9, //图片的个数
+				TotalAudio: 1, //音频的个数
+				TotalVideo: 1, //视频的个数
+			});
+			//显示发送短信按钮
+			document.getElementById('senMSN').style.display = 'inherit';
+
 			/*
 			 * 初始化控件
 			 */
@@ -298,20 +312,8 @@
 
 				//图片查看控件
 				mui.previewImage();
+				multiMedia.initEvent();
 
-				//多媒体控件
-				multiMedia = MultiMedia.multiMedia({
-					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
-					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
-					Picture: true, //是否显示图片图标
-					Audio: false, //是否显示音频图标
-					Video: false, //是否显示视频图标
-					TotalPicture: 9, //图片的个数
-					TotalAudio: 1, //音频的个数
-					TotalVideo: 1, //视频的个数
-				});
-				//显示发送短信按钮
-				document.getElementById('senMSN').style.display = 'inherit';
 				//设置底部卡片上边距-15px→10px;
 				//				document.getElementById("bootom-card").style.marginTop = "10px";
 				/**

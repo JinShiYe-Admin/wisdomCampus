@@ -55,6 +55,9 @@
 	<script src="../../js/jquery-weui.min.js"></script>
 	<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
+		mui.init({
+				statusBarBackground: '#63BBFF'
+			});
 		//		$(function() {
 		//			
 		//		});
@@ -154,7 +157,7 @@
 							store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 							if(tempPW == '123456') {
 								var tempModel = {
-									flag: 0 //0是主动修改密码，1是判断是默认密码，自动让修改
+									flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
 								}
 								utils.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
 							} else {

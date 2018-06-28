@@ -147,8 +147,6 @@
 								//console.log('上传并修改个人头像，成功的回调' + JSON.stringify(successCB));
 								mui.toast('个人头像更新成功');
 								setTimeout(function() {
-									personal.imgurl = successCB;
-									myStorage.setItem(storageKeyName.PERSONALINFO, personal);
 									document.getElementById("img").src = successCB;
 									document.getElementById("img").onload = function() {
 										wd.close();

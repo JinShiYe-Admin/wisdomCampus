@@ -147,8 +147,8 @@ var appUpdate = (function(mod) {
 				}
 			}
 		} else { //ios
-			if(version) {
-				newestVersions = version.version.split('.');
+			if(versionInfo) {
+				newestVersions = versionInfo.version.split('.');
 				var hasNewerVersion = newestVersions.some(function(verNo, index) {
 					return parseInt(verNo) > parseInt(appVersions[index]);
 				})
