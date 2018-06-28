@@ -208,6 +208,8 @@
 
 				} else {
 					if(personal.userName0) {
+						document.getElementById("account").value = personal.userName0;
+						document.getElementById("password").value = personal.passWord0;
 						//login登录
 						loginPro(personal.userName0, personal.passWord0);
 					} else {

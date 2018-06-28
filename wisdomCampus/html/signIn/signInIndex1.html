@@ -147,7 +147,7 @@
 				</div>
 			</div>
 			<p style="background: #e4e4e4;height: 10px;margin-left: -10px;"></p>
-			<div id="MultiMedia" style="">
+			<div id="MultiMedia">
 
 			</div>
 			<br />
@@ -281,6 +281,10 @@
 			mui.plusReady(function() {
 				personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(personal));
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+						mui.toast('网络连接失败,请重新尝试一下');
+						return;
+					}
 				setMap();
 				//12.获取考勤类型
 				getAttendType();
@@ -341,6 +345,10 @@
 
 			//签到
 			function save() {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+						mui.toast('网络连接失败,请重新尝试一下');
+						return;
+					}
 				var attendTypeId = document.getElementById("attendType").data_id;
 				var departId = document.getElementById("depart").data_id;
 				var deptName = document.getElementById("depart").value;
@@ -363,10 +371,6 @@
 					mui.toast("请添加照片");
 					return;
 				} else {
-					if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-						mui.toast('网络连接失败,请重新尝试一下');
-						return;
-					}
 					var wd = events.showWaiting();
 					uploadFile(wd); //上传文件
 				}
@@ -389,6 +393,8 @@
 							attendType.attendTypeList.push(model);
 						}
 						console.log('重组考勤类型:' + JSON.stringify(attendType.attendTypeList));
+					}else{
+						mui.toast(data.RspTxt);
 					}
 				});
 			};
@@ -409,6 +415,8 @@
 							model.value = model.AttendAreaId;
 							attendArea.attendAreaList.push(model);
 						}
+					}else{
+						mui.toast(data.RspTxt);
 					}
 				});
 			}

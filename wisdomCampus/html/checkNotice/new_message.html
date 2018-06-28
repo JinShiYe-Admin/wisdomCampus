@@ -77,7 +77,8 @@
 			<h1 class="mui-title">新建通知</h1>
 		</header>
 		<div id="message" class="mui-content">
-			<template>
+			<!--<template>-->
+				<template v-show="dataFlag>0">
 				<div class="weui-cells" style="margin-top: 0px;">
 					<div class="weui-cell">
 						<div class="weui-cell__hd">标题</div>
@@ -92,14 +93,14 @@
 						</div>
 					</div>
 				</div>
-			</template>
+			<!--</template>-->
 			<div id="MultiMedia">
 				<div class="mui-input-row mui-checkbox mui-left" id="senMSN" style="float: right;margin-top: 3px;display: none;">
 					<label style="font-size: 14px;color: #333333;">发送短信</label>
 					<input v-model="smsSync" name="checkbox1" type="checkbox">
 				</div>
 			</div>
-			<template v-if="dataFlag>0">
+			<!--<template v-if="dataFlag>0">-->
 				<div class="weui-cells" style="margin-top: 0px;">
 					<div @click="selectPepole()" class="weui-cell weui-cell_access">
 						<div class="weui-cell__bd">
