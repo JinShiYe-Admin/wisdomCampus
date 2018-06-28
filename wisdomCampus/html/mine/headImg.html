@@ -34,7 +34,7 @@
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell mui-media" @click="modifyImg()">
 					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-right" :src=peopleHeadImg style="border-radius:50%;width:35px;height: 35px;">
+						<img class="mui-media-object mui-pull-right" id="img" :src=peopleHeadImg style="border-radius:50%;width:35px;height: 35px;">
 						<p class="mui-ellipsis">头像</p>
 					</a>
 				</li>
@@ -47,11 +47,27 @@
 			</ul>
 		</div>
 		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../../js/publicProtocol.js"></script>
-		<script src="../../js/utils/storageKeyName.js"></script>
 		<script src="../../js/utils/store.js"></script>
-		<script src="../../js/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/qiniu/qiniu.js"></script>
+		<script type="text/javascript" src="../../js/utils/cryption.js"></script>
+		<!--<script src="../../js/libs/myStorage/myStorage.js"></script>-->
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script src="../../js/utils/camera.js"></script>
+		<script type="text/javascript" src="../../js/publicProtocol.js"></script>
+		<script src="../../js/utils/load.js"></script>
+		<script type="text/javascript" src="../../js/utils/CloudFileUtil.js"></script>
+		<script type="text/javascript" src="../../js/cloud/AndroidFileSystem.js"></script>
+		<script type="text/javascript" src="../../js/utils/UploadHeadImage.js"></script>
+		<script type="text/javascript" src="../../js/utils/compress.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/lib/jquery.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			//获取个人信息
@@ -72,49 +88,84 @@
 				},
 				methods: {
 					modifyImg: function() {
-						var btnArray = [{
-							title: "拍照"
-						}, {
-							title: "从相册选"
-						}];
-						plus.nativeUI.actionSheet({
-							title: "选择修改头像的方式",
-							cancel: "取消",
-							buttons: btnArray
-						}, function(e) {
-							var index = e.index;
-							switch(index) {
-								case 0:
-									break;
-								case 1:
-									var cmr = plus.camera.getCamera();
-									cmr.captureImage(function(p){
-										plus.io.resolveLocalFileSystemURL(p, function(entry){//拍照
-											 _compressImage(entry.toLocalURL(),function(event) {//压缩
-											 	uploadFile(entry,index);//上传
-											}, function(error) {
-												console.log('### ERROR ### 图片压缩 失败 ' + JSON.stringify(error));
+						if(personal.utp == 0) { //0老师，1学生，2家长
+							var btnArray = [{
+								title: "拍照"
+							}, {
+								title: "从相册选"
+							}];
+							plus.nativeUI.actionSheet({
+								title: "选择修改头像的方式",
+								cancel: "取消",
+								buttons: btnArray
+							}, function(e) {
+								var index = e.index;
+								switch(index) {
+									case 0:
+										break;
+									case 1:
+										var cmr = plus.camera.getCamera();
+										cmr.captureImage(function(p) { //打开相机
+											plus.io.resolveLocalFileSystemURL(p, function(entry) { //拍照
+												_compressImage(entry.toLocalURL(), function(event) { //压缩
+													uploadFile(entry, index); //上传
+												}, function(error) {
+													console.log('图片压缩 失败 ' + JSON.stringify(error));
+												});
+											}, function(e) {
+												console.log('读取拍照文件错误：' + e.message);
 											});
-										}, function(e){
-											console.log('读取拍照文件错误：'+e.message);
+										}, function(e) {
+											console.log('取消拍照：' + e.message);
+										}, {
+											filename: '_doc/camera/',
+											index: 1
 										});
-									}, function(e){
-										console.log('失败：'+e.message);
-									}, {filename:'_doc/camera/',index:1});
-									break;
-								case 2:
-									 plus.gallery.pick(function(path){//选照片
- 											_compressImage(path,function(event) {//压缩
-												uploadFile(path,index);//上传
+										break;
+									case 2:
+										plus.gallery.pick(function(path) { //选照片
+											_compressImage(path, function(event) { //压缩
+												uploadFile(path, index); //上传
 											}, function(error) {
-												console.log('### ERROR ### 图片压缩 失败 ' + JSON.stringify(error));
+												console.log('图片压缩 失败 ' + JSON.stringify(error));
 											});
-								    }, function(e){
-								    	console.log('取消选择图片'); 
-								    }, {filter:'image'});
-									break;
-							}
-						});
+										}, function(e) {
+											console.log('取消选择图片');
+										}, {
+											filter: 'image'
+										});
+										break;
+								}
+							});
+						} else {
+							var img = document.getElementById("img");
+							UploadHeadImage.addListener(img, 0, {
+								id: personal.utid, //utid
+								//name: data.studentName //资料名称
+							}, function(successCB) {
+								var wd = events.showWaiting('更新头像...');
+								//console.log('上传并修改个人头像，成功的回调' + JSON.stringify(successCB));
+								mui.toast('个人头像更新成功');
+								setTimeout(function() {
+									personal.imgurl = successCB;
+									myStorage.setItem(storageKeyName.PERSONALINFO, personal);
+									document.getElementById("img").src = successCB;
+									document.getElementById("img").onload = function() {
+										wd.close();
+									}
+								}, 2000);
+								// 设置头像
+								personal.imgurl = successCB;
+								store.set(window.storageKeyName.PERSONALINFO, personal);
+								mui.fire(plus.webview.currentWebview().opener(), 'mine_setHeadImg', {
+									imgurl: successCB
+								});
+							}, function(errorCB) {
+								//console.log('上传并修改个人头像，失败的回调' + JSON.stringify(errorCB));
+								mui.toast(data.RspTxt);
+							});
+						}
+
 					}
 				}
 			});

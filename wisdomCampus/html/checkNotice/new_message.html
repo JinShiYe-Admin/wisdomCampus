@@ -188,7 +188,8 @@
 					selectIndex: 0,
 					selectImgPath: '',
 					uploadedFiles: [],
-					selectPeople: []
+					selectPeople: [],
+					selectDepartID:[]
 				},
 				computed: {
 					// 计算属性的 getter
@@ -199,6 +200,11 @@
 				},
 				methods: {
 					clickSubmitBtn: function() {
+						if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+							mui.toast("网络连接失败,请重新尝试一下", "cancel");
+							sendFlag = 0;
+							return;
+						}
 						if(sendFlag == 0) {
 							sendFlag = 1;
 							if(message.title.trim().length == 0 || message.content.trim().length == 0) {
@@ -264,6 +270,7 @@
 						}
 						var data = {
 							flag: 1, //1 通知公告
+							departArray:message.selectDepartID,
 							selectPeople: tempPeople
 						}
 						console.log(JSON.stringify(data));
@@ -407,8 +414,9 @@
 				});
 			}
 			window.addEventListener('selectPeople', function(data) {
-				console.log("data" + JSON.stringify(data.detail.peopleArray))
+				console.log("data" + JSON.stringify(data.detail))
 				message.selectPeople = data.detail.peopleArray;
+				message.selectDepartID = data.detail.departArray;
 				var tempPeople = [];
 				for(var i = 0; i < message.selectPeople.length; i++) {
 					var tempModel = message.selectPeople[i];

@@ -26,7 +26,8 @@ function setImg(imgURL) {
 	if (imgURL==null||imgURL.length==0) {
 		tempUrl = '../../img/login/headImg.png';
 	} else{
-		tempUrl = imgURL;
+		var myDate = new Date();
+		tempUrl = imgURL + '?' + myDate.getTime();
 	}
 //	console.log('tempUrl000:'+tempUrl);
 	return tempUrl;

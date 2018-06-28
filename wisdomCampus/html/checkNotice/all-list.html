@@ -119,8 +119,11 @@
 				font-size: 13px;
 				color: gray;
 			}
-			.oneLine{
-				white-space: nowrap;-o-text-overflow:ellipsis;text-overflow: ellipsis;
+			
+			.oneLine {
+				white-space: nowrap;
+				-o-text-overflow: ellipsis;
+				text-overflow: ellipsis;
 			}
 		</style>
 	</head>
@@ -329,7 +332,7 @@
 						if(model.SendManName == undefined) {
 							model.SendManName = tempInfo00.utname;
 							noticep = model.NoticeProgress
-//							model.SendManPic = tempInfo00.imgurl;
+							//							model.SendManPic = tempInfo00.imgurl;
 						} else {
 							model.SendManName = model.SendManName;
 							noticep = model.NoticeStatus
@@ -352,10 +355,10 @@
 						li.innerHTML = '<div>' +
 							//							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;"><img style="width: 45px;height: 45px;border-radius: 50%;" src="../../img/login/headImg.png" />' + model.NoticeTitle + noYes +
 							//							'</p>' +
-							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.SendManPic) + '" /><div class="mui-media-body replyName">' + model.SendManName + noYes + '</div>' +'<div class="mui-media-body replyName1" style="margin-top: -20px;float:right;">' + model.SendTime + '</div>' + '<div class="mui-media-body replyName2 oneLine" style="margin-top: 10px;">' + model.NoticeTitle + '</div></a>' +
-//							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-//							model.SendTime +
-//							'</p>' +
+							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.SendManPic) + '" /><div class="mui-media-body replyName">' + model.SendManName + noYes + '</div>' + '<div class="mui-media-body replyName1" style="margin-top: -20px;float:right;">' + model.SendTime + '</div>' + '<div class="mui-media-body replyName2 oneLine" style="margin-top: 10px;">' + model.NoticeTitle + '</div></a>' +
+							//							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							//							model.SendTime +
+							//							'</p>' +
 							'</div>'
 					} else if(index == 2) {
 						var myName = "";
@@ -364,7 +367,7 @@
 							li.id = model.ApplyId
 							myName = tempInfo00.utname;
 							Progress = model.ApplyProgress;
-//							model.ApplyManPic = tempInfo00.imgurl;
+							//							model.ApplyManPic = tempInfo00.imgurl;
 						} else {
 							li.id = myId = model.ApproveId
 							myName = model.ApplyManName;
@@ -384,13 +387,13 @@
 							readcolor = '#c9c9c9';
 						}
 						li.innerHTML = '<div>' +
-//							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;">' + model.ApplyTitle + noYes +
-//							'</p>' +
-//							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.ApplyManPic) + '" /><div class="mui-media-body replyName">' + model.ApplyTitle + noYes + '</div></a>' +
-							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.ApplyManPic) + '" /><div class="mui-media-body replyName">' + myName + noYes + '</div>' +'<div class="mui-media-body replyName1" style="margin-top: -20px;float:right;">' + model.CreateTime + '</div>' + '<div class="mui-media-body replyName2 oneLine" style="margin-top: 10px;">' + model.ApplyTitle + '</div></a>' +
-//							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
-//							myName + model.CreateTime +
-//							'</p>' +
+							//							'<p class="mui-ellipsis" style="white-space: pre;font-size:14px;color:#333333;width: 100%;">' + model.ApplyTitle + noYes +
+							//							'</p>' +
+							//							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.ApplyManPic) + '" /><div class="mui-media-body replyName">' + model.ApplyTitle + noYes + '</div></a>' +
+							'<a><img class="mui-media-object mui-pull-left peopleImg" src="' + setImg(model.ApplyManPic) + '" /><div class="mui-media-body replyName">' + myName + noYes + '</div>' + '<div class="mui-media-body replyName1" style="margin-top: -20px;float:right;">' + model.CreateTime + '</div>' + '<div class="mui-media-body replyName2 oneLine" style="margin-top: 10px;">' + model.ApplyTitle + '</div></a>' +
+							//							'<p class="mui-ellipsis mui-pull-right" style="margin-top: 5px;font-size:12px;color:#999999">' +
+							//							myName + model.CreateTime +
+							//							'</p>' +
 							'</div>'
 					}
 
@@ -398,245 +401,215 @@
 				}
 				return fragment;
 			};
-			(function($1) {
-				//阻尼系数
-				var deceleration = mui.os.ios ? 0.003 : 0.0009;
-				$1('.mui-scroll-wrapper').scroll({
-					bounce: false,
-					indicators: true, //是否显示滚动条
-					deceleration: deceleration
-				});
+			mui.plusReady(function() {
+				(function($1) {
+					//阻尼系数
+					var deceleration = mui.os.ios ? 0.003 : 0.0009;
+					$1('.mui-scroll-wrapper').scroll({
+						bounce: false,
+						indicators: true, //是否显示滚动条
+						deceleration: deceleration
+					});
 
-				$1.ready(function() {
-					var getNotice = function(pullRefresh,id, title, callback) { //10.获取发送的通知公告列表
-//						events.showWaiting();
-						console.log("1111111111111" + title)
-						var current_data = datasource[title];
-						var refreshObj = current_data.refreshObj
-						var tempData = {}
-						var personal = store.get(window.storageKeyName.PERSONALINFO);
+					$1.ready(function() {
+						var getNotice = function(pullRefresh, id, title, callback) { //10.获取发送的通知公告列表
+													events.showWaiting();
+							console.log("1111111111111" + title)
+							var current_data = datasource[title];
+							var refreshObj = current_data.refreshObj
+							var tempData = {}
+							var personal = store.get(window.storageKeyName.PERSONALINFO);
 
-						if(id == "1" && title == "send") {
-							console.log('qqqqqq111');
-							tempData = {
-								schoolId: storageKeyName.SCHOOLID, //学校ID
-								sendManId: personal.utid, //发送人ID
-								title: '', //标题
-								status: '0', //状态,0 全部,1 发出,2 撤销
-								progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-								beginTime: '20170101', //查询开始时间
-								endTime: '30180127', //查询结束时间
-								pageIndex: refreshObj.pageIndex, //当前页数
-								pageSize: '10' //每页记录数
-							}
-							getSendNoticePro(tempData, function function_name(data) {
-								console.log(JSON.stringify(data))
-//								events.closeWaiting();
-								if(data.RspCode == 0) {
-									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-									if(datasource[title].refreshObj.refreshFlag == 0) {
-										datasource[title].refreshObj.pageIndex = 1;
-										datasource[title].data = data.RspData.Data
-									} else {
-										//									datasource.notice_send.refreshObj.pageIndex++;
-										datasource[title].data = datasource[title].data.concat(data.RspData.Data)
-									}
-									callback(data.RspData.Data)
-								}else{
-									mui.toast(data.RspTxt);
-									pullRefresh.endPullDownToRefresh();
-									pullRefresh.endPullUpToRefresh();
+							if(id == "1" && title == "send") {
+								console.log('qqqqqq111');
+								tempData = {
+									schoolId: storageKeyName.SCHOOLID, //学校ID
+									sendManId: personal.utid, //发送人ID
+									title: '', //标题
+									status: '0', //状态,0 全部,1 发出,2 撤销
+									progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+									beginTime: '20170101', //查询开始时间
+									endTime: '30180127', //查询结束时间
+									pageIndex: refreshObj.pageIndex, //当前页数
+									pageSize: '10' //每页记录数
 								}
-							});
-						} else if(id == "1" && title != "send") {
-							console.log('qqqqqq222');
-							var tempStatus = title.replace("receive", '');
-							if(tempStatus == 1) {
-								tempStatus = 2;
-							} else if(tempStatus == 2) {
-								tempStatus = 1
-							}
-							tempData = {
-								schoolId: storageKeyName.SCHOOLID, //学校ID
-								sendMan: '', //发送人ID
-								receiveManId: personal.utid, //接收人ID
-								title: '', //标题
-								status: tempStatus, //状态,0 全部，1 已阅,2 未阅,3 已回复
-								progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
-								beginTime: '20170101', //查询开始时间
-								endTime: '30180127', //查询结束时间
-								pageIndex: refreshObj.pageIndex, //当前页数
-								pageSize: '10' //每页记录数
-							}
-							getReceiveNoticePro(tempData, function function_name(data) {
-//								events.closeWaiting();
-								console.log(JSON.stringify(data))
-								if(data.RspCode == 0) {
-									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-									if(datasource[title].refreshObj.refreshFlag == 0) {
-										datasource[title].data = data.RspData.Data
+								getSendNoticePro(tempData, function function_name(data) {
+									console.log(JSON.stringify(data))
+																	events.closeWaiting();
+									if(data.RspCode == 0) {
+										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+										if(datasource[title].refreshObj.refreshFlag == 0) {
+											datasource[title].refreshObj.pageIndex = 1;
+											datasource[title].data = data.RspData.Data
+										} else {
+											//									datasource.notice_send.refreshObj.pageIndex++;
+											datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										}
+										callback(data.RspData.Data)
 									} else {
-										datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										mui.toast(data.RspTxt);
+										pullRefresh.endPullDownToRefresh();
+										pullRefresh.endPullUpToRefresh();
 									}
-									callback(data.RspData.Data)
-								}else{
-									mui.toast(data.RspTxt);
-									pullRefresh.endPullDownToRefresh();
-									pullRefresh.endPullUpToRefresh();
+								});
+							} else if(id == "1" && title != "send") {
+								console.log('qqqqqq222');
+								var tempStatus = title.replace("receive", '');
+								if(tempStatus == 1) {
+									tempStatus = 2;
+								} else if(tempStatus == 2) {
+									tempStatus = 1
 								}
-							});
-						} else if(id == "2" && title == "send") {
-							console.log('qqqqqq333');
-							tempData = {
-								schoolId: storageKeyName.SCHOOLID, //学校ID
-								applyManId: personal.utid, //申请人ID
-								title: '', //标题
-								status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
-								progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
-								beginTime: '20170101', //查询开始时间
-								endTime: '30180131', //查询结束时间
-								pageIndex: refreshObj.pageIndex, //当前页数
-								pageSize: '10' //每页记录数，0 为全部
-							}
+								tempData = {
+									schoolId: storageKeyName.SCHOOLID, //学校ID
+									sendMan: '', //发送人ID
+									receiveManId: personal.utid, //接收人ID
+									title: '', //标题
+									status: tempStatus, //状态,0 全部，1 已阅,2 未阅,3 已回复
+									progress: '0', //进程,0 全部,1 新建,2 处理中,3 阅毕,4 已撤销
+									beginTime: '20170101', //查询开始时间
+									endTime: '30180127', //查询结束时间
+									pageIndex: refreshObj.pageIndex, //当前页数
+									pageSize: '10' //每页记录数
+								}
+								getReceiveNoticePro(tempData, function function_name(data) {
+																	events.closeWaiting();
+									console.log(JSON.stringify(data))
+									if(data.RspCode == 0) {
+										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+										if(datasource[title].refreshObj.refreshFlag == 0) {
+											datasource[title].data = data.RspData.Data
+										} else {
+											datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										}
+										callback(data.RspData.Data)
+									} else {
+										mui.toast(data.RspTxt);
+										pullRefresh.endPullDownToRefresh();
+										pullRefresh.endPullUpToRefresh();
+									}
+								});
+							} else if(id == "2" && title == "send") {
+								console.log('qqqqqq333');
+								tempData = {
+									schoolId: storageKeyName.SCHOOLID, //学校ID
+									applyManId: personal.utid, //申请人ID
+									title: '', //标题
+									status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
+									progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回，5 已撤销
+									beginTime: '20170101', //查询开始时间
+									endTime: '30180131', //查询结束时间
+									pageIndex: refreshObj.pageIndex, //当前页数
+									pageSize: '10' //每页记录数，0 为全部
+								}
 
-							getAffairApplyPro(tempData, function function_name(data) {
-								console.log(JSON.stringify(data))
-//								events.closeWaiting();
-								if(data.RspCode == 0) {
-									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-									if(datasource[title].refreshObj.refreshFlag == 0) {
-										datasource[title].refreshObj.pageIndex = 1;
-										datasource[title].data = data.RspData.Data
+								getAffairApplyPro(tempData, function function_name(data) {
+									console.log(JSON.stringify(data))
+																	events.closeWaiting();
+									if(data.RspCode == 0) {
+										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+										if(datasource[title].refreshObj.refreshFlag == 0) {
+											datasource[title].refreshObj.pageIndex = 1;
+											datasource[title].data = data.RspData.Data
+										} else {
+											//									datasource.apply_send.refreshObj.pageIndex++;
+											datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										}
+										callback(data.RspData.Data)
 									} else {
-										//									datasource.apply_send.refreshObj.pageIndex++;
-										datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										mui.toast(data.RspTxt);
+										pullRefresh.endPullDownToRefresh();
+										pullRefresh.endPullUpToRefresh();
 									}
-									callback(data.RspData.Data)
-								}else{
-									mui.toast(data.RspTxt);
-									pullRefresh.endPullDownToRefresh();
-									pullRefresh.endPullUpToRefresh();
+								});
+							} else if(id == "2" && title != "send") {
+								console.log('qqqqqq444');
+								var tempStatus = title.replace("receive", '');
+								document.getElementById("receive1").innerHTML = "等待"
+								document.getElementById("receive2").innerHTML = "未批"
+								document.getElementById("receive3").innerHTML = "已批"
+								if(tempStatus == 1) {
+									tempStatus = 2;
+								} else if(tempStatus == 2) {
+									tempStatus = 3
+								} else if(tempStatus == 3) {
+									tempStatus = 1
 								}
-							});
-						} else if(id == "2" && title != "send") {
-							console.log('qqqqqq444');
-							var tempStatus = title.replace("receive", '');
-							document.getElementById("receive1").innerHTML = "等待"
-							document.getElementById("receive2").innerHTML = "未批"
-							document.getElementById("receive3").innerHTML = "已批"
-							if(tempStatus == 1) {
-								tempStatus = 2;
-							} else if(tempStatus == 2) {
-								tempStatus = 3
-							} else if(tempStatus == 3) {
-								tempStatus = 1
-							}
-							tempData = {
-								schoolId: storageKeyName.SCHOOLID, //学校ID
-								approveManId: personal.utid, //审批人ID
-								title: '', //标题
-								applyMan: '', //申请人姓名
-								status: tempStatus, //状态,0 全部,1 同意,2 退回，3 等待，4 未批
-								progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
-								beginTime: '20170101', //查询开始时间
-								endTime: '30180131', //查询结束时间
-								pageIndex: refreshObj.pageIndex, //当前页数
-								pageSize: '10' //每页记录数，0 为全部
-							}
+								tempData = {
+									schoolId: storageKeyName.SCHOOLID, //学校ID
+									approveManId: personal.utid, //审批人ID
+									title: '', //标题
+									applyMan: '', //申请人姓名
+									status: tempStatus, //状态,0 全部,1 同意,2 退回，3 等待，4 未批
+									progress: '0', //进程,0 全部,1 新建,2 审批中,3 审毕,4 退回
+									beginTime: '20170101', //查询开始时间
+									endTime: '30180131', //查询结束时间
+									pageIndex: refreshObj.pageIndex, //当前页数
+									pageSize: '10' //每页记录数，0 为全部
+								}
 
-							getAffairApprovePro(tempData, function function_name(data) {
-//								events.closeWaiting();
-								console.log(JSON.stringify(data))
-								if(data.RspCode == 0) {
-									datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
-									if(datasource[title].refreshObj.refreshFlag == 0) {
-										datasource[title].refreshObj.pageIndex = 1;
-										datasource[title].data = data.RspData.Data
+								getAffairApprovePro(tempData, function function_name(data) {
+																	events.closeWaiting();
+									console.log(JSON.stringify(data))
+									if(data.RspCode == 0) {
+										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
+										if(datasource[title].refreshObj.refreshFlag == 0) {
+											datasource[title].refreshObj.pageIndex = 1;
+											datasource[title].data = data.RspData.Data
+										} else {
+											//									datasource.apply_recevice.refreshObj.pageIndex++;
+											datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										}
+										callback(data.RspData.Data)
 									} else {
-										//									datasource.apply_recevice.refreshObj.pageIndex++;
-										datasource[title].data = datasource[title].data.concat(data.RspData.Data)
+										mui.toast(data.RspTxt);
+										pullRefresh.endPullDownToRefresh();
+										pullRefresh.endPullUpToRefresh();
 									}
-									callback(data.RspData.Data)
-								}else{
-									mui.toast(data.RspTxt);
-									pullRefresh.endPullDownToRefresh();
-									pullRefresh.endPullUpToRefresh();
-								}
-							});
+								});
+							}
+							//					events.closeWaiting();
 						}
-						//					events.closeWaiting();
-					}
-//					events.showWaiting();
-					getNotice(pullRefresh,title_id, 'receive0', function(data) {
-						var ul = document.getElementById("ul0");
-						ul.appendChild(createFragment(ul, title_id, data));
-					});
-					getNotice(pullRefresh,title_id, 'receive1', function(data) {
-						var ul = document.getElementById("ul1");
-						ul.appendChild(createFragment(ul, title_id, data));
-					});
-					getNotice(pullRefresh,title_id, 'receive2', function(data) {
-						var ul = document.getElementById("ul2");
-						ul.appendChild(createFragment(ul, title_id, data));
-					});
-					getNotice(pullRefresh,title_id, 'receive3', function(data) {
-						var ul = document.getElementById("ul3");
-						ul.appendChild(createFragment(ul, title_id, data));
-					});
-					getNotice(pullRefresh,title_id, 'send', function(data) {
-						var ul = document.getElementById("ul4");
-						ul.appendChild(createFragment(ul, title_id, data));
-					});
-					var p = [];
+						events.showWaiting();
+						getNotice(pullRefresh, title_id, 'receive0', function(data) {
+							var ul = document.getElementById("ul0");
+							ul.appendChild(createFragment(ul, title_id, data));
+						});
+						getNotice(pullRefresh, title_id, 'receive1', function(data) {
+							var ul = document.getElementById("ul1");
+							ul.appendChild(createFragment(ul, title_id, data));
+						});
+						getNotice(pullRefresh, title_id, 'receive2', function(data) {
+							var ul = document.getElementById("ul2");
+							ul.appendChild(createFragment(ul, title_id, data));
+						});
+						getNotice(pullRefresh, title_id, 'receive3', function(data) {
+							var ul = document.getElementById("ul3");
+							ul.appendChild(createFragment(ul, title_id, data));
+						});
+						getNotice(pullRefresh, title_id, 'send', function(data) {
+							var ul = document.getElementById("ul4");
+							ul.appendChild(createFragment(ul, title_id, data));
+						});
+						var p = [];
 
-					//循环初始化所有下拉刷新，上拉加载。
-					$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-						var b = $1(pullRefreshEl).pullToRefresh({
+						//循环初始化所有下拉刷新，上拉加载。
+						$1.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+							var b = $1(pullRefreshEl).pullToRefresh({
 
-							down: {
-								callback: function() {
-									if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-										mui.toast('网络连接失败,请重新尝试一下');
-										b.endPullDownToRefresh();
-									} else {
-										var self = this;
-										pullRefresh = self;
-										var current_data = datasource[title];
-										var refreshObj = current_data.refreshObj
-										refreshObj.refreshFlag = 0;
-										refreshObj.pageIndex = 1;
-										getNotice(self,title_id, title, function(data) {
-											var ul_id = '';
-											if(title == 'send') {
-												ul_id = "ul4"
-											} else {
-												ul_id = title.replace('receive', 'ul')
-											}
-											var ul = document.getElementById(ul_id);
-											ul.innerHTML = '';
-											ul.appendChild(createFragment(ul, title_id, data));
+								down: {
+									callback: function() {
+										if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+											mui.toast('网络连接失败,请重新尝试一下');
 											b.endPullDownToRefresh();
-											self.refresh(true);
-										})
-									}
-								}
-							},
-							up: {
-								callback: function() {
-									if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-										mui.toast('网络连接失败,请重新尝试一下');
-										var self = this;
-										self.endPullUpToRefresh();
-									} else {
-										var self = this;
-										pullRefresh = self;
-										var current_data = datasource[title];
-										var refreshObj = current_data.refreshObj
-										console.log(JSON.stringify(refreshObj))
-										if(refreshObj.pageIndex < refreshObj.TotalPage) {
-											refreshObj.refreshFlag = 1;
-											refreshObj.pageIndex++;
-											getNotice(self,title_id, title, function(data) {
+										} else {
+											var self = this;
+											pullRefresh = self;
+											var current_data = datasource[title];
+											var refreshObj = current_data.refreshObj
+											refreshObj.refreshFlag = 0;
+											refreshObj.pageIndex = 1;
+											getNotice(self, title_id, title, function(data) {
 												var ul_id = '';
 												if(title == 'send') {
 													ul_id = "ul4"
@@ -644,25 +617,58 @@
 													ul_id = title.replace('receive', 'ul')
 												}
 												var ul = document.getElementById(ul_id);
+												ul.innerHTML = '';
 												ul.appendChild(createFragment(ul, title_id, data));
-												self.endPullUpToRefresh();
+												b.endPullDownToRefresh();
+												self.refresh(true);
 											})
+										}
+									}
+								},
+								up: {
+									callback: function() {
+										if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+											mui.toast('网络连接失败,请重新尝试一下');
+											var self = this;
+											self.endPullUpToRefresh();
 										} else {
-											console.log(refreshObj.pageIndex)
-											console.log(refreshObj.TotalPage)
-											//										mui.toast('没有更多了')
-											self.endPullUpToRefresh(true);
+											var self = this;
+											pullRefresh = self;
+											var current_data = datasource[title];
+											var refreshObj = current_data.refreshObj
+											console.log(JSON.stringify(refreshObj))
+											if(refreshObj.pageIndex < refreshObj.TotalPage) {
+												refreshObj.refreshFlag = 1;
+												refreshObj.pageIndex++;
+												getNotice(self, title_id, title, function(data) {
+													var ul_id = '';
+													if(title == 'send') {
+														ul_id = "ul4"
+													} else {
+														ul_id = title.replace('receive', 'ul')
+													}
+													var ul = document.getElementById(ul_id);
+													ul.appendChild(createFragment(ul, title_id, data));
+													self.endPullUpToRefresh();
+												})
+											} else {
+												console.log(refreshObj.pageIndex)
+												console.log(refreshObj.TotalPage)
+												//										mui.toast('没有更多了')
+												self.endPullUpToRefresh(true);
+											}
 										}
 									}
 								}
-							}
+							});
+							p.push(b);
 						});
-						p.push(b);
+
 					});
 
-				});
+				})(mui);
+			});
 
-			})(mui);
 			//设置头像，如果有，用本身的，没有给默认值
 			function setImg(imgURL) {
 				var tempUrl = '';
@@ -671,7 +677,7 @@
 				} else {
 					tempUrl = imgURL;
 				}
-//				console.log('tempUrl:' + tempUrl);
+				//				console.log('tempUrl:' + tempUrl);
 				return tempUrl;
 			};
 			mui('.mui-segmented-control').on('tap', 'a', function() {

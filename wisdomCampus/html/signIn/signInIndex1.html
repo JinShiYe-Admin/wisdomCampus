@@ -90,10 +90,11 @@
 				font-size: 15px;
 				margin-top: 0px;
 			}
+			
 			.weui-tab__bd {
-	box-sizing: border-box;
-	 height: 410px; 
-}
+				box-sizing: border-box;
+				height: 410px;
+			}
 			/*.weui-tab {
             margin-top:-30px;
         }*/
@@ -243,7 +244,7 @@
 					selectIndex: 0
 				},
 				methods: {
-					
+
 				}
 			});
 
@@ -295,7 +296,7 @@
 					TotalPicture: 1, //图片的个数
 					TotalAudio: 1, //音频的个数
 					TotalVideo: 1, //视频的个数
-					PictureTuke:false//不显示从相册选图
+					PictureTuke: false //不显示从相册选图
 				});
 				//显示发送短信按钮
 				//				document.getElementById('senMSN').style.display = 'inherit';
@@ -359,11 +360,15 @@
 					mui.toast("请选择考勤地点");
 					return;
 				}
-				
+
 				if(multiMedia.data.PictureArray.length == 0) { //没有传附件
 					mui.toast("请添加照片");
 					return;
 				} else {
+					if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+						mui.toast('网络连接失败,请重新尝试一下');
+						return;
+					}
 					var wd = events.showWaiting();
 					uploadFile(wd); //上传文件
 				}

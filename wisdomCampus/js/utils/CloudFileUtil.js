@@ -143,9 +143,9 @@ var CloudFileUtil = (function($, mod) {
 //		console.log("getUpLoadTokens " + JSON.stringify(data));
 		var appId = data.appId; //项目id
 		var desKey = getAppKey(appId); //项目名称
-		if (appId==8) {
-			appId = 4;
-		}
+//		if (appId==8) {
+//			appId = 4;
+//		}
 		var configure = {}; //配置的数据
 		var params = []; //配置的参数信息
 
@@ -640,7 +640,7 @@ var CloudFileUtil = (function($, mod) {
 				desKey = storageKeyName.QNPUBJBYZYKEY;
 				break;
 			case 4: //教宝云盘
-				desKey = storageKeyName.QNPUBJBYPKEY;
+				desKey = storageKeyName.QNPUBXXT;
 				break;
 			case 5: //教宝云用户管理
 				desKey = storageKeyName.QUPUBJBMANKEY;
@@ -984,7 +984,7 @@ var CloudFileUtil = (function($, mod) {
 				div.innerHTML = '<img style="width:90%;height:90%;margin:5%;" src="' + img.thumb + '" data-preview-src="' + img.url + '" data-preview-group="1"/>' +
 					'<a class="mui-icon iconfont icon-guanbi"></a>';
 			} else {
-				div.innerHTML = '<div class="clip-container"  style="width:' + div_width * 0.9 + 'px;height:' + div_width * 0.9 + 'px;margin:5%;overflow:hidden;display:inline-block;backgroud:red"><img src="' +
+				div.innerHTML = '<div class="clip-container"  style="width:' + div_width * 0.9 + 'px;height:' + div_width * 0.9 + 'px;margin:5%;overflow:hidden;display:inline-block;backgroud:blue"><img src="' +
 					img.url + '" style="visibility:hidden;" data-preview-src="' + img.url + '" data-preview-group="1"/></div>' +
 					'<a class="mui-icon iconfont icon-guanbi"></a>';
 			}
