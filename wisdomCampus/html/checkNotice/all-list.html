@@ -413,13 +413,14 @@
 
 					$1.ready(function() {
 						var getNotice = function(pullRefresh, id, title, callback) { //10.获取发送的通知公告列表
-													events.showWaiting();
 							console.log("1111111111111" + title)
 							var current_data = datasource[title];
 							var refreshObj = current_data.refreshObj
 							var tempData = {}
 							var personal = store.get(window.storageKeyName.PERSONALINFO);
-
+							if(refreshObj.pageIndex == 1) {
+								events.showWaiting();
+							}
 							if(id == "1" && title == "send") {
 								console.log('qqqqqq111');
 								tempData = {
@@ -435,7 +436,7 @@
 								}
 								getSendNoticePro(tempData, function function_name(data) {
 									console.log(JSON.stringify(data))
-																	events.closeWaiting();
+									events.closeWaiting();
 									if(data.RspCode == 0) {
 										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
 										if(datasource[title].refreshObj.refreshFlag == 0) {
@@ -473,7 +474,7 @@
 									pageSize: '10' //每页记录数
 								}
 								getReceiveNoticePro(tempData, function function_name(data) {
-																	events.closeWaiting();
+									events.closeWaiting();
 									console.log(JSON.stringify(data))
 									if(data.RspCode == 0) {
 										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
@@ -505,7 +506,7 @@
 
 								getAffairApplyPro(tempData, function function_name(data) {
 									console.log(JSON.stringify(data))
-																	events.closeWaiting();
+									events.closeWaiting();
 									if(data.RspCode == 0) {
 										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
 										if(datasource[title].refreshObj.refreshFlag == 0) {
@@ -549,7 +550,7 @@
 								}
 
 								getAffairApprovePro(tempData, function function_name(data) {
-																	events.closeWaiting();
+									events.closeWaiting();
 									console.log(JSON.stringify(data))
 									if(data.RspCode == 0) {
 										datasource[title].refreshObj.TotalPage = data.RspData.TotalPage;
