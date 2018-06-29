@@ -125,6 +125,23 @@
 				-o-text-overflow: ellipsis;
 				text-overflow: ellipsis;
 			}
+			
+			.mui-table-view-cell:before{
+			    position: absolute;
+			    right: 0;
+			    bottom: 0;
+			    left: 15px;
+			    height: 1px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #c8c7cc;
+			}
+			
+			
+			.mui-table-view-cell:last-child:after, .mui-table-view-cell:last-child:before {
+			    height: 1px;
+			}
 		</style>
 	</head>
 
@@ -168,7 +185,6 @@
 						<div class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul id="ul0" class="mui-table-view">
-
 								</ul>
 							</div>
 						</div>
