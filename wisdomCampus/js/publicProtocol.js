@@ -23,13 +23,13 @@ function generateUUID() {
 //设置头像，如果有，用本身的，没有给默认值
 function setImg(imgURL) {
 	var tempUrl = '';
-	if (imgURL==null||imgURL.length==0) {
+	if(imgURL == null || imgURL.length == 0) {
 		tempUrl = '../../img/login/headImg.png';
-	} else{
+	} else {
 		var myDate = new Date();
 		tempUrl = imgURL + '?' + myDate.getTime();
 	}
-//	console.log('tempUrl000:'+tempUrl);
+	//	console.log('tempUrl000:'+tempUrl);
 	return tempUrl;
 }
 
@@ -184,7 +184,7 @@ var xhrPost = function(url, commonData, callback) {
 			callback({
 				RspCode: 404,
 				RspData: null,
-				RspTxt: "网络连接失败,请重新尝试一下"
+				RspTxt: "网络连接超时,请重新尝试一下"
 			});
 		};
 		xhr.onerror = function(e) {
@@ -241,11 +241,12 @@ var jQAjaxPost = function(url, data, callback) {
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 						//						jQAjaxPost(url, data, callback);
 						var urlArr = url.split('/');
-						console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
-						data.utoken = data1.RspData;
-						delete data.sign;
-						postDataEncry(urlArr[urlArr.length - 1], {}, data, 0, function(data2) {
-
+						var tempData = JSON.parse(data);
+						//						console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
+						tempData.utoken = data1.RspData;
+						delete tempData.sign;
+						postDataEncry(urlArr[urlArr.length - 1], {}, tempData, 0, function(data2) {
+							callback(data2);
 						});
 					}
 				});

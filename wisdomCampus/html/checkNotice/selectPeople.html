@@ -249,6 +249,7 @@
 
 			//根据个人信息，获取权限等
 			var getData = function() {
+				personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
 				//判断是否年级领导
 				if(personal.grds.length > 0) {
