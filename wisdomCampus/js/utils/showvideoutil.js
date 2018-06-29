@@ -8,11 +8,14 @@ var ShowVideoUtil = (function(mod) {
 	 * 初始化播放器
 	 * @param {Object} videoElement video标签元素
 	 */
-	mod.initVideo = function(videoElement) {
+	mod.initVideo = function(videoElement,flag) {
 		videoElement.style.width = plus.screen.resolutionWidth + 'px';
 		videoElement.style.height = parseInt(plus.screen.resolutionWidth * 3 / 4) + 'px';
-		videoElement.style.marginTop = (plus.screen.resolutionHeight - 45 - plus.navigator.getStatusbarHeight() - parseInt(plus.screen.resolutionWidth * 3 / 4)) / 2 + 'px';
-//		videoElement.style.marginTop = -150 + 'px';
+		if (flag == 1) {
+			videoElement.style.marginTop = -(plus.screen.resolutionHeight *(1/3.5))+ 'px'; 
+		} else{
+			videoElement.style.marginTop = (plus.screen.resolutionHeight - 45 - plus.navigator.getStatusbarHeight() - parseInt(plus.screen.resolutionWidth * 3 / 4)) / 2 + 'px';
+		}
 	}
 
 	/**
@@ -100,9 +103,29 @@ var ShowVideoUtil = (function(mod) {
 	 */
 	mod.showVideo = function(videoElement, videoPopoverId, videoPath, videoThumb) {
 		if(plus.os.name == 'Android') {
-			playutil.openFileAndroid(videoPath, function(text) {
-				mui.toast(text);
-			});
+			var vid='';
+			var suffix = videoPath.substr(videoPath.lastIndexOf('.'));
+			var url = '';
+			if(suffix=='.mov' || suffix=='.3gp' || suffix=='.mp4' || suffix=='.avi'){
+				//if(unv){plus.runtime.openFile('_doc/camera/'+name);return;}
+				url = '../../html/utils/camera_video.html';
+			} else{
+				mui.toast('系统不支持播放此格式文件');
+			}
+			
+			w=plus.webview.create(url,url,{hardwareAccelerated:true,scrollIndicator:'none',scalable:true,bounce:'all'});
+			w.addEventListener('loaded', function(){
+				w.evalJS('loadMedia("'+videoPath+'")');
+				//w.evalJS('loadMedia("'+'http://localhost:13131/_doc/camera/'+name+'")');
+			}, false );
+			w.addEventListener('close', function(){
+				w = null;
+			}, false);
+			w.show('pop-in');
+			
+//			playutil.openFileAndroid(videoPath, function(text) {
+//				mui.toast(text);
+//			});
 		} else if(plus.os.name == 'iOS') {
 			videoElement.src = videoPath;
 			videoElement.poster = videoThumb;
