@@ -2,10 +2,10 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 0;
+	mod.key = 1;//开发，1部署
 	var exLog = console.log;
 	console.log = function(hint, object) {
-		if(mod.key === 0) {
+		if(mod.key === 1) {
 			var argus = hint;
 			if(typeof(object) !== 'undefined') {
 				argus = hint + JSON.stringify(object);
@@ -32,22 +32,9 @@ var storageKeyName = (function(mod) {
 		case 1: //发布
 			mod.SCHOOLID = 100008; //学校ID
 			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://zhxyapi.jiaobaowang.net:8501/api/Data/'; //顾工接口
+			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/'; //顾工接口
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolOAService/'; //孔工接口
-
-			//---七牛空间和接口---
-			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
-			mod.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
-			mod.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
-			mod.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
-			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8004/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
-			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
-			break;
-		case 2: //发布
-			mod.SCHOOLID = 100008; //学校ID
-			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://jsycs.jiaobaowang.net:9443/api/data/'; //顾工接口
-			mod.INTERFACEKONG = 'https://jsycs.jiaobaowang.net:9444/SchoolOAService/'; //孔工接口
+			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolAttendanceService/'; //孔工接口
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
