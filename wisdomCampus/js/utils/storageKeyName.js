@@ -2,10 +2,10 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 0;//开发，1部署
+	mod.key = 1;//开发，1部署
 	var exLog = console.log;
 	console.log = function(hint, object) {
-		if(mod.key === 0) {
+		if(mod.key === 1) {
 			var argus = hint;
 			if(typeof(object) !== 'undefined') {
 				argus = hint + JSON.stringify(object);
@@ -32,7 +32,7 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			break;
 		case 1: //发布
-			mod.SCHOOLID = 100008; //学校ID
+			mod.SCHOOLID = 100102; //学校ID
 			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
 			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/data/'; //顾工接口
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolOAService/'; //孔工接口
