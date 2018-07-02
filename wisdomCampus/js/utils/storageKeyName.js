@@ -21,6 +21,7 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/'; //孔工接口
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
 			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
+			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
@@ -37,6 +38,7 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolOAService/'; //孔工接口
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolAttendanceService/'; //孔工接口
 			mod.TEACHERIMG = 'https://zhxy.jiaobaowang.net:8515/schadminwebadmin/upuserimg.ashx?userid='; //老师上传头像
+			mod.ANDROIDUPDATEURL='http://zhxy.jiaobaowang.net:8015/appupdate/versionCode.xml';
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
