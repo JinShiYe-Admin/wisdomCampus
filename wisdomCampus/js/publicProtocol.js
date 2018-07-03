@@ -182,8 +182,7 @@ var xhrPost = function(url, commonData, callback) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-//						var urlArr = url.split('/');
-						commonData.utoken = data1.RspData;
+						commonData.token = data1.RspData;
 						delete commonData.sign;
 						xhrPost(url, commonData, function(data2) {
 							callback(data2);
@@ -262,10 +261,8 @@ var jQAjaxPost = function(url, data, callback) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-						//						jQAjaxPost(url, data, callback);
 						var urlArr = url.split('/');
 						var tempData = JSON.parse(data);
-						//						console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
 						tempData.utoken = data1.RspData;
 						delete tempData.sign;
 						postDataEncry(urlArr[urlArr.length - 1], {}, tempData, 0, function(data2) {
@@ -329,8 +326,7 @@ var tempPro = function(url, data0, callback) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-//						var urlArr = url.split('/');
-						data0.utoken = data1.RspData;
+//						data0.utoken = data1.RspData;
 						delete data0.sign;
 						tempPro(url, data0, function(data2) {
 							callback(data2);
