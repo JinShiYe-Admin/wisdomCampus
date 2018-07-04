@@ -322,7 +322,6 @@ var tempPro = function(url, data0, callback) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 						tempInfo00.utoken = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-//						data0.token = data1.RspData;
 						delete data0.sign;
 						tempPro(url, data0, function(data2) {
 							callback(data2);
