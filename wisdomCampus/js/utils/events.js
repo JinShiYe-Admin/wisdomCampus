@@ -13,6 +13,27 @@ var events = (function(mod) {
 	mod.setSessionArray = function(key, arr) {
 		sessionStorage.setItem(key, JSON.stringify(arr));
 	}
+
+	//短信群发
+	mod.SendSmsForMobiles = function(mobiles,content) {
+		console.log('mobiles:'+mobiles);
+		console.log('content:'+content);
+		var personal = store.get(window.storageKeyName.PERSONALINFO);
+		var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+		var enData0 = {};
+		//不需要加密的数据
+		var comData0 = {
+			uuid: publicParameter.uuid, //用户设备号
+			utoken: personal.utoken, //用户令牌
+			content: content, //发送的内容,不超过300汉字
+			mobiles: mobiles //手机号码组,多个用逗号隔开
+		}
+		//发送网络请求，data为网络返回值
+		postDataEncry('SendSms', enData0, comData0, 0, function(data) {
+			
+		});
+	}
+
 	/**
 	 * 数组中删除或添加值
 	 * @param {Object} arr 数组
@@ -87,7 +108,7 @@ var events = (function(mod) {
 	mod.setSessionObject = function(key, object) {
 		sessionStorage.setItem(key, JSON.stringify(object));
 	}
-	
+
 	/**
 	 * 返回一个安卓手机返回键无法关闭的等待框
 	 * @author 莫尚霖
@@ -148,7 +169,7 @@ var events = (function(mod) {
 			}
 		};
 	}
-	
+
 	/**
 	 * 将界面的焦点清除后再退出当前界面
 	 */
@@ -159,7 +180,7 @@ var events = (function(mod) {
 			oldBack();
 		}
 	}
-	
+
 	/**
 	 * 初始化强制隐藏键盘
 	 * @author 莫尚霖
@@ -182,7 +203,7 @@ var events = (function(mod) {
 			return hideOption;
 		}
 	}
-	
+
 	/**
 	 * 强制隐藏键盘需要和initHideKeyBoard配合使用
 	 * @author 莫尚霖

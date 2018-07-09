@@ -584,6 +584,9 @@
 						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
 							setArray3(data.RspData.dpts);
 						}
+						if (tempStr == 1) {
+							setArray1(data.RspData.dpts);
+						}
 						var tempFlag1 = PrivilegeStr.toString().substring(3);
 						var tempStr1 = personal.urolestr.substr(6, 1);
 						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
@@ -633,7 +636,7 @@
 				setSubordinateDepart(array, selectPeopleData.departmentArray);
 			}
 
-			//循环塞入下级部门
+			//循环塞入下级部门----现在要求，下级只包含直属下级  不包含下下级
 			var setSubordinateDepart = function(array, tempArray) {
 				var tempDepartArray = [];
 				//循环现在存入的部门
@@ -651,7 +654,7 @@
 				}
 				if(tempDepartArray.length > 0) {
 					selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(tempDepartArray);
-					setSubordinateDepart(array, tempDepartArray);
+//					setSubordinateDepart(array, tempDepartArray);
 				}
 				selectDepartment();
 			}

@@ -225,7 +225,7 @@ var jQAjaxPost = function(url, data, callback) {
 		return;
 	}
 	console.log('jQAP-Url:', url);
-	console.log('jQAP-Data:', data);
+	console.log('jQAP-Data222:', data);
 	jQuery.ajax({
 		url: url,
 		type: "POST",

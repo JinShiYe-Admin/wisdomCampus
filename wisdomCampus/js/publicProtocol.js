@@ -63,7 +63,10 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 		// 等待的对话框
 		var urlArr = url.split('/');
 		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
-		jQAjaxPost(url, JSON.stringify(tempData), callback);
+		var tempStr = JSON.stringify(tempData).replace(/\\/g, "");
+		console.log('tempStr:' + tempStr);
+		jQAjaxPost(url, tempStr, callback);
+//		jQAjaxPost(url, JSON.stringify(tempData), callback);
 	});
 }
 
@@ -230,7 +233,7 @@ var jQAjaxPost = function(url, data, callback) {
 		return;
 	}
 	console.log('jQAP-Url:', url);
-	console.log('jQAP-Data:', data);
+	console.log('jQAP-Data111:', data);
 	jQuery.ajax({
 		url: url,
 		type: "POST",
