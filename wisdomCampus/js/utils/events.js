@@ -26,7 +26,8 @@ var events = (function(mod) {
 			uuid: publicParameter.uuid, //用户设备号
 			utoken: personal.utoken, //用户令牌
 			content: content, //发送的内容,不超过300汉字
-			mobiles: mobiles //手机号码组,多个用逗号隔开
+			mobiles: mobiles, //手机号码组,多个用逗号隔开
+			appid: publicParameter.appid //系统所分配的应用ID
 		}
 		//发送网络请求，data为网络返回值
 		postDataEncry('SendSms', enData0, comData0, 0, function(data) {
