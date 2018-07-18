@@ -58,6 +58,7 @@ var appUpdate = (function(mod) {
 	
 	//获取android 更新信息
 	function getXml(school_id){
+		  console.log('APP更新：'+school_id); 
 		$.ajax({
 		    url:mod.androidUpdateUrl,
 		    type: 'GET',

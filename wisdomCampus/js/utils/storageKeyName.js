@@ -83,6 +83,8 @@ var storageKeyName = (function(mod) {
 	mod.WAITING = '加载中...'; //
 	mod.UPLOADING = '上传中...';
 	mod.SIGNKEY = 'jsy309'; //签名密钥
+	
+	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
 
 	/**
 	 * 在本地存永久数据
