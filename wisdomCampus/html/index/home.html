@@ -267,12 +267,13 @@
 							console.log('msg.title========'+JSON.stringify(msg))
 							//设置通知栏消息
 						    var options = {cover:false,sound:'system'};
-						    if(JSON.parse(msg.content).body==undefined){//非标准json格式
-						    	plus.push.createMessage(msg.content, msg.content, options );
-						    }else{//使用封装的标准json格式
+						    try{
+						    	JSON.parse(msg.content);
 						    	plus.push.createMessage(msg.title, JSON.parse(msg.content).body, options );
 						    }
-						    
+						    catch(err){
+						    	plus.push.createMessage(msg.content, msg.content, options );
+						    }
 	
 				    } ,false);
 					plus.push.addEventListener( "click", function ( msg ) {
@@ -616,6 +617,30 @@
 					}
 				});
 			}
+			
+			
+			if(mui.os.android) {
+					//监听收到通知后，没通过标题栏而是点击app图标进入app的事件，官方用语叫：应用切换到前台运行事件 
+					document.addEventListener("plusready", onPlusReady, false);
+
+					function onPlusReady() {
+						document.addEventListener("resume", onAppReume, false);
+					}
+
+					function onAppReume() {
+						console.log("清空安卓app角标");
+						//清空app角标
+						try {
+							var context = plus.android.runtimeMainActivity();
+							var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
+							ShortcutBadger.removeCount(context);
+						} catch(err) {
+							console.log('类加载出错：' + err)
+						}
+
+					}
+				}
+			
 		</script>
 	</body>
 
