@@ -193,6 +193,7 @@
 		<script src='../../js/utils/store.js'></script>
 		<script src='../../js/lib/app-update.js'></script>
 		<script src='../../js/utils/pushPermission.js'></script>
+		<script src="../../js/clearIcon.js"></script>
 		<script>
 			mui('.mui-scroll-wrapper').scroll({
 				indicators: true, //是否显示滚动条
@@ -203,43 +204,6 @@
 				statusBarBackground: '#63BBFF'
 			});
 			
-//			document.addEventListener("plusready", function() {
-//				
-//							
-//				message = document.getElementById("message");
-//				// 监听点击消息事件
-//				plus.push.addEventListener("click", function(msg) {
-//					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
-//					//					utils.setBadgeNumber(2, 0);
-//					//获取未读数
-//					getNoReadCnt();
-//					plus.device.vibrate(500);
-//					// 判断是从本地创建还是离线推送的消息 
-//					switch(msg.payload) {
-//						case "LocalMSG":
-//							//						outSet("点击本地创建消息启动：");
-//							break;
-//						default:
-//							//						outSet("点击离线推送消息启动：");
-//							break;
-//					}
-//				}, false);
-//				// 监听在线消息事件
-//				plus.push.addEventListener("receive", function(msg) {
-//					//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
-//					//					utils.setBadgeNumber(2, 0);
-//					//获取未读数
-//					getNoReadCnt();
-//					plus.device.vibrate(500);
-//					if(msg.aps) { // Apple APNS message
-//						//					outSet("接收到在线APNS消息：");
-//					} else {
-//						//					outSet("接收到在线透传消息：");
-//					}
-//				}, false);
-//				
-//				
-//			}, false);
 			mui.plusReady(function() {
 				var wv = plus.webview.currentWebview();
 				// 关闭侧滑返回功能
@@ -279,21 +243,18 @@
 					plus.push.addEventListener( "click", function ( msg ) {
 						getNoReadCnt();
 						//清空app角标
-						try{
-							 var context = plus.android.runtimeMainActivity();
-							 var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
-							 ShortcutBadger.removeCount(context);
-						}
-						catch(err){
-							console.log('类加载出错：'+err)
-						}
+							plus.clearIcon.clearIco(function( result ) {
+								console.log("result>>>>>>"+result[0]);
+							},function(result){
+								console.log('未知错误：'+result);
+							});
 	//					console.log('msg:'+JSON.stringify(msg))
-						console.log('appname:'+msg.title)
-						console.log('title:'+msg.content)
-						console.log('body:'+JSON.stringify(msg.payload))
-						console.log('body.title:'+JSON.parse(msg.payload).title)
-						console.log('body.content:'+JSON.parse(msg.payload).content)
-						console.log('body.payload:'+JSON.parse(msg.payload).payload)
+//						console.log('appname:'+msg.title)
+//						console.log('title:'+msg.content)
+//						console.log('body:'+JSON.stringify(msg.payload))
+//						console.log('body.title:'+JSON.parse(msg.payload).title)
+//						console.log('body.content:'+JSON.parse(msg.payload).content)
+//						console.log('body.payload:'+JSON.parse(msg.payload).payload)
 					} ,false); 
 					
 					var isFirst = store.get(window.storageKeyName.ISFIRST);
@@ -620,26 +581,21 @@
 			
 			
 			if(mui.os.android) {
-					//监听收到通知后，没通过标题栏而是点击app图标进入app的事件，官方用语叫：应用切换到前台运行事件 
-					document.addEventListener("plusready", onPlusReady, false);
+				//监听收到通知后，没通过标题栏而是点击app图标进入app的事件，官方用语叫：应用切换到前台运行事件 
+				document.addEventListener("plusready", onPlusReady, false);
 
-					function onPlusReady() {
-						document.addEventListener("resume", onAppReume, false);
-					}
-
-					function onAppReume() {
-						console.log("清空安卓app角标");
-						//清空app角标
-						try {
-							var context = plus.android.runtimeMainActivity();
-							var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
-							ShortcutBadger.removeCount(context);
-						} catch(err) {
-							console.log('类加载出错：' + err)
-						}
-
-					}
+				function onPlusReady() {
+					document.addEventListener("resume", onAppReume, false);
 				}
+
+				function onAppReume() {
+					plus.clearIcon.clearIco(function( result ) {
+						console.log("result>>>>>>"+result[0]);
+					},function(result){
+						console.log('未知错误：'+result);
+					});
+				}
+			}
 			
 		</script>
 	</body>
