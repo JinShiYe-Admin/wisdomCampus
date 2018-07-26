@@ -85,7 +85,8 @@ var storageKeyName = (function(mod) {
 	mod.SIGNKEY = 'jsy309'; //签名密钥
 	
 	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
-
+	mod.ICONNUM = 0; //角标数量
+	
 	/**
 	 * 在本地存永久数据
 	 * @param {Object} key

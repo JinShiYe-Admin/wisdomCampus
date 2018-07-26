@@ -221,9 +221,11 @@
 					plus.push.addEventListener( "receive", function( msg ) {
 							//放置安卓角标
 							try{
+								var iconNum = store.get(window.storageKeyName.ICONNUM)*1+1;
 								var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
 								var context = plus.android.runtimeMainActivity();
-								ShortcutBadger.applyCount(context, 1);
+								ShortcutBadger.applyCount(context, iconNum);
+								store.set(window.storageKeyName.ICONNUM, iconNum);
 							}
 							catch(err){
 								console.log('类加载出错：'+err)
@@ -232,8 +234,11 @@
 							//设置通知栏消息
 						    var options = {cover:false,sound:'system'};
 						    try{
-						    	JSON.parse(msg.content);
-						    	plus.push.createMessage(msg.title, JSON.parse(msg.content).body, options );
+								if(JSON.parse(msg.content).body==undefined){
+									plus.push.createMessage(msg.content, msg.content, options );
+								}else{
+									plus.push.createMessage(msg.title, JSON.parse(msg.content).body, options );
+								}
 						    }
 						    catch(err){
 						    	plus.push.createMessage(msg.content, msg.content, options );
@@ -245,6 +250,8 @@
 						//清空app角标
 							plus.clearIcon.clearIco(function( result ) {
 								console.log("result>>>>>>"+result[0]);
+								store.set(window.storageKeyName.ICONNUM, 0);
+								plus.push.clear();
 							},function(result){
 								console.log('未知错误：'+result);
 							});
@@ -591,6 +598,8 @@
 				function onAppReume() {
 					plus.clearIcon.clearIco(function( result ) {
 						console.log("result>>>>>>"+result[0]);
+						store.set(window.storageKeyName.ICONNUM, 0);
+						plus.push.clear();
 					},function(result){
 						console.log('未知错误：'+result);
 					});
