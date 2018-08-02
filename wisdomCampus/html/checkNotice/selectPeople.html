@@ -437,6 +437,7 @@
 										for(var b = 0; b < selectPeopleData.selectPeopleArray.length; b++) {
 											var tempSelectPeople = selectPeopleData.selectPeopleArray[b];
 											if(tempSelectPeople.utid == tempModel.utid) {
+												tempSelectPeople = $.extend(tempSelectPeople, tempModel);
 												tempA++;
 											}
 										}

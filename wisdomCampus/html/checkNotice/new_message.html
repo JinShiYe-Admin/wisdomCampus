@@ -265,6 +265,7 @@
 						for(var i = 0; i < message.selectPeople.length; i++) {
 							var tempModel = {
 								utid: message.selectPeople[i].utid,
+								imgurl: message.selectPeople[i].imgurl,
 								utname: message.selectPeople[i].utname
 							};
 							tempPeople.push(tempModel);
@@ -382,7 +383,9 @@
 					if(model.imgurl == null) {
 						pics.push('""');
 					} else {
-						pics.push('"' + model.imgurl + '"');
+						var tempUrl = model.imgurl;
+						tempUrl = tempUrl.replace(/\\/g, '/');
+						pics.push('"' + tempUrl + '"');
 					}
 				}
 				if(ids.length == 0) {
