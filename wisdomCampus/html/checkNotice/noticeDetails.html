@@ -111,6 +111,9 @@
 				height: 40px;
 				border-radius: 50%;
 			}
+			.mui-table-view-cell:after {
+			    height: 2px;
+			}
 		</style>
 	</head>
 
@@ -120,12 +123,6 @@
 			<h1 class="mui-title" style="color: white;">通知详情</h1>
 			<a v-if="flag==1&&status == 1" @click="revoke()" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 10px;">撤回</a>
 		</header>
-		<!--<nav class="mui-bar mui-bar-tab" id="noticeReplyContent">
-			<div style="padding-top: 5px;">
-				<input v-model="content" type="text" style="border: 0px;margin-bottom: 0px;margin-left: 5px;width: 70%;font-size: 12px;" placeholder="请输入要回复的内容" />
-				<button v-on:click.stop="replyContent()" type="button" class="mui-btn-primary down-btn" style="width: 20%;margin-top: 5px;">确定</button>
-			</div>
-		</nav>-->
 		<div class="mui-content" id="noticeDetailData" v-show="flag>0" style="background-color: white;">
 			<template>
 				<p align="center" class="titleCSS" style="font-size: 18px;color: #000;margin-top: 10px;">{{detailModel.NoticeTitle}}</p>
@@ -158,7 +155,6 @@
 								<div class="" v-else-if="replyModel.IsRead==1">
 									<p style="color: #666;font-size: 12px; white-space:pre-wrap;">【已读】</p>
 								</div>
-								</span>
 							</a>
 						</div>
 					</li>
