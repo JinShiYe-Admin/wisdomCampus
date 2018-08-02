@@ -280,11 +280,13 @@
 					PictureTuke: false //不显示从相册选图
 				});
 			mui.plusReady(function() {
-				plus.permissionChecker.isLocationEnabled(function( result ) {
-					console.log("result>>>>>>"+result[0]);
-				},function(result){
-					console.log('未知错误：'+result);
-				});
+				if(mui.os.android) {
+					plus.permissionChecker.isLocationEnabled(function( result ) {
+						console.log("result>>>>>>"+result[0]);
+					},function(result){
+						console.log('未知错误：'+result);
+					});
+				}
 				personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(personal));
 				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
