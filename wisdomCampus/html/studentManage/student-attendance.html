@@ -124,10 +124,12 @@
 			});
 			//54.科教频道_个人收藏列表
 			function getTnewsCollList(index) {
+				console.log('index:'+index);
 				var tempArray = [];
 				for(var i = 0; i < 10; i++) {
+					var tempValue = (index - 1) * 10 + i;
 					var tempModel = {
-						titleName: 'index:' + (index - 1) * 10 + i
+						titleName: 'index:' + tempValue
 					}
 					tempArray.push(tempModel);
 				}

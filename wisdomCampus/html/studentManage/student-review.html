@@ -126,8 +126,9 @@
 			function getTnewsCollList(index) {
 				var tempArray = [];
 				for(var i = 0; i < 10; i++) {
+					var tempValue = (index - 1) * 10 + i;
 					var tempModel = {
-						titleName: 'index:' + (index - 1) * 10 + i
+						titleName: 'index:' + tempValue
 					}
 					tempArray.push(tempModel);
 				}
