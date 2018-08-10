@@ -88,8 +88,8 @@ var getHomeCircle = function(id) {
 		grideName: '事务审批',
 		grideShow: 1
 	}, {
-		grideName: '班级管理',
-		grideShow: 0
+		grideName: '学生管理',
+		grideShow: 1
 	}, {
 		grideName: '课堂管理',
 		grideShow: 0

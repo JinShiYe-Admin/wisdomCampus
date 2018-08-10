@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="attendanceListArray">
+			<a @click="muiback" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">学生考勤</h1>
+			<!--<a @click="revoke()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>-->
+		</header>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script type="text/javascript" src="../../js/publicProtocol.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/lib/jquery.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var attendanceListArray = new Vue({
+				el: "#attendanceListArray",
+				data: {
+					
+				},
+				methods: {
+					muiback: function() {
+						console.log('clickHomeworkModel:');
+						mui.back();
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

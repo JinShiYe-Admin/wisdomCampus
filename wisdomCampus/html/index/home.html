@@ -203,93 +203,122 @@
 			mui.init({
 				statusBarBackground: '#63BBFF'
 			});
-			
+
 			mui.plusReady(function() {
 				var wv = plus.webview.currentWebview();
 				// 关闭侧滑返回功能
 				wv.setStyle({
 					'popGesture': 'none'
 				});
-				
-				if(mui.os.android){
+
+				if(mui.os.android) {
 					var info = plus.push.getClientInfo();
 					console.log(JSON.stringify(info))
 					//当设备收到服务器发送的透传消息时，不会触发页面监听的receive事件。当用户点击消息中心消息时会触发监听页面的“click”事件。如果用户点击多个消息时，会多次触发“click”事件。
 					//不符指定合格式的透传消息不会进入系统的消息中心，会在监听“receive”事件的页面触发事件回调。
 					//{title:"通知标题",content:"通知内容",payload:"通知去干嘛这里可以自定义"} 标准格式
 					//{"title":"接收到一条待办","body":"{\"title\":\"通知标题\",\"content\":\"通知内容\",\"payload\":\"通知去干嘛这里可以自定义\"}"}  由于使用标准格式，不会触发receice监听，所以封装了下
-					plus.push.addEventListener( "receive", function( msg ) {
-							//放置安卓角标
-							try{
-								var iconNum = store.get(window.storageKeyName.ICONNUM)*1+1;
-								var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
-								var context = plus.android.runtimeMainActivity();
-								ShortcutBadger.applyCount(context, iconNum);
-								store.set(window.storageKeyName.ICONNUM, iconNum);
+					plus.push.addEventListener("receive", function(msg) {
+						//放置安卓角标
+						try {
+							var iconNum = store.get(window.storageKeyName.ICONNUM) * 1 + 1;
+							var ShortcutBadger = plus.android.importClass("me.leolin.shortcutbadger.ShortcutBadger");
+							var context = plus.android.runtimeMainActivity();
+							ShortcutBadger.applyCount(context, iconNum);
+							store.set(window.storageKeyName.ICONNUM, iconNum);
+						} catch(err) {
+							console.log('类加载出错：' + err)
+						}
+						console.log('msg.title========' + JSON.stringify(msg))
+						//设置通知栏消息
+						var options = {
+							cover: false,
+							sound: 'system'
+						};
+						try {
+							if(JSON.parse(msg.content).body == undefined) {
+								plus.push.createMessage(msg.content, msg.content, options);
+							} else {
+								plus.push.createMessage(msg.title, JSON.parse(msg.content).body, options);
 							}
-							catch(err){
-								console.log('类加载出错：'+err)
-							}
-							console.log('msg.title========'+JSON.stringify(msg))
-							//设置通知栏消息
-						    var options = {cover:false,sound:'system'};
-						    try{
-								if(JSON.parse(msg.content).body==undefined){
-									plus.push.createMessage(msg.content, msg.content, options );
-								}else{
-									plus.push.createMessage(msg.title, JSON.parse(msg.content).body, options );
-								}
-						    }
-						    catch(err){
-						    	plus.push.createMessage(msg.content, msg.content, options );
-						    }
-	
-				    } ,false);
-					plus.push.addEventListener( "click", function ( msg ) {
+						} catch(err) {
+							plus.push.createMessage(msg.content, msg.content, options);
+						}
+
+					}, false);
+					plus.push.addEventListener("click", function(msg) {
 						getNoReadCnt();
 						//清空app角标
-							plus.clearIcon.clearIco(function( result ) {
-								console.log("result>>>>>>"+result[0]);
-								store.set(window.storageKeyName.ICONNUM, 0);
-								plus.push.clear();
-							},function(result){
-								console.log('未知错误：'+result);
-							});
-	//					console.log('msg:'+JSON.stringify(msg))
-//						console.log('appname:'+msg.title)
-//						console.log('title:'+msg.content)
-//						console.log('body:'+JSON.stringify(msg.payload))
-//						console.log('body.title:'+JSON.parse(msg.payload).title)
-//						console.log('body.content:'+JSON.parse(msg.payload).content)
-//						console.log('body.payload:'+JSON.parse(msg.payload).payload)
-					} ,false); 
-					
+						plus.clearIcon.clearIco(function(result) {
+							console.log("result>>>>>>" + result[0]);
+							store.set(window.storageKeyName.ICONNUM, 0);
+							plus.push.clear();
+						}, function(result) {
+							console.log('未知错误：' + result);
+						});
+						//					console.log('msg:'+JSON.stringify(msg))
+						//						console.log('appname:'+msg.title)
+						//						console.log('title:'+msg.content)
+						//						console.log('body:'+JSON.stringify(msg.payload))
+						//						console.log('body.title:'+JSON.parse(msg.payload).title)
+						//						console.log('body.content:'+JSON.parse(msg.payload).content)
+						//						console.log('body.payload:'+JSON.parse(msg.payload).payload)
+					}, false);
+
 					var isFirst = store.get(window.storageKeyName.ISFIRST);
-					console.log('isFirst=========================='+isFirst)
-					if(isFirst==null){
+					console.log('isFirst==========================' + isFirst)
+					if(isFirst == null) {
 						//检测通知权限是否开启
-						plus.pushPermission.isNotificationEnabled(function( result ) {
-							console.log("result>>>>>>"+result[0]);
-							var obj=JSON.parse(result[0]);
-							if(obj.code==0){
-								if(!obj.msg){//通知权限没开启，提示打开
+						plus.pushPermission.isNotificationEnabled(function(result) {
+							console.log("result>>>>>>" + result[0]);
+							var obj = JSON.parse(result[0]);
+							if(obj.code == 0) {
+								if(!obj.msg) { //通知权限没开启，提示打开
 									store.set(window.storageKeyName.ISFIRST, 'noFirst');
 									var btnArray = ['以后再说', '立即开启'];
 									mui.confirm('开启后可第一时间收到消息通知', '校讯通', btnArray, function(e) {
-										if (e.index == 1) {//立即开启
+										if(e.index == 1) { //立即开启
 											plus.pushPermission.gotoSetting();
 										}
 									})
 								}
 							}
-						},function(result){
-							console.log('未知错误：'+result);
+						}, function(result) {
+							console.log('未知错误：' + result);
 						});
 					}
+				} else {
+					document.addEventListener("plusready", function() {
+						message = document.getElementById("message");
+						// 监听点击消息事件
+						plus.push.addEventListener("click", function(msg) {
+							//获取未读数
+							getNoReadCnt();
+							plus.device.vibrate(500);
+							// 判断是从本地创建还是离线推送的消息 
+							switch(msg.payload) {
+								case "LocalMSG":
+									//						outSet("点击本地创建消息启动：");
+									break;
+								default:
+									//						outSet("点击离线推送消息启动：");
+									break;
+							}
+						}, false);
+						// 监听在线消息事件
+						plus.push.addEventListener("receive", function(msg) {
+							//获取未读数
+							getNoReadCnt();
+							plus.device.vibrate(500);
+							if(msg.aps) { // Apple APNS message
+								//					outSet("接收到在线APNS消息：");
+							} else {
+								//					outSet("接收到在线透传消息：");
+							}
+						}, false);
+					}, false);
 				}
-				
-				
-				
+
 				//安卓的连续点击两次退出程序
 				var backButtonPress = 0;
 				//重写返回键
@@ -405,6 +434,8 @@
 				} else {
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
+					}else if(id == 3) {
+						utils.mOpenWithData("../../html/studentManage/student-index.html", id);
 					} else {
 						mui.toast("此功能暂未开放");
 					}
@@ -585,8 +616,7 @@
 					}
 				});
 			}
-			
-			
+
 			if(mui.os.android) {
 				//监听收到通知后，没通过标题栏而是点击app图标进入app的事件，官方用语叫：应用切换到前台运行事件 
 				document.addEventListener("plusready", onPlusReady, false);
@@ -596,16 +626,15 @@
 				}
 
 				function onAppReume() {
-					plus.clearIcon.clearIco(function( result ) {
-						console.log("result>>>>>>"+result[0]);
+					plus.clearIcon.clearIco(function(result) {
+						console.log("result>>>>>>" + result[0]);
 						store.set(window.storageKeyName.ICONNUM, 0);
 						plus.push.clear();
-					},function(result){
-						console.log('未知错误：'+result);
+					}, function(result) {
+						console.log('未知错误：' + result);
 					});
 				}
 			}
-			
 		</script>
 	</body>
 
