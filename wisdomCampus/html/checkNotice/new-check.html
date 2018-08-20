@@ -116,7 +116,8 @@
 						<div class="weui-cell__bd">
 							<ol>
 								<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
-									<a><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
+									<a v-if='item.flag==1'></a>
+									<a v-else=''><span  @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
 								</li>
 
 							</ol>
@@ -469,8 +470,12 @@
 
 				}
 				getWorkFlowListByIdPro(tempData, function function_name(data) {
-					console.log(JSON.stringify(data))
+					console.log('getWorkFlowListById:'+JSON.stringify(data));
 					if(data.RspCode == 0) {
+						for (var i = 0; i < data.RspData.Data.length; i++) {
+							var tempModel = data.RspData.Data[i];
+							tempModel.flag = 1;
+						}
 						message.flowMan_arr = message.flowMan_arr.concat(data.RspData.Data);
 
 					} else {

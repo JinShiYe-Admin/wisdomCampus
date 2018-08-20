@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../../css/mui.min.css" rel="stylesheet" />
+    <style>
+        .mui-table-view-cell>a:not(.mui-btn) {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            margin: -11px -15px;
+            padding: inherit;
+            white-space: normal;
+            text-overflow: ellipsis;
+            color: inherit;
+        }
+		.pClass{
+			font-size: 13px;
+			color: blue;
+		}
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
+        <a @click="muiback" class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
+        <h1 class="mui-title" style="color: white;">考勤详情</h1>
+        <a class="mui-pull-right" style="color: white;font-size: 17px;margin-top: 10px;">修改</a>
+    </header>
+    <div class="mui-content" id="attendanceDetialData">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" v-for='(attendanceModel,index) in actionDetialArray'>
+                <a v-if='index==4'>
+                    <div class="mui-media-body">
+                        {{attendanceModel.attendanceDetialTitle}}
+                    </div>
+                    <p style="margin-top: 5px;padding: 5px 5px 5px;">{{attendanceModel.attendanceDetialValue}}</p>
+                </a>
+                <a v-else=''>
+                    <p class="mui-pull-right">{{attendanceModel.attendanceDetialValue}}</p>
+                    <div class="mui-media-body">
+                        {{attendanceModel.attendanceDetialTitle}}
+                    </div>
+                </a>
+                <a v-if='index==2||index==4||index==6' style="background: gray;height: 10px;margin-top: 13px;"></a>
+            </li>
+        </ul>
+    </div>
+    <script src="../../js/mui.js"></script>
+    <script src="../../js/vue.min.js"></script>
+    <script src='../../js/lib/vconsole/vconsole.min.js'></script>
+    <script src="../../js/publicProtocol.js"></script>
+    <script src="../../js/utils/store.js"></script>
+    <script src="../../js/utils/storageKeyName.js"></script>
+    <script src="../../js/utils/events.js"></script>
+    <script type="text/javascript" src="../../js/publicProtocol.js"></script>
+    <script src="../../js/utils/utils.js"></script>
+    <script src="../../js/lib/jquery.js"></script>
+    <script type="text/javascript">
+        mui.init()
+        var attendanceDetialData = new Vue({
+            el: "#attendanceDetialData",
+            data: {
+                actionDetialArray: [{
+                    attendanceDetialTitle: '年级',
+                    attendanceDetialValue: '五年级'
+                }, {
+                    attendanceDetialTitle: '班级',
+                    attendanceDetialValue: '1801'
+                }, {
+                    attendanceDetialTitle: '姓名',
+                    attendanceDetialValue: '王大陆'
+                }, {
+                    attendanceDetialTitle: '考勤细项',
+                    attendanceDetialValue: '请假'
+                }, {
+                    attendanceDetialTitle: '考勤说明',
+                    attendanceDetialValue: '上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲'
+                }, {
+                    attendanceDetialTitle: '考勤日期',
+                    attendanceDetialValue: '2018-6-20'
+                }, {
+                    attendanceDetialTitle: '节次',
+                    attendanceDetialValue: '全天'
+                }, {
+                    attendanceDetialTitle: '出入权限',
+                    attendanceDetialValue: '可离校'
+                }, {
+                    attendanceDetialTitle: '离校时间',
+                    attendanceDetialValue: '2018-6-20 8：00'
+                }, {
+                    attendanceDetialTitle: '回校时间',
+                    attendanceDetialValue: '2018-6-20 18：00'
+                }, {
+                    attendanceDetialTitle: '记录人',
+                    attendanceDetialValue: '宋老师'
+                }, {
+                    attendanceDetialTitle: '记录时间',
+                    attendanceDetialValue: '2018-6-20'
+                }]
+            },
+            methods: {
+                clickPop: function (model) {
+                    console.log('clickPop:' + JSON.stringify(model));
+                    mui('#topPopover').popover('hide');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

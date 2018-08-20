@@ -13,7 +13,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="attendanceHead">
 			<a @click="muiback" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">学生考勤</h1>
-			<!--<a @click="revoke()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>-->
+			<a href="#topPopover" class="mui-icon mui-icon-more mui-pull-right" style="color: white;font-size: 25px;"></a>
 		</header>
 		<div class="mui-content mui-fullscreen" id="attendanceArrayData" style="background: white;margin-top: 45px;z-index:0;">
 			<div class="mui-scroll-wrapper">
@@ -29,6 +29,13 @@
 					</ul>
 				</div>
 			</div>
+		</div>
+		<div id="topPopover" class="mui-popover" style="width: 100px;">
+			<ul class="mui-table-view">
+				<li @click='clickPop(popModel)' class="mui-table-view-cell" v-for='popModel in popArray'>
+					<a href="#">{{popModel.popName}}</a>
+				</li>
+			</ul>
 		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/vue.min.js"></script>
@@ -69,9 +76,26 @@
 					attendanceArray: []
 				},
 				methods: {
-					muiback: function() {
-						console.log('clickHomeworkModel:');
-						mui.back();
+					clickAttendance: function() {
+						utils.mOpenWithData("../../html/studentManage/student-attendanceDetail.html", {});
+					}
+				}
+			});
+			var topPopover = new Vue({
+				el: "#topPopover",
+				data: {
+					popArray: [{
+						popName: '添加',
+						popId: 0
+					},{
+						popName: '统计报表',
+						popId: 1
+					}]
+				},
+				methods: {
+					clickPop: function (model) {
+						console.log('clickPop:'+JSON.stringify(model));
+						mui('#topPopover').popover('hide');
 					}
 				}
 			});
