@@ -421,7 +421,12 @@ var getSendNoticePro = function(data0, callback) {
 var getReceiveNoticePro = function(data0, callback) {
 	var tempAttendUrl = window.storageKeyName.INTERFACEKONG + 'notice/';
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl + 'getReceiveNotice', data0, callback);
+	if (data0.status==0&&data0.progress==0) {
+		//22.获取全部通知公告列表
+		xhrPost(tempAttendUrl + 'getAllNotice', data0, callback);
+	} else{
+		xhrPost(tempAttendUrl + 'getReceiveNotice', data0, callback);
+	}
 }
 
 //12.通过通知公告ID获取通知公告(我发送的)
