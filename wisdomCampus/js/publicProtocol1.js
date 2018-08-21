@@ -456,7 +456,12 @@ var getAffairApplyPro = function(data0, callback) {
 var getAffairApprovePro = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.INTERFACEKONG + 'approve/';
 	data0 = extendParameter(data0);
-	xhrPost(tempAttendUrl1 + 'getAffairApprove', data0, callback);
+	if (data0.status==0&&data0.progress==0) {
+		//21.获取全部事务及文件申请列表
+		xhrPost(tempAttendUrl1 + 'getAllAffairApply', data0, callback);
+	} else{
+		xhrPost(tempAttendUrl1 + 'getAffairApprove', data0, callback);
+	}
 }
 
 //19.通过ID获取事务及文件申请
