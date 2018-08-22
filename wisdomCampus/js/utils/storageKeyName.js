@@ -1,4 +1,4 @@
-﻿﻿ //此js用于保存本地存储时，用到的key值
+ //此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
 

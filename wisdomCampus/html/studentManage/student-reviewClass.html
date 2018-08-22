@@ -56,28 +56,36 @@
         <p class="pTitle">五年级1801班2018年春季学期学生行为量化考核</p>
         <p class="pTime">量化时间:2018-6-20至2018-6-27</p>
         <div class="mui-content-padded">
-        		<a>
-            		<p class="mui-pull-left">| 行为趋势</p>
-            		<p class="mui-pull-right">请假 ></p>
+            <a>
+                <p class="mui-pull-left">| 行为趋势</p>
+                <p class="mui-pull-right">请假 ></p>
             </a>
             <div class="chart" id="lineChart"></div>
             <h5>| 量化总评</h5>
             <!--<p class="mui-pull-right" style="margin-top: -20px;">请假 ></p>-->
-            <img class="mui-pull-right" style="margin-top: -20px;width: 35px;height: 35px;" src="../../img/firstPage/firstPage5.png"/>
-            <!--<a style="margin-top: 50px;">
-            		<p class="mui-pull-left">| 量化均分</p>
-            		<p class="mui-pull-right">请假 ></p>
-            </a>-->
+            <img class="mui-pull-right" style="margin-top: -20px;width: 35px;height: 35px;" src="../../img/firstPage/firstPage5.png"
+            />
             <div style="text-align: center;">
                 <p class="p_left">80分</p>
                 <p class="p_right">/良好</p>
             </div>
-            <h5>| 加减分行为</h5>
+            <a style="margin-top: 50px;">
+                <div style="margin-left: 20%;display: inline;margin-top: 20px;">
+                    <p class="p_right">最高:</p>
+                    <p class="p_left">/112分</p>
+                </div>
+                <div style="margin-left: 25%;display: inline;">
+                    <p class="p_right">最低:</p>
+                    <p class="p_left">/30分</p>
+                </div>
+            </a>
+            <h5>| 等级信息</h5>
+            <div class="chart" id="pieChart"></div>
             <ul class="mui-table-view" style="">
                 <li class="mui-table-view-cell">
                     <a>
                         <p class="mui-pull-left">上课打架</p>
-						<p class="mui-pull-right">-8分</p>
+                        <p class="mui-pull-right">-8分</p>
                         <p style="margin-left: 40%;">4次</p>
                     </a>
                 </li>
@@ -99,7 +107,31 @@
     <script type="text/javascript">
         mui.init()
         var getOption = function (chartType) {
-            var chartOption = chartType = {
+            var chartOption = chartType == 'pie' ? {
+                calculable: false,
+                series: [{
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '65%',
+                    center: ['50%', '50%'],
+                    data: [{
+                        value: 335,
+                        name: '直接访问'
+                    }, {
+                        value: 310,
+                        name: '邮件营销'
+                    }, {
+                        value: 234,
+                        name: '联盟广告'
+                    }, {
+                        value: 135,
+                        name: '视频广告'
+                    }, {
+                        value: 1548,
+                        name: '搜索引擎'
+                    }]
+                }]
+            } : {
                 grid: {
                     x: 35, //到左侧的距离
                     x2: 10, //到右侧的距离
@@ -165,6 +197,8 @@
         var lineChart = echarts.init(byId('lineChart'));
         // 使用刚指定的配置项和数据显示图表。
         lineChart.setOption(getOption('line'));
+		var pieChart = echarts.init(byId('pieChart'));
+		pieChart.setOption(getOption('pie'));
     </script>
 </body>
 
