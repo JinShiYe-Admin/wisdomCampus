@@ -113,11 +113,15 @@
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/mui.js"></script>
-		<script src="../../js/echarts-all.js"></script>
+		<script src="../../js/echarts.common.min.js"></script>
 		<script type="text/javascript">
 			mui.init()
 			// 指定图表的配置项和数据
 			var pieoption = {
+				tooltip: {
+			        trigger: 'item',
+			        formatter: "{d}%"
+			    },
 				legend: {
 					orient: 'vertical',
 					x: 'left',
@@ -127,23 +131,19 @@
 					name: '访问来源',
 					type: 'pie',
 					//饼状图
-					// radius: ['50%', '70%'],
+					radius: '100%',
+					center: ['60%', '50%'],
 					avoidLabelOverlap: false,
 					//标签
 					label: {
-						normal: {
-							show: false,
-							position: 'inside',
-							formatter: '{d}%', //模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
-
-							textStyle: {
-								align: 'center',
-								baseline: 'middle',
-								fontFamily: '微软雅黑',
-								fontSize: 15,
-								fontWeight: 'bolder'
-							}
-						},
+						 normal: {
+						 		position:'inner',
+			                    formatter: '{d}%',
+			                    backgroundColor: 'transparent',
+			                    borderColor: 'transparent',
+//			                    borderWidth: 1,
+//			                    borderRadius: 4
+			                }
 					},
 					data: [{
 							value: 335,
