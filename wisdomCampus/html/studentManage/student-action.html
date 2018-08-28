@@ -73,15 +73,26 @@
 		<script src="../../js/classRoom/mui.poppicker.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
-		<script src="../../js/publicProtocol.js"></script>
-		<script src="../../js/utils/store.js"></script>
-		<script src="../../js/utils/storageKeyName.js"></script>
-		<script src="../../js/utils/events.js"></script>
-		<script type="text/javascript" src="../../js/publicProtocol.js"></script>
-		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		
+		<!--加密-->
+		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src='../../js/lib/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/utils/storageutil.js"></script>
+		<script src='../../js/utils/events.js'></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script type="text/javascript">
 			var $=mui.init()
 			var pageIndex = 1; //请求数据页面
@@ -89,6 +100,9 @@
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
 				getTnewsCollList(pageIndex);
+				studentMP.getStudentManagePermission(1,1,1,function(array){
+					console.log('array:'+JSON.stringify(array));
+				});
 			});
 			var actionHead = new Vue({
 				el: "#actionHead",
