@@ -580,3 +580,54 @@ var getAttendTypeForSelPro = function(data0, callback) {
 	data0 = extendParameter(data0);
 	xhrPost(tempAttendUrl1 + 'getAttendTypeForSel', data0, callback);
 }
+
+//学生管理----考勤
+
+//合并参数
+var extendParameter1 = function(data0) {
+	var personal = store.get(window.storageKeyName.PERSONALINFO);
+	var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+	var tempData = {
+		uuid: publicPar.uuid,
+		utid: personal.utid,
+		utname: personal.utname,
+		schid: personal.schid,
+		token: personal.utoken
+	}
+	return $.extend(data0, tempData);
+}
+
+//1.学生考勤列表首页
+var getAttendanceIndex = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'attendanceIndex', data0, callback);
+}
+
+//2.考勤详情
+var getAttendanceDetail = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'detail', data0, callback);
+}
+
+//3.保存考勤信息
+var getSaveAttendance = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'saveAttendance', data0, callback);
+}
+
+//4.考勤统计
+var getAttendanceStatistics = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'statistics', data0, callback);
+}
+
+//5.删除考勤信息
+var getattendanceDelete = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}

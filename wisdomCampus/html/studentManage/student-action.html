@@ -10,22 +10,26 @@
 		<link href="../../css/classRoom/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/classRoom/mui.poppicker.css" rel="stylesheet" />
 		<style>
-			body{
+			body {
 				background: #fff;
 			}
-			.mui-segmented-control{
+			
+			.mui-segmented-control {
 				border: 0px;
 				background: #F0F0F0;
 			}
-			.mui-segmented-control .mui-control-item{
+			
+			.mui-segmented-control .mui-control-item {
 				color: #0D0D0D;
 				border: 0px;
-			}			
-			.mui-segmented-control .mui-control-item.mui-active {
-			    color: #0D0D0D;
-			    background-color: transparent;
 			}
-			.mui-segmented-control .mui-control-item span{
+			
+			.mui-segmented-control .mui-control-item.mui-active {
+				color: #0D0D0D;
+				background-color: transparent;
+			}
+			
+			.mui-segmented-control .mui-control-item span {
 				font-size: 13px;
 				padding: 0 0 0 5px;
 			}
@@ -39,7 +43,7 @@
 			<a href="#topPopover" class="mui-icon mui-icon-more mui-pull-right" style="color: white;font-size: 25px;"></a>
 		</header>
 		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 8;">
-			<div class="mui-segmented-control" >
+			<div class="mui-segmented-control">
 				<a class="mui-control-item" href="javaScript:void(0)" @click="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" href="javaScript:void(0)" @click="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" href="javaScript:void(0)" @click="selectStudent()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -76,13 +80,13 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
-		
+
 		<!--加密-->
 		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-		
+
 		<script src='../../js/lib/crypto-js/require.js'></script>
 		<script src='../../js/utils/signHmacSHA1.js'></script>
 		<script src="../../js/publicProtocol.js"></script>
@@ -94,14 +98,26 @@
 		<script src='../../js/utils/events.js'></script>
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script type="text/javascript">
-			var $=mui.init()
+			var $ = mui.init()
 			var pageIndex = 1; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			mui.plusReady(function(){
+			mui.plusReady(function() {
 				getTnewsCollList(pageIndex);
-				studentMP.getStudentManagePermission(1,1,1,function(array){
-					console.log('array:'+JSON.stringify(array));
+				//				studentMP.getStudentManagePermission(1, 1, 1, function(array) {
+				//					console.log('array:' + JSON.stringify(array));
+				//				});
+				//2.考勤详情
+				var tempData = {
+					id: 50 //通知ID
+				}
+				getAttendanceDetail(tempData, function function_name(data) {
+					console.log('data:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+
+					} else {
+						mui.toast(data.RspTxt);
+					}
 				});
 			});
 			var actionHead = new Vue({
@@ -134,68 +150,139 @@
 					popArray: [{
 						popName: '添加',
 						popId: 0
-					},{
+					}, {
 						popName: '统计报表',
 						popId: 1
 					}]
 				},
 				methods: {
-					clickPop: function (model) {
-						console.log('clickPop:'+JSON.stringify(model));
+					clickPop: function(model) {
+						console.log('clickPop:' + JSON.stringify(model));
 						mui('#topPopover').popover('hide');
 					}
 				}
 			});
-			
-			var selectTitle =new Vue({
-				el:"#selectTitle",
-				data:{
-					grade:'全部年级',
-					classes:'全部班级',
-					student:'全部学生',
-					th:'谈话状态',
-					list:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级",children: [{value: "100",text: "全部学生"}]}]},
-						   {value: '2',text: '初中一年级',children: [{value: "10",text: "10111班",children: [{value: "101",text: "11张三"},{value: "102",text: "11李四"}]},{value: "20",text: "二班",children: [{value: "201",text: "12李四"},{value: "202",text: "11王五"}]}]},
-						   {value: '3',text: '二年级',children: [{value: "10",text: "一班",children: [{value: "101",text: "21张三"},{value: "102",text: "21李四"}]},{value: "20",text: "二班",children: [{value: "201",text: "22李四"},{value: "202",text: "22王五"}]}]}
-						 ],
-					thList:[
-							 {value: '1',text: '全部状态'},
-							 {value: '2',text: '已谈话'},
-							 {value: '3',text: '未谈话'}
-						 ]
+
+			var selectTitle = new Vue({
+				el: "#selectTitle",
+				data: {
+					grade: '全部年级',
+					classes: '全部班级',
+					student: '全部学生',
+					th: '谈话状态',
+					list: [{
+							value: '1',
+							text: '全部年级',
+							children: [{
+								value: "10",
+								text: "全部班级",
+								children: [{
+									value: "100",
+									text: "全部学生"
+								}]
+							}]
+						},
+						{
+							value: '2',
+							text: '初中一年级',
+							children: [{
+								value: "10",
+								text: "10111班",
+								children: [{
+									value: "101",
+									text: "11张三"
+								}, {
+									value: "102",
+									text: "11李四"
+								}]
+							}, {
+								value: "20",
+								text: "二班",
+								children: [{
+									value: "201",
+									text: "12李四"
+								}, {
+									value: "202",
+									text: "11王五"
+								}]
+							}]
+						},
+						{
+							value: '3',
+							text: '二年级',
+							children: [{
+								value: "10",
+								text: "一班",
+								children: [{
+									value: "101",
+									text: "21张三"
+								}, {
+									value: "102",
+									text: "21李四"
+								}]
+							}, {
+								value: "20",
+								text: "二班",
+								children: [{
+									value: "201",
+									text: "22李四"
+								}, {
+									value: "202",
+									text: "22王五"
+								}]
+							}]
+						}
+					],
+					thList: [{
+							value: '1',
+							text: '全部状态'
+						},
+						{
+							value: '2',
+							text: '已谈话'
+						},
+						{
+							value: '3',
+							text: '未谈话'
+						}
+					]
 				},
-				methods:{
-					selectGrade:function(){
-						var userPicker = new $.PopPicker({layer: 3});
+				methods: {
+					selectGrade: function() {
+						var userPicker = new $.PopPicker({
+							layer: 3
+						});
 						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
-							selectTitle.grade=_getParam(items[0], 'text');
-							selectTitle.classes=_getParam(items[1], 'text');
-							selectTitle.student=_getParam(items[2], 'text');
+							selectTitle.grade = _getParam(items[0], 'text');
+							selectTitle.classes = _getParam(items[1], 'text');
+							selectTitle.student = _getParam(items[2], 'text');
 							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text') + " " + _getParam(items[2], 'text'));
 						});
 					},
-					selectClass:function(){
+					selectClass: function() {
 						this.$options.methods.selectGrade();
 					},
-					selectStudent:function(){
+					selectStudent: function() {
 						this.$options.methods.selectGrade();
 					},
-					selectTh:function(){
-						var obj=this;
-						var userPicker = new $.PopPicker({layer: 1});
+					selectTh: function() {
+						var obj = this;
+						var userPicker = new $.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(this.thList);
 						userPicker.show(function(items) {
-							obj.th=_getParam(items[0], 'text')
-							console.log( JSON.stringify(items[0]));
+							obj.th = _getParam(items[0], 'text')
+							console.log(JSON.stringify(items[0]));
 						});
 					}
 				}
-			}); 
+			});
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
+
 			//阻尼系数、初始化刷新加载更多
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({

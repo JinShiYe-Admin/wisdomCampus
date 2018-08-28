@@ -22,6 +22,7 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
 			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
 			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';
+			mod.STUDENTMANAGE='https://gxkf.jiaobaowang.net:9443/sm/app/';//学生管理
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
