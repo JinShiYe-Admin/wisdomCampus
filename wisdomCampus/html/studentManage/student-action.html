@@ -209,8 +209,8 @@
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
 				getTnewsCollList(pageIndex);
-				studentMP.getStudentManagePermission(1,1,1,function(){
-					
+				studentMP.getStudentManagePermission(1,1,1,function(array){
+					console.log('getStudentManagePermission:'+JSON.stringify(array));
 				});
 			});
 			//接收student-index发送的close事件
