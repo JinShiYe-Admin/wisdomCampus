@@ -108,10 +108,12 @@ var studentMP = (function(mod) {
 				text: tempModel0.grdname,
 				children: []
 			}
+			var tempClsIDs1 = []; //当前年级的全部班级id
 			//班级
 			for(var a = 0; a < tempModel0.classArray.length; a++) {
 				var tempModel1 = tempModel0.classArray[a];
 				tempClsIDs.push(tempModel1.clsid);
+				tempClsIDs1.push(tempModel1.clsid);
 				var tempCls = {
 					value: tempModel1.clsid,
 					text: tempModel1.clsname,
@@ -128,14 +130,19 @@ var studentMP = (function(mod) {
 				}
 				tempGrd.children.push(tempCls);
 			}
+			var tempGrdModel = {
+				value: tempClsIDs1.join(','),
+				text: '全部班级',
+				children: [{
+					value: 0,
+					text: '全部学生'
+				}]
+			}
+			tempGrd.children = [tempGrdModel].concat(tempGrd.children);
 			sumArray.push(tempGrd);
 		}
-		console.log('tempGrdIDs:' + JSON.stringify(tempGrdIDs));
-		console.log('tempClsIDs:' + JSON.stringify(tempClsIDs));
 		var temp0 = tempGrdIDs.join(',');
 		var temp1 = tempClsIDs.join(',');
-		console.log('temp0:' + temp0);
-		console.log('temp1:' + temp1);
 		var tempSum = {
 			value: temp0,
 			text: '全部年级',
