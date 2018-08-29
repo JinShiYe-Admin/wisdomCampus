@@ -81,7 +81,7 @@ var studentMP = (function(mod) {
 						}
 						if(studentFlag == 1 && gradeFalg == 2) {
 							getClassStu(callback);
-						} else {
+						} else if(studentFlag == 2 && gradeFalg == 2) {
 							dataFormat(callback);
 						}
 					}
