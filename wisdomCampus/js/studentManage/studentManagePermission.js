@@ -82,15 +82,74 @@ var studentMP = (function(mod) {
 						if(studentFlag == 1 && gradeFalg == 2) {
 							getClassStu(callback);
 						} else {
-							callback(grdsArray);
+							dataFormat(callback);
 						}
 					}
 					console.log('合并clss后:' + JSON.stringify(grdsArray));
+				} else {
+					dataFormat(callback);
 				}
 			} else {
 				mui.toast(data.RspTxt, "cancel");
 			}
 		});
+	}
+
+	var dataFormat = function(callback) {
+		var sumArray = [];
+		var tempGrdIDs = []; //全部年级的id
+		var tempClsIDs = []; //全部班级的id
+		//年级
+		for(var i = 0; i < grdsArray.length; i++) {
+			var tempModel0 = grdsArray[i];
+			tempGrdIDs.push(tempModel0.grdid);
+			var tempGrd = {
+				value: tempModel0.grdid,
+				text: tempModel0.grdname,
+				children: []
+			}
+			//班级
+			for(var a = 0; a < tempModel0.classArray.length; a++) {
+				var tempModel1 = tempModel0.classArray[a];
+				tempClsIDs.push(tempModel1.clsid);
+				var tempCls = {
+					value: tempModel1.clsid,
+					text: tempModel1.clsname,
+					children: []
+				}
+				//学生
+				for(var b = 0; b < tempModel1.studentArray.length; b++) {
+					var tempModel2 = tempModel1.studentArray[b];
+					var tempStu = {
+						value: tempModel2.stuid,
+						text: tempModel2.stuname
+					}
+					tempCls.children.push(tempStu);
+				}
+				tempGrd.children.push(tempCls);
+			}
+			sumArray.push(tempGrd);
+		}
+		console.log('tempGrdIDs:' + JSON.stringify(tempGrdIDs));
+		console.log('tempClsIDs:' + JSON.stringify(tempClsIDs));
+		var temp0 = tempGrdIDs.join(',');
+		var temp1 = tempClsIDs.join(',');
+		console.log('temp0:' + temp0);
+		console.log('temp1:' + temp1);
+		var tempSum = {
+			value: temp0,
+			text: '全部年级',
+			children: [{
+				value: temp1,
+				text: '全部班级',
+				children: [{
+					value: 0,
+					text: '全部学生'
+				}]
+			}]
+		}
+		sumArray = [tempSum].concat(sumArray);
+		callback(sumArray);
 	}
 
 	//给获取到的列表数据，添加年级名称、班级名称
@@ -101,12 +160,12 @@ var studentMP = (function(mod) {
 			var tempDetail = pageList[i];
 			for(var a = 0; a < GrdClsMsg.length; a++) {
 				var tempGrdClsMsg = GrdClsMsg[a];
-				if(tempDetail.gradeId == tempGrdClsMsg.grdid) {
-					tempDetail.gradeName = tempGrdClsMsg.grdname;
-					for(var b = 0; b < tempGrdClsMsg.length; b++) {
-						var tempClass = tempGrdClsMsg[b];
-						if(tempClass.clsid == tempDetail.classId) {
-							tempDetail.className = tempClass.clsname;
+				if(tempDetail.gradeId == tempGrdClsMsg.value) {
+					tempDetail.gradeName = tempGrdClsMsg.text;
+					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+						var tempClass = tempGrdClsMsg.children[b];
+						if(tempClass.clsid == tempDetail.value) {
+							tempDetail.className = tempClass.text;
 						}
 					}
 				}
@@ -153,7 +212,7 @@ var studentMP = (function(mod) {
 					if(studentFlag == 1) {
 						getClassStu(callback);
 					} else {
-						callback(grdsArray);
+						dataFormat(callback);
 					}
 				} else {
 					mui.toast(data.RspTxt, "cancel");
@@ -163,7 +222,7 @@ var studentMP = (function(mod) {
 			if(studentFlag == 1) {
 				getClassStu(callback);
 			} else {
-				callback(grdsArray);
+				dataFormat(callback);
 			}
 		}
 	}
@@ -206,7 +265,7 @@ var studentMP = (function(mod) {
 						}
 					}
 					console.log('获取到学生后合并:' + JSON.stringify(grdsArray));
-					callback(grdsArray);
+					dataFormat(callback);
 				}
 			} else {
 				mui.toast(data.RspTxt, "cancel");
