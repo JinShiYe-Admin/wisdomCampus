@@ -1,13 +1,13 @@
 //
-//document.write('<script src="../js/lib/RSA/Barrett.js"><\/script>');
-//document.write('<script src="../js/lib/RSA/BigInt.js"><\/script>');
-//document.write('<script src="../js/lib/RSA/RSA.js"><\/script>');
-//document.write('<script src="../js/utils/RSAEncrypt.js"><\/script>');
-//document.write('<script src="../js/lib/crypto-js/require.js"><\/script>');
-//document.write('<script src="../js/utils/signHmacSHA1.js"><\/script>');
-//document.write('<script src="../js/lib/jquery.js"><\/script>');
-//document.write('<script src="../js/utils/sortSign.js"><\/script>');
-//document.write('<script src="../js/utils/myStorage.js"><\/script>');
+document.write('<script src="../../js/lib/RSA/Barrett.js"><\/script>');
+document.write('<script src="../../js/lib/RSA/BigInt.js"><\/script>');
+document.write('<script src="../../js/lib/RSA/RSA.js"><\/script>');
+document.write('<script src="../../js/utils/RSAEncrypt.js"><\/script>');
+document.write('<script src="../../js/lib/crypto-js/require.js"><\/script>');
+document.write('<script src="../../js/utils/signHmacSHA1.js"><\/script>');
+document.write('<script src="../../js/lib/jquery.js"><\/script>');
+document.write('<script src="../../js/utils/sortSign.js"><\/script>');
+document.write('<script src="../../js/utils/myStorage.js"><\/script>');
 document.write('<script src="../../js/utils/storageKeyName.js"><\/script>');
 
 function generateUUID() {

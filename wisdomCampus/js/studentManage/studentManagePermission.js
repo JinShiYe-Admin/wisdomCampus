@@ -92,6 +92,21 @@ var studentMP = (function(mod) {
 			}
 		});
 	}
+	
+	//给获取到的列表数据，添加年级名称、班级名称
+	//GrdClsMsg,当前页面的年级、班级数组，上面接口获取到的数据
+	//pageList，当前页面获取到的列表
+	mod.setGrdNameClsName = function(GrdClsMsg, pageList callback) {
+		for (var i = 0; i < pageList.length; i++) {
+			var tempDetail = pageList[i];
+			for (var a = 0; a < GrdClsMsg.length; a++) {
+				var tempGrdClsMsg = GrdClsMsg[a];
+				if (tempDetail.gradeId == ) {
+					
+				}
+			}
+		}
+	}
 
 	//2.3 学校年级下班级
 	var getGradeClass = function(grdsArray, studentFlag, callback) {

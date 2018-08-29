@@ -201,6 +201,7 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script type="text/javascript">
 			var m$=mui.init()
 			var pageIndex = 1; //请求数据页面
@@ -208,6 +209,9 @@
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
 				getTnewsCollList(pageIndex);
+				studentMP.getStudentManagePermission(1,1,1,function(){
+					
+				});
 			});
 			//接收student-index发送的close事件
 			window.addEventListener('closePop', function() {
