@@ -79,7 +79,7 @@ var studentMP = (function(mod) {
 								}
 							}
 						}
-						if(studentFlag == 1&&gradeFalg==2) {
+						if(studentFlag == 1 && gradeFalg == 2) {
 							getClassStu(callback);
 						} else {
 							callback(grdsArray);
@@ -92,20 +92,27 @@ var studentMP = (function(mod) {
 			}
 		});
 	}
-	
+
 	//给获取到的列表数据，添加年级名称、班级名称
 	//GrdClsMsg,当前页面的年级、班级数组，上面接口获取到的数据
 	//pageList，当前页面获取到的列表
-	mod.setGrdNameClsName = function(GrdClsMsg, pageList callback) {
-		for (var i = 0; i < pageList.length; i++) {
+	mod.setGrdNameClsName = function(GrdClsMsg, pageList, callback) {
+		for(var i = 0; i < pageList.length; i++) {
 			var tempDetail = pageList[i];
-			for (var a = 0; a < GrdClsMsg.length; a++) {
+			for(var a = 0; a < GrdClsMsg.length; a++) {
 				var tempGrdClsMsg = GrdClsMsg[a];
-				if (tempDetail.gradeId == ) {
-					
+				if(tempDetail.gradeId == tempGrdClsMsg.grdid) {
+					tempDetail.gradeName = tempGrdClsMsg.grdname;
+					for(var b = 0; b < tempGrdClsMsg.length; b++) {
+						var tempClass = tempGrdClsMsg[b];
+						if(tempClass.clsid == tempDetail.classId) {
+							tempDetail.className = tempClass.clsname;
+						}
+					}
 				}
 			}
 		}
+		callback(pageList);
 	}
 
 	//2.3 学校年级下班级

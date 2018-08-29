@@ -7,8 +7,7 @@ document.write('<script src="../../js/lib/crypto-js/require.js"><\/script>');
 document.write('<script src="../../js/utils/signHmacSHA1.js"><\/script>');
 document.write('<script src="../../js/lib/jquery.js"><\/script>');
 document.write('<script src="../../js/utils/sortSign.js"><\/script>');
-document.write('<script src="../../js/utils/myStorage.js"><\/script>');
-document.write('<script src="../../js/utils/storageKeyName.js"><\/script>');
+
 
 function generateUUID() {
 	var d = new Date().getTime();
