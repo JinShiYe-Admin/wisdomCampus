@@ -48,11 +48,6 @@
 	</head>
 
 	<body>
-		<!--<header id="headData" class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
-			<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
-			<h1 id="title" class="mui-title" style="color: white;">{{titleName}}</h1>
-			<a class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>
-		</header>-->
 		<nav class="mui-bar mui-bar-tab">
 			<a id="defaultTab" class="mui-tab-item mui-active" href="../../html/studentManage/student-attendance.html">
 				<span class="mui-icon mui-icon-home"></span>
@@ -82,90 +77,57 @@
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/jquery.js"></script>
 		<script type="text/javascript">
-			mui.init()
-			//mui初始化
 			mui.init();
-			var subpages = ['../../html/studentManage/student-attendance.html', '../../html/studentManage/student-action.html', '../../html/studentManage/student-talkRecord.html', '../../html/studentManage/student-review.html'];
 			var subpage_style = {
 				top: '0px',
 				bottom: '51px'
 			};
 
-			var aniShow = {};
-			var headData = new Vue({
-				el: '#headData',
-				data: {
-					headFlag: 0, //0显示标题，1显示分类显示，作业报表
-					titleName: '学生考勤'
-				},
-				methods: {
-
-				}
-			});
-
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
+				var defaultUrl='../../html/studentManage/student-attendance.html';
 				var self = plus.webview.currentWebview();
-				for(var i = 0; i < 4; i++) {
-					var temp = {};
-					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-					if(i > 0) {
-						sub.hide();
-					} else {
-						temp[subpages[i]] = "true";
-						mui.extend(aniShow, temp);
-					}
-					self.append(sub);
-				}
-			});
-			//当前激活选项
-			var activeTab = subpages[0];
-			var title = document.getElementById("title");
-			//选项卡点击事件
-			mui('.mui-bar-tab').on('tap', 'a', function(e) {
-				var targetTab = this.getAttribute('href');
-				if(targetTab == activeTab) {
-					return;
-				}
+				var sub = plus.webview.create(defaultUrl, defaultUrl, subpage_style);
+				self.append(sub);
 				
-				//发送通知。隐藏学生行为页面的popwindow
-				if(targetTab!='../../html/studentManage/student-action.html'){
-					var action=plus.webview.getWebviewById(subpages[1]);
-					mui.fire(action,'closePop',{});
+				//当前激活选项
+				activeTab = defaultUrl;
+				
+				//选项卡点击事件
+				mui('.mui-bar-tab').on('tap', 'a', function(e) {
+						var targetTab = this.getAttribute('href');
+						if(targetTab == activeTab) {
+							return;
+						}else{
+							var viewIsExists=plus.webview.getWebviewById(targetTab);
+							if(viewIsExists==null||viewIsExists==''||viewIsExists==undefined){
+								var newSub = plus.webview.create(targetTab, targetTab, subpage_style);
+								newSub.hide();
+								self.append(newSub);
+							} 
+						}
+						
+						mui.fire(plus.webview.getWebviewById(activeTab), 'closePop', {});
+						
+						plus.webview.show(targetTab, "fade-in", 300);
+						//隐藏当前;
+						plus.webview.hide(activeTab);
+						//更改当前活跃的选项卡 
+						activeTab = targetTab;
+				});
+			
+				var defaultTab = document.getElementById("defaultTab");
+				//模拟首页点击
+				mui.trigger(defaultTab, 'tap');
+				
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if(defaultTab !== current) {
+					current.classList.remove('mui-active');
+					defaultTab.classList.add('mui-active');
 				}
-				//更换标题
-//				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
-//				var tempFlag = this.querySelector('.mui-tab-label').id;
-//				if(tempFlag == 'flag0') {
-//					headData.headFlag = 0;
-//					headData.titleName = '学生考勤';
-//				} else if(tempFlag == 'flag1') {
-//					headData.headFlag = 0;
-//					headData.titleName = '学生行为';
-//				} else if(tempFlag == 'flag2'){
-//					headData.headFlag = 1;
-//					headData.titleName = '学生谈话记录';
-//				} else if(tempFlag == 'flag3'){
-//					headData.headFlag = 1;
-//					headData.titleName = '学生量化考评';
-//				}
-//				console.log('tempFlag:' + tempFlag + ',headData.headFlag:' + headData.headFlag);
-				//显示目标选项卡
-				//若为iOS平台或非首次显示，则直接显示
-				if(mui.os.ios || aniShow[targetTab]) {
-					plus.webview.show(targetTab);
-				} else {
-					//否则，使用fade-in动画，且保存变量
-					var temp = {};
-					temp[targetTab] = "true";
-					mui.extend(aniShow, temp);
-					plus.webview.show(targetTab, "fade-in", 300);
-				}
-				//隐藏当前;
-				plus.webview.hide(activeTab);
-				//更改当前活跃的选项卡
-				activeTab = targetTab;
 			});
+			
 			//自定义事件，模拟点击“首页选项卡”
 			document.addEventListener('gohome', function() {
 				var defaultTab = document.getElementById("defaultTab");

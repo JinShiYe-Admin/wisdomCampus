@@ -210,9 +210,8 @@
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
-				console.log("liushuai========")
-				studentMP.getStudentManagePermission(1,1,1,function(array){
-					console.log("liushuai========"+JSON.stringify(array))
+				studentMP.getStudentManagePermission(1,1,2,function(array){
+					console.log("========"+JSON.stringify(array))
 				});
 				getAttendanceList(pageIndex);
 				
