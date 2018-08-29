@@ -202,13 +202,20 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var m$=mui.init()
 			var pageIndex = 1; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
-				getTnewsCollList(pageIndex);
+				console.log("liushuai========")
+				studentMP.getStudentManagePermission(1,1,1,function(array){
+					console.log("liushuai========"+JSON.stringify(array))
+				});
+				getAttendanceList(pageIndex);
+				
 			});
 			//接收student-index发送的close事件
 			window.addEventListener('closePop', function() {
@@ -311,7 +318,7 @@
 						pageIndex = 1;
 						flagRef = 0;
 						//54.科教频道_个人收藏列表
-						getTnewsCollList(pageIndex);
+						getAttendanceList(pageIndex);
 						setTimeout(function() {
 							//结束下拉刷新
 							self.endPullDownToRefresh();
@@ -325,7 +332,7 @@
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
-							getTnewsCollList(pageIndex);
+							getAttendanceList(pageIndex);
 							setTimeout(function() {
 								//结束下拉刷新
 								self.endPullUpToRefresh();
@@ -341,50 +348,28 @@
 					}
 				}
 			});
-			//54.科教频道_个人收藏列表
-			function getTnewsCollList(index) {
-				var tempArray = [];
-				for(var i = 0; i < 10; i++) {
-					var tempValue = (index - 1) * 10 + i;
-					var tempModel = {
-						titleName: 'index:' + tempValue
-					}
-					tempArray.push(tempModel);
-				}
-				//总页数
-				totalPageCount = 20;
-				pageIndex++;
-				if(flagRef == 0) { //刷新
-					actionArrayData.actionArray = tempArray;
-				} else { //加载更多
-					//合并数组
-					actionArrayData.actionArray = actionArrayData.actionArray.concat(tempArray);
-				}
-				//需要加密的数据
-				//					var comData = {
-				//						top: '10', //每页行数，
-				//						vvl1: index //页码,获取第几页
-				//					};
-				//					// 等待的对话框
-				//					var wd = events.showWaiting();
-				//					//54.科教频道_个人收藏列表
-				//					postDataPro_PostTnewsCollList(comData, wd, function(data) {
-				//						wd.close();
-				//						console.log('54.科教频道_个人收藏列表:' + JSON.stringify(data));
-				//						if(data.RspCode == 0) {
-				//							//总页数
-				//							totalPageCount = data.RspData.pg.PageCount;
-				//							pageIndex++;
-				//							if(flagRef == 0) { //刷新
-				//								actionArrayData.actionArray = data.RspData.dt;
-				//							} else { //加载更多
-				//								//合并数组
-				//								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.dt);
-				//							}
-				//						} else {
-				////							mui.toast(data.RspTxt);
-				//						}
-				//					});
+			//1.学
+			function getAttendanceList(index) {
+				// 等待的对话框
+//				var wd = events.showWaiting();
+				//54.科教频道_个人收藏列表
+//				postDataPro_PostTnewsCollList(comData, wd, function(data) {
+//					wd.close();
+//					console.log('54.科教频道_个人收藏列表:' + JSON.stringify(data));
+//					if(data.RspCode == 0) {
+//						//总页数
+//						totalPageCount = data.RspData.pg.PageCount;
+//						pageIndex++;
+//						if(flagRef == 0) { //刷新
+//							actionArrayData.actionArray = data.RspData.dt;
+//						} else { //加载更多
+//							//合并数组
+//							actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.dt);
+//						}
+//					} else {
+////							mui.toast(data.RspTxt);
+//					}
+//				});
 			};
 			
 		</script>
