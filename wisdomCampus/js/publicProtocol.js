@@ -581,7 +581,7 @@ var getAttendTypeForSelPro = function(data0, callback) {
 	xhrPost(tempAttendUrl1 + 'getAttendTypeForSel', data0, callback);
 }
 
-//学生管理----考勤
+//学生管理
 
 //合并参数
 var extendParameter1 = function(data0) {
@@ -628,6 +628,69 @@ var getAttendanceStatistics = function(data0, callback) {
 //5.删除考勤信息
 var getattendanceDelete = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'attendance/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+
+//6.学生行为首页列表
+var getActionBehaviorIndex = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'behavior/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'behaviorIndex', data0, callback);
+}
+
+//7.行为详情
+var getActionDetail = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'behavior/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'detail', data0, callback);
+}
+
+//8.保存行为信息
+var getActionSaveBehavior = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'behavior/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'saveBehavior', data0, callback);
+}
+
+//9.行为统计
+var getActionStatistics = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'behavior/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'statistics', data0, callback);
+}
+
+//10.删除行为信息
+var getActionDelete = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'behavior/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+
+//11.教师谈话首页列表
+var getTalkChatIndex = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'chatIndex', data0, callback);
+}
+
+//12.谈话详情
+var getTalkDetail = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'detail', data0, callback);
+}
+
+//13.保存谈话信息
+var getTalkSaveChat = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'saveChat', data0, callback);
+}
+
+//14.删除谈话记录
+var getTalkDelete = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
 }
