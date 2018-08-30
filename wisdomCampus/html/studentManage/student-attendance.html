@@ -79,7 +79,7 @@
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
-				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectType()"><span>{{type}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 			</div>
 		</div>
 		<div id="actionArrayData">
@@ -207,20 +207,11 @@
 		<script type="text/javascript">
 			var m$=mui.init()
 			var pageIndex = 1; //请求数据页面
+			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			mui.plusReady(function(){
-				studentMP.getStudentManagePermission(1,1,2,function(array){
-					console.log("========"+JSON.stringify(array))
-				});
-				getAttendanceList(pageIndex);
-				
-			});
-			//接收student-index发送的close事件
-			window.addEventListener('closePop', function() {
-				$("#bottomPopover").hide();
-				$(".mui-backdrop").hide();
-			});
+			
+			
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
@@ -260,39 +251,36 @@
 				data:{
 					grade:'全部年级',
 					classes:'全部班级',
-					type:'类型',
-					list:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级"}]},
-						   {value: '2',text: '初中一年级',children: [{value: "10",text: "10111班"}]},
-						   {value: '3',text: '二年级',children: [{value: "10",text: "一班"}]}
-						 ],
-					typeList:[
-							 {value: '1',text: '全部状态'},
-							 {value: '2',text: '期评'},
-							 {value: '3',text: '周评'}
-						 ]
+					student:'全部学生',
+					sGrade:"",
+					sClasses:"",
+					sStudent:"",
+					list:[]
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 2});
+						var userPicker = new m$.PopPicker({layer: 3});
 						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text'));
+							selectTitle.student=_getParam(items[2], 'text');
+							selectTitle.sGrade=_getParam(items[0], 'value');
+							selectTitle.sClasses=_getParam(items[1], 'value');
+							var stu=_getParam(items[2], 'value');
+							console.log("liushuai"+stu)
+							if(stu==""||stu==null||stu==undefined){
+								selectTitle.sStudent=""
+							}else{
+								selectTitle.sStudent=stu
+							}
+							getAttendanceList(pageIndex);
+//							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text')+" "+_getParam(items[2], 'text'));
+//							console.log("你选择的城市是1:" + _getParam(items[0], 'value') + " " + _getParam(items[1], 'value')+" "+_getParam(items[2], 'value'));
 						});
 					},
 					selectClass:function(){
 						this.$options.methods.selectGrade();
-					},
-					selectType:function(){
-						console.log("1111111111111")
-						var obj=this;
-						var userPicker = new m$.PopPicker({layer: 1});
-						userPicker.setData(this.typeList);
-						userPicker.show(function(items) {
-							obj.type=_getParam(items[0], 'text')
-							console.log( JSON.stringify(items[0]));
-						});
 					}
 				}
 			}); 
@@ -300,6 +288,27 @@
 				return obj[param] || '';
 			}
 			
+			mui.plusReady(function(){
+				studentMP.getStudentManagePermission(1,1,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					selectTitle.list=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						selectTitle.sGrade=allGrade.value;
+						selectTitle.sClasses=allClasses.value;
+						selectTitle.sStudent="";//全部学生查询的时候，传空值
+						getAttendanceList(pageIndex);
+					}
+				});
+			});
+			//接收student-index发送的close事件
+			window.addEventListener('closePop', function() {
+				$("#bottomPopover").hide();
+				$(".mui-backdrop").hide();
+			});
+			
+			 
 			//阻尼系数、初始化刷新加载更多
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
@@ -347,28 +356,41 @@
 					}
 				}
 			});
-			//1.学
+			//1.学生考勤列表首页
 			function getAttendanceList(index) {
+				var gradeValue=selectTitle.sGrade;
+				var classesValue=selectTitle.sClasses;
+				var studentValue=selectTitle.sStudent;//全部学生查询的时候，传空值
+				console.log("liushuai1 "+gradeValue)
+				console.log("liushuai2 "+classesValue)
+				console.log("liushuai3 "+studentValue)
+				var comData ={
+					grdIds:gradeValue,
+					clsIds:classesValue,
+					stuId:studentValue,
+					pageSize:pageSize,
+					pageNumber:index
+				}
 				// 等待的对话框
-//				var wd = events.showWaiting();
-				//54.科教频道_个人收藏列表
-//				postDataPro_PostTnewsCollList(comData, wd, function(data) {
-//					wd.close();
-//					console.log('54.科教频道_个人收藏列表:' + JSON.stringify(data));
-//					if(data.RspCode == 0) {
-//						//总页数
-//						totalPageCount = data.RspData.pg.PageCount;
-//						pageIndex++;
-//						if(flagRef == 0) { //刷新
-//							actionArrayData.actionArray = data.RspData.dt;
-//						} else { //加载更多
-//							//合并数组
-//							actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.dt);
-//						}
-//					} else {
-////							mui.toast(data.RspTxt);
-//					}
-//				});
+				var wd = events.showWaiting();
+				//1.学生考勤列表首页
+				getAttendanceIndex(comData, wd, function(data) {
+					wd.close();
+					console.log('1.:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						//总页数
+						totalPageCount = data.data.totalRow;
+						pageIndex++;
+						if(flagRef == 0) { //刷新
+							actionArrayData.actionArray = data.data.list;
+						} else { //加载更多
+							//合并数组
+							actionArrayData.actionArray = actionArrayData.actionArray.concat(data.data.list);
+						}
+					} else {
+//							mui.toast(data.RspTxt);
+					}
+				});
 			};
 			
 		</script>
