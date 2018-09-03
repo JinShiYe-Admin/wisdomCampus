@@ -6,8 +6,7 @@ var studentMP = (function(mod) {
 	//学生管理模块，获取年级、班级、学生等
 	//gradeFalg，1查看(包含年级领导)，2添加、修改
 	//teacherFlag，1班主任和任课老师都有，2有班主任，没有任课老师
-	//studentFlag，1需要获取学生，2不需要获取
-	mod.getStudentManagePermission = function(gradeFalg, teacherFlag, studentFlag, callback) {
+	mod.getStudentManagePermission = function(gradeFalg, teacherFlag, callback) {
 		var enData0 = {};
 		//不需要加密的数据
 		var comData0 = {
@@ -35,7 +34,7 @@ var studentMP = (function(mod) {
 						}
 						console.log('年级领导:' + JSON.stringify(grdsArray));
 						//2.3 学校年级下班级
-						getGradeClass(grdsArray, studentFlag, callback);
+						getGradeClass(grdsArray, callback);
 					}
 					//是任课老师或者班主任
 					if(personal.clss.length > 0) {
@@ -79,11 +78,7 @@ var studentMP = (function(mod) {
 								}
 							}
 						}
-						if(studentFlag == 1 && gradeFalg == 2) {
-							getClassStu(callback);
-						} else if(studentFlag == 2 && gradeFalg == 2) {
-							dataFormat(callback);
-						}
+						//						getClassStu(callback);
 					}
 					console.log('合并clss后:' + JSON.stringify(grdsArray));
 				} else {
@@ -125,6 +120,7 @@ var studentMP = (function(mod) {
 					var tempStu = {
 						value: tempModel2.stuid,
 						text: tempModel2.stuname
+//						img:tempModel2
 					}
 					tempCls.children.push(tempStu);
 				}
@@ -171,8 +167,15 @@ var studentMP = (function(mod) {
 					tempDetail.gradeName = tempGrdClsMsg.text;
 					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
 						var tempClass = tempGrdClsMsg.children[b];
-						if(tempClass.clsid == tempDetail.value) {
+						if(tempDetail.classId == tempClass.value) {
 							tempDetail.className = tempClass.text;
+							for(var c = 0; c < tempClass.children.length; c++) {
+								var tempStu = tempClass.children[c];
+								tempDetail.stuName = '../../img/login/headImg.png';
+								if(tempStu.stuId == tempDetail.value) {
+									tempDetail.stuName = tempStu.text;
+								}
+							}
 						}
 					}
 				}
@@ -182,7 +185,7 @@ var studentMP = (function(mod) {
 	}
 
 	//2.3 学校年级下班级
-	var getGradeClass = function(grdsArray, studentFlag, callback) {
+	var getGradeClass = function(grdsArray, callback) {
 		if(grdsArray.length > 0) {
 			var tempGradeId = []; //需要查询的年级ID
 			for(var i = 0; i < grdsArray.length; i++) {
@@ -216,21 +219,13 @@ var studentMP = (function(mod) {
 						}
 						console.log('获取到班级后合并:' + JSON.stringify(grdsArray));
 					}
-					if(studentFlag == 1) {
-						getClassStu(callback);
-					} else {
-						dataFormat(callback);
-					}
+					getClassStu(callback);
 				} else {
 					mui.toast(data.RspTxt, "cancel");
 				}
 			});
 		} else {
-			if(studentFlag == 1) {
-				getClassStu(callback);
-			} else {
-				dataFormat(callback);
-			}
+			getClassStu(callback);
 		}
 	}
 
