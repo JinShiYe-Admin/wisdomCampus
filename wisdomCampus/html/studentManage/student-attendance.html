@@ -87,7 +87,7 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
-							<!--<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
+							<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
 								<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,index)">
 									<a class="mui-btn mui-btn-red">删除</a>
 								</div>
@@ -98,8 +98,8 @@
 										<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
 									</div>
 								</a>
-							</li>-->
-							<li class="mui-table-view-cell mui-media">
+							</li>
+							<!--<li class="mui-table-view-cell mui-media">
 								<div class="mui-slider-right mui-disabled"  @tap="deleteItem($event,1)">
 									<a class="mui-btn mui-btn-red">删除</a>
 								</div>
@@ -172,7 +172,7 @@
 										<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span>
 									</div>
 								</a>
-							</li>
+							</li>-->
 						
 						</ul>
 					</div>
@@ -289,7 +289,7 @@
 			}
 			
 			mui.plusReady(function(){
-				studentMP.getStudentManagePermission(1,1,1,function(array){
+				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					selectTitle.list=array;
 					if(array.length>0){
@@ -374,18 +374,25 @@
 				// 等待的对话框
 				var wd = events.showWaiting();
 				//1.学生考勤列表首页
-				getAttendanceIndex(comData, wd, function(data) {
+				getAttendanceIndex(comData,function(data) {
 					wd.close();
 					console.log('1.:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数
-						totalPageCount = data.data.totalRow;
+						totalPageCount = data.RspData.totalRow;
 						pageIndex++;
 						if(flagRef == 0) { //刷新
-							actionArrayData.actionArray = data.data.list;
+							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
+								console.log("array=="+JSON.stringify(array));
+								console.log("array=="+JSON.stringify(array));
+								console.log("array=="+JSON.stringify(array));
+								console.log("array=="+JSON.stringify(array));
+								actionArrayData.actionArray = array;
+							})
+//							actionArrayData.actionArray = data.RspData.list;
 						} else { //加载更多
 							//合并数组
-							actionArrayData.actionArray = actionArrayData.actionArray.concat(data.data.list);
+							actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
 						}
 					} else {
 //							mui.toast(data.RspTxt);
