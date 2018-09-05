@@ -1,0 +1,477 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/utils/common.css" />
+		<link rel="stylesheet" href="../../fonts/iconfont1.css" />
+		<link rel="stylesheet" href="../../css/utils/MultiMedia.css" />
+		<link rel="stylesheet" href="../../css/utils/preview.css" />
+		<link rel="stylesheet" href="../../css/utils/audiopopover.css" />
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+
+		<style type="text/css">
+			[v-cloak] {
+				visibility: hidden;
+			}
+			
+			body{
+				background: #fff;
+			}
+			
+			.mui-content {
+				background: #f2f3f5;
+				/*line-height: 0px;*/
+			}
+			
+			#notes {
+				border: none;
+				border-radius: initial;
+				height: 20rem;
+				border: 1px solid lightgray;
+				margin: 3%;
+				font-size: 14px;
+				padding-bottom: 25px;
+			}
+			
+			.mui-popover {
+				width: 100%;
+				height: 0px;
+				border-radius: initial;
+				background-color: transparent;
+				border: none;
+				box-shadow: none;
+			}
+			
+			.mui-backdrop {
+				background-color: transparent;
+			}
+			
+			.aCss {
+				font-size: 15px;
+				color: #999999;
+				width: 130px;
+				float: left;
+			}
+			
+			.pCss {
+				font-size: 14px;
+				color: #666666;
+				margin-left: 70px;
+				margin-right: 10px;
+			}
+			
+			.rCss{
+				font-size: 14px;
+				color: #666666;
+				float: right;
+				margin:4px 17px 0 0;
+			}
+			
+			.mui-table-view-cell {
+				min-height: 44px;
+			}
+			
+			.mui-checkbox input[type=checkbox]:checked:before {
+				color: #00cfbd;
+			}
+			
+			/**add*/
+			.title-info {
+				padding: 18px 0 5px 0;
+				text-align: center;
+				background: #fff;
+			}
+			.title-body{
+				margin-top: 5px;
+				background: #fff;
+				padding:10px 0 0 10px;
+			}
+			
+			.user-title {
+				font-size: 17px;
+				color: #333333;
+				font-weight: bold;
+			}
+			
+			.user-title-se{
+				font-size: 13px;
+				color: #6d6d6d;
+			}
+			
+			.user-title-body {
+				font-size: 15px;
+				text-align: left;
+				margin: 0 10px;
+				color: #6d6d6d;
+				text-indent: 2em;
+			}
+			
+			.user-title-footer {
+				text-align: left;
+				margin: 10px 10px 0;
+			}
+			
+			.ul-btn {
+				display: inline;
+				float: right;
+				height: 5px;
+				font-size: 13px;
+				padding: 2px 12px;
+				color: #6D6D6D;
+			}
+			
+			.ul-p {
+				width: 30%;
+				color: #6D6D6D;
+				display: inline;
+				vertical-align: middle;
+				font-size: 13px;
+			}
+			
+			.body-title{
+				font-size: 15px;
+				margin-left: 5px;
+			}
+			
+			.mui-table-view-cell:after {
+			    right: 10px;
+			}
+			/**add*/
+		</style>
+	</head>
+
+	<body >
+		<div id='talk'>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" >
+			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
+			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;">提交</a>
+		</header>
+		<div class="mui-content mui-fullscreen" style="background: white;">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectGrade()">
+						<a class="aCss">年级</a>
+						<span  class="mui-navigate-right rCss">{{grade}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectGrade()">
+						<a class="aCss">班级</a>
+						<span  class="mui-navigate-right  rCss">{{classes}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectGrade()">
+						<a class="aCss">姓名</a>
+						<span  class="mui-navigate-right  rCss">{{student}}</span>
+					</li>
+				</ul>
+				<div style="background-color: #f2f3f5;height: 10px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectKqxx()" >
+						<a  class="aCss">考勤细项</a>
+						<span  class="mui-navigate-right  rCss">{{kqxx}}</span>
+					</li>
+					<li class="mui-table-view-cell" >
+						<a  class="aCss">考勤说明</a>
+					</li>
+					<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" style="width: 94%;"></textarea>
+				</ul>
+				<div style="background-color: #f2f3f5;height: 10px;"></div>
+				<div id="test">
+					<ul class="mui-table-view copy" style="display: none;">
+						<img src="../../img/utils/delete.png" style="width: 30px;float: right;margin:31px 5px 0 0;display:none;" onclick="deleteItem(this)">
+						<li class="mui-table-view-cell" onclick="selectTimeKq(this)" data-options='{"type":"date"}' style="margin-right: 35px;">
+							<a  class="aCss">考勤日期</a>
+							<p  class="mui-navigate-right rCss">请选择</p>
+						</li>
+						<li class="mui-table-view-cell" onclick="selectJc(this)" style="margin-right: 35px;">
+							<a  class="aCss">节次</a> 
+							<span  class="mui-navigate-right  rCss">请选择</span>
+							<input type="hidden" value=""/>
+						</li>
+					</ul>
+					<ul class="mui-table-view">
+						<img src="../../img/utils/delete.png" style="width: 30px;float: right;margin:31px 5px 0 0;display:none;" onclick="deleteItem(this)">
+						<li class="mui-table-view-cell" onclick="selectTimeKq(this)" data-options='{"type":"date"}' style="margin-right: 35px;">
+							<a  class="aCss">考勤日期</a>
+							<p  class="mui-navigate-right rCss">请选择</p>
+						</li>
+						<li class="mui-table-view-cell" onclick="selectJc(this)" style="margin-right: 35px;">
+							<a  class="aCss">节次</a> 
+							<span  class="mui-navigate-right  rCss">请选择</span>
+							<input type="hidden" value=""/>
+						</li>
+					</ul>
+				</div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" style="text-align: center;" @tap="addLi()">
+						<img src="../../img/utils/add.png" style="width: 30px">
+					</li>
+				</ul>
+				<div style="background-color: #f2f3f5;height: 10px;"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectQx()">
+						<a  class="aCss">出入权限</a>
+						<span  class="mui-navigate-right  rCss">{{qx}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj')" data-options='{}'>
+						<a  class="aCss">离校时间</a>
+						<p  class="mui-navigate-right rCss">{{lxsj}}</p>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj')" data-options='{}'>
+						<a  class="aCss">回校时间</a>
+						<p  class="mui-navigate-right rCss">{{hxsj}}</p>
+					</li>
+				</ul>
+				<div style="background-color: #f2f3f5;height: 10px;"></div>
+				<div id="bootom-card" style="margin-bottom: 30px">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="aCss">记录人</a>
+							<span  class="mui-navigate-right  rCss">{{jlr}}</span>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="aCss">记录时间</a>
+							<p  class="mui-navigate-right  rCss">{{jlsj}}</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/events.js"></script>
+		<script type="text/javascript" src="../../js/utils/storageKeyName.js"></script>
+		<script type="text/javascript" src="../../js/mui.zoom.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<!--<script src="../../js/utils/events.js"></script>-->
+		<script src="../../js/lib/jquery.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
+		<!--加密-->
+		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/utils/mui.picker.js"></script>
+		<script src="../../js/utils/mui.poppicker.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script type="text/javascript">
+			var $M=mui.init();
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
+			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+
+			mui.plusReady(function(){
+				//得到年级、班级、学生数据
+				studentMP.getStudentManagePermission(1,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					talkTitle.gradelist=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						talkTitle.sGrade=allGrade.value;
+						talkTitle.sClasses=allClasses.value;
+					}
+				});
+				//得到考勤细项、节次、出入权限等列表信息
+				var comData ={
+					id:666
+				}
+				var wd = events.showWaiting();
+				getAttendanceDetail(comData,function(data) {
+					wd.close();
+					console.log('2.考勤详情' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						talkTitle.kqxxList=data.RspData.qa;
+						talkTitle.jcList=data.RspData.cn;
+						talkTitle.qxList=data.RspData.permission;
+					} else {
+//							mui.toast(data.RspTxt);
+					} 
+				});
+			});
+			
+			
+			var talkTitle =new Vue({
+				el:'#talk',
+				data:{
+					grade:'请选择',
+					classes:'请选择',
+					student:'请选择',
+					kqxx:'请选择',
+					jc:'请选择',
+					qx:'请选择',
+					kqrq:'请选择',
+					jlr:personal.utname,
+					lxsj:'请选择' ,
+					hxsj:'请选择',
+					jlsj:getDate(),
+					gradelist:[],
+					kqxxList:[],
+					jList:[],
+					qxList:[],
+					kList:[],//存值用
+					jcList:[],//存值用
+					content:'',//存值用
+					qValue:'',//存值用
+					kValue:'',//存值用
+					sGrade:"",//存值用
+					sClasses:"",//存值用
+					sStudent:""//存值用
+				},
+				methods:{
+					selectTime:function(event,lx){
+						var _self = event.target;
+//						if(_self.picker) {
+//							_self.picker.show(function (rs) {
+//								console.log( '选择结果: ' + rs.text);
+//								_self.picker.dispose();
+//								_self.picker = null;
+//							});
+//						} else {
+							var optionsJson = _self.getAttribute('data-options') || '{}';
+							var options = JSON.parse(optionsJson);
+							var id = _self.getAttribute('id');
+							_self.picker = new $M.DtPicker(options);
+							_self.picker.show(function(rs) {
+								console.log('选择结果: ' + rs.text);
+								if(lx=='lxsj'){
+									if(compairTime(rs.text,talkTitle.hxsj)){
+										talkTitle.lxsj=rs.text;
+									}else{
+										mui.toast('开始时间不能晚于结束时间');
+									}
+								}else if(lx=='hxsj'){
+									if(compairTime(talkTitle.lxsj,rs.text)){
+										talkTitle.hxsj=rs.text;
+									}else{
+										mui.toast('结束时间不能早于开始时间');
+									}
+								}
+								_self.picker.dispose();
+								_self.picker = null;
+							});
+//						}
+					},
+					selectGrade:function(){//选择年级 班级 学生
+						var userPicker = new $M.PopPicker({layer: 3});
+						userPicker.setData(talkTitle.gradelist);
+						userPicker.show(function(items) {
+							talkTitle.grade=_getParam(items[0], 'text');
+							talkTitle.classes=_getParam(items[1], 'text');
+							talkTitle.student=_getParam(items[2], 'text');
+							talkTitle.sGrade=_getParam(items[0], 'value');
+							talkTitle.sClasses=_getParam(items[1], 'value');
+							talkTitle.sStudent=_getParam(items[2], 'value');
+						});
+					},
+					selectKqxx:function(){//选择考勤细项
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.kqxxList);
+						userPicker.show(function(items) {
+							talkTitle.kqxx=_getParam(items[0], 'text');
+							talkTitle.kValue=_getParam(items[0], 'value');
+						});
+					},
+					selectQx:function(){//选择权限
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.qxList);
+						userPicker.show(function(items) {
+							talkTitle.qx=_getParam(items[0], 'text');
+							talkTitle.qValue=_getParam(items[0], 'value');
+						});
+					},
+					addLi:function(){//添加考勤日期节次 项
+						var html=$('.mui-table-view.copy').html();
+						var reg=/none/g;
+						html=html.replace(reg,'inherit');
+						var newUl='<ul class="mui-table-view">'+html+'</ul>';
+						$('#test').append(newUl);
+					}
+				}
+			});
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			}
+			
+			//删除考勤日期 节次项
+			function deleteItem(obj){
+				$(obj).parent().remove();
+			}
+			
+			//节次选择
+			function selectJc(obj){
+				var _self = obj;
+				var userPicker = new $M.PopPicker({layer: 1});
+				userPicker.setData(talkTitle.jcList);
+				userPicker.show(function(items) {
+					var jc =_getParam(items[0], 'text');
+					var jcValue =_getParam(items[0], 'value');
+					$(obj).find('span').text(jc);
+					
+					$(obj).find('input[type=hidden]').val(jcValue)
+					console.log($(obj).find('input[type=hidden]').val())
+				});
+			}
+			//考勤日期选择
+			function selectTimeKq(obj){
+				var _self = obj;
+				var optionsJson = _self.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var id = _self.getAttribute('id');
+				_self.picker = new $M.DtPicker(options);
+				_self.picker.show(function(rs) {
+					console.log('选择结果: ' + rs.text);
+					var kqrq=rs.text;
+					$(obj).find('p').text(kqrq);
+					
+					_self.picker.dispose();
+					_self.picker = null;
+				});
+			}
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
+			}
+			
+			//比对时间大小
+			function compairTime(startTime,endTime){
+				console.log(endTime)
+				if(startTime=='请选择'||endTime=='请选择'){
+					return true;
+				}
+				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
+				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
+				if(end>start){
+					return true;
+				}
+				return false;
+			}
+			
+		</script>
+	</body>
+
+</html>

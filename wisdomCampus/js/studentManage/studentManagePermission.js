@@ -159,6 +159,7 @@ var studentMP = (function(mod) {
 	//GrdClsMsg,当前页面的年级、班级数组，上面接口获取到的数据
 	//pageList，当前页面获取到的列表
 	mod.setGrdNameClsName = function(GrdClsMsg, pageList, callback) {
+		console.log('pageList================='+pageList)
 		for(var i = 0; i < pageList.length; i++) {
 			var tempDetail = pageList[i];
 			for(var a = 0; a < GrdClsMsg.length; a++) {
@@ -171,7 +172,7 @@ var studentMP = (function(mod) {
 							tempDetail.className = tempClass.text;
 							for(var c = 0; c < tempClass.children.length; c++) {
 								var tempStu = tempClass.children[c];
-								tempDetail.stuName = '../../img/login/headImg.png';
+								tempDetail.stuImg = '../../img/login/headImg.png';
 								if(tempStu.stuId == tempDetail.value) {
 									tempDetail.stuName = tempStu.text;
 								}

@@ -105,9 +105,10 @@
 		</header>
 		<div id="selectTitle">
 			<div class="mui-content" style="position: fixed;z-index: 8;background: #fff;">
-				<div class="mui-segmented-control" >
+				<div class="mui-segmented-control" style="margin-top: 46px;">
 					<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 					<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+					<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				</div>
 				<div class="mui-row title-info">
 					<p v-cloak class="user-title">{{title}}</p>
@@ -159,6 +160,26 @@
 							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
 						</div>
 					</li>
+					<li class="mui-table-view-cell keep-unfold mui-collapse">
+						<a class="mui-navigate-right" href="#">三年级</a>
+						<div class="mui-collapse-content">
+							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
+							<div class="line"></div>
+							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
+							<div class="line"></div>
+							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell keep-unfold mui-collapse">
+						<a class="mui-navigate-right" href="#">三年级</a>
+						<div class="mui-collapse-content">
+							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
+							<div class="line"></div>
+							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
+							<div class="line"></div>
+							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
+						</div>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -183,8 +204,9 @@
 			var selectTitle =new Vue({
 				el:"#selectTitle",
 				data:{
-					grade:'全部年级',
-					classes:'全部班级',
+					grade:'全部年级',//显示用
+					classes:'全部班级',//显示用
+					student:'全部学生',//显示用
 					title:'全校学生行为统计',
 					startTime:'2018-06-23',
 					endTime:'2018-06-28',
