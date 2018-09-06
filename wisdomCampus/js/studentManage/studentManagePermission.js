@@ -20,6 +20,7 @@ var studentMP = (function(mod) {
 			console.log('2.1 学校年级:' + JSON.stringify(data));
 			if(data.RspCode == 0) {
 				if(data.RspData) {
+					var tempFlag0 = 0;
 					//如果是查看，需要判断是否是年级领导，将年级塞入数组
 					if(gradeFalg == 1) {
 						for(var i = 0; i < personal.grds.length; i++) {
@@ -35,6 +36,7 @@ var studentMP = (function(mod) {
 						console.log('年级领导:' + JSON.stringify(grdsArray));
 						//2.3 学校年级下班级
 						getGradeClass(grdsArray, callback);
+						tempFlag0++;
 					}
 					//是任课老师或者班主任
 					if(personal.clss.length > 0) {
@@ -78,9 +80,11 @@ var studentMP = (function(mod) {
 								}
 							}
 						}
-						//						getClassStu(callback);
 					}
 					console.log('合并clss后:' + JSON.stringify(grdsArray));
+					if (tempFlag0 == 0) {
+						getClassStu(callback);
+					}
 				} else {
 					dataFormat(callback);
 				}

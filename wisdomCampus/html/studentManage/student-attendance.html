@@ -91,7 +91,7 @@
 								<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
 									<a class="mui-btn mui-btn-red">删除</a>
 								</div>
-								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index)">
+								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
 									<img class="mui-media-object mui-pull-left" :src=actionModel.stuImg>
 									<div class="mui-media-body">
 										{{actionModel.studentName}}【 {{actionModel.gradeName}}{{actionModel.className}}】
@@ -159,10 +159,10 @@
 							}
 						});
 					},
-					gotoDeatil:function(index){//item点击事件
+					gotoDeatil:function(index,model){//item点击事件
 						console.log('点击第'+index+'个标签进入详情')
-						console.log(JSON.stringify(actionArray[index]))
-//						utils.mOpenWithData("../../html/studentManage/student-action-Detail.html", {});	
+//						console.log(JSON.stringify(actionArray[index]))
+						utils.mOpenWithData("../../html/studentManage/student-attendanceDetail.html", model);
 					},
 					toPage:function(url){//右上角弹出框
 //						plus.webview.open(url);

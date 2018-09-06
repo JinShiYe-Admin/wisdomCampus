@@ -1,37 +1,38 @@
 <!doctype html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <link href="../../css/mui.min.css" rel="stylesheet" />
-    <style>
-        .mui-table-view-cell>a:not(.mui-btn) {
-            position: relative;
-            display: block;
-            overflow: hidden;
-            margin: -11px -15px;
-            padding: inherit;
-            white-space: normal;
-            text-overflow: ellipsis;
-            color: inherit;
-        }
-		.pClass{
-			font-size: 13px;
-			color: blue;
-		}
-    </style>
-</head>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-table-view-cell>a:not(.mui-btn) {
+				position: relative;
+				display: block;
+				overflow: hidden;
+				margin: -11px -15px;
+				padding: inherit;
+				white-space: normal;
+				text-overflow: ellipsis;
+				color: inherit;
+			}
+			
+			.pClass {
+				font-size: 13px;
+				color: blue;
+			}
+		</style>
+	</head>
 
-<body>
-    <header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
-        <a @tap="muiback" class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
-        <h1 class="mui-title" style="color: white;">行为详情</h1>
-        <a class="mui-pull-right" style="color: white;font-size: 17px;margin-top: 10px;">修改</a>
-    </header>
-    <div class="mui-content" id="actionDetialData">
-        <ul class="mui-table-view">
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
+			<a @tap="muiback" class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">行为详情</h1>
+			<a class="mui-pull-right" style="color: white;font-size: 17px;margin-top: 10px;">修改</a>
+		</header>
+		<div class="mui-content" id="actionDetialData">
+			<!--<ul class="mui-table-view">
             <li class="mui-table-view-cell" v-for='(actionModel,index) in actionDetialArray'>
                 <a v-if='index==4'>
                     <div class="mui-media-body">
@@ -56,63 +57,154 @@
                 </a>
                 <a v-if='index==2||index==7' style="background: gray;height: 10px;margin-top: 13px;"></a>
             </li>
-        </ul>
-    </div>
-    <script src="../../js/mui.js"></script>
-    <script src="../../js/vue.min.js"></script>
-    <script src='../../js/lib/vconsole/vconsole.min.js'></script>
-    <script src="../../js/publicProtocol.js"></script>
-    <script src="../../js/utils/store.js"></script>
-    <script src="../../js/utils/storageKeyName.js"></script>
-    <script src="../../js/utils/events.js"></script>
-    <script type="text/javascript" src="../../js/publicProtocol.js"></script>
-    <script src="../../js/utils/utils.js"></script>
-    <script src="../../js/lib/jquery.js"></script>
-    <script type="text/javascript">
-        mui.init()
-        var actionDetialData = new Vue({
-            el: "#actionDetialData",
-            data: {
-                actionDetialArray: [{
-                    actionDetialTitle: '年级',
-                    actionDetialValue: '五年级'
-                }, {
-                    actionDetialTitle: '班级',
-                    actionDetialValue: '1801'
-                }, {
-                    actionDetialTitle: '姓名',
-                    actionDetialValue: '王大陆'
-                }, {
-                    actionDetialTitle: '行为细项',
-                    actionDetialValue: '上课打架'
-                }, {
-                    actionDetialTitle: '行为说明',
-                    actionDetialValue: '上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲上课不认真听讲'
-                }, {
-                    actionDetialTitle: '发生日期',
-                    actionDetialValue: '2018-6-20'
-                }, {
-                    actionDetialTitle: '节次',
-                    actionDetialValue: '第二节'
-                }, {
-                    actionDetialTitle: '科目',
-                    actionDetialValue: '语文'
-                }, {
-                    actionDetialTitle: '记录人',
-                    actionDetialValue: '宋老师'
-                }, {
-                    actionDetialTitle: '记录时间',
-                    actionDetialValue: '2018-6-20'
-                }]
-            },
-            methods: {
-                clickPop: function (model) {
-                    console.log('clickPop:' + JSON.stringify(model));
-                    mui('#topPopover').popover('hide');
-                }
-            }
-        });
-    </script>
-</body>
+        </ul>-->
+			<ul class="mui-table-view" v-if="dataFlag == 1">
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.gradeName}}</p>
+						<div class="mui-media-body liTitle">
+							年级
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.className}}</p>
+						<div class="mui-media-body liTitle">
+							班级
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.stuName}}</p>
+						<div class="mui-media-body liTitle">
+							姓名
+						</div>
+					</a>
+				</li>
+				<p class="lineCell"></p>
+				<li class="mui-table-view-cell" style="margin-top: -10px;">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.behaviorName}}</p>
+						<div class="mui-media-body liTitle">
+							行为细项
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<div class="mui-media-body liTitle">
+							行为说明
+						</div>
+						<p class="liDetail" style="margin-top: 5px;padding: 5px 5px 5px;">{{actionDetail.detail}}</p>
+						<!--<p style="border: 1px solid gray;margin-top: 5px;padding: 5px 5px 5px;">{{actionDetail.detail}}</p>-->
+						<div v-if="actionDetail.attachs.lenght>0" style="margin-top: 10px;">
+							<div style="float:left;">附件:</div>
+							<div style="float:left;">
+								<p class="pClass">附件1</p>
+								<p>附件2</p>
+								<p>附件3</p>
+								<p>附件4</p>
+							</div>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.behaviorTime}}</p>
+						<div class="mui-media-body liTitle">
+							发生日期
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
+						<div class="mui-media-body liTitle">
+							节次
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.subCode}}</p>
+						<div class="mui-media-body liTitle">
+							科目
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.recorder}}</p>
+						<div class="mui-media-body liTitle">
+							记录人
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a>
+						<p class="mui-pull-right liDetail">{{actionDetail.recordTime}}</p>
+						<div class="mui-media-body liTitle">
+							记录时间
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/storageKeyName.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/lib/jquery.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var curPage = {};
+			mui.plusReady(function() {
+				curPage = utils.getDataFromUrl(window.location.href);
+				console.log('2222:' + JSON.stringify(curPage));
+				studentMP.getStudentManagePermission(2,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+				});
+//				getActionDetailP();
+			});
+			var getActionDetailP = function() {
+				var tempData = {
+					id: curPage.id
+				}
+				getActionDetail(tempData, function funcName(data) {
+					console.log('data:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						actionDetialData.actionDetail = data.RspData.sb;
+						curPage.detail = actionDetialData.actionDetail.detail;
+						//合并对象
+						actionDetialData.actionDetail = $.extend(actionDetialData.actionDetail, curPage);
+						console.log('actionDetialData.actionDetail:' + JSON.stringify(actionDetialData.actionDetail));
+						actionDetialData.dataFlag = 1;
+					} else {
+						mui.toast(data.RspTxt);
+					}
+				});
+			}
+			var actionDetialData = new Vue({
+				el: "#actionDetialData",
+				data: {
+					dataFlag: 0,
+					actionDetail: {}
+				},
+				methods: {
+					clickPop: function(model) {
+						console.log('clickPop:' + JSON.stringify(model));
+						mui('#topPopover').popover('hide');
+					}
+				}
+			});
+		</script>
+	</body>
 
 </html>
