@@ -8,9 +8,6 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/utils/common.css" />
 		<link rel="stylesheet" href="../../fonts/iconfont1.css" />
-		<link rel="stylesheet" href="../../css/utils/MultiMedia.css" />
-		<link rel="stylesheet" href="../../css/utils/preview.css" />
-		<link rel="stylesheet" href="../../css/utils/audiopopover.css" />
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 
 		<style type="text/css">
@@ -37,13 +34,8 @@
 				padding-bottom: 25px;
 			}
 			
-			.mui-popover {
-				width: 100%;
-				height: 0px;
-				border-radius: initial;
-				background-color: transparent;
-				border: none;
-				box-shadow: none;
+			.mui-popover-arrow {
+				display: none;
 			}
 			
 			.mui-backdrop {
@@ -53,7 +45,7 @@
 			.aCss {
 				font-size: 15px;
 				color: #999999;
-				width: 130px;
+				width: 35%;
 				float: left;
 			}
 			
@@ -68,11 +60,11 @@
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:4px 17px 0 0;
+				margin:0 17px 0 0;
 			}
 			
 			.mui-table-view-cell {
-				min-height: 44px;
+				min-height: 40px;
 			}
 			
 			.mui-checkbox input[type=checkbox]:checked:before {
@@ -141,18 +133,19 @@
 			    right: 10px;
 			}
 			/**add*/
+			
 		</style>
 	</head>
 
 	<body >
 		<div id='talk'>
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" >
-			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
-			<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
-			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;">提交</a>
-		</header>
-		<div class="mui-content mui-fullscreen" style="background: white;">
-				<ul class="mui-table-view">
+			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" >
+				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
+				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
+			</header>
+			<div class="mui-content mui-fullscreen" style="background: white;">
+				<ul class="mui-table-view" style="margin-top:2px;">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">年级</a>
 						<span  class="mui-navigate-right rCss">{{grade}}</span>
@@ -179,30 +172,30 @@
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div id="test">
-					<ul class="mui-table-view copy" style="display: none;">
-						<img src="../../img/utils/delete.png" style="width: 30px;float: right;margin:31px 5px 0 0;display:none;" onclick="deleteItem(this)">
-						<li class="mui-table-view-cell" onclick="selectTimeKq(this)" data-options='{"type":"date"}' style="margin-right: 35px;">
-							<a  class="aCss">考勤日期</a>
-							<p  class="mui-navigate-right rCss">请选择</p>
-						</li>
-						<li class="mui-table-view-cell" onclick="selectJc(this)" style="margin-right: 35px;">
-							<a  class="aCss">节次</a> 
-							<span  class="mui-navigate-right  rCss">请选择</span>
-							<input type="hidden" value=""/>
-						</li>
-					</ul>
-					<ul class="mui-table-view">
-						<img src="../../img/utils/delete.png" style="width: 30px;float: right;margin:31px 5px 0 0;display:none;" onclick="deleteItem(this)">
-						<li class="mui-table-view-cell" onclick="selectTimeKq(this)" data-options='{"type":"date"}' style="margin-right: 35px;">
-							<a  class="aCss">考勤日期</a>
-							<p  class="mui-navigate-right rCss">请选择</p>
-						</li>
-						<li class="mui-table-view-cell" onclick="selectJc(this)" style="margin-right: 35px;">
-							<a  class="aCss">节次</a> 
-							<span  class="mui-navigate-right  rCss">请选择</span>
-							<input type="hidden" value=""/>
-						</li>
-					</ul>
+					<!--<ul id="index" class="mui-table-view">
+							<img src="../../img/utils/delete.png" style="width: 30px;float: right;margin:31px 5px 0 0;" >
+							<li class="mui-table-view-cell"data-options='{"type":"date"}' style="margin-right: 35px;">
+								<a  class="aCss">考勤日期</a>
+								<p  class="mui-navigate-right rCss">123</p>
+							</li>
+							<li class="mui-table-view-cell" style="margin-right: 35px;">
+								<a  class="aCss">节次</a> 
+								<a href="'#select'+index" style="float:right;width:85%"><p  class="mui-navigate-right  rCss">11111111</p></a>
+							</li>
+						</ul>-->
+					<template v-for="(ul,index) in nodeSubJson"> 
+						<ul :id="'ul'+index" class="mui-table-view">
+							<img src="../../img/utils/delete.png" v-show="ul.canDelete==1" style="width: 30px;float: right;margin:31px 5px 0 0;" @tap="deleteLi($event,index)">
+							<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}' style="margin-right: 35px;">
+								<a  class="aCss">考勤日期</a>
+								<p  class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
+							</li>
+							<li class="mui-table-view-cell" style="margin-right: 35px;">
+								<a  class="aCss">节次</a> 
+								<a :href="'#select'+index" style="float:right;width:75%"><p  class="mui-navigate-right  rCss">{{ul.classNames}}</p></a>
+							</li>
+						</ul>
+					</template>
 				</div>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" style="text-align: center;" @tap="addLi()">
@@ -210,20 +203,20 @@
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectQx()">
-						<a  class="aCss">出入权限</a>
-						<span  class="mui-navigate-right  rCss">{{qx}}</span>
-					</li>
-					<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj')" data-options='{}'>
-						<a  class="aCss">离校时间</a>
-						<p  class="mui-navigate-right rCss">{{lxsj}}</p>
-					</li>
-					<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj')" data-options='{}'>
-						<a  class="aCss">回校时间</a>
-						<p  class="mui-navigate-right rCss">{{hxsj}}</p>
-					</li>
-				</ul>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
+							<a  class="aCss">出入权限</a>
+							<span  class="mui-navigate-right  rCss">{{qx}}</span>
+						</li>
+						<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
+							<a  class="aCss">离校时间</a>
+							<p  class="mui-navigate-right rCss">{{lxsj}}</p>
+						</li>
+						<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1" >
+							<a  class="aCss">回校时间</a>
+							<p  class="mui-navigate-right rCss">{{hxsj}}</p>
+						</li>
+					</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div id="bootom-card" style="margin-bottom: 30px">
 					<ul class="mui-table-view">
@@ -238,8 +231,28 @@
 					</ul>
 				</div>
 			</div>
+			<template v-for="(abc,index) in nodeSubJson">
+				<div :id="'select'+index" class="mui-popover" ref="scrollBox" style="height: 300px;">
+					<div class="mui-popover-arrow" style="display: none;"></div>
+					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
+						<div class="mui-scroll">
+								<ul class="mui-table-view" style="background: #393D49;color: #fff;" >
+									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+										<div class="mui-input-row mui-checkbox mui-right">
+											<label style="width: 100%;">{{jc.text}}</label>
+											<input :name="jc.text" :value="jc.value" type="checkbox">
+										</div>
+									</li>
+								</ul>
+						</div>
+					</div>
+					<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
+						<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event,index)">确定</button>
+					</div>
+				</div>
+			</template>
 		</div>
-		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/utils/mui.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/events.js"></script>
@@ -247,18 +260,8 @@
 		<script type="text/javascript" src="../../js/mui.zoom.js"></script>
 		<script src="../../js/utils/store.js"></script>
 		<script src="../../js/utils/utils.js"></script>
-		<!--<script src="../../js/utils/events.js"></script>-->
 		<script src="../../js/lib/jquery.js"></script>
-		<script src="../../js/publicProtocol.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
-		<!--加密-->
-		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-
-		<script src='../../js/utils/signHmacSHA1.js'></script>
-		<script src='../../js/utils/sortSign.js'></script>
 		<script src="../../js/utils/mui.picker.js"></script>
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
@@ -271,10 +274,11 @@
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 
 			mui.plusReady(function(){
+				mui('.mui-scroll-wrapper').scroll() 
 				//得到年级、班级、学生数据
-				studentMP.getStudentManagePermission(1,1,function(array){
+				studentMP.getStudentManagePermission(2,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
-					talkTitle.gradelist=array;
+					talkTitle.gradelist=array; 
 					if(array.length>0){
 						var allGrade=array[0];
 						var allClasses=allGrade.children[0];
@@ -311,56 +315,71 @@
 					jc:'请选择',
 					qx:'请选择',
 					kqrq:'请选择',
-					jlr:personal.utname,
-					lxsj:'请选择' ,
-					hxsj:'请选择',
-					jlsj:getDate(),
+					qxShow:'0',
+					sjShow:'0',
 					gradelist:[],
 					kqxxList:[],
-					jList:[],
+					jcList:[],
 					qxList:[],
-					kList:[],//存值用
-					jcList:[],//存值用
-					content:'',//存值用
-					qValue:'',//存值用
-					kValue:'',//存值用
-					sGrade:"",//存值用
-					sClasses:"",//存值用
-					sStudent:""//存值用
+					nodeSubJson:[{canDelete:'0',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
+					jlr:personal.utname,//存值用：记录人
+					lxsj:'请选择' ,//存值用：离校时间
+					hxsj:'请选择',//存值用:回校时间
+					jlsj:getDate(),//存值用:记录时间
+					content:'',//存值用:考勤说明
+					qValue:'',//存值用:出入权限
+					kValue:'',//存值用:考勤细项
+					sGrade:"",//存值用:年级ID
+					sClasses:"",//存值用:班级ID
+					sStudent:""//存值用:学生ID
 				},
 				methods:{
-					selectTime:function(event,lx){
+					selectTime:function(event,lx,index){
 						var _self = event.target;
-//						if(_self.picker) {
-//							_self.picker.show(function (rs) {
-//								console.log( '选择结果: ' + rs.text);
-//								_self.picker.dispose();
-//								_self.picker = null;
-//							});
-//						} else {
-							var optionsJson = _self.getAttribute('data-options') || '{}';
-							var options = JSON.parse(optionsJson);
-							var id = _self.getAttribute('id');
-							_self.picker = new $M.DtPicker(options);
-							_self.picker.show(function(rs) {
-								console.log('选择结果: ' + rs.text);
-								if(lx=='lxsj'){
-									if(compairTime(rs.text,talkTitle.hxsj)){
-										talkTitle.lxsj=rs.text;
-									}else{
-										mui.toast('开始时间不能晚于结束时间');
-									}
-								}else if(lx=='hxsj'){
-									if(compairTime(talkTitle.lxsj,rs.text)){
-										talkTitle.hxsj=rs.text;
-									}else{
-										mui.toast('结束时间不能早于开始时间');
+						var obj=this;
+						var optionsJson = _self.getAttribute('data-options') || '{}';
+						if(lx=='kqrq'){
+							optionsJson='{"type":"date"}';
+						}
+						var options = JSON.parse(optionsJson);
+						var id = _self.getAttribute('id');
+						_self.picker = new $M.DtPicker(options);
+						_self.picker.show(function(rs) {
+							if(lx=='lxsj'){
+								if(compairTime(rs.text,talkTitle.hxsj)){
+									talkTitle.lxsj=rs.text;
+								}else{
+									mui.toast('开始时间不能晚于结束时间');
+								}
+							}else if(lx=='hxsj'){
+								if(compairTime(talkTitle.lxsj,rs.text)){
+									talkTitle.hxsj=rs.text;
+								}else{
+									mui.toast('结束时间不能早于开始时间');
+								}
+							}else if(lx='kqrq'){
+								var stime=rs.text;
+								var isContains=false;
+								for(var i=0;i<obj.nodeSubJson.length;i++){
+									var time=obj.nodeSubJson[i].attendanceTime;
+									if(time==stime){
+										isContains=true;
 									}
 								}
-								_self.picker.dispose();
-								_self.picker = null;
-							});
-//						}
+								if(!isContains){
+									if(compairTime2(getDate(),stime)){
+										var nodes=obj.nodeSubJson[index];
+										nodes.attendanceTime=rs.text;
+									}else{
+										mui.toast('时间不能早于当前时间');
+									}
+								}else{
+									mui.toast('不能选择相同时间');
+								}
+							}
+							_self.picker.dispose();
+							_self.picker = null;
+						});
 					},
 					selectGrade:function(){//选择年级 班级 学生
 						var userPicker = new $M.PopPicker({layer: 3});
@@ -380,6 +399,10 @@
 						userPicker.show(function(items) {
 							talkTitle.kqxx=_getParam(items[0], 'text');
 							talkTitle.kValue=_getParam(items[0], 'value');
+							talkTitle.qxShow='0';
+							if(_getParam(items[0], 'value')=='12'){
+								talkTitle.qxShow='1';
+							}
 						});
 					},
 					selectQx:function(){//选择权限
@@ -388,14 +411,82 @@
 						userPicker.show(function(items) {
 							talkTitle.qx=_getParam(items[0], 'text');
 							talkTitle.qValue=_getParam(items[0], 'value');
+							talkTitle.sjShow='0';
+							if(_getParam(items[0], 'value')=='outSchool'){
+								talkTitle.sjShow='1';
+							}
 						});
 					},
-					addLi:function(){//添加考勤日期节次 项
-						var html=$('.mui-table-view.copy').html();
-						var reg=/none/g;
-						html=html.replace(reg,'inherit');
-						var newUl='<ul class="mui-table-view">'+html+'</ul>';
-						$('#test').append(newUl);
+					selectJc:function(e,index){//选择节次
+						var classes=[];
+						var names=[];
+						var obj=e.target;
+						var id ='#select'+index;
+						$(id).find('li').each(function() {
+							if($(this).find('input').prop("checked")) {
+								names.push($(this).find('label').text());
+								classes.push($(this).find('input').val());
+							}
+						})
+						var nodes=this.nodeSubJson[index];
+						nodes.classNodes=classes.join(",");
+						if(names.length>0){
+							nodes.classNames=names.join(",");
+						}
+						mui(id).popover('toggle');
+					},
+					addLi:function(){
+						var nodes={canDelete:'1',attendanceTime:"请选择",classNodes:[],classNames:"请选择"};
+						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
+					},
+					deleteLi:function(e,index){//添加考勤日期节次 项
+						var obj=e.target;
+						this.nodeSubJson.splice(index,1);
+					},
+					submit:function(){
+						var arr =[];
+						for(var i=0;i<talkTitle.nodeSubJson.length;i++){
+							var obj=talkTitle.nodeSubJson[i];
+							var params={
+								attendanceTime:obj.attendanceTime,
+								classNodes:obj.classNodes
+							}
+							arr.push(params);
+						}
+						console.log(JSON.stringify(arr))
+						var comData ={
+							id:'',
+							gradeId:talkTitle.sGrade,
+							classId:talkTitle.sClasses,
+							studentId:talkTitle.sStudent,
+							studentName:talkTitle.student,
+							quantizationAttendanceId:talkTitle.kValue,
+							nodeSubJson:arr,
+							explain:talkTitle.content,
+							outsidePermisionCode:talkTitle.qValue,
+							recordTime:talkTitle.jlsj,
+							leaveSchoolTime:talkTitle.lxsj,
+							backSchoolTime:talkTitle.hxsj
+						}
+						console.log(JSON.stringify(comData));
+						var wd = events.showWaiting();
+						getSaveAttendance(comData,function(data) {
+							wd.close();
+							console.log('3.保存考勤' + JSON.stringify(data));
+							if(data.RspCode == 0) {
+								mui.toast(data.RspTxt);
+							} else {
+								mui.toast(data.RspTxt);
+							} 
+						});
+					}
+				},
+				watch: {
+					nodeSubJson: function() {
+						mui('.mui-scroll-wrapper').scroll();
+						setTimeout(function() {
+							mui('.mui-scroll-wrapper').scroll();
+						});
 					}
 				}
 			});
@@ -403,41 +494,6 @@
 				return obj[param] || '';
 			}
 			
-			//删除考勤日期 节次项
-			function deleteItem(obj){
-				$(obj).parent().remove();
-			}
-			
-			//节次选择
-			function selectJc(obj){
-				var _self = obj;
-				var userPicker = new $M.PopPicker({layer: 1});
-				userPicker.setData(talkTitle.jcList);
-				userPicker.show(function(items) {
-					var jc =_getParam(items[0], 'text');
-					var jcValue =_getParam(items[0], 'value');
-					$(obj).find('span').text(jc);
-					
-					$(obj).find('input[type=hidden]').val(jcValue)
-					console.log($(obj).find('input[type=hidden]').val())
-				});
-			}
-			//考勤日期选择
-			function selectTimeKq(obj){
-				var _self = obj;
-				var optionsJson = _self.getAttribute('data-options') || '{}';
-				var options = JSON.parse(optionsJson);
-				var id = _self.getAttribute('id');
-				_self.picker = new $M.DtPicker(options);
-				_self.picker.show(function(rs) {
-					console.log('选择结果: ' + rs.text);
-					var kqrq=rs.text;
-					$(obj).find('p').text(kqrq);
-					
-					_self.picker.dispose();
-					_self.picker = null;
-				});
-			}
 			//获取当前日期
 			function getDate() {
 			    var date = new Date();
@@ -466,6 +522,20 @@
 				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
 				if(end>start){
+					return true;
+				}
+				return false;
+			}
+			
+			//比对时间大小
+			function compairTime2(startTime,endTime){
+				console.log(endTime)
+				if(startTime=='请选择'||endTime=='请选择'){
+					return true;
+				}
+				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
+				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
+				if(end>=start){
 					return true;
 				}
 				return false;

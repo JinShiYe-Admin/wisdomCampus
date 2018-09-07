@@ -99,16 +99,16 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="actionHead">
-			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
-			<h1 class="mui-title" style="color: white;">统计报表</h1>
-		</header>
 		<div id="selectTitle">
-			<div class="mui-content" style="position: fixed;z-index: 8;background: #fff;">
+			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+				<h1 class="mui-title" style="color: white;">考勤统计</h1>
+			</header>
+			<div class="mui-content" style="position: fixed;z-index: 8;background: #fff;padding-top: 0;">
 				<div class="mui-segmented-control" style="margin-top: 46px;">
 					<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 					<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
-					<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+					<!--<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>-->
 				</div>
 				<div class="mui-row title-info">
 					<p v-cloak class="user-title">{{title}}</p>
@@ -197,43 +197,66 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var m$=mui.init()
 			mui.plusReady(function(){
+				//得到年级、班级、学生数据
+				studentMP.getStudentManagePermission(1,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					selectTitle.gradelist=array; 
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						selectTitle.grdIds=allGrade.value;
+						selectTitle.clsIds=allClasses.value;
+						getData();
+					}
+				});
 			});
 			var selectTitle =new Vue({
 				el:"#selectTitle",
 				data:{
 					grade:'全部年级',//显示用
 					classes:'全部班级',//显示用
-					student:'全部学生',//显示用
 					title:'全校学生行为统计',
-					startTime:'2018-06-23',
-					endTime:'2018-06-28',
-					list:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级"}]},
-						   {value: '2',text: '初中一年级',children: [{value: "20",text: "全部班级"},{value: "21",text: "10111班"},{value: "22",text: "10112班"}]},
-						   {value: '3',text: '二年级',children: [{value: "30",text: "全部班级"},{value: "31",text: "一班"},{value: "32",text: "10112班"}]}
-						 ]
+					grdIds:'',
+					clsIds:'',
+					flag:'0',
+					startTime:getDate(),
+					endTime:getDate(),
+					gradelist:[]
 				},
 				methods:{
 					selectGrade:function(){
 						var userPicker = new m$.PopPicker({layer: 2});
-						userPicker.setData(selectTitle.list);
+						userPicker.setData(selectTitle.gradelist);
 						userPicker.show(function(items) {
 							var grade=_getParam(items[0], 'text');
 							var classes=_getParam(items[1], 'text');
 							selectTitle.grade=grade;
 							selectTitle.classes=classes;
+							
+							var grdIds=_getParam(items[0], 'value');
+							var clsIds=_getParam(items[1], 'value');
+							selectTitle.grdIds=grdIds;
+							selectTitle.clsIds=clsIds;
 							var tit='';
 							if(grade.indexOf('全部')!=-1&&classes.indexOf('全部')!=-1){
-								tit='全校学生行为统计'
+								tit='全校学生行为统计';
+								selectTitle.flag='0';
 							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')!=-1){
 								tit=grade+'学生行为统计'
+								selectTitle.flag='1';
 							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')==-1){
 								tit=grade+classes+'学生行为统计'
+								selectTitle.flag='2';
+							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')==-1){
+								tit=grade+classes+student+'行为统计'
 							}
 							selectTitle.title=tit;
-							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text'));
+							getData();
 						});
 					},
 					selectClass:function(){
@@ -248,12 +271,14 @@
 							if(lx=='1'){
 								if(compairTime(rs.text,selectTitle.endTime)){
 									selectTitle.startTime=rs.text;
+									 getData();
 								}else{
 									mui.toast('开始时间不能晚于结束时间');
 								}
 							}else{
 								if(compairTime(selectTitle.startTime,rs.text)){
 									selectTitle.endTime=rs.text;
+									getData();
 								}else{
 									mui.toast('结束时间不能早于开始时间');
 								}
@@ -265,6 +290,30 @@
 					}
 				}
 			}); 
+			
+			function getData(){
+				var comData ={
+					grdIds:selectTitle.grdIds,
+					clsIds:selectTitle.clsIds,
+					fromDate:selectTitle.startTime,
+					toDate:selectTitle.endTime,
+//					gradeId:selectTitle.grdIds,
+//					classId:selectTitle.clsIds,
+//					stuId:selectTitle.stuId,
+					flag:selectTitle.flag
+				}
+				console.log(JSON.stringify(comData));
+				var wd = events.showWaiting();
+				getAttendanceStatistics(comData,function(data) {
+					wd.close();
+					console.log('4.考勤统计' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						mui.toast(JSON.stringify(data));
+					} else {
+						mui.toast(data.RspTxt);
+					} 
+				});
+			}
 			
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
@@ -280,7 +329,24 @@
 				return false;
 			}
 			
-			
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
+			}
 		</script>
 	</body>
  
