@@ -66,6 +66,7 @@
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectType()"><span>{{type}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 			</div>
 		</div>
@@ -73,15 +74,6 @@
 			<div class="mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<!--<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray" @tap="gotoDeatil(index)">
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									王{{index+1}}陆【五年级108{{index+1}}班】
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #D36570;">未谈话</span>
-								</div>
-							</a>
-						</li>-->
 						<li class="mui-table-view-cell mui-media" @tap="gotoDeatil(1)">
 							<a href="javascript:;">
 								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
@@ -96,54 +88,15 @@
 								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 								<div class="mui-media-body">
 									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">未谈话</span>
+									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">已谈话</span>
 								</div>
 							</a>
 						</li>
-						
-						
-						<li class="mui-table-view-cell mui-media" >
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">未谈话</span>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media" >
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">未谈话</span>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media" >
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">未谈话</span>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media" >
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">未谈话</span>
-								</div>
-							</a>
-						</li>
-					
 					</ul>
 				</div>
 			</div>
 		</div>
-		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/mui2.js"></script>
 		<script src="../../js/utils/mui.picker.js"></script>
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script src="../../js/vue.min.js"></script>
@@ -157,13 +110,27 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var m$=mui.init()
 			var pageIndex = 1; //请求数据页面
+			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
+			
 			mui.plusReady(function(){
-				getTnewsCollList(pageIndex);
+				studentMP.getStudentManagePermission(1,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					selectTitle.list=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						selectTitle.sGrade=allGrade.value;
+						selectTitle.sClasses=allClasses.value;
+						getAttendanceList(pageIndex);
+					}
+				});
 			});
 
 			var actionArrayData = new Vue({
@@ -172,9 +139,24 @@
 					actionArray: []
 				},
 				methods: {
-					gotoDeatil:function(index){
-						console.log('点击的第'+index+'个item')
-						utils.mOpenWithData("../../html/studentManage/student-talkRecord-Detail.html", {});	
+					deleteItem:function(event,index){
+						var dom=event.target;
+						var li = dom.parentNode.parentNode;
+						var btnArray = ['确认', '取消'];
+						mui.confirm('确认删除该条记录？', '校讯通', btnArray, function(e) {
+							if (e.index == 0) {
+								console.log("删除第"+index+"个item")
+								attendanceDelete(index,li)
+							} else {
+								setTimeout(function() {
+									m$.swipeoutClose(li);
+								}, 0);
+							}
+						});
+					},
+					gotoDeatil:function(index,model){//item点击事件
+						console.log('点击第'+index+'个标签进入详情')
+						utils.mOpenWithData("../../html/studentManage/student-attendanceDetail.html", model);
 					}
 				}
 			});
@@ -184,15 +166,13 @@
 				data:{
 					grade:'全部年级',
 					classes:'全部班级',
-					type:'类型',
-					list:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级"}]},
-						   {value: '2',text: '初中一年级',children: [{value: "10",text: "10111班"}]},
-						   {value: '3',text: '二年级',children: [{value: "10",text: "一班"}]}
-						 ],
+					student:'全部学生',//显示用
+					type:'全部状态',
+					list:[],
 					typeList:[
-							 {value: '1',text: '全部状态'},
-							 {value: '2',text: '期评'},
-							 {value: '3',text: '周评'}
+							 {value: '',text: '全部状态'},
+							 {value: '0',text: '未谈'},
+							 {value: '1',text: '已谈'}
 						 ]
 				},
 				methods:{
@@ -240,7 +220,7 @@
 						pageIndex = 1;
 						flagRef = 0;
 						//54.科教频道_个人收藏列表
-						getTnewsCollList(pageIndex);
+						getAttendanceList(pageIndex);
 						setTimeout(function() {
 							//结束下拉刷新
 							self.endPullDownToRefresh();
@@ -254,7 +234,7 @@
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
-							getTnewsCollList(pageIndex);
+							getAttendanceList(pageIndex);
 							setTimeout(function() {
 								//结束下拉刷新
 								self.endPullUpToRefresh();
@@ -270,50 +250,58 @@
 					}
 				}
 			});
-			//54.科教频道_个人收藏列表
-			function getTnewsCollList(index) {
-				var tempArray = [];
-				for(var i = 0; i < 10; i++) {
-					var tempValue = (index - 1) * 10 + i;
-					var tempModel = {
-						titleName: 'index:' + tempValue
+			//3.1.教师谈话首页列表
+			function getAttendanceList(index) {
+				var gradeValue=selectTitle.sGrade;
+				var classesValue=selectTitle.sClasses;
+				var comData ={
+					grdIds:gradeValue,
+					clsIds:classesValue,
+					stuId:'',
+					status:'',
+					pageSize:pageSize,
+					pageNumber:index
+				}
+				var wd = events.showWaiting();
+				getTalkChatIndex(comData,function(data) {
+					wd.close();
+					console.log('3.1.教师谈话首页列表:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						//总页数
+						totalPageCount = data.RspData.totalRow;
+						pageIndex++;
+						if(flagRef == 0) { //刷新
+							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
+								console.log("array=="+JSON.stringify(array));
+								actionArrayData.actionArray = array;
+							})
+						} else { //加载更多
+							//合并数组
+							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
+								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
+								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
+							})
+						}
+					} else {
+//							mui.toast(data.RspTxt);
 					}
-					tempArray.push(tempModel);
+				});
+			};
+			//3.4.删除谈话记录
+			function attendanceDelete(index,li) {
+				var comData ={
+					id:index
 				}
-				//总页数
-				totalPageCount = 20;
-				pageIndex++;
-				if(flagRef == 0) { //刷新
-					actionArrayData.actionArray = tempArray;
-				} else { //加载更多
-					//合并数组
-					actionArrayData.actionArray = actionArrayData.actionArray.concat(tempArray);
-				}
-				//需要加密的数据
-				//					var comData = {
-				//						top: '10', //每页行数，
-				//						vvl1: index //页码,获取第几页
-				//					};
-				//					// 等待的对话框
-				//					var wd = events.showWaiting();
-				//					//54.科教频道_个人收藏列表
-				//					postDataPro_PostTnewsCollList(comData, wd, function(data) {
-				//						wd.close();
-				//						console.log('54.科教频道_个人收藏列表:' + JSON.stringify(data));
-				//						if(data.RspCode == 0) {
-				//							//总页数
-				//							totalPageCount = data.RspData.pg.PageCount;
-				//							pageIndex++;
-				//							if(flagRef == 0) { //刷新
-				//								actionArrayData.actionArray = data.RspData.dt;
-				//							} else { //加载更多
-				//								//合并数组
-				//								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.dt);
-				//							}
-				//						} else {
-				////							mui.toast(data.RspTxt);
-				//						}
-				//					});
+				var wd = events.showWaiting();
+				getTalkDelete(comData,function(data) {
+					wd.close();
+					console.log('3.4.删除谈话记录:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						li.parentNode.removeChild(li);
+					} else {
+						mui.toast("删除考勤信息失败");
+					}
+				});
 			};
 		</script>
 	</body>

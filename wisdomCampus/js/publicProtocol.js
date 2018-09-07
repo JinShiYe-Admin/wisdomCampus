@@ -665,30 +665,51 @@ var getActionDelete = function(data0, callback) {
 	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
 }
 
-//11.教师谈话首页列表
+//3.1.教师谈话首页列表
 var getTalkChatIndex = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'chatIndex', data0, callback);
 }
 
-//12.谈话详情
+//3.2.谈话详情
 var getTalkDetail = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'detail', data0, callback);
 }
 
-//13.保存谈话信息
+//3.3.保存谈话信息
 var getTalkSaveChat = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'saveChat', data0, callback);
 }
 
-//14.删除谈话记录
+//3.4.删除谈话记录
 var getTalkDelete = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'teacherChat/';
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+
+//4.1.量化考评首页列表
+var getReviewEvaluationIndex = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'evaluation/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+
+//4.2.考评详情
+var getReviewEvaluationDetail = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'evaluation/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+
+//4.3.学生考评分析
+var getReviewEvaluationStuAnalysis = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'evaluation/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'evaluationStuAnalysis', data0, callback);
 }
