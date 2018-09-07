@@ -22,6 +22,11 @@
 				font-size: 13px;
 				color: blue;
 			}
+			.lineCell {
+				height: 10px;
+				width: 100%;
+				background: #f2f2f2;
+			}
 		</style>
 	</head>
 
@@ -32,32 +37,6 @@
 			<a class="mui-pull-right" style="color: white;font-size: 17px;margin-top: 10px;">修改</a>
 		</header>
 		<div class="mui-content" id="actionDetialData">
-			<!--<ul class="mui-table-view">
-            <li class="mui-table-view-cell" v-for='(actionModel,index) in actionDetialArray'>
-                <a v-if='index==4'>
-                    <div class="mui-media-body">
-                        {{actionModel.actionDetialTitle}}
-                    </div>
-                    <p style="border: 1px solid gray;margin-top: 5px;padding: 5px 5px 5px;">{{actionModel.actionDetialValue}}</p>
-                    <div style="margin-top: 10px;">
-                        <div style="float:left;">附件:</div>
-                        <div style="float:left;">
-							<p class="pClass">附件1</p>
-							<p>附件2</p>
-							<p>附件3</p>
-							<p>附件4</p>
-						</div>
-                    </div>
-                </a>
-                <a v-else=''>
-                    <p class="mui-pull-right">{{actionModel.actionDetialValue}}</p>
-                    <div class="mui-media-body">
-                        {{actionModel.actionDetialTitle}}
-                    </div>
-                </a>
-                <a v-if='index==2||index==7' style="background: gray;height: 10px;margin-top: 13px;"></a>
-            </li>
-        </ul>-->
 			<ul class="mui-table-view" v-if="dataFlag == 1">
 				<li class="mui-table-view-cell">
 					<a>
@@ -134,7 +113,8 @@
 						</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<p class="lineCell"></p>
+				<li class="mui-table-view-cell" style="margin-top: -10px;">
 					<a>
 						<p class="mui-pull-right liDetail">{{actionDetail.recorder}}</p>
 						<div class="mui-media-body liTitle">
@@ -160,7 +140,7 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/jquery.js"></script>
-		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<!--<script src="../../js/studentManage/studentManagePermission.js"></script>-->
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			mui.init();
@@ -168,10 +148,10 @@
 			mui.plusReady(function() {
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
-				studentMP.getStudentManagePermission(2,1,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-				});
-//				getActionDetailP();
+//				studentMP.getStudentManagePermission(2,1,function(array){
+//					console.log("ABCD=="+JSON.stringify(array))
+//				});
+				getActionDetailP();
 			});
 			var getActionDetailP = function() {
 				var tempData = {
