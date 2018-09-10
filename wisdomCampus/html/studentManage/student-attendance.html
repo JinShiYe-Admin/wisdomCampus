@@ -193,6 +193,9 @@
 							selectTitle.student=_getParam(items[2], 'text');
 							selectTitle.sGrade=_getParam(items[0], 'value');
 							selectTitle.sClasses=_getParam(items[1], 'value');
+							
+							pageIndex = 1;
+							flagRef = 0;
 							getAttendanceList(pageIndex);
 						});
 					},

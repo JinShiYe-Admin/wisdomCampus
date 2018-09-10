@@ -92,56 +92,32 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
-							<!--<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
-								<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,index)">
-									<a class="mui-btn mui-btn-red">删除</a>
-								</div>
-								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index)">
-									<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-									<div class="mui-media-body">
-										王{{index+1}}陆【五年级108{{index+1}}班】
-										<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-									</div>
-								</a>
-							</li>-->
-							<li class="mui-table-view-cell mui-media">
+							<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
 								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(1)">
-									<div class="mui-media-body">
-										<span class="leftTag-title" style="background: #EC971F;">期评</span><span class="leftTag">年级1701班2018年春季学生行为量化考评</span>
-										<br/>
-										<span class='mui-ellipsis'>量化时间：2018-08-21——2018-08-26</span>
-										<span class='rightTag-title'>宇文化及</span>
-									</div>
-								</a>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(1)">
-									<div class="mui-media-body">
-										<span class="leftTag-title" style="background: #48C6C3;">月评</span><span class="leftTag">年级1701班2018年春季3月学生行为量化考评</span>
-										<br/>
-										<span class='mui-ellipsis'>量化时间：2018-08-21——2018-08-26</span>
-										<span class='rightTag-title'>宇文化及</span>
-									</div>
-								</a>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(1)">
-									<div class="mui-media-body">
-										<span class="leftTag-title" style="background: #FF6AC8;">周评</span><span class="leftTag">年级1701班2018年春季第23周学生行为量化考评</span>
-										<br/>
-										<span class='mui-ellipsis'>量化时间：2018-08-21——2018-08-26</span>
-										<span class='rightTag-title'>宇文化及</span>
-									</div>
-								</a>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(1)">
-									<div class="mui-media-body">
-										<span class="leftTag-title" style="background: #FF6AC8;">周评</span><span class="leftTag">年级1701班2018年春季第23周学生行为量化考评年级1701班2018年春季第23周学生行为量化考评年级1701班2018年春季第23周学生行为量化考评年级1701班2018年春季第23周学生行为量化考评</span>
-										<br/>
-										<span class='mui-ellipsis'>量化时间：2018-08-21——2018-08-26</span>
-										<span class='rightTag-title'>宇文化及</span>
-									</div>
+									<template v-if="actionModel.type=='周评'">
+										<div class="mui-media-body">
+											<span class="leftTag-title" style="background: #FF6AC8;">{{actionModel.type}}</span><span class="leftTag">{{actionModel.gradeName}}{{actionModel.className}}{{actionModel.year}}年{{actionModel.week}}学生行为量化考评</span>
+											<br/>
+											<span class='mui-ellipsis'>量化时间：{{actionModel.fromDate}}——{{actionModel.toDate}}</span>
+											<span class='rightTag-title'>{{actionModel.createUsername}}</span>
+										</div>
+									</template>
+									<template v-if="actionModel.type=='月评'">
+										<div class="mui-media-body">
+											<span class="leftTag-title" style="background: #48C6C3;">{{actionModel.type}}</span><span class="leftTag">{{actionModel.gradeName}}{{actionModel.className}}{{actionModel.year}}年{{actionModel.month}}月学生行为量化考评</span>
+											<br/>
+											<span class='mui-ellipsis'>量化时间：{{actionModel.fromDate}}——{{actionModel.toDate}}</span>
+											<span class='rightTag-title'>{{actionModel.createUsername}}</span>
+										</div>
+									</template>
+									<template v-if="actionModel.type=='期评'">
+										<div class="mui-media-body">
+											<span class="leftTag-title" style="background: #EC971F;">{{actionModel.type}}</span><span class="leftTag">{{actionModel.gradeName}}{{actionModel.className}}{{actionModel.year}}年{{actionModel.term}}学期学生行为量化考评</span>
+											<br/>
+											<span class='mui-ellipsis'>量化时间：{{actionModel.fromDate}}——{{actionModel.toDate}}</span>
+											<span class='rightTag-title'>{{actionModel.createUsername}}</span>
+										</div>
+									</template>
 								</a>
 							</li>
 						</ul>
@@ -172,13 +148,26 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.js"></script>
 		<script src="../../js/utils/mui.pullToRefresh.material.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var m$=mui.init()
 			var pageIndex = 1; //请求数据页面
+			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
 			mui.plusReady(function(){
-				getTnewsCollList(pageIndex);
+				studentMP.getStudentManagePermission(1,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					selectTitle.list=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						selectTitle.sGrade=allGrade.value;
+						selectTitle.sClasses=allClasses.value;
+						getReviewList(pageIndex);
+					}
+				});
 			});
 			//接收student-index发送的close事件
 			window.addEventListener('closePop', function() {
@@ -191,21 +180,6 @@
 					actionArray: []
 				},
 				methods: {
-					deleteItem:function(event,index){
-						var dom=event.target;
-						var li = dom.parentNode.parentNode;
-						var btnArray = ['确认', '取消'];
-						mui.confirm('确认删除该条记录？', '校讯通', btnArray, function(e) {
-							if (e.index == 0) {
-//								li.parentNode.removeChild(li);
-								console.log("删除第"+index+"个item")
-							} else {
-								setTimeout(function() {
-									m$.swipeoutClose(li);
-								}, 0);
-							}
-						});
-					},
 					gotoDeatil:function(index){
 						console.log('点击第'+index+'个标签进入详情')
 //						utils.mOpenWithData("../../html/studentManage/student-action-Detail.html", {});	
@@ -225,14 +199,15 @@
 					grade:'全部年级',
 					classes:'全部班级',
 					type:'类型',
-					list:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级"}]},
-						   {value: '2',text: '初中一年级',children: [{value: "10",text: "10111班"}]},
-						   {value: '3',text: '二年级',children: [{value: "10",text: "一班"}]}
-						 ],
+					list:[],
+					sGrade:"",//存值用
+					sClasses:"",//存值用
+					typeValue:"",//存值用
 					typeList:[
-							 {value: '1',text: '全部状态'},
-							 {value: '2',text: '期评'},
-							 {value: '3',text: '周评'}
+							 {value: '',text: '全部'},
+							 {value: 'termEvaluation',text: '期评'},
+							 {value: 'weekEvaluation',text: '周评'},
+							 {value: 'monthEvaluation',text: '月评'},
 						 ]
 				},
 				methods:{
@@ -242,7 +217,13 @@
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text'));
+							
+							selectTitle.sGrade=_getParam(items[0], 'value');
+							selectTitle.sClasses=_getParam(items[1], 'value');
+							
+							pageIndex = 1;
+							flagRef = 0;
+							getReviewList(pageIndex);
 						});
 					},
 					selectClass:function(){
@@ -254,7 +235,12 @@
 						userPicker.setData(this.typeList);
 						userPicker.show(function(items) {
 							obj.type=_getParam(items[0], 'text')
-							console.log( JSON.stringify(items[0]));
+							
+							obj.typeValue=_getParam(items[0], 'value')
+							
+							pageIndex = 1;
+							flagRef = 0;
+							getReviewList(pageIndex);
 						});
 					}
 				}
@@ -276,13 +262,10 @@
 				down: {
 					callback: function() {
 						var self = this;
-						//console.log("下拉刷新");
 						pageIndex = 1;
 						flagRef = 0;
-						//54.科教频道_个人收藏列表
-						getTnewsCollList(pageIndex);
+						getReviewList(pageIndex);
 						setTimeout(function() {
-							//结束下拉刷新
 							self.endPullDownToRefresh();
 						}, 1000);
 					}
@@ -290,70 +273,57 @@
 				up: {
 					callback: function() {
 						var self = this;
-						//console.log("上拉加载更多");
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
-							//54.科教频道_个人收藏列表
-							getTnewsCollList(pageIndex);
+							getReviewList(pageIndex);
 							setTimeout(function() {
-								//结束下拉刷新
 								self.endPullUpToRefresh();
 								if(mui(".mui-table-view-cell").length < 10) {
 									mui(".mui-pull-loading")[0].innerHTML = "";
 								}
 							}, 1000);
 						} else {
-							//结束下拉刷新
 							self.endPullUpToRefresh();
 							mui(".mui-pull-loading")[0].innerHTML = "没有更多了";
 						}
 					}
 				}
 			});
-			//54.科教频道_个人收藏列表
-			function getTnewsCollList(index) {
-				var tempArray = [];
-				for(var i = 0; i < 10; i++) {
-					var tempValue = (index - 1) * 10 + i;
-					var tempModel = {
-						titleName: 'index:' + tempValue
+			//4.1 量化考评首页列表
+			function getReviewList(index) {
+				var gradeValue=selectTitle.sGrade;
+				var classesValue=selectTitle.sClasses;
+				var comData ={
+					grdIds:gradeValue,
+					clsIds:classesValue,
+					type:selectTitle.typeValue,
+					pageSize:pageSize,
+					pageNumber:index
+				}
+				var wd = events.showWaiting();
+				getReviewEvaluationIndex(comData,function(data) {
+					wd.close();
+					console.log('4.1 量化考评首页列表' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						//总页数
+						totalPageCount = data.RspData.totalRow;
+						pageIndex++;
+						if(flagRef == 0) { //刷新
+							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
+								console.log("array=="+JSON.stringify(array));
+								actionArrayData.actionArray = array;
+							})
+						} else { //加载更多
+							//合并数组
+							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
+								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
+								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
+							})
+						}
+					} else {
+//							mui.toast(data.RspTxt);
 					}
-					tempArray.push(tempModel);
-				}
-				//总页数
-				totalPageCount = 20;
-				pageIndex++;
-				if(flagRef == 0) { //刷新
-					actionArrayData.actionArray = tempArray;
-				} else { //加载更多
-					//合并数组
-					actionArrayData.actionArray = actionArrayData.actionArray.concat(tempArray);
-				}
-				//需要加密的数据
-				//					var comData = {
-				//						top: '10', //每页行数，
-				//						vvl1: index //页码,获取第几页
-				//					};
-				//					// 等待的对话框
-				//					var wd = events.showWaiting();
-				//					//54.科教频道_个人收藏列表
-				//					postDataPro_PostTnewsCollList(comData, wd, function(data) {
-				//						wd.close();
-				//						console.log('54.科教频道_个人收藏列表:' + JSON.stringify(data));
-				//						if(data.RspCode == 0) {
-				//							//总页数
-				//							totalPageCount = data.RspData.pg.PageCount;
-				//							pageIndex++;
-				//							if(flagRef == 0) { //刷新
-				//								actionArrayData.actionArray = data.RspData.dt;
-				//							} else { //加载更多
-				//								//合并数组
-				//								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.dt);
-				//							}
-				//						} else {
-				////							mui.toast(data.RspTxt);
-				//						}
-				//					});
+				});
 			};
 			
 		</script>

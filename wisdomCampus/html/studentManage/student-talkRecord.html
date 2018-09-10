@@ -74,21 +74,21 @@
 			<div class="mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell mui-media" @tap="gotoDeatil(1)">
-							<a href="javascript:;">
+						<li class="mui-table-view-cell mui-media"   v-for="(actionModel,index) in actionArray">
+							<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
+								<a class="mui-btn mui-btn-red">删除</a>
+							</div>
+							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
 								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
 								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #D36570;">未谈话</span>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media" >
-							<a href="javascript:;">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
-								<div class="mui-media-body">
-									<span class="leftTag">王大陆【五年级1081班】</span><span class="rightTag">2018-8-13</span>
-									<span class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</span><span class="rightTagTh" style="color: #5D9DDA;">已谈话</span>
+									<span class="leftTag">{{actionModel.studentName}}【{{actionModel.gradeName}}{{actionModel.className}}】</span><span class="rightTag">{{actionModel.behaviorTime}}</span>
+									<span class='mui-ellipsis'>{{actionModel.detail}}</span>
+									<template v-if="actionModel.id ==null">
+										<span class="rightTagTh" style="color: #D36570;">未谈话</span>
+									</template>
+									<template v-else>
+										<span class="rightTagTh" style="color: #5D9DDA;">已谈话</span>
+									</template>
 								</div>
 							</a>
 						</li>
@@ -143,9 +143,13 @@
 						var dom=event.target;
 						var li = dom.parentNode.parentNode;
 						var btnArray = ['确认', '取消'];
-						mui.confirm('确认删除该条记录？', '校讯通', btnArray, function(e) {
+						mui.confirm('确认删除该条记录？', '智慧校园', btnArray, function(e) {
 							if (e.index == 0) {
 								console.log("删除第"+index+"个item")
+								if(index==null){
+									mui.toast("未谈话的记录无法删除")	
+									return
+								}
 								attendanceDelete(index,li)
 							} else {
 								setTimeout(function() {
@@ -168,6 +172,9 @@
 					classes:'全部班级',
 					student:'全部学生',//显示用
 					type:'全部状态',
+					sGrade:"",//存值用
+					sClasses:"",//存值用
+					typeValue:"",//存值用
 					list:[],
 					typeList:[
 							 {value: '',text: '全部状态'},
@@ -177,12 +184,19 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 2});
+						var userPicker = new m$.PopPicker({layer: 3});
 						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							console.log("你选择的城市是:" + _getParam(items[0], 'text') + " " + _getParam(items[1], 'text'));
+							selectTitle.student=_getParam(items[2], 'text');
+							
+							selectTitle.sGrade=_getParam(items[0], 'value');
+							selectTitle.sClasses=_getParam(items[1], 'value');
+							
+							pageIndex = 1;
+							flagRef = 0;
+							getAttendanceList(pageIndex);
 						});
 					},
 					selectClass:function(){
@@ -194,7 +208,11 @@
 						userPicker.setData(this.typeList);
 						userPicker.show(function(items) {
 							obj.type=_getParam(items[0], 'text')
-							console.log( JSON.stringify(items[0]));
+							obj.typeValue=_getParam(items[0], 'value')
+							
+							pageIndex = 1;
+							flagRef = 0;
+							getAttendanceList(pageIndex);
 						});
 					}
 				}
@@ -258,7 +276,7 @@
 					grdIds:gradeValue,
 					clsIds:classesValue,
 					stuId:'',
-					status:'',
+					status:selectTitle.typeValue,
 					pageSize:pageSize,
 					pageNumber:index
 				}

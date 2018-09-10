@@ -279,6 +279,57 @@ var studentMP = (function(mod) {
 			}
 		});
 	}
+	
+	//根据flag获取id对应的年级、班级、学生 name
+	//GrdClsMsg,当前页面的年级、班级数组，上面接口获取到的数据
+	//pageList，当前页面获取到的列表
+	mod.getName=function(flag,GrdClsMsg, list, callback){
+		switch (flag){
+			case '0':
+			for(var i = 0; i < list.length; i++) {
+				var tempDetail = list[i];
+				for(var a = 0; a < GrdClsMsg.length; a++) {
+					var tempGrdClsMsg = GrdClsMsg[a];
+					if(tempDetail.id == tempGrdClsMsg.value) {
+						tempDetail.name = tempGrdClsMsg.text;
+					}
+				}
+			}
+			break;
+			case '1':
+			for(var i = 0; i < list.length; i++) {
+				var tempDetail = list[i];
+				for(var a = 0; a < GrdClsMsg.length; a++) {
+					var tempGrdClsMsg = GrdClsMsg[a];
+					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+						var tempClass = tempGrdClsMsg.children[b];
+						if(tempDetail.id == tempClass.value) {
+							tempDetail.name = tempClass.text;
+						}
+					}
+				}
+			}
+			break;
+			case '2':
+			for(var i = 0; i < list.length; i++) {
+				var tempDetail = list[i];
+				for(var a = 0; a < GrdClsMsg.length; a++) {
+					var tempGrdClsMsg = GrdClsMsg[a];
+					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+						var tempClass = tempGrdClsMsg.children[b];
+						for(var c = 0; c < tempClass.children.length; c++) {
+							var tempStu = tempClass.children[c];
+							if(tempStu.id == tempDetail.value) {
+								tempDetail.name = tempStu.text;
+							}
+						}
+					}
+				}
+			}
+			break;
+		}
+		callback(list);
+	}
 
 	//给数组去重
 	Array.prototype.unique = function(key) {

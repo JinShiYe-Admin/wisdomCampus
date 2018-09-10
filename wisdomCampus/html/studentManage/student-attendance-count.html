@@ -308,7 +308,9 @@
 					wd.close();
 					console.log('4.考勤统计' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						mui.toast(JSON.stringify(data));
+						studentMP.getName(selectTitle.flag,selectTitle.gradelist,data.RspData.list,function(array){
+							console.log(JSON.stringify(array));
+						});
 					} else {
 						mui.toast(data.RspTxt);
 					} 

@@ -697,14 +697,14 @@ var getTalkDelete = function(data0, callback) {
 var getReviewEvaluationIndex = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'evaluation/';
 	data0 = extendParameter1(data0);
-	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+	xhrPost(tempAttendUrl1 + 'evaluationIndex', data0, callback);
 }
 
 //4.2.考评详情
 var getReviewEvaluationDetail = function(data0, callback) {
 	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'evaluation/';
 	data0 = extendParameter1(data0);
-	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+	xhrPost(tempAttendUrl1 + 'evaluationDetail', data0, callback);
 }
 
 //4.3.学生考评分析
