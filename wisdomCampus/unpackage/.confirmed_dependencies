@@ -1,56 +1,79 @@
 {
-  "html/index/login.html": {
-    "refer": [
-      "html/index/home.html"
-    ]
-  },
-  "html/index/home.html": {
-    "refer": [
-      "html/checkNotice/all-list.html",
-      "html/signIn/atterecords.html",
-      "html/signIn/signInIndex.html",
-      "html/signIn/signInIndex1.html",
-      "html/index/login.html",
-      "html/mine/modifyPassword.html",
-      "html/mine/about.html",
-      "html/mine/redirectPassword.html",
-      "html/mine/headImg.html",
-      "html/index/test.html"
-    ],
-    "resources": [
-      "js/lib/app-update.js"
-    ]
-  },
-  "html/checkNotice/all-list.html": {
-    "refer": [
-      "html/checkNotice/new_message.html",
-      "html/checkNotice/new-check.html",
-      "html/checkNotice/noticeDetails.html",
-      "html/checkNotice/check-detail.html"
-    ]
-  },
-  "html/checkNotice/new_message.html": {
-    "refer": [
-      "html/checkNotice/selectPeople.html"
-    ]
-  },
-  "html/checkNotice/new-check.html": {
-    "refer": [
-      "html/checkNotice/selectPeople.html"
-    ]
-  },
-  "html/signIn/signInIndex1.html": {
-    "refer": [
-      "html/signIn/atterecords.html",
-      "html/signIn/atterecords1.html"
-    ]
-  },
-  "html/mine/redirectPassword.html": {
-    "resources": [
-      "html/mine/test.html"
-    ],
-    "refer": [
-      "html/mine/test.html"
-    ]
-  }
+	"html/index/login.html": {
+		"refer": [
+			"html/index/home.html"
+		]
+	},
+	"html/index/home.html": {
+		"refer": [
+			"html/checkNotice/all-list.html",
+			"html/signIn/atterecords.html",
+			"html/signIn/signInIndex.html",
+			"html/signIn/signInIndex1.html",
+			"html/index/login.html",
+			"html/mine/modifyPassword.html",
+			"html/mine/about.html",
+			"html/mine/redirectPassword.html",
+			"html/mine/headImg.html",
+			"html/index/test.html",
+			"html/studentManage/student-index.html"
+		],
+		"resources": [
+			"js/lib/app-update.js"
+		]
+	},
+	"html/checkNotice/all-list.html": {
+		"refer": [
+			"html/checkNotice/new_message.html",
+			"html/checkNotice/new-check.html",
+			"html/checkNotice/noticeDetails.html",
+			"html/checkNotice/check-detail.html"
+		]
+	},
+	"html/checkNotice/new_message.html": {
+		"refer": [
+			"html/checkNotice/selectPeople.html"
+		]
+	},
+	"html/checkNotice/new-check.html": {
+		"refer": [
+			"html/checkNotice/selectPeople.html"
+		]
+	},
+	"html/signIn/signInIndex1.html": {
+		"refer": [
+			"html/signIn/atterecords.html",
+			"html/signIn/atterecords1.html"
+		]
+	},
+	"html/mine/redirectPassword.html": {
+		"resources": [
+			"html/mine/test.html"
+		],
+		"refer": [
+			"html/mine/test.html"
+		]
+	},
+	"html/studentManage/student-index.html": {
+		"resources": [
+			"html/studentManage/student-attendance.html",
+			"html/studentManage/student-talkRecord.html"
+		],
+		"refer": [
+			"html/studentManage/student-talkRecord.html",
+			"html/studentManage/student-review.html",
+			"html/studentManage/student-attendance.html",
+			"html/studentManage/student-action.html"
+		]
+	},
+	"html/studentManage/student-attendance.html": {
+		"resources": [
+			"img/login/headImg.png"
+		],
+		"refer": [
+			"html/studentManage/student-attendance-add.html",
+			"html/studentManage/student-attendanceDetail.html",
+			"html/studentManage/student-attendance-count.html"
+		]
+	}
 }
