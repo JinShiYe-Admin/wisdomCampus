@@ -713,3 +713,5 @@ var getReviewEvaluationStuAnalysis = function(data0, callback) {
 	data0 = extendParameter1(data0);
 	xhrPost(tempAttendUrl1 + 'evaluationStuAnalysis', data0, callback);
 }
+
+

@@ -29,9 +29,8 @@
 				border-radius: initial;
 				height: 20rem;
 				border: 1px solid lightgray;
-				margin: 3%;
+				margin: 10px 0 0 0;
 				font-size: 14px;
-				padding-bottom: 25px;
 			}
 			
 			.mui-popover-arrow {
@@ -133,7 +132,9 @@
 			    right: 10px;
 			}
 			/**add*/
-			
+			.mui-navigate-right.rCss.no-icon:after{
+				content: ' ';
+			}
 		</style>
 	</head>
 
@@ -167,8 +168,8 @@
 					</li>
 					<li class="mui-table-view-cell" >
 						<a  class="aCss">考勤说明</a>
+						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" ></textarea>
 					</li>
-					<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" style="width: 94%;"></textarea>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div id="test">
@@ -222,11 +223,11 @@
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录人</a>
-							<span  class="mui-navigate-right  rCss">{{jlr}}</span>
+							<span  class="mui-navigate-right rCss no-icon">{{jlr}}</span>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录时间</a>
-							<p  class="mui-navigate-right  rCss">{{jlsj}}</p>
+							<p  class="mui-navigate-right rCss no-icon">{{jlsj}}</p>
 						</li>
 					</ul>
 				</div>
@@ -321,7 +322,7 @@
 					kqxxList:[],
 					jcList:[],
 					qxList:[],
-					nodeSubJson:[{canDelete:'0',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
+					nodeSubJson:[{canDelete:'1',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
 					jlr:personal.utname,//存值用：记录人
 					lxsj:'请选择' ,//存值用：离校时间
 					hxsj:'请选择',//存值用:回校时间
@@ -441,7 +442,12 @@
 					},
 					deleteLi:function(e,index){//添加考勤日期节次 项
 						var obj=e.target;
-						this.nodeSubJson.splice(index,1);
+						if(this.nodeSubJson.length==1){
+								mui.toast("至少要填写一条考勤数据")
+						}else{
+							this.nodeSubJson.splice(index,1);
+						}
+						
 					},
 					submit:function(){
 						var arr =[];

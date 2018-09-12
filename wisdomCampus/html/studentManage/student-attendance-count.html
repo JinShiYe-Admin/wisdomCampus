@@ -120,64 +120,15 @@
 			</div>
 			<div class="mui-content mui-fullscreen" style="z-index: 6;background: #fff;margin-top: 115px;">
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">总计</a>
+					<li class="mui-table-view-cell keep-unfold mui-collapse" v-for="(model,index) in queryList">
+						<a class="mui-navigate-right" href="#" v-if="model.id=='total'">总计</a>
+						<a class="mui-navigate-right" href="#" v-else-if="flag=='2'">{{model.id}}</a>
+						<a class="mui-navigate-right" href="#" v-else>{{model.name}}</a>
 						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">一年级</a>
-						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">二年级</a>
-						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">三年级</a>
-						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">三年级</a>
-						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell keep-unfold mui-collapse">
-						<a class="mui-navigate-right" href="#">三年级</a>
-						<div class="mui-collapse-content">
-							<div class="spdiv"><span class="dl">上课吵闹</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课打架</span><span class="dr">2次</span></div>
-							<div class="line"></div>
-							<div class="spdiv"><span class="dl">上课迟到</span><span class="dr">2次</span></div>
+							<template v-for="val in model.value">
+								<div class="spdiv"><span class="dl">{{val.name}}</span><span class="dr">{{val.count}}次</span></div>
+								<div class="line"></div>
+							</template>
 						</div>
 					</li>
 				</ul>
@@ -226,7 +177,8 @@
 					flag:'0',
 					startTime:getDate(),
 					endTime:getDate(),
-					gradelist:[]
+					gradelist:[],
+					queryList:[]
 				},
 				methods:{
 					selectGrade:function(){
@@ -297,8 +249,6 @@
 					clsIds:selectTitle.clsIds,
 					fromDate:selectTitle.startTime,
 					toDate:selectTitle.endTime,
-//					gradeId:selectTitle.grdIds,
-//					classId:selectTitle.clsIds,
 //					stuId:selectTitle.stuId,
 					flag:selectTitle.flag
 				}
@@ -309,7 +259,8 @@
 					console.log('4.考勤统计' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						studentMP.getName(selectTitle.flag,selectTitle.gradelist,data.RspData.list,function(array){
-							console.log(JSON.stringify(array));
+							console.log('array================'+JSON.stringify(array));
+							selectTitle.queryList=array;
 						});
 					} else {
 						mui.toast(data.RspTxt);

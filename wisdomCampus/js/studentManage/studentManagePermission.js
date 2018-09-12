@@ -286,6 +286,7 @@ var studentMP = (function(mod) {
 	mod.getName=function(flag,GrdClsMsg, list, callback){
 		switch (flag){
 			case '0':
+			console.log("查询年级对应的名称")
 			for(var i = 0; i < list.length; i++) {
 				var tempDetail = list[i];
 				for(var a = 0; a < GrdClsMsg.length; a++) {
@@ -297,6 +298,7 @@ var studentMP = (function(mod) {
 			}
 			break;
 			case '1':
+			console.log("查询班级对应的名称")
 			for(var i = 0; i < list.length; i++) {
 				var tempDetail = list[i];
 				for(var a = 0; a < GrdClsMsg.length; a++) {
@@ -311,6 +313,7 @@ var studentMP = (function(mod) {
 			}
 			break;
 			case '2':
+			console.log("查询学生对应的名称")
 			for(var i = 0; i < list.length; i++) {
 				var tempDetail = list[i];
 				for(var a = 0; a < GrdClsMsg.length; a++) {
