@@ -314,6 +314,7 @@ var studentMP = (function(mod) {
 						}
 					}
 				}
+			}
 				break;
 			case '2':
 			console.log("查询学生对应的名称")
