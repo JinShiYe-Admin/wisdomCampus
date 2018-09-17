@@ -300,7 +300,8 @@ var studentMP = (function(mod) {
 						tempDetail.name = tempGrdClsMsg.text;
 					}
 				}
-				break;
+			}
+			break;
 			case '1':
 			console.log("查询班级对应的名称")
 			for(var i = 0; i < list.length; i++) {
@@ -332,7 +333,8 @@ var studentMP = (function(mod) {
 						}
 					}
 				}
-				break;
+			}
+			break;
 		}
 		callback(list);
 	}
