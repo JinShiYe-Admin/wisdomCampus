@@ -27,6 +27,14 @@
 				width: 100%;
 				background: #f2f2f2;
 			}
+			.liTitle{
+				font-size: 15px;
+				color: #333;
+			}
+			.liDetail{
+				font-size: 14px;
+				color: #666;
+			}
 		</style>
 	</head>
 
@@ -34,7 +42,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
 			<a @tap="muiback" class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">行为详情</h1>
-			<a class="mui-pull-right" style="color: white;font-size: 17px;margin-top: 10px;">修改</a>
+			<a class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 11px;">修改</a>
 		</header>
 		<div class="mui-content" id="actionDetialData">
 			<ul class="mui-table-view" v-if="dataFlag == 1">
