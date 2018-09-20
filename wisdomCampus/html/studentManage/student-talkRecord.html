@@ -21,16 +21,19 @@
 				background: #F0F0F0;
 			}
 			.mui-segmented-control .mui-control-item{
-				color: #0D0D0D;
 				border: 0px;
+				color: #666;
+				font-size: 12px;
 			}			
 			.mui-segmented-control .mui-control-item.mui-active {
-			    color: #0D0D0D;
 			    background-color: transparent;
+			    color: #666;
+				font-size: 12px;
 			}
 			.mui-segmented-control .mui-control-item span{
 				font-size: 12px;
 				padding: 0 0 0 5px;
+				color: #666;
 			}
 			.leftTag{
 				font-size: 14px;
@@ -57,7 +60,7 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="actionHead">
+		<header class="mui-bar mui-bar-nav" style="background-color:#3c9bfe;" id="actionHead">
 			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">学生谈话记录</h1>
 			<a @tap="revoke()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>
@@ -79,15 +82,16 @@
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
-								<img class="mui-media-object mui-pull-left" src="../../img/login/headImg.png">
+								<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" src="../../img/login/headImg.png">
 								<div class="mui-media-body">
-									<span class="leftTag">{{actionModel.studentName}}【{{actionModel.gradeName}}{{actionModel.className}}】</span><span class="rightTag">{{actionModel.behaviorTime}}</span>
-									<span class='mui-ellipsis'>{{actionModel.detail}}</span>
+									<span class="leftTag" style="font-size: 14px;color: #333;">{{actionModel.studentName}}&nbsp;【{{actionModel.gradeName}}{{actionModel.className}}】</span>
+									<span class="rightTag" style="font-size: 12px;color: #999;">{{actionModel.behaviorTime}}</span>
+									<span class='mui-ellipsis' style="font-size: 12px;color: #666;">{{actionModel.detail}}</span>
 									<template v-if="actionModel.id ==null">
-										<span class="rightTagTh" style="color: #D36570;">未谈话</span>
+										<span class="rightTagTh" style="font-size: 12px;color: #D36570;">未谈话</span>
 									</template>
 									<template v-else>
-										<span class="rightTagTh" style="color: #5D9DDA;">已谈话</span>
+										<span class="rightTagTh" style="font-size: 12px;color: #5D9DDA;">已谈话</span>
 									</template>
 								</div>
 							</a>
@@ -159,8 +163,17 @@
 						});
 					},
 					gotoDeatil:function(index,model){//item点击事件
-						console.log('点击第'+index+'个标签进入详情')
-						utils.mOpenWithData("../../html/studentManage/student-attendanceDetail.html", model);
+						utils.mOpenWithData("../../html/studentManage/student-talkRecord-Detail.html", model);
+					}
+				}
+			});
+			
+			var actionHead =new Vue({
+				el:'#actionHead',
+				data:{},
+				methods:{
+					revoke:function(){
+						utils.mOpenWithData("student-talkRecord-add.html", {});
 					}
 				}
 			});

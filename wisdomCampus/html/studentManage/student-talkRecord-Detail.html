@@ -37,6 +37,19 @@
 				border-bottom:0;
 				margin: 3%;
 				font-size: 14px;
+				padding-bottom: 35px;
+			}
+			
+			#notes2 {
+				border: none;
+				border-radius: initial;
+				height: 20rem;
+				border-top: 1px solid lightgray;
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray;
+				border-bottom:1px solid lightgray;
+				margin: 3%;
+				font-size: 14px;
 				padding-bottom: 25px;
 			}
 			
@@ -157,49 +170,73 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="actionHead">
 			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">谈话记录详情</h1>
-			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;">确定</a>
+			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;">{{edit}}</a>
 		</header>
 		<div class="mui-content mui-fullscreen" style="background: white;">
 			<div id='talk'>
 				<div class="mui-row title-info">
-					<p v-cloak class="user-title">{{title}}</p>
-					<p v-cloak class="user-title-se">{{time}}</p>
-					<p v-cloak class="user-title-body">{{body}}</p>
-					<div v-cloak class="user-title-footer">
-						<p class="ul-p">附件：<a :href=fj>上课睡觉.jpg</a></p>
-						<p class="ul-btn" >{{data1}}</p>
+					<p v-cloak class="user-title">{{curPage.gradeName}}{{curPage.className}}{{curPage.stuName}}</p>
+					<p v-cloak class="user-title-se">{{sb.behaviorTime}}&nbsp;{{sb.period}}</p>
+					<p v-cloak class="user-title-body">【{{sb.behaviorName}}】&nbsp;{{sb.behaviorDetail}}</p>
+					<div v-cloak class="user-title-footer" v-for="(attach,index) in sb.attachs">
+						//TODO
+						<p class="ul-p">附件：<a :href=attach.url>{{attact.attachName}}</a></p>
 					</div>
+					<p class="ul-btn" style="margin-top: -22px;">{{sb.recorder}}</p>
 				</div>
-
-
-				<div style="background-color: #f2f3f5;height: 10px;"></div>
-				<div class="mui-row title-body">
-					<span class="body-title" >谈话内容</span>
-				</div>
-				<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入谈话内容（最多350字）" style="width: 94%;"></textarea>
-				<div id="MultiMedia">
-					<div id="MultiMedia_Body" class="multimedia-body"></div>
-				</div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
-						<a  class="aCss">谈话日期:</a>
-						<p @tap="selectTime($event)" data-options='{"type":"date"}' class="mui-navigate-right pCss">{{time2}}</p>
-					</li>
-				</ul>
-				
-				
-				<div style="background-color: #f2f3f5;height: 10px;"></div>
-				<div id="bootom-card" style="margin-bottom: 30px">
+				<div :style="{visibility: isEdit=='hide'? 'hidden' : 'initial' }">
+					<div style="background-color: #f2f3f5;height: 10px;"></div>
+					<div class="mui-row title-body">
+						<span class="body-title" >谈话内容</span>
+					</div>
+					
+					<textarea id="notes2" :disabled="isEdit=='show'"  v-model="content" style="width: 94%;">{{tc.chatDetail}}</textarea>
+					
+					<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'initial' : 'hidden' }">
+						<div id="MultiMedia_Body" class="multimedia-body"></div>
+					</div>
+					<div v-cloak class="user-title-footer" style="margin: -15px 25px 10px;" v-for="(attach,index) in tc.attachs">
+						<p class="ul-p">附件：<a :href=attach.url>{{attact.attachName}}</a></p>
+					</div>
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a class="aCss">谈话/教育人 </a>
-							<span  class="rCss">{{data2}}</span>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="aCss">记录日期 </a>
-							<p  class="rCss">{{record}}</p>
-						</li>
+						<template v-if="isEdit=='edit'">
+							<li class="mui-table-view-cell" @tap="selectTime($event)">
+								<a  class="aCss">谈话日期:</a>
+								<p  data-options='{"type":"date"}' class="mui-navigate-right pCss">{{talkTime}}</p>
+							</li>
+						</template>
+						<template v-else>
+							<li class="mui-table-view-cell">
+								<a  class="aCss">谈话日期:</a>
+								<p class="mui-navigate-right pCss">{{tc.chatTime}}</p>
+							</li>
+						</template>
 					</ul>
+					<div style="background-color: #f2f3f5;height: 10px;"></div>
+					<div id="bootom-card" style="margin-bottom: 30px">
+						<ul class="mui-table-view">
+							<template v-if="isEdit=='edit'">
+								<li class="mui-table-view-cell">
+									<a class="aCss">谈话/教育人 </a>
+									<span  class="rCss">{{teacher}}</span>
+								</li>
+								<li class="mui-table-view-cell">
+									<a class="aCss">记录日期 </a>
+									<p  class="rCss">{{localTime}}</p>
+								</li>
+							</template>
+							<template v-else>
+								<li class="mui-table-view-cell">
+									<a class="aCss">谈话/教育人 </a>
+									<span  class="rCss">{{tc.teacher}}</span>
+								</li>
+								<li class="mui-table-view-cell">
+									<a class="aCss">记录日期 </a>
+									<p  class="rCss">{{tc.recordTime}}</p>
+								</li>
+							</template>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -228,7 +265,6 @@
 		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/vue.min.js"></script>
-		<!--<script type="text/javascript" src="../../js/publicProtocol.js"></script>-->
 		<script type="text/javascript" src="../../js/utils/mui.picker.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/events.js"></script>
 		<script type="text/javascript" src="../../js/utils/MultiMedia.js"></script>
@@ -247,26 +283,98 @@
 		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
 		<script src="../../js/utils/store.js"></script>
 		<script src="../../js/utils/utils.js"></script>
-		<!--<script src="../../js/utils/events.js"></script>-->
 		<script src="../../js/lib/jquery.js"></script>
-		<script src="../../js/publicProtocol.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
-		<!--加密-->
-		<script src="../../js/lib/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/lib/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/lib/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-
-		<script src='../../js/lib/crypto-js/require.js'></script>
-		<script src='../../js/utils/signHmacSHA1.js'></script>
-		<script src='../../js/utils/sortSign.js'></script>
 		<script src='../../js/utils/compressVideo.js'></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
+		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var $M=mui.init();
+			mui.plusReady(function() {
+				init();
+				initListener(); //初始化监听
+				getTalk();
+			});
+	
+			var actionHead =new Vue({
+				el:'#actionHead',
+				data:{
+					edit:'修改'
+				}
+			});
+			
+			var talkTitle =new Vue({
+				el:'#talk',
+				data:{
+					sb:'',
+					tc:'',
+					curPage:'',
+					isEdit:'',
+					content:'',
+					localTime: getDate(),//记录日期 取的是当前日期
+					teacher:personal.utname,//谈话/教育人 取的是当前登录老师
+					talkTime:'',
+					time:'2018年8月13日 第二节',
+					body:'【上课睡觉】王大陆同学上课不认真听讲，一直趴在桌子上睡觉，老师打了也不听。',
+					fj:'http://net.jiaobaowang.xiaoxuntong/download/sleep.jpg',
+					data1:'王老师|语文',
+					content:'',
+					time2:'2018-8-18',
+					data2:'王老师',
+					record:'2018-8-18'
+				},
+				methods:{
+					selectTime:function(event){
+						var _self = event.target;
+						var optionsJson = _self.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						var id = _self.getAttribute('id');
+						_self.picker = new $M.DtPicker(options);
+						_self.picker.show(function(rs) {
+							console.log('选择结果: ' + rs.text);
+							talkTitle.talkTime=rs.text;
+							_self.picker.dispose();
+							_self.picker = null;
+						});
+					}
+				}
+			});
+
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			console.log('publicParameter:' + JSON.stringify(personal));
+			var	curPage = utils.getDataFromUrl(window.location.href);
+			console.log('2222:' + JSON.stringify(curPage));
+			
+			if(curPage.id==null){
+				talkTitle.isEdit='show'		
+			}else{
+				talkTitle.isEdit='show'	
+			}
+			talkTitle.curPage=curPage;
+			
+			
+			//3.2.谈话详情
+			function getTalk() {
+				var comData ={
+					id:curPage.id,
+					sbId:curPage.sbId
+				}
+				var wd = events.showWaiting();
+				getTalkDetail(comData,function(data) {
+					wd.close();
+					console.log('3.2.谈话详情:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						talkTitle.sb=data.RspData.sb;
+						talkTitle.tc=data.RspData.tc;
+					} else {
+//							mui.toast(data.RspTxt);
+					}
+				});
+			};
+			
 			var pathList = []; //记录需要删掉的图片和缩略图
 			var QNUptoken; //token数据
 			var uploadNum = 0; //记录上传的次数
@@ -283,49 +391,6 @@
 				TotalPicture: 9, //图片的个数
 				TotalAudio: 0, //音频的个数
 				TotalVideo: 0, //视频的个数
-			});
-			
-			var talkTitle =new Vue({
-				el:'#talk',
-				data:{
-					title:'五年级1801班王大陆',
-					time:'2018年8月13日 第二节',
-					body:'【上课睡觉】王大陆同学上课不认真听讲，一直趴在桌子上睡觉，老师打了也不听。',
-					fj:'http://net.jiaobaowang.xiaoxuntong/download/sleep.jpg',
-					data1:'王老师|语文',
-					content:'',
-					time2:'2018-8-18',
-					data2:'王老师',
-					record:'2018-8-18'
-				},
-				methods:{
-					selectTime:function(event){
-						var _self = event.target;
-						if(_self.picker) {
-							_self.picker.show(function (rs) {
-								console.log( '选择结果: ' + rs.text);
-								_self.picker.dispose();
-								_self.picker = null;
-							});
-						} else {
-							var optionsJson = _self.getAttribute('data-options') || '{}';
-							var options = JSON.parse(optionsJson);
-							var id = _self.getAttribute('id');
-							_self.picker = new $M.DtPicker(options);
-							_self.picker.show(function(rs) {
-								console.log('选择结果: ' + rs.text);
-								talkTitle.time2=rs.text;
-								_self.picker.dispose();
-								_self.picker = null;
-							});
-						}
-					}
-				}
-			});
-
-			mui.plusReady(function() {
-				init();
-				initListener(); //初始化监听
 			});
 
 			/*
@@ -388,21 +453,26 @@
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
-					if(addNoticeContent.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
-						mui.toast('通知内容不能为空');
-						document.getElementById("finish").disabled = false;
-					} else if(addNoticeContent.content.length > 350) {
-						mui.toast('内容最多350字');
-						document.getElementById("finish").disabled = false;
-					} else {
-						var wd = events.showWaiting();
-						document.getElementById("finish").disabled = true;
-						if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
-							addNote(wd, '3', '', '', 0);
-						} else {
-							uploadFile(wd); //上传文件
+						if(actionHead.edit=='修改'){
+							talkTitle.isEdit='edit'	
+							actionHead.edit='提交'
+						}else{
+							if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
+								mui.toast('通知内容不能为空');
+								document.getElementById("finish").disabled = false;
+							} else if(talkTitle.content.length > 350) {
+								mui.toast('内容最多350字');
+								document.getElementById("finish").disabled = false;
+							} else {
+								var wd = events.showWaiting();
+								document.getElementById("finish").disabled = true;
+								if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
+									addNote(wd, '3', '', '', 0);
+								} else {
+									uploadFile(wd); //上传文件
+								}
+							}
 						}
-					}
 				});
 			}
 
@@ -414,7 +484,57 @@
 			 * @param {Object} encImg 附件缩略图地址
 			 */
 			function addNote(wd, encType, encAddr, encImg, encLen) {
+				console.log('encImg:' + encImg);
+				//附件名称
+				var encName = '';
+				if(encAddr.length > 0) {
+					var tempArray = [];
+					var tempAddr = encAddr.split('|');
+					for(var i = 0; i < tempAddr.length; i++) {
+						var tempModel = tempAddr[i];
+						var temp000 = tempModel.split('/');
+						tempArray.push(temp000[temp000.length - 1]);
+					}
+					encName = tempArray.join('|');
+				}
+				console.log('encName:'+encName);
 				
+				//1.新增学校通知（同时增加通知未读）
+//				var tempData1 = {
+//					schoolId: (personal.schid).toString(), //学校ID，统一部署的时候，学校ID传000000
+//					noticeContent: addNoticeContent.content, //内容
+//					noticEncName: encName, //附件名称，竖杠隔开
+//					noticeEncImgAddr: encImg, //附件缩略图地址，竖杠隔开
+//					noticeEncAddr: encAddr, //附件地址，竖杠隔开
+//					smsSync: addNoticeContent.msgFlag, //是否短信同步，先填0
+//					sendManId: (personal.utid).toString(), //发布人ID
+//					sendManCode: personal.uid, //发布人账号
+//					sendManName: personal.utname, //发布人姓名
+//					sendManImg: personal.imgurl, //发布人头像
+//					receiveManIds: arrayToStr(temp0), //接收人人ID，例如：[“1”,”2”,”3”]
+//					receiveManCodes: arrayToStr(temp1), //接收人账号，例如：[“1”,”2”,”3”]
+//					receiveManNames: arrayToStr(temp2), //接收人姓名，例如：[“1”,”2”,”3”]
+//					receiveManImgs: arrayToStr(temp3) //接收人头像
+//				}
+//				events.showWaiting();
+//				//1.新增学校通知（同时增加通知未读）
+//				addNoticePro(tempData1, function function_name(data) {
+//					events.closeWaiting();
+//					if(data.RspCode == 0) {
+//						addNoticeContent.content = '';
+//						if(temp4.length > 0&&addNoticeContent.msgFlag == 1) {
+//							var tempMobiles = temp4.join(',').toString();
+//							events.SendSmsForMobiles(tempMobiles, addNoticeContent.content);
+//						}
+//						mui.toast('成功');
+//						setTimeout(function() {
+//							mui.back();
+//						}, 1000);
+//					} else {
+//						document.getElementById("finish").disabled = false;
+//						mui.toast(data.RspTxt);
+//					}
+//				});
 			}
 
 			/**
@@ -681,6 +801,25 @@
 						break;
 					}
 				}
+			}
+			
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
 			}
 		</script>
 	</body>
