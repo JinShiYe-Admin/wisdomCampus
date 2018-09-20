@@ -82,7 +82,7 @@
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
-								<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" src="../../img/login/headImg.png">
+								<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" :src=actionModel.stuImg>
 								<div class="mui-media-body">
 									<span class="leftTag" style="font-size: 14px;color: #333;">{{actionModel.studentName}}&nbsp;【{{actionModel.gradeName}}{{actionModel.className}}】</span>
 									<span class="rightTag" style="font-size: 12px;color: #999;">{{actionModel.behaviorTime}}</span>

@@ -181,7 +181,7 @@ var studentMP = (function(mod) {
 							tempDetail.className = tempClass.text;
 							for(var c = 0; c < tempClass.children.length; c++) {
 								var tempStu = tempClass.children[c];
-								tempDetail.stuImg = '../../img/login/headImg.png';
+								tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
 								if(tempStu.stuId == tempDetail.value) {
 									tempDetail.stuName = tempStu.text;
 								}

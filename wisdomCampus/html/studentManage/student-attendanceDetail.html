@@ -110,7 +110,7 @@
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="selectKqxx()" >
 							<a  class="aCss">考勤细项</a>
-							<span  class="mui-navigate-right  rCss">{{kqxx}}</span>
+							<span  class="mui-navigate-right  rCss">{{attendanceDetail.attendanceName}}</span>
 						</li>
 						<li class="mui-table-view-cell" >
 							<a  class="aCss">考勤说明</a>
@@ -132,15 +132,15 @@
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
 							<a  class="aCss">出入权限</a>
-							<span  class="mui-navigate-right  rCss">{{qx}}</span>
+							<span  class="mui-navigate-right  rCss">{{attendanceDetail.permision}}</span>
 						</li>
 						<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
 							<a  class="aCss">离校时间</a>
-							<p  class="mui-navigate-right rCss">{{lxsj}}</p>
+							<p  class="mui-navigate-right rCss">{{attendanceDetail.leaveSchoolTime}}</p>
 						</li>
 						<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1" >
 							<a  class="aCss">回校时间</a>
-							<p  class="mui-navigate-right rCss">{{hxsj}}</p>
+							<p  class="mui-navigate-right rCss">{{attendanceDetail.backSchoolTime}}</p>
 						</li>
 					</ul>
 				</div>
@@ -281,7 +281,17 @@
 						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
 						console.log('attendanceDetialData.attendanceDetail:'+JSON.stringify(attendanceDetialData.attendanceDetail));
 						attendanceDetialData.dataFlag = 1;
-					} else {
+						attendanceDetialData.content=attendanceDetialData.attendanceDetail.explain;
+						attendanceDetialData.nodeSubJson[0].attendanceTime=attendanceDetialData.attendanceDetail.attendanceTime
+						attendanceDetialData.nodeSubJson[0].classNames=attendanceDetialData.attendanceDetail.period
+						attendanceDetialData.nodeSubJson[0].classNodes=attendanceDetialData.attendanceDetail.period
+						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId=='12'){
+							attendanceDetialData.qxShow='1'
+						}
+						if(attendanceDetialData.attendanceDetail.outsidePermisionCode=='outSchool'){
+							attendanceDetialData.sjShow='1'
+						}
+					} else {    
 						mui.toast(data.RspTxt);
 					}
 				});
@@ -293,7 +303,6 @@
 					attendanceDetail: {},
 					kqxx:'请选择',
 					jc:'请选择',
-					qx:'请选择',
 					kqrq:'请选择',
 					qxShow:'0',
 					sjShow:'0',
@@ -303,11 +312,8 @@
 					jcList:[],
 					qxList:[],
 					nodeSubJson:[{canDelete:'0',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
-					lxsj:'请选择' ,//存值用：离校时间
-					hxsj:'请选择',//存值用:回校时间
 					content:'',//存值用:考勤说明
-					qValue:'',//存值用:出入权限
-					kValue:''//存值用:考勤细项
+					attendanceDetail:''
 				},
 				methods: {
 					selectTime:function(event,lx,index){
@@ -322,14 +328,14 @@
 						_self.picker = new $M.DtPicker(options);
 						_self.picker.show(function(rs) {
 							if(lx=='lxsj'){
-								if(compairTime(rs.text,attendanceDetialData.hxsj)){
-									attendanceDetialData.lxsj=rs.text;
+								if(compairTime(rs.text,attendanceDetialData.attendanceDetail.backSchoolTime)){
+									attendanceDetialData.attendanceDetail.leaveSchoolTime=rs.text;
 								}else{
 									mui.toast('开始时间不能晚于结束时间');
 								}
 							}else if(lx=='hxsj'){
-								if(compairTime(attendanceDetialData.lxsj,rs.text)){
-									attendanceDetialData.hxsj=rs.text;
+								if(compairTime(attendanceDetialData.attendanceDetail.leaveSchoolTime,rs.text)){
+									attendanceDetialData.attendanceDetail.backSchoolTime=rs.text;
 								}else{
 									mui.toast('结束时间不能早于开始时间');
 								}
@@ -346,8 +352,8 @@
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(attendanceDetialData.kqxxList);
 						userPicker.show(function(items) {
-							attendanceDetialData.kqxx=_getParam(items[0], 'text');
-							attendanceDetialData.kValue=_getParam(items[0], 'value');
+							attendanceDetialData.attendanceDetail.attendanceName=_getParam(items[0], 'text');
+							attendanceDetialData.attendanceDetail.quantizationAttendanceId=_getParam(items[0], 'value');
 							attendanceDetialData.qxShow='0';
 							if(_getParam(items[0], 'value')=='12'){
 								attendanceDetialData.qxShow='1';
@@ -358,9 +364,9 @@
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(attendanceDetialData.qxList);
 						userPicker.show(function(items) {
-							attendanceDetialData.qx=_getParam(items[0], 'text');
-							attendanceDetialData.qValue=_getParam(items[0], 'value');
 							attendanceDetialData.sjShow='0';
+							attendanceDetialData.attendanceDetail.outsidePermisionCode=_getParam(items[0], 'value');
+							attendanceDetialData.attendanceDetail.permision=_getParam(items[0], 'text');
 							if(_getParam(items[0], 'value')=='outSchool'){
 								attendanceDetialData.sjShow='1';
 							}
@@ -390,6 +396,7 @@
 						}else{
 							this.update='1';
 							this.titleBar='提交';
+							attendanceDetialData.attendanceDetail.recordTime=getDate();
 						}
 						
 					},
@@ -410,25 +417,37 @@
 							classId:attendanceDetialData.attendanceDetail.classId,
 							studentId:attendanceDetialData.attendanceDetail.studentId,
 							studentName:attendanceDetialData.attendanceDetail.studentName,
-							quantizationAttendanceId:attendanceDetialData.kValue,
+							quantizationAttendanceId:attendanceDetialData.attendanceDetail.quantizationAttendanceId,
 							nodeSubJson:arr,
 							explain:attendanceDetialData.content,
-							outsidePermisionCode:attendanceDetialData.qValue,
-							recordTime:attendanceDetialData.jlsj,
-							leaveSchoolTime:attendanceDetialData.lxsj,
-							backSchoolTime:attendanceDetialData.hxsj
+							recordTime:attendanceDetialData.attendanceDetail.recordTime
+						}
+						
+						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId==12){
+							comData.outsidePermisionCode=attendanceDetialData.attendanceDetail.outsidePermisionCode
+						}else{
+							comData.outsidePermisionCode=''
+						}
+						console.log(comData.outsidePermisionCode);
+						console.log(comData.outsidePermisionCode=='outSchool'); 
+						if(comData.outsidePermisionCode=='outSchool'){
+							comData.leaveSchoolTime=attendanceDetialData.attendanceDetail.leaveSchoolTime,
+							comData.backSchoolTime=attendanceDetialData.attendanceDetail.backSchoolTime
+						}else{
+							comData.leaveSchoolTime='',
+							comData.backSchoolTime='' 
 						}
 						console.log(JSON.stringify(comData));
-						var wd = events.showWaiting();
-						getSaveAttendance(comData,function(data) {
-							wd.close();
-							console.log('3.保存考勤' + JSON.stringify(data));
-							if(data.RspCode == 0) {
-								mui.toast(data.RspTxt);
-							} else {
-								mui.toast(data.RspTxt);
-							} 
-						});
+//						var wd = events.showWaiting();
+//						getSaveAttendance(comData,function(data) {
+//							wd.close();
+//							console.log('3.保存考勤' + JSON.stringify(data));
+//							if(data.RspCode == 0) {
+//								mui.toast(data.RspTxt);
+//							} else {
+//								mui.toast(data.RspTxt);
+//							} 
+//						});
 					}
 				}
 			});
@@ -449,6 +468,25 @@
 					return true;
 				}
 				return false;
+			}
+			
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
 			}
 		</script>
 	</body>
