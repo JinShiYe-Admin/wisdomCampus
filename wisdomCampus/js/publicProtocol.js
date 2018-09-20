@@ -163,7 +163,7 @@ var xhrPost = function(url, commonData, callback) {
 				var urlArr = url.split('/');
 				var success_data = JSON.parse(this.responseText);
 				console.log('XHRP-Success:', JSON.stringify(success_data));
-				if(success_data.RspCode == 10) { //令牌过期
+				if(success_data.RspCode == 6) { //令牌过期
 					//续订令牌
 					var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 					var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -307,7 +307,7 @@ var tempPro = function(url, data0, callback) {
 			var urlArr = url.split('/');
 			var success_data = JSON.parse(this.responseText);
 			console.log('XHRP-Success:', JSON.stringify(success_data));
-			if(success_data.RspCode == 10) { //令牌过期
+			if(success_data.RspCode == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
