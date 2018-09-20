@@ -71,7 +71,7 @@
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:4px 17px 0 0;
+				margin:0px 17px 0 0;
 			}
 			
 			.mui-table-view-cell {
@@ -166,22 +166,22 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">年级</a>
-						<span  class="mui-navigate-right rCss">{{grade}}</span>
+						<span  class="mui-navigate-right rCss">{{gradeText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">班级</a>
-						<span  class="mui-navigate-right  rCss">{{classes}}</span>
+						<span  class="mui-navigate-right  rCss">{{classesText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">姓名</a>
-						<span  class="mui-navigate-right  rCss">{{student}}</span>
+						<span  class="mui-navigate-right  rCss">{{studentText}}</span>
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectAction()">
 						<a  class="aCss">行为细项</a>
-						<span  class="mui-navigate-right  rCss">{{action}}</span>
+						<span  class="mui-navigate-right  rCss">{{actionText}}</span>
 					</li>
 				</ul>
 				<div class="mui-row title-body">
@@ -194,15 +194,15 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a  class="aCss">发生日期</a>
-						<p @tap="selectTime($event)" data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time2}}</p>
+						<p @tap="selectTime($event)" data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectJc()">
 						<a  class="aCss">节次</a>
-						<span  class="mui-navigate-right  rCss">{{jc}}</span>
+						<span  class="mui-navigate-right  rCss">{{jcText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectKm()">
 						<a  class="aCss">科目</a>
-						<span  class="mui-navigate-right  rCss">{{km}}</span>
+						<span  class="mui-navigate-right  rCss">{{kmText}}</span>
 					</li>
 				</ul>
 				
@@ -211,11 +211,11 @@
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录人</a>
-							<span  class="mui-navigate-right  rCss">{{data2}}</span>
+							<span  class="rCss">{{teacher}}</span>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录时间</a>
-							<p  class="mui-navigate-right  rCss">{{record}}</p>
+							<p  class="rCss">{{record}}</p>
 						</li>
 					</ul>
 				</div>
@@ -270,6 +270,7 @@
 		<script src='../../js/utils/compressVideo.js'></script>
 		<script src="../../js/utils/mui.picker.js"></script>
 		<script src="../../js/utils/mui.poppicker.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			var $M=mui.init();
@@ -277,6 +278,120 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			
+			var talkTitle =new Vue({
+				el:'#talk',
+				data:{
+					list:[],
+					gradeText:'请选择',
+					classesText:'请选择',
+					studentText:'请选择',
+					gradeValue:'',
+					classesValue:'',
+					studentValue:'',
+					actionList:[],
+					jcList:[],
+					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
+					actionText:'请选择',
+					actionValue:'',
+					content:'',
+					time:getDate(),
+					jcText:'请选择',
+					jcValue:'',
+					kmText:'请选择',
+					kmValue:'',
+					teacher:personal.utname,
+					record:getDate()
+				},
+				methods:{
+					selectTime:function(event){
+						var _self = event.target;
+						var optionsJson = _self.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						var id = _self.getAttribute('id');
+						_self.picker = new $M.DtPicker(options);
+						_self.picker.show(function(rs) {
+							console.log('选择结果: ' + rs.text);
+							talkTitle.time=rs.text;
+							_self.picker.dispose();
+							_self.picker = null;
+						});
+					},
+					selectGrade:function(){
+						var userPicker = new $M.PopPicker({layer: 3});
+						userPicker.setData(talkTitle.list);
+						userPicker.show(function(items) {
+							talkTitle.gradeText=_getParam(items[0], 'text');
+							talkTitle.classesText=_getParam(items[1], 'text');
+							talkTitle.studentText=_getParam(items[2], 'text');
+							talkTitle.gradeValue=_getParam(items[0], 'value');
+							talkTitle.classesValue=_getParam(items[1], 'value');
+							talkTitle.studentValue=_getParam(items[2], 'value');
+						});
+					},
+					selectAction:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.actionList);
+						userPicker.show(function(items) {
+							talkTitle.actionText=_getParam(items[0], 'text');
+							talkTitle.actionValue=_getParam(items[0], 'value');
+						});
+					},
+					selectJc:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.jcList);
+						userPicker.show(function(items) {
+							talkTitle.jcText=_getParam(items[0], 'text');
+							talkTitle.jcValue=_getParam(items[0], 'value');
+						});
+					},
+					selectKm:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.kmList);
+						userPicker.show(function(items) {
+							talkTitle.kmText=_getParam(items[0], 'text');
+							talkTitle.kmValue=_getParam(items[0], 'value');
+						});
+					}
+				}
+			});
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			}
+			
+			mui.plusReady(function(){
+				init();
+				initListener(); //初始化监听
+				studentMP.getStudentManagePermission(2,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					talkTitle.list=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						talkTitle.gradeValue=allGrade.value;
+						talkTitle.classesValue=allClasses.value;
+					}
+				});
+				
+				//行为详情 
+				var comData ={
+					id:-1
+				}
+				var wd = events.showWaiting();
+				getActionDetail(comData,function(data) {
+					wd.close();
+					console.log('2.行为详情 ' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						talkTitle.actionList=data.RspData.qb;
+						talkTitle.jcList=data.RspData.cn;
+					} else {
+//							mui.toast(data.RspTxt);
+					} 
+				});
+			});
+			
+			
+			
 			var pathList = []; //记录需要删掉的图片和缩略图
 			var QNUptoken; //token数据
 			var uploadNum = 0; //记录上传的次数
@@ -295,99 +410,6 @@
 				TotalVideo: 0, //视频的个数
 			});
 			
-			var talkTitle =new Vue({
-				el:'#talk',
-				data:{
-					grade:'请选择',
-					classes:'请选择',
-					student:'请选择',
-					action:'请选择',
-					jc:'请选择',
-					km:'请选择',
-					content:'',
-					time2:'2018-8-18',
-					data2:'王老师',
-					record:'2018-8-18',
-					gradelist:[ {value: '1',text: '全部年级',children: [{value: "10",text: "全部班级",children:[{value:'1',text:'全部学生'}]}]},
-						   {value: '2',text: '初中一年级',children:[{value:"10",text:"全部班级",children:[{value:'1',text:'全部学生'}]},{value: "11",text: "10111班",children:[{value:'1',text:'全部学生'},{value:'2',text:'张三'},{value:'3',text:'李四'}]},{value: "12",text: "10112班",children:[{value:'1',text:'全部学生'},{value:'2',text:'张五'},{value:'3',text:'李六'}]}]},
-						   {value: '3',text: '初中二年级',children:[{value:"10",text:"全部班级",children:[{value:'1',text:'全部学生'}]},{value: "11",text: "20221班",children:[{value:'1',text:'全部学生'},{value:'2',text:'张三'},{value:'3',text:'李四'}]},{value: "12",text: "20222班",children:[{value:'1',text:'全部学生'},{value:'2',text:'张五'},{value:'3',text:'李六'}]}]}
-						 ],
-					actionList:[{value: '1',text: '吃饭'},
-							{value: '2',text: '睡觉'},
-							{value: '3',text: '打呼噜'},
-						 ],
-					 jcList:[{value: '1',text: '第一节'},
-						{value: '2',text: '第二节'},
-						{value: '3',text: '第三节'},
-					 ],
-					 kmList:[{value: '1',text: '语文'},
-						{value: '2',text: '数学'},
-						{value: '3',text: '英语'},
-					 ]
-				},
-				methods:{
-					selectTime:function(event){
-						var _self = event.target;
-						if(_self.picker) {
-							_self.picker.show(function (rs) {
-								console.log( '选择结果: ' + rs.text);
-								_self.picker.dispose();
-								_self.picker = null;
-							});
-						} else {
-							var optionsJson = _self.getAttribute('data-options') || '{}';
-							var options = JSON.parse(optionsJson);
-							var id = _self.getAttribute('id');
-							_self.picker = new $M.DtPicker(options);
-							_self.picker.show(function(rs) {
-								console.log('选择结果: ' + rs.text);
-								talkTitle.time2=rs.text;
-								_self.picker.dispose();
-								_self.picker = null;
-							});
-						}
-					},
-					selectGrade:function(){
-						var userPicker = new $M.PopPicker({layer: 3});
-						userPicker.setData(talkTitle.gradelist);
-						userPicker.show(function(items) {
-							talkTitle.grade=_getParam(items[0], 'text');
-							talkTitle.classes=_getParam(items[1], 'text');
-							talkTitle.student=_getParam(items[2], 'text');
-						});
-					},
-					selectAction:function(){
-						var userPicker = new $M.PopPicker({layer: 1});
-						userPicker.setData(talkTitle.actionList);
-						userPicker.show(function(items) {
-							talkTitle.action=_getParam(items[0], 'text');
-						});
-					},
-					selectJc:function(){
-						var userPicker = new $M.PopPicker({layer: 1});
-						userPicker.setData(talkTitle.jcList);
-						userPicker.show(function(items) {
-							talkTitle.jc=_getParam(items[0], 'text');
-						});
-					},
-					selectKm:function(){
-						var userPicker = new $M.PopPicker({layer: 1});
-						userPicker.setData(talkTitle.kmList);
-						userPicker.show(function(items) {
-							talkTitle.km=_getParam(items[0], 'text');
-						});
-					}
-				}
-			});
-			var _getParam = function(obj, param) {
-				return obj[param] || '';
-			}
-
-			mui.plusReady(function() {
-				init();
-				initListener(); //初始化监听
-			});
-
 			/*
 			 * 初始化控件
 			 */
@@ -448,13 +470,19 @@
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
-					if(addNoticeContent.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
+					if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 						mui.toast('通知内容不能为空');
 						document.getElementById("finish").disabled = false;
-					} else if(addNoticeContent.content.length > 350) {
+					} else if(talkTitle.content.length > 350) {
 						mui.toast('内容最多350字');
 						document.getElementById("finish").disabled = false;
-					} else {
+					} else if(talkTitle.studentText=='请选择'){
+						mui.toast('请选择一个学生');
+						document.getElementById("finish").disabled = false;
+					} else if(talkTitle.studentText=='全部学生'){
+						mui.toast('只能选择一个学生');
+						document.getElementById("finish").disabled = false;
+					} else{
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
 						if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
@@ -474,7 +502,20 @@
 			 * @param {Object} encImg 附件缩略图地址
 			 */
 			function addNote(wd, encType, encAddr, encImg, encLen) {
-				
+				console.log('encImg:' + encImg);
+				//附件名称
+				var encName = '';
+				if(encAddr.length > 0) {
+					var tempArray = [];
+					var tempAddr = encAddr.split('|');
+					for(var i = 0; i < tempAddr.length; i++) {
+						var tempModel = tempAddr[i];
+						var temp000 = tempModel.split('/');
+						tempArray.push(temp000[temp000.length - 1]);
+					}
+					encName = tempArray.join('|');
+				}
+				console.log('encName:'+encName);
 			}
 
 			/**
@@ -505,13 +546,13 @@
 					}
 				}
 				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
-				//				console.log('uploadNum:' + uploadNum);
-				//				console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
-				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
-					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
+								console.log('uploadNum:' + uploadNum);
+								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) { 
+										console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
-						//						console.log('上传配置 ' + JSON.stringify(data.configure));
-						//						console.log('上传凭证 ' + JSON.stringify(data.data));
+												console.log('上传配置 ' + JSON.stringify(data.configure));
+												console.log('上传凭证 ' + JSON.stringify(data.data));
 						QNUptoken = data.data; //token数据
 
 						if(multiMedia.data.PictureArray.length != 0) { //图片
@@ -741,6 +782,25 @@
 						break;
 					}
 				}
+			}
+			
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
 			}
 		</script>
 	</body>
