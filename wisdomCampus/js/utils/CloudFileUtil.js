@@ -152,10 +152,9 @@ var CloudFileUtil = (function($, mod) {
 		if(data.type == "2" || data.type == "3") { //视频||音频
 			configure.thumbKey = [];
 		}
-		for(var i;i<data.fileArray.length;i++) {
+		for(var i in data.fileArray) {
 			var filePaths = data.fileArray[i].split("/");
 			var QNFileName = filePaths[filePaths.length - 1];
-			console.log('QNFileName============='+QNFileName);
 			var param = {
 				Bucket: data.mainSpace,
 				Key: data.uploadSpace + QNFileName,
@@ -720,8 +719,8 @@ var CloudFileUtil = (function($, mod) {
 	 * @param {Object} errorCB
 	 */
 	mod.getQNUpTokenWithManage = function(url, data, successCB, errorCB) {
-		console.log('url:'+url);
-		console.log('data:'+JSON.stringify(data));
+//		console.log('url:'+url);
+//		console.log('data:'+data);
 		mui.ajax(url, {
 			async: false,
 			data: data, //请求参数
@@ -730,7 +729,6 @@ var CloudFileUtil = (function($, mod) {
 			timeout: 60000, //超时时间设置为60秒
 			success: function(data) {
 				//服务器返回响应
-				console.log('data==============='+JSON.stringify(data));
 				successCB(data);
 			},
 			error: function(xhr, type, errorThrown) {
