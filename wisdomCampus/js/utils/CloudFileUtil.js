@@ -140,7 +140,7 @@ var CloudFileUtil = (function($, mod) {
 	 * @param {Object} callBack
 	 */
 	mod.getUpLoadTokens = function(data, callBack) {
-//		console.log("getUpLoadTokens " + JSON.stringify(data));
+		console.log("getUpLoadTokens " + JSON.stringify(data));
 		var appId = data.appId; //项目id
 		var desKey = getAppKey(appId); //项目名称
 //		if (appId==8) {
@@ -152,7 +152,10 @@ var CloudFileUtil = (function($, mod) {
 		if(data.type == "2" || data.type == "3") { //视频||音频
 			configure.thumbKey = [];
 		}
-		for(var i in data.fileArray) {
+		console.log('data.fileArray:'+data.fileArray.length);
+//		for(var i in data.fileArray) {
+		for (var i = 0; i < data.fileArray.length; i++) {
+			console.log('ddddd:'+data.fileArray[i]);
 			var filePaths = data.fileArray[i].split("/");
 			var QNFileName = filePaths[filePaths.length - 1];
 			var param = {
