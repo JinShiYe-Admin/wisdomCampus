@@ -153,14 +153,19 @@ var CloudFileUtil = (function($, mod) {
 			configure.thumbKey = [];
 		}
 		for(var i in data.fileArray) {
+			console.log('data.fileArray[i]=========='+data.fileArray[i])
+			console.log('data.fileArray[i]=========='+data.fileArray[i].split("/"))
 			var filePaths = data.fileArray[i].split("/");
 			var QNFileName = filePaths[filePaths.length - 1];
+			console.log('QNFileName=========='+QNFileName)
 			var param = {
 				Bucket: data.mainSpace,
 				Key: data.uploadSpace + QNFileName,
 				Pops: "",
 				NotifyUrl: ""
 			}
+			console.log('data=========='+JSON.stringify(data))
+			console.log('param=========='+JSON.stringify(param))
 			switch(data.type) {
 				case "0": //上传多个原文件
 					break;
@@ -184,7 +189,7 @@ var CloudFileUtil = (function($, mod) {
 					break;
 			}
 
-//			console.log("参数数据 param " + JSON.stringify(param));
+			console.log("参数数据 param " + JSON.stringify(param));
 			params.push(param);
 		}
 		configure.options = {
@@ -192,7 +197,7 @@ var CloudFileUtil = (function($, mod) {
 			Param: encryptByDES(desKey, JSON.stringify(params))
 		}
 
-//		console.log("参数数据：" + JSON.stringify(configure.options))
+		console.log("参数数据：" + JSON.stringify(configure.options))
 		//获取token
 		mod.getQNUpTokenWithManage(window.storageKeyName.QNGETUPLOADTOKEN, configure.options, function(data) {
 			callBack({

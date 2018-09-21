@@ -247,9 +247,7 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
-		<script src="../../js/demoCssJs/jquery-weui.js"></script>
 		<!--<script type="text/javascript" src="../../js/publicProtocol.js"></script>-->
-		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/events.js"></script>
 		<script type="text/javascript" src="../../js/utils/MultiMedia.js"></script>
 		<script type="text/javascript" src="../../js/cloud/AndroidFileSystem.js"></script>
@@ -265,11 +263,11 @@
 		<script type="text/javascript" src="../../js/utils/showvideoutil.js"></script>
 		<script type="text/javascript" src="../../js/utils/showaudio.js"></script>
 		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
+		
 		<script src="../../js/utils/cloudutil.js"></script>
 		<script src="../../js/utils/store.js"></script>
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/vconsole/vconsole.min.js"></script>
-		<script src='../../js/utils/compressVideo.js'></script>
 		<script src="../../js/utils/mui.picker.js"></script>
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
@@ -520,9 +518,7 @@
 				console.log('encName:'+encName);
 			}
 
-			/**
-			 * 上传文件
-			 */
+
 			function uploadFile(wd) {
 				var getUpTokenData = {
 					type: '0', //获取上传token的方式
@@ -550,11 +546,11 @@
 				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
 								console.log('uploadNum:' + uploadNum);
 								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
-				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) { 
-										console.log("getUpLoadTokens111111 " + JSON.stringify(data));
+				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
+					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
-												console.log('上传配置 ' + JSON.stringify(data.configure));
-												console.log('上传凭证 ' + JSON.stringify(data.data));
+						//						console.log('上传配置 ' + JSON.stringify(data.configure));
+						//						console.log('上传凭证 ' + JSON.stringify(data.data));
 						QNUptoken = data.data; //token数据
 
 						if(multiMedia.data.PictureArray.length != 0) { //图片
@@ -566,9 +562,9 @@
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];
 									if(multiMedia.data.PictureArray[j].id == fileId) {
-										//										console.log('QNUptoken.Data[i].Domain:'+QNUptoken.Data[i].Domain);
-										//										console.log('+QNUptoken.Data[i].Key:'+QNUptoken.Data[i].Key);
-										//										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+										//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
+										//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
+										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
 										multiMedia.data.PictureArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
 									}
 								}
@@ -610,12 +606,109 @@
 						taskCreate(wd);
 					} else {
 						//						console.log('### ERROR ### 获取上传凭证失败 ### ');
-						document.getElementById("finish").disabled = false;
+						//						document.getElementById("finish").disabled = false;
 						wd.close();
 						mui.toast('上传失败 ' + data.message);
 					}
 				});
 			}
+//
+//			/**
+//			 * 上传文件
+//			 */
+//			function uploadFile(wd) {
+//				var getUpTokenData = {
+//					type: '0', //获取上传token的方式
+//					appId: 4, //项目id
+//					fileArray: [], //文件数组
+//					mainSpace: window.storageKeyName.QNPUBSPACE, //文件存放在私有空间或公有空间
+//					uploadSpace: window.storageKeyName.XXTNOTICE, //上传的空间
+//				}
+//
+//				if(multiMedia.data.PictureArray.length != 0) { //图片
+//					for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+//						getUpTokenData.fileArray.push(multiMedia.data.PictureArray[i].path);
+//					}
+//				} else if(multiMedia.data.VideoArray.length != 0) { //视频
+//					getUpTokenData.type = '2';
+//					for(var i = 0; i < multiMedia.data.VideoArray.length; i++) {
+//						getUpTokenData.fileArray.push(multiMedia.data.VideoArray[i].path);
+//					}
+//				} else if(multiMedia.data.AudioArray.length != 0) { //音频
+//					getUpTokenData.type = '3';
+//					for(var i = 0; i < multiMedia.data.AudioArray.length; i++) {
+//						getUpTokenData.fileArray.push(multiMedia.data.AudioArray[i].fpath);
+//					}
+//				}
+//				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
+//								console.log('uploadNum:' + uploadNum);
+//								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+//				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) { 
+//										console.log("getUpLoadTokens111111 " + JSON.stringify(data));
+//					if(data.code == 1) {
+//												console.log('上传配置 ' + JSON.stringify(data.configure));
+//												console.log('上传凭证 ' + JSON.stringify(data.data));
+//						QNUptoken = data.data; //token数据
+//
+//						if(multiMedia.data.PictureArray.length != 0) { //图片
+//							//记录图片和缩略图地址
+//							for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
+//								for(var i = 0; i < QNUptoken.Data.length; i++) {
+//									console.log(JSON.stringify(QNUptoken.Data[i]));
+//									var filePath = QNUptoken.Data[i].P_Key.split("/");
+//									var fileName = filePath[filePath.length - 1];
+//									var fileId = fileName.split("_")[0];
+//									if(multiMedia.data.PictureArray[j].id == fileId) {
+//										//										console.log('QNUptoken.Data[i].Domain:'+QNUptoken.Data[i].Domain);
+//										//										console.log('+QNUptoken.Data[i].Key:'+QNUptoken.Data[i].Key);
+//										//										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+//										multiMedia.data.PictureArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
+//									}
+//								}
+//							}
+//						} else if(multiMedia.data.VideoArray.length != 0) { //视频
+//							//记录视频和缩略图地址
+//							for(var j = 0; j < multiMedia.data.VideoArray.length; j++) {
+//								var videoPath = multiMedia.data.VideoArray[j].path.split("/");
+//								var videoName = videoPath[videoPath.length - 1];
+//								for(var i = 0; i < QNUptoken.Data.length; i++) {
+//									////console.log(JSON.stringify(QNUptoken.Data[i]));
+//									var filePath = QNUptoken.Data[i].P_Key.split("/");
+//									var fileName = filePath[filePath.length - 1];
+//									if(videoName == fileName) {
+//										//										multiMedia.data.VideoArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+//										multiMedia.data.VideoArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
+//										multiMedia.data.VideoArray[j].thumb = QNUptoken.Data[i].OtherKey[data.configure.thumbKey[i]];
+//									}
+//								}
+//							}
+//						} else if(multiMedia.data.AudioArray.length != 0) {
+//							//记录音频文件地址
+//							for(var j = 0; j < multiMedia.data.AudioArray.length; j++) {
+//								var audioPath = multiMedia.data.AudioArray[j].fpath.split("/");
+//								var audioName = audioPath[audioPath.length - 1];
+//								for(var i = 0; i < QNUptoken.Data.length; i++) {
+//									////console.log(JSON.stringify(QNUptoken.Data[i]));
+//									var filePath = QNUptoken.Data[i].P_Key.split("/");
+//									var fileName = filePath[filePath.length - 1];
+//									if(audioName == fileName) {
+//										multiMedia.data.AudioArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
+//										multiMedia.data.AudioArray[j].thumb = QNUptoken.Data[i].OtherKey[data.configure.thumbKey[i]];
+//									}
+//								}
+//							}
+//						}
+//						wd.setTitle('上传中...');
+//						//开始执行上传任务
+//						taskCreate(wd);
+//					} else {
+//						//						console.log('### ERROR ### 获取上传凭证失败 ### ');
+//						document.getElementById("finish").disabled = false;
+//						wd.close();
+//						mui.toast('上传失败 ' + data.message);
+//					}
+//				});
+//			}
 
 			/**
 			 * 删除上传失败的文件
