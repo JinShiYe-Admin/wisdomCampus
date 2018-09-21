@@ -152,38 +152,23 @@
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var curPage = {};
-			mui.plusReady(function() {
-				curPage = utils.getDataFromUrl(window.location.href);
-				console.log('2222:' + JSON.stringify(curPage));
-//				studentMP.getStudentManagePermission(2,1,function(array){
-//					console.log("ABCD=="+JSON.stringify(array))
-//				});
-				getActionDetailP();
-			});
-			var getActionDetailP = function() {
-				var tempData = {
-					id: curPage.id
-				}
-				getActionDetail(tempData, function funcName(data) {
-					console.log('data:' + JSON.stringify(data));
-					if(data.RspCode == 0) {
-						actionDetialData.actionDetail = data.RspData.sb;
-						curPage.detail = actionDetialData.actionDetail.detail;
-						//合并对象
-						actionDetialData.actionDetail = $.extend(actionDetialData.actionDetail, curPage);
-						console.log('actionDetialData.actionDetail:' + JSON.stringify(actionDetialData.actionDetail));
-						actionDetialData.dataFlag = 1;
-					} else {
-						mui.toast(data.RspTxt);
-					}
-				});
-			}
 			var actionDetialData = new Vue({
 				el: "#actionDetialData",
 				data: {
 					dataFlag: 0,
-					actionDetail: {}
+					actionDetail: {},
+					curPage:{},
+					actionList:[],
+					jcList:[],
+					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
+					content:'',
+					time:getDate(),
+					actionText:'请选择',
+					actionValue:'',
+					jcText:'请选择',
+					jcValue:'',
+					kmText:'请选择',
+					kmValue:''
 				},
 				methods: {
 					clickPop: function(model) {
@@ -192,6 +177,45 @@
 					}
 				}
 			});
+			var curPage = {};
+			mui.plusReady(function() {
+				curPage = utils.getDataFromUrl(window.location.href);
+				console.log('2222:' + JSON.stringify(curPage));
+				getActionDetailP();
+			});
+			var getActionDetailP = function() {
+				var tempData = {
+					id: curPage.id
+				} 
+				getActionDetail(tempData, function funcName(data) {
+					console.log('data:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						actionDetialData.actionDetail = data.RspData.sb;
+						actionDetialData.curPage = curPage;
+						actionDetialData.dataFlag = 1;
+					} else {
+						mui.toast(data.RspTxt);
+					}
+				});
+			}
+			//获取当前日期
+			function getDate() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
+			}
 		</script>
 	</body>
 

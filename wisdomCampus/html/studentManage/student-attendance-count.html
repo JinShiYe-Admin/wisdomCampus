@@ -171,7 +171,7 @@
 				data:{
 					grade:'全部年级',//显示用
 					classes:'全部班级',//显示用
-					title:'全校学生行为统计',
+					title:'全校学生考勤统计',
 					grdIds:'',
 					clsIds:'',
 					flag:'0',
@@ -196,16 +196,16 @@
 							selectTitle.clsIds=clsIds;
 							var tit='';
 							if(grade.indexOf('全部')!=-1&&classes.indexOf('全部')!=-1){
-								tit='全校学生行为统计';
+								tit='全校学生考勤统计';
 								selectTitle.flag='0';
 							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')!=-1){
-								tit=grade+'学生行为统计'
+								tit=grade+'学生考勤统计'
 								selectTitle.flag='1';
 							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')==-1){
-								tit=grade+classes+'学生行为统计'
+								tit=grade+classes+'学生考勤统计'
 								selectTitle.flag='2';
 							}else if(grade.indexOf('全部')==-1&&classes.indexOf('全部')==-1){
-								tit=grade+classes+student+'行为统计'
+								tit=grade+classes+student+'考勤统计'
 							}
 							selectTitle.title=tit;
 							getData();

@@ -480,7 +480,10 @@
 							wd.close();
 							console.log('3.保存考勤' + JSON.stringify(data));
 							if(data.RspCode == 0) {
-								mui.toast(data.RspTxt);
+								mui.toast('保存成功');
+								setTimeout(function(){
+									mui.back();
+								},2000)
 							} else {
 								mui.toast(data.RspTxt);
 							} 
