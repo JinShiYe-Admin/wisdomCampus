@@ -64,7 +64,7 @@
 				</li>
 				<li class="mui-table-view-cell">
 					<a>
-						<p class="mui-pull-right liDetail">{{actionDetail.stuName}}</p>
+						<p class="mui-pull-right liDetail">{{actionDetail.studentName}}</p>
 						<div class="mui-media-body liTitle">
 							姓名
 						</div>
@@ -84,18 +84,14 @@
 						<div class="mui-media-body liTitle">
 							行为说明
 						</div>
-						<p class="liDetail" style="margin-top: 5px;padding: 5px 5px 5px;">{{actionDetail.detail}}</p>
-						<!--<p style="border: 1px solid gray;margin-top: 5px;padding: 5px 5px 5px;">{{actionDetail.detail}}</p>-->
-						<div v-if="actionDetail.attachs.lenght>0" style="margin-top: 10px;">
-							<div style="float:left;">附件:</div>
-							<div style="float:left;">
-								<p class="pClass">附件1</p>
-								<p>附件2</p>
-								<p>附件3</p>
-								<p>附件4</p>
-							</div>
-						</div>
+						<textarea id="notes" style="width: 98%;font-size: 15px;" disabled>{{actionDetail.detail}}</textarea>
 					</a>
+					<div v-if="actionDetail.attachs.length>0">
+						<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
+						<div style="float:left;">
+							<p class="pClass" v-for="(attach,index) in actionDetail.attachs"><a @click="checkEnc(index)">{{attach.attachName}}</a></p>
+						</div>
+					</div>
 				</li>
 				<li class="mui-table-view-cell">
 					<a>
@@ -148,7 +144,7 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/lib/jquery.js"></script>
-		<!--<script src="../../js/studentManage/studentManagePermission.js"></script>-->
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
 			mui.init();
@@ -156,6 +152,12 @@
 				el: "#actionDetialData",
 				data: {
 					dataFlag: 0,
+					gradeText:'请选择',
+					classesText:'请选择',
+					studentText:'请选择',
+					gradeValue:'',
+					classesValue:'',
+					studentValue:'',
 					actionDetail: {},
 					curPage:{},
 					actionList:[],
@@ -174,6 +176,9 @@
 					clickPop: function(model) {
 						console.log('clickPop:' + JSON.stringify(model));
 						mui('#topPopover').popover('hide');
+					},checkEnc: function( index) {
+						var tempUrl = this.actionDetail.attachs[index].url;
+						plus.runtime.openURL(tempUrl);
 					}
 				}
 			});
@@ -181,7 +186,18 @@
 			mui.plusReady(function() {
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
-				getActionDetailP();
+				studentMP.getStudentManagePermission(2,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					actionDetialData.list=array;
+					if(array.length>0){
+						var allGrade=array[0];
+						var allClasses=allGrade.children[0];
+						actionDetialData.gradeValue=allGrade.value;
+						actionDetialData.classesValue=allClasses.value;
+						getActionDetailP();
+					}
+				});
+				
 			});
 			var getActionDetailP = function() {
 				var tempData = {
@@ -190,9 +206,24 @@
 				getActionDetail(tempData, function funcName(data) {
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						actionDetialData.actionDetail = data.RspData.sb;
+						var sb=data.RspData.sb;
+						console.log("查询学生对应的名称")
+						for(var a = 0; a < actionDetialData.list.length; a++) {
+							var tempGrdClsMsg = actionDetialData.list[a];
+							if(tempGrdClsMsg.id=sb.gradeId){
+								sb.gradeName=tempGrdClsMsg.text
+							}
+							for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+								var tempClass = tempGrdClsMsg.children[b];
+								if(tempClass.id=sb.classId){
+									sb.className=tempClass.text
+								}
+							}
+						}
+						actionDetialData.actionDetail = sb;
 						actionDetialData.curPage = curPage;
 						actionDetialData.dataFlag = 1;
+						console.log(JSON.stringify(actionDetialData.actionDetail))
 					} else {
 						mui.toast(data.RspTxt);
 					}

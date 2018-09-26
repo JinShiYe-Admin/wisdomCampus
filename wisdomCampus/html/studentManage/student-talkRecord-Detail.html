@@ -162,6 +162,12 @@
 			.multimedia-footer{
 				border: 0;
 			}
+			.fj{
+				float:left;
+				font-size: 14px;
+				color: #6D6D6D;
+				margin:5px 5px 0 10px !important;
+			}
 			/**add*/
 		</style>
 	</head>
@@ -178,14 +184,17 @@
 					<p v-cloak class="user-title">{{curPage.gradeName}}{{curPage.className}}{{curPage.stuName}}</p>
 					<p v-cloak class="user-title-se">{{sb.behaviorTime}}&nbsp;{{sb.period}}</p>
 					<p v-cloak class="user-title-body">【{{sb.behaviorName}}】&nbsp;{{sb.behaviorDetail}}</p>
-					<div v-cloak class="user-title-footer" v-for="(attach,index) in sb.attachs">
-						//TODO
-						<p class="ul-p">附件：<a :href=attach.url>{{attact.attachName}}</a></p>
-					</div>
-					<p class="ul-btn" style="margin-top: -22px;">{{sb.recorder}}</p>
+					<div class="fj" v-if="sb.attachs==undefined || sb.attachs.length==0"></div>
+					<div class="fj" v-else>附件:</div>
+					<div v-cloak style="float: left;margin:5px 0 0 0;">
+						<p style="word-break: break-all;text-align: left;" v-for="(attach,index) in sb.attachs"><a @click="checkEnc(index)">{{attach.attachName}}</a></p>
+					</div> 
 				</div>
+				<div class="mui-row title-info" style="margin: -52px 15px 0 0;">
+					<p  style="float: right;">{{sb.recorder}}</p>
+				</div>
+				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div :style="{visibility: isEdit=='hide'? 'hidden' : 'initial' }">
-					<div style="background-color: #f2f3f5;height: 10px;"></div>
 					<div class="mui-row title-body" style="font-size: 15px;color: #333;">
 						<span class="body-title" >谈话内容</span>
 					</div>
@@ -196,7 +205,7 @@
 						<div id="MultiMedia_Body" class="multimedia-body"></div>
 					</div>
 					<div v-cloak class="user-title-footer" style="margin: -15px 25px 10px;" v-for="(attach,index) in tc.attachs">
-						<p class="ul-p">附件：<a :href=attach.url>{{attact.attachName}}</a></p>
+						<p class="ul-p">附件：<a @click="checkEncTc(index)">{{attach.attachName}}</a></p>
 					</div>
 					<ul class="mui-table-view">
 						<template v-if="isEdit=='edit'">
@@ -289,13 +298,6 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var $M=mui.init();
-			mui.plusReady(function() {
-				init();
-				initListener(); //初始化监听
-				getTalk();
-			});
-	
 			var actionHead =new Vue({
 				el:'#actionHead',
 				data:{
@@ -336,6 +338,12 @@
 							_self.picker.dispose();
 							_self.picker = null;
 						});
+					},checkEnc: function( index) {
+						var tempUrl = this.sb.attachs[index].url;
+						plus.runtime.openURL(tempUrl);
+					},checkEncTc: function( index) {
+						var tempUrl = this.tc.attachs[index].url;
+						plus.runtime.openURL(tempUrl);
 					}
 				}
 			});
@@ -348,13 +356,25 @@
 			var	curPage = utils.getDataFromUrl(window.location.href);
 			console.log('2222:' + JSON.stringify(curPage));
 			
+			var $M=mui.init();
+			mui.plusReady(function() {
+				init();
+				initListener(); //初始化监听
+				studentMP.getStudentManagePermission(2,1,function(array){
+					console.log("ABCD=="+JSON.stringify(array))
+					talkTitle.list=array;
+					getTalk();
+				});
+			});
+			
 			if(curPage.id==null){
-				talkTitle.isEdit='hide'		
+				talkTitle.isEdit='hide'	
+				actionHead.edit='新增谈话'
 			}else{
-				talkTitle.isEdit='show'	
+				talkTitle.isEdit='show'
+				actionHead.edit='修改谈话'
 			}
 			talkTitle.curPage=curPage;
-			
 			
 			//3.2.谈话详情
 			function getTalk() {
@@ -367,8 +387,23 @@
 					wd.close();
 					console.log('3.2.谈话详情:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						talkTitle.sb=data.RspData.sb;
+						var sb=data.RspData.sb;
+						console.log("查询学生对应的名称")
+						for(var a = 0; a < talkTitle.list.length; a++) {
+							var tempGrdClsMsg = talkTitle.list[a];
+							if(tempGrdClsMsg.id=sb.gradeId){
+								sb.gradeName=tempGrdClsMsg.text
+							}
+							for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+								var tempClass = tempGrdClsMsg.children[b];
+								if(tempClass.id=sb.classId){
+									sb.className=tempClass.text
+								}
+							}
+						}
+						talkTitle.sb=sb;
 						talkTitle.tc=data.RspData.tc;
+						talkTitle.curPage=curPage;
 					} else {
 //							mui.toast(data.RspTxt);
 					}
@@ -453,7 +488,7 @@
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
-						if(actionHead.edit=='修改'){
+						if(actionHead.edit=='修改谈话' || actionHead.edit=='新增谈话' ){
 							talkTitle.isEdit='edit'	
 							actionHead.edit='提交'
 						}else{

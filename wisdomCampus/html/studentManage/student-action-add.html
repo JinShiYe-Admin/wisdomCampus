@@ -420,7 +420,6 @@
 			 */
 			function init() {
 				events.blurBack();
-
 				multiMedia.initEvent();
 				/**
 				 * 播放视频
@@ -490,7 +489,9 @@
 					} else{
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
-						if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
+						console.log(JSON.stringify(multiMedia))
+						console.log(JSON.stringify(multiMedia.data.PictureArray))
+						if(multiMedia.data.PictureArray.length == 0 ) { //没有传附件
 							addNotice(wd, '3', '', '', 0, '');
 						} else {
 							uploadFile(wd); //上传文件
@@ -512,21 +513,20 @@
 								console.log('encAddr:' + encAddr);
 								console.log('encImg:' + encImg);
 								console.log('encLen:' + encLen);
-				//附件名称
-				var encName = '';
-				var encUrl = encAddr.split("|").join(",");
+				var fj=[];
+				var enc_Url = encAddr.split("|");
 				if(encAddr.length > 0) {
-					var tempArray = [];
-					var tempAddr = encAddr.split(',');
+					var tempAddr = encAddr.split('|');
 					for(var i = 0; i < tempAddr.length; i++) {
 						var tempModel = tempAddr[i];
 						var temp000 = tempModel.split('/');
-						tempArray.push(temp000[temp000.length - 1]);
+						var attach={};
+						attach.oriName=temp000[temp000.length - 1];
+						attach.filePath=enc_Url[i];
+						fj.push(attach);
 					}
-					encName = tempArray.join(',');
 				}
-				console.log('encName:'+encName);
-				var tempData = {
+				var tempData = { 
 					id: '',
 					gradeId: talkTitle.gradeValue, 
 					classId: talkTitle.classesValue, 
@@ -538,7 +538,7 @@
 					classNodes: talkTitle.jcValue, 
 					subCode: talkTitle.kmValue, 
 					recordTime: talkTitle.record, 
-					attachId: encUrl
+					attachs: fj
 					
 				}
 				console.log('tempData:'+JSON.stringify(tempData));

@@ -285,7 +285,7 @@ var studentMP = (function(mod) {
 		});
 	}
 
-	//根据flag获取id对应的年级、班级、学生 name
+	//根据flag获取id对应的年级、班级、学生 name   0获取年级名次  1获取班级名称  2获取学生名称
 	//GrdClsMsg,当前页面的年级、班级数组，上面接口获取到的数据
 	//pageList，当前页面获取到的列表
 	mod.getName = function(flag, GrdClsMsg, list, callback) {
@@ -338,7 +338,7 @@ var studentMP = (function(mod) {
 		}
 		callback(list);
 	}
-
+	
 	//给数组去重
 	Array.prototype.unique = function(key) {
 		var arr = this;
