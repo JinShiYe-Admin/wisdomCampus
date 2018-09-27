@@ -486,6 +486,9 @@
 					} else if(talkTitle.studentText=='全部学生'){
 						mui.toast('只能选择一个学生');
 						document.getElementById("finish").disabled = false;
+					} else if(talkTitle.actionValue=='请选择'||talkTitle.actionValue==''){
+						mui.toast('请选择行为细项');
+						document.getElementById("finish").disabled = false;
 					} else{
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
@@ -552,6 +555,7 @@
 							mui.back();
 						},2000)
 					} else {
+						document.getElementById("finish").disabled = false;
 						mui.toast(data.RspTxt);
 					} 
 				});

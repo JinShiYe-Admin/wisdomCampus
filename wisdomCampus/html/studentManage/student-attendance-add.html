@@ -15,7 +15,7 @@
 				visibility: hidden;
 			}
 			
-			body{
+			body {
 				background: #fff;
 			}
 			
@@ -55,11 +55,11 @@
 				margin-right: 10px;
 			}
 			
-			.rCss{
+			.rCss {
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:0 17px 0 0;
+				margin: 0 17px 0 0;
 			}
 			
 			.mui-table-view-cell {
@@ -69,17 +69,18 @@
 			.mui-checkbox input[type=checkbox]:checked:before {
 				color: #00cfbd;
 			}
-			
 			/**add*/
+			
 			.title-info {
 				padding: 18px 0 5px 0;
 				text-align: center;
 				background: #fff;
 			}
-			.title-body{
+			
+			.title-body {
 				margin-top: 5px;
 				background: #fff;
-				padding:10px 0 0 10px;
+				padding: 10px 0 0 10px;
 			}
 			
 			.user-title {
@@ -88,7 +89,7 @@
 				font-weight: bold;
 			}
 			
-			.user-title-se{
+			.user-title-se {
 				font-size: 13px;
 				color: #6d6d6d;
 			}
@@ -123,24 +124,25 @@
 				font-size: 13px;
 			}
 			
-			.body-title{
+			.body-title {
 				font-size: 15px;
 				margin-left: 5px;
 			}
 			
 			.mui-table-view-cell:after {
-			    right: 10px;
+				right: 10px;
 			}
 			/**add*/
-			.mui-navigate-right.rCss.no-icon:after{
+			
+			.mui-navigate-right.rCss.no-icon:after {
 				content: ' ';
 			}
 		</style>
 	</head>
 
-	<body >
+	<body>
 		<div id='talk'>
-			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" >
+			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
 				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
@@ -149,26 +151,26 @@
 				<ul class="mui-table-view" style="margin-top:2px;">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">年级</a>
-						<span  class="mui-navigate-right rCss">{{grade}}</span>
+						<span class="mui-navigate-right rCss">{{grade}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">班级</a>
-						<span  class="mui-navigate-right  rCss">{{classes}}</span>
+						<span class="mui-navigate-right  rCss">{{classes}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">姓名</a>
-						<span  class="mui-navigate-right  rCss">{{student}}</span>
+						<span class="mui-navigate-right  rCss">{{student}}</span>
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectKqxx()" >
-						<a  class="aCss">考勤细项</a>
-						<span  class="mui-navigate-right  rCss">{{kqxx}}</span>
+					<li class="mui-table-view-cell" @tap="selectKqxx()">
+						<a class="aCss">考勤细项</a>
+						<span class="mui-navigate-right  rCss">{{kqxx}}</span>
 					</li>
-					<li class="mui-table-view-cell" >
-						<a  class="aCss">考勤说明</a>
-						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" ></textarea>
+					<li class="mui-table-view-cell">
+						<a class="aCss">考勤说明</a>
+						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明"></textarea>
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
@@ -184,16 +186,18 @@
 								<a href="'#select'+index" style="float:right;width:85%"><p  class="mui-navigate-right  rCss">11111111</p></a>
 							</li>
 						</ul>-->
-					<template v-for="(ul,index) in nodeSubJson"> 
+					<template v-for="(ul,index) in nodeSubJson">
 						<ul :id="'ul'+index" class="mui-table-view">
 							<img src="../../img/utils/delete.png" v-show="ul.canDelete==1" style="width: 30px;float: right;margin:31px 5px 0 0;" @tap="deleteLi($event,index)">
 							<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}' style="margin-right: 35px;">
-								<a  class="aCss">考勤日期</a>
-								<p  class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
+								<a class="aCss">考勤日期</a>
+								<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
 							</li>
 							<li class="mui-table-view-cell" style="margin-right: 35px;">
-								<a  class="aCss">节次</a> 
-								<a :href="'#select'+index" style="float:right;width:75%"><p  class="mui-navigate-right  rCss">{{ul.classNames}}</p></a>
+								<a class="aCss">节次</a>
+								<a :href="'#select'+index" style="float:right;width:75%">
+									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
+								</a>
 							</li>
 						</ul>
 					</template>
@@ -204,30 +208,30 @@
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
-							<a  class="aCss">出入权限</a>
-							<span  class="mui-navigate-right  rCss">{{qx}}</span>
-						</li>
-						<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
-							<a  class="aCss">离校时间</a>
-							<p  class="mui-navigate-right rCss">{{lxsj}}</p>
-						</li>
-						<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1" >
-							<a  class="aCss">回校时间</a>
-							<p  class="mui-navigate-right rCss">{{hxsj}}</p>
-						</li>
-					</ul>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
+						<a class="aCss">出入权限</a>
+						<span class="mui-navigate-right  rCss">{{qx}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
+						<a class="aCss">离校时间</a>
+						<p class="mui-navigate-right rCss">{{lxsj}}</p>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
+						<a class="aCss">回校时间</a>
+						<p class="mui-navigate-right rCss">{{hxsj}}</p>
+					</li>
+				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div id="bootom-card" style="margin-bottom: 30px">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录人</a>
-							<span  class="mui-navigate-right rCss no-icon">{{jlr}}</span>
+							<span class="mui-navigate-right rCss no-icon">{{jlr}}</span>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录时间</a>
-							<p  class="mui-navigate-right rCss no-icon">{{jlsj}}</p>
+							<p class="mui-navigate-right rCss no-icon">{{jlsj}}</p>
 						</li>
 					</ul>
 				</div>
@@ -237,14 +241,14 @@
 					<div class="mui-popover-arrow" style="display: none;"></div>
 					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 						<div class="mui-scroll">
-								<ul class="mui-table-view" style="background: #393D49;color: #fff;" >
-									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
-										<div class="mui-input-row mui-checkbox mui-right">
-											<label style="width: 100%;">{{jc.text}}</label>
-											<input :name="jc.text" :value="jc.value" type="checkbox">
-										</div>
-									</li>
-								</ul>
+							<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+									<div class="mui-input-row mui-checkbox mui-right">
+										<label style="width: 100%;">{{jc.text}}</label>
+										<input :name="jc.text" :value="jc.value" type="checkbox">
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
 					<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
@@ -268,113 +272,117 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var $M=mui.init();
+			var $M = mui.init();
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 
-			mui.plusReady(function(){
-				mui('.mui-scroll-wrapper').scroll() 
+			mui.plusReady(function() {
+				mui('.mui-scroll-wrapper').scroll()
 				//得到年级、班级、学生数据
-				studentMP.getStudentManagePermission(2,1,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-					talkTitle.gradelist=array; 
-					if(array.length>0){
-						var allGrade=array[0];
-						var allClasses=allGrade.children[0];
-						talkTitle.sGrade=allGrade.value;
-						talkTitle.sClasses=allClasses.value;
+				studentMP.getStudentManagePermission(2, 1, function(array) {
+					console.log("ABCD==" + JSON.stringify(array))
+					talkTitle.gradelist = array;
+					if(array.length > 0) {
+						var allGrade = array[0];
+						var allClasses = allGrade.children[0];
+						talkTitle.sGrade = allGrade.value;
+						talkTitle.sClasses = allClasses.value;
 					}
 				});
 				//得到考勤细项、节次、出入权限等列表信息
-				var comData ={
-					id:666
+				var comData = {
+					id: 666
 				}
 				var wd = events.showWaiting();
-				getAttendanceDetail(comData,function(data) {
+				getAttendanceDetail(comData, function(data) {
 					wd.close();
 					console.log('2.考勤详情' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						talkTitle.kqxxList=data.RspData.qa;
-						talkTitle.jcList=data.RspData.cn;
-						talkTitle.qxList=data.RspData.permission;
+						talkTitle.kqxxList = data.RspData.qa;
+						talkTitle.jcList = data.RspData.cn;
+						talkTitle.qxList = data.RspData.permission;
 					} else {
-//							mui.toast(data.RspTxt);
-					} 
+						//							mui.toast(data.RspTxt);
+					}
 				});
 			});
-			
-			
-			var talkTitle =new Vue({
-				el:'#talk',
-				data:{
-					grade:'请选择',
-					classes:'请选择',
-					student:'请选择',
-					kqxx:'请选择',
-					jc:'请选择',
-					qx:'请选择',
-					kqrq:'请选择',
-					qxShow:'0',
-					sjShow:'0',
-					gradelist:[],
-					kqxxList:[],
-					jcList:[],
-					qxList:[],
-					nodeSubJson:[{canDelete:'1',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
-					jlr:personal.utname,//存值用：记录人
-					lxsj:'请选择' ,//存值用：离校时间
-					hxsj:'请选择',//存值用:回校时间
-					jlsj:getDate(),//存值用:记录时间
-					content:'',//存值用:考勤说明
-					qValue:'',//存值用:出入权限
-					kValue:'',//存值用:考勤细项
-					sGrade:"",//存值用:年级ID
-					sClasses:"",//存值用:班级ID
-					sStudent:""//存值用:学生ID
+
+			var talkTitle = new Vue({
+				el: '#talk',
+				data: {
+					grade: '请选择',
+					classes: '请选择',
+					student: '请选择',
+					kqxx: '请选择',
+					jc: '请选择',
+					qx: '请选择',
+					kqrq: '请选择',
+					qxShow: '0',
+					sjShow: '0',
+					gradelist: [],
+					kqxxList: [],
+					jcList: [],
+					qxList: [],
+					nodeSubJson: [{
+						canDelete: '1',
+						attendanceTime: "请选择",
+						classNodes: [],
+						classNames: "请选择"
+					}], //存值用：时间和节次集合
+					jlr: personal.utname, //存值用：记录人
+					lxsj: '请选择', //存值用：离校时间
+					hxsj: '请选择', //存值用:回校时间
+					jlsj: getDate(), //存值用:记录时间
+					content: '', //存值用:考勤说明
+					qValue: '', //存值用:出入权限
+					kValue: '', //存值用:考勤细项
+					sGrade: "", //存值用:年级ID
+					sClasses: "", //存值用:班级ID
+					sStudent: "" //存值用:学生ID
 				},
-				methods:{
-					selectTime:function(event,lx,index){
+				methods: {
+					selectTime: function(event, lx, index) {
 						var _self = event.target;
-						var obj=this;
+						var obj = this;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
-						if(lx=='kqrq'){
-							optionsJson='{"type":"date"}';
+						if(lx == 'kqrq') {
+							optionsJson = '{"type":"date"}';
 						}
 						var options = JSON.parse(optionsJson);
 						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
 						_self.picker.show(function(rs) {
-							if(lx=='lxsj'){
-								if(compairTime(rs.text,talkTitle.hxsj)){
-									talkTitle.lxsj=rs.text;
-								}else{
+							if(lx == 'lxsj') {
+								if(compairTime(rs.text, talkTitle.hxsj)) {
+									talkTitle.lxsj = rs.text;
+								} else {
 									mui.toast('开始时间不能晚于结束时间');
 								}
-							}else if(lx=='hxsj'){
-								if(compairTime(talkTitle.lxsj,rs.text)){
-									talkTitle.hxsj=rs.text;
-								}else{
+							} else if(lx == 'hxsj') {
+								if(compairTime(talkTitle.lxsj, rs.text)) {
+									talkTitle.hxsj = rs.text;
+								} else {
 									mui.toast('结束时间不能早于开始时间');
 								}
-							}else if(lx='kqrq'){
-								var stime=rs.text;
-								var isContains=false;
-								for(var i=0;i<obj.nodeSubJson.length;i++){
-									var time=obj.nodeSubJson[i].attendanceTime;
-									if(time==stime){
-										isContains=true;
+							} else if(lx = 'kqrq') {
+								var stime = rs.text;
+								var isContains = false;
+								for(var i = 0; i < obj.nodeSubJson.length; i++) {
+									var time = obj.nodeSubJson[i].attendanceTime;
+									if(time == stime) {
+										isContains = true;
 									}
 								}
-								if(!isContains){
-									if(compairTime2(getDate(),stime)){
-										var nodes=obj.nodeSubJson[index];
-										nodes.attendanceTime=rs.text;
-									}else{
+								if(!isContains) {
+									if(compairTime2(getDate(), stime)) {
+										var nodes = obj.nodeSubJson[index];
+										nodes.attendanceTime = rs.text;
+									} else {
 										mui.toast('时间不能早于当前时间');
 									}
-								}else{
+								} else {
 									mui.toast('不能选择相同时间');
 								}
 							}
@@ -382,112 +390,130 @@
 							_self.picker = null;
 						});
 					},
-					selectGrade:function(){//选择年级 班级 学生
-						var userPicker = new $M.PopPicker({layer: 3});
+					selectGrade: function() { //选择年级 班级 学生
+						var userPicker = new $M.PopPicker({
+							layer: 3
+						});
 						userPicker.setData(talkTitle.gradelist);
 						userPicker.show(function(items) {
-							talkTitle.grade=_getParam(items[0], 'text');
-							talkTitle.classes=_getParam(items[1], 'text');
-							talkTitle.student=_getParam(items[2], 'text');
-							talkTitle.sGrade=_getParam(items[0], 'value');
-							talkTitle.sClasses=_getParam(items[1], 'value');
-							talkTitle.sStudent=_getParam(items[2], 'value');
+							talkTitle.grade = _getParam(items[0], 'text');
+							talkTitle.classes = _getParam(items[1], 'text');
+							talkTitle.student = _getParam(items[2], 'text');
+							talkTitle.sGrade = _getParam(items[0], 'value');
+							talkTitle.sClasses = _getParam(items[1], 'value');
+							talkTitle.sStudent = _getParam(items[2], 'value');
 						});
 					},
-					selectKqxx:function(){//选择考勤细项
-						var userPicker = new $M.PopPicker({layer: 1});
+					selectKqxx: function() { //选择考勤细项
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.kqxxList);
 						userPicker.show(function(items) {
-							talkTitle.kqxx=_getParam(items[0], 'text');
-							talkTitle.kValue=_getParam(items[0], 'value');
-							talkTitle.qxShow='0';
-							if(_getParam(items[0], 'value')=='12'){
-								talkTitle.qxShow='1';
+							talkTitle.kqxx = _getParam(items[0], 'text');
+							talkTitle.kValue = _getParam(items[0], 'value');
+							talkTitle.qxShow = '0';
+							if(_getParam(items[0], 'value') == '12') {
+								talkTitle.qxShow = '1';
 							}
 						});
 					},
-					selectQx:function(){//选择权限
-						var userPicker = new $M.PopPicker({layer: 1});
+					selectQx: function() { //选择权限
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.qxList);
 						userPicker.show(function(items) {
-							talkTitle.qx=_getParam(items[0], 'text');
-							talkTitle.qValue=_getParam(items[0], 'value');
-							talkTitle.sjShow='0';
-							if(_getParam(items[0], 'value')=='outSchool'){
-								talkTitle.sjShow='1';
+							talkTitle.qx = _getParam(items[0], 'text');
+							talkTitle.qValue = _getParam(items[0], 'value');
+							talkTitle.sjShow = '0';
+							if(_getParam(items[0], 'value') == 'outSchool') {
+								talkTitle.sjShow = '1';
 							}
 						});
 					},
-					selectJc:function(e,index){//选择节次
-						var classes=[];
-						var names=[];
-						var obj=e.target;
-						var id ='#select'+index;
+					selectJc: function(e, index) { //选择节次
+						var classes = [];
+						var names = [];
+						var obj = e.target;
+						var id = '#select' + index;
 						$(id).find('li').each(function() {
 							if($(this).find('input').prop("checked")) {
 								names.push($(this).find('label').text());
 								classes.push($(this).find('input').val());
 							}
 						})
-						var nodes=this.nodeSubJson[index];
-						nodes.classNodes=classes.join(",");
-						if(names.length>0){
-							nodes.classNames=names.join(",");
+						var nodes = this.nodeSubJson[index];
+						nodes.classNodes = classes.join(",");
+						if(names.length > 0) {
+							nodes.classNames = names.join(",");
 						}
 						mui(id).popover('toggle');
 					},
-					addLi:function(){
-						var nodes={canDelete:'1',attendanceTime:"请选择",classNodes:[],classNames:"请选择"};
+					addLi: function() {
+						var nodes = {
+							canDelete: '1',
+							attendanceTime: "请选择",
+							classNodes: [],
+							classNames: "请选择"
+						};
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
 					},
-					deleteLi:function(e,index){//添加考勤日期节次 项
-						var obj=e.target;
-						if(this.nodeSubJson.length==1){
-								mui.toast("至少要填写一条考勤数据")
-						}else{
-							this.nodeSubJson.splice(index,1);
+					deleteLi: function(e, index) { //添加考勤日期节次 项
+						var obj = e.target;
+						if(this.nodeSubJson.length == 1) {
+							mui.toast("至少要填写一条考勤数据")
+						} else {
+							this.nodeSubJson.splice(index, 1);
 						}
-						
+
 					},
-					submit:function(){
-						var arr =[];
-						for(var i=0;i<talkTitle.nodeSubJson.length;i++){
-							var obj=talkTitle.nodeSubJson[i];
-							var params={
-								attendanceTime:obj.attendanceTime,
-								classNodes:obj.classNodes
+					submit: function() {
+						var arr = [];
+						for(var i = 0; i < talkTitle.nodeSubJson.length; i++) {
+							var obj = talkTitle.nodeSubJson[i];
+							var params = {
+								attendanceTime: obj.attendanceTime,
+								classNodes:'['+obj.classNodes+']'
 							}
 							arr.push(params);
 						}
-						console.log(JSON.stringify(arr))
-						var comData ={
-							id:'',
-							gradeId:talkTitle.sGrade,
-							classId:talkTitle.sClasses,
-							studentId:talkTitle.sStudent,
-							studentName:talkTitle.student,
-							quantizationAttendanceId:talkTitle.kValue,
-							nodeSubJson:arr,
-							explain:talkTitle.content,
-							outsidePermisionCode:talkTitle.qValue,
-							recordTime:talkTitle.jlsj,
-							leaveSchoolTime:talkTitle.lxsj,
-							backSchoolTime:talkTitle.hxsj
+						if(talkTitle.student == '请选择') {
+							mui.toast('请选择一个学生');
+						} else if(talkTitle.student == '全部学生') {
+							mui.toast('只能选择一个学生');
+						} else {
+							console.log(JSON.stringify(arr))
+							var comData = {
+								id: '',
+								gradeId: talkTitle.sGrade,
+								classId: talkTitle.sClasses,
+								studentId: talkTitle.sStudent,
+								studentName: talkTitle.student,
+								quantizationAttendanceId: talkTitle.kValue,
+								nodeSubJson: arr,
+								explain: talkTitle.content,
+								outsidePermisionCode: talkTitle.qValue,
+								recordTime: talkTitle.jlsj,
+								leaveSchoolTime: talkTitle.lxsj,
+								backSchoolTime: talkTitle.hxsj
+							}
+							console.log(JSON.stringify(comData));
+							var wd = events.showWaiting();
+							getSaveAttendance(comData, function(data) {
+								wd.close();
+								console.log('3.保存考勤' + JSON.stringify(data));
+								if(data.RspCode == 0) {
+									mui.toast('保存成功');
+									setTimeout(function() {
+										mui.back();
+									}, 2000)
+								} else {
+									mui.toast(data.RspTxt);
+								}
+							});
 						}
-						console.log(JSON.stringify(comData));
-						var wd = events.showWaiting();
-						getSaveAttendance(comData,function(data) {
-							wd.close();
-							console.log('3.保存考勤' + JSON.stringify(data));
-							if(data.RspCode == 0) {
-								mui.toast('保存成功');
-								setTimeout(function(){
-									mui.back();
-								},2000)
-							} else {
-								mui.toast(data.RspTxt);
-							} 
-						});
+
 					}
 				},
 				watch: {
@@ -502,54 +528,53 @@
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
+
 			//获取当前日期
 			function getDate() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-//			            + " " + date.getHours() + seperator2 + date.getMinutes()
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+				//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
-			
+
 			//比对时间大小
-			function compairTime(startTime,endTime){
+			function compairTime(startTime, endTime) {
 				console.log(endTime)
-				if(startTime=='请选择'||endTime=='请选择'){
+				if(startTime == '请选择' || endTime == '请选择') {
 					return true;
 				}
 				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
-				if(end>start){
+				if(end > start) {
 					return true;
 				}
 				return false;
 			}
-			
+
 			//比对时间大小
-			function compairTime2(startTime,endTime){
+			function compairTime2(startTime, endTime) {
 				console.log(endTime)
-				if(startTime=='请选择'||endTime=='请选择'){
+				if(startTime == '请选择' || endTime == '请选择') {
 					return true;
 				}
 				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
-				if(end>=start){
+				if(end >= start) {
 					return true;
 				}
 				return false;
 			}
-			
 		</script>
 	</body>
 

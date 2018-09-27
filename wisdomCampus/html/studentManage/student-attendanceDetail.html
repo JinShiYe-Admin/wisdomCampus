@@ -42,7 +42,7 @@
 				background: #f2f2f2;
 			}
 			
-				#notes {
+			#notes {
 				border: none;
 				border-radius: initial;
 				height: 15rem;
@@ -59,12 +59,13 @@
 				float: left;
 			}
 			
-			.rCss{
+			.rCss {
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:0 17px 0 0;
+				margin: 0 17px 0 0;
 			}
+			
 			.mui-popover-arrow {
 				display: none;
 			}
@@ -74,11 +75,11 @@
 	<body>
 		<div id="attendanceDetialData">
 			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
-				<a  class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
+				<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">考勤详情</h1>
 				<a class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="updateInfo()">{{titleBar}}</a>
 			</header>
-			<div class="mui-content" >
+			<div class="mui-content">
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell">
 						<a>
@@ -108,44 +109,46 @@
 				<div v-show="update=='1'" style="margin: -5px 0 -5px 0;">
 					<p class="lineCell"></p>
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell" @tap="selectKqxx()" >
-							<a  class="aCss">考勤细项</a>
-							<span  class="mui-navigate-right  rCss">{{attendanceDetail.attendanceName}}</span>
+						<li class="mui-table-view-cell" @tap="selectKqxx()">
+							<a class="aCss">考勤细项</a>
+							<span class="mui-navigate-right  rCss">{{attendanceDetail.attendanceName}}</span>
 						</li>
-						<li class="mui-table-view-cell" >
-							<a  class="aCss">考勤说明</a>
+						<li class="mui-table-view-cell">
+							<a class="aCss">考勤说明</a>
 						</li>
 						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" style="width: 94%;"></textarea>
 					</ul>
-					<template v-for="(ul,index) in nodeSubJson"> 
+					<template v-for="(ul,index) in nodeSubJson">
 						<ul :id="'ul'+index" class="mui-table-view">
 							<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}'>
-								<a  class="aCss">考勤日期</a>
-								<p  class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
+								<a class="aCss">考勤日期</a>
+								<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
 							</li>
 							<li class="mui-table-view-cell">
-								<a  class="aCss">节次</a> 
-								<a :href="'#select'+index" style="float:right;width:75%"><p  class="mui-navigate-right  rCss">{{ul.classNames}}</p></a>
+								<a class="aCss">节次</a>
+								<a :href="'#select'+index" style="float:right;width:75%">
+									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
+								</a>
 							</li>
 						</ul>
 					</template>
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
-							<a  class="aCss">出入权限</a>
-							<span  class="mui-navigate-right  rCss">{{attendanceDetail.permision}}</span>
+							<a class="aCss">出入权限</a>
+							<span class="mui-navigate-right  rCss">{{attendanceDetail.permision}}</span>
 						</li>
 						<li class="mui-table-view-cell" @tap="selectTime($event,'lxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
-							<a  class="aCss">离校时间</a>
-							<p  class="mui-navigate-right rCss">{{attendanceDetail.leaveSchoolTime}}</p>
+							<a class="aCss">离校时间</a>
+							<p class="mui-navigate-right rCss">{{attendanceDetail.leaveSchoolTime}}</p>
 						</li>
-						<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1" >
-							<a  class="aCss">回校时间</a>
-							<p  class="mui-navigate-right rCss">{{attendanceDetail.backSchoolTime}}</p>
+						<li class="mui-table-view-cell" @tap="selectTime($event,'hxsj',-1)" data-options='{}' v-show="qxShow==1 && sjShow==1">
+							<a class="aCss">回校时间</a>
+							<p class="mui-navigate-right rCss">{{attendanceDetail.backSchoolTime}}</p>
 						</li>
 					</ul>
 				</div>
 				<p class="lineCell"></p>
-				<ul class="mui-table-view" v-show="update=='0'" v-if="dataFlag == 1">	
+				<ul class="mui-table-view" v-show="update=='0'" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.attendanceName}}</p>
@@ -205,7 +208,7 @@
 						</a>
 					</li>
 				</ul>
-				<ul  class="mui-table-view">
+				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.recorder}}</p>
@@ -228,14 +231,14 @@
 						<div class="mui-popover-arrow" style="display: none;"></div>
 						<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 							<div class="mui-scroll">
-									<ul class="mui-table-view" style="background: #393D49;color: #fff;" >
-										<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
-											<div class="mui-input-row mui-checkbox mui-right">
-												<label style="width: 100%;">{{jc.text}}</label>
-												<input :name="jc.text" :value="jc.value" type="checkbox">
-											</div>
-										</li>
-									</ul>
+								<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+										<div class="mui-input-row mui-checkbox mui-right">
+											<label style="width: 100%;">{{jc.text}}</label>
+											<input :name="jc.text" :value="jc.value" type="checkbox">
+										</div>
+									</li>
+								</ul>
 							</div>
 						</div>
 						<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
@@ -257,7 +260,7 @@
 		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script type="text/javascript">
-			var $M=mui.init();
+			var $M = mui.init();
 			var curPage = {};
 			mui.plusReady(function() {
 				curPage = utils.getDataFromUrl(window.location.href);
@@ -272,26 +275,26 @@
 				getAttendanceDetail(tempData, function funcName(data) {
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						attendanceDetialData.kqxxList=data.RspData.qa;
-						attendanceDetialData.jcList=data.RspData.cn;
-						attendanceDetialData.qxList=data.RspData.permission;
-						
+						attendanceDetialData.kqxxList = data.RspData.qa;
+						attendanceDetialData.jcList = data.RspData.cn;
+						attendanceDetialData.qxList = data.RspData.permission;
+
 						attendanceDetialData.attendanceDetail = data.RspData.sa;
 						//合并对象
 						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
-						console.log('attendanceDetialData.attendanceDetail:'+JSON.stringify(attendanceDetialData.attendanceDetail));
+						console.log('attendanceDetialData.attendanceDetail:' + JSON.stringify(attendanceDetialData.attendanceDetail));
 						attendanceDetialData.dataFlag = 1;
-						attendanceDetialData.content=attendanceDetialData.attendanceDetail.explain;
-						attendanceDetialData.nodeSubJson[0].attendanceTime=attendanceDetialData.attendanceDetail.attendanceTime
-						attendanceDetialData.nodeSubJson[0].classNames=attendanceDetialData.attendanceDetail.period
-						attendanceDetialData.nodeSubJson[0].classNodes=attendanceDetialData.attendanceDetail.period
-						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId=='12'){
-							attendanceDetialData.qxShow='1'
+						attendanceDetialData.content = attendanceDetialData.attendanceDetail.explain;
+						attendanceDetialData.nodeSubJson[0].attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
+						attendanceDetialData.nodeSubJson[0].classNames = attendanceDetialData.attendanceDetail.period;
+						attendanceDetialData.nodeSubJson[0].classNodes = attendanceDetialData.attendanceDetail.classNodes;
+						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
+							attendanceDetialData.qxShow = '1';
 						}
-						if(attendanceDetialData.attendanceDetail.outsidePermisionCode=='outSchool'){
-							attendanceDetialData.sjShow='1'
+						if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
+							attendanceDetialData.sjShow = '1';
 						}
-					} else {    
+					} else {
 						mui.toast(data.RspTxt);
 					}
 				});
@@ -299,194 +302,206 @@
 			var attendanceDetialData = new Vue({
 				el: "#attendanceDetialData",
 				data: {
-					dataFlag : 0,
+					dataFlag: 0,
 					attendanceDetail: {},
-					kqxx:'请选择',
-					jc:'请选择',
-					kqrq:'请选择',
-					qxShow:'0',
-					sjShow:'0',
-					update:'0',
-					titleBar:'修改',
-					kqxxList:[],
-					jcList:[],
-					qxList:[],
-					nodeSubJson:[{canDelete:'0',attendanceTime:"请选择",classNodes:[],classNames:"请选择"}],//存值用：时间和节次集合
-					content:'',//存值用:考勤说明
-					attendanceDetail:''
+					kqxx: '请选择',
+					jc: '请选择',
+					kqrq: '请选择',
+					qxShow: '0',
+					sjShow: '0',
+					update: '0',
+					titleBar: '修改',
+					kqxxList: [],
+					jcList: [],
+					qxList: [],
+					nodeSubJson: [{
+						canDelete: '0',
+						attendanceTime: "请选择",
+						classNodes: [],
+						classNames: "请选择"
+					}], //存值用：时间和节次集合
+					content: '', //存值用:考勤说明
+					attendanceDetail: ''
 				},
 				methods: {
-					selectTime:function(event,lx,index){
+					selectTime: function(event, lx, index) {
 						var _self = event.target;
-						var obj=this;
+						var obj = this;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
-						if(lx=='kqrq'){
-							optionsJson='{"type":"date"}';
+						if(lx == 'kqrq') {
+							optionsJson = '{"type":"date"}';
 						}
 						var options = JSON.parse(optionsJson);
 						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
 						_self.picker.show(function(rs) {
-							if(lx=='lxsj'){
-								if(compairTime(rs.text,attendanceDetialData.attendanceDetail.backSchoolTime)){
-									attendanceDetialData.attendanceDetail.leaveSchoolTime=rs.text;
-								}else{
+							if(lx == 'lxsj') {
+								if(compairTime(rs.text, attendanceDetialData.attendanceDetail.backSchoolTime)) {
+									attendanceDetialData.attendanceDetail.leaveSchoolTime = rs.text;
+								} else {
 									mui.toast('开始时间不能晚于结束时间');
 								}
-							}else if(lx=='hxsj'){
-								if(compairTime(attendanceDetialData.attendanceDetail.leaveSchoolTime,rs.text)){
-									attendanceDetialData.attendanceDetail.backSchoolTime=rs.text;
-								}else{
+							} else if(lx == 'hxsj') {
+								if(compairTime(attendanceDetialData.attendanceDetail.leaveSchoolTime, rs.text)) {
+									attendanceDetialData.attendanceDetail.backSchoolTime = rs.text;
+								} else {
 									mui.toast('结束时间不能早于开始时间');
 								}
-							}else if(lx='kqrq'){
-								var stime=rs.text;
-								var nodes=obj.nodeSubJson[index];
-								nodes.attendanceTime=rs.text;
+							} else if(lx = 'kqrq') {
+								var stime = rs.text;
+								var nodes = obj.nodeSubJson[index];
+								nodes.attendanceTime = rs.text;
 							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});
 					},
-					selectKqxx:function(){//选择考勤细项
-						var userPicker = new $M.PopPicker({layer: 1});
+					selectKqxx: function() { //选择考勤细项
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(attendanceDetialData.kqxxList);
 						userPicker.show(function(items) {
-							attendanceDetialData.attendanceDetail.attendanceName=_getParam(items[0], 'text');
-							attendanceDetialData.attendanceDetail.quantizationAttendanceId=_getParam(items[0], 'value');
-							attendanceDetialData.qxShow='0';
-							if(_getParam(items[0], 'value')=='12'){
-								attendanceDetialData.qxShow='1';
+							attendanceDetialData.attendanceDetail.attendanceName = _getParam(items[0], 'text');
+							attendanceDetialData.attendanceDetail.quantizationAttendanceId = _getParam(items[0], 'value');
+							attendanceDetialData.qxShow = '0';
+							if(_getParam(items[0], 'value') == '12') {
+								attendanceDetialData.qxShow = '1';
 							}
 						});
 					},
-					selectQx:function(){//选择权限
-						var userPicker = new $M.PopPicker({layer: 1});
+					selectQx: function() { //选择权限
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(attendanceDetialData.qxList);
 						userPicker.show(function(items) {
-							attendanceDetialData.sjShow='0';
-							attendanceDetialData.attendanceDetail.outsidePermisionCode=_getParam(items[0], 'value');
-							attendanceDetialData.attendanceDetail.permision=_getParam(items[0], 'text');
-							if(_getParam(items[0], 'value')=='outSchool'){
-								attendanceDetialData.sjShow='1';
+							attendanceDetialData.sjShow = '0';
+							attendanceDetialData.attendanceDetail.outsidePermisionCode = _getParam(items[0], 'value');
+							attendanceDetialData.attendanceDetail.permision = _getParam(items[0], 'text');
+							if(_getParam(items[0], 'value') == 'outSchool') {
+								attendanceDetialData.sjShow = '1';
 							}
 						});
 					},
-					selectJc:function(e,index){//选择节次
-						var classes=[];
-						var names=[];
-						var obj=e.target;
-						var id ='#select'+index;
+					selectJc: function(e, index) { //选择节次
+						var classes = [];
+						var names = [];
+						var obj = e.target;
+						var id = '#select' + index;
 						$(id).find('li').each(function() {
 							if($(this).find('input').prop("checked")) {
 								names.push($(this).find('label').text());
 								classes.push($(this).find('input').val());
 							}
 						})
-						var nodes=this.nodeSubJson[index];
-						nodes.classNodes=classes;
-						if(names.length>0){
-							nodes.classNames=names.join(",");
+						var nodes = this.nodeSubJson[index];
+						nodes.classNodes = classes;
+						if(names.length > 0) {
+							nodes.classNames = names.join(",");
 						}
 						mui(id).popover('toggle');
 					},
-					updateInfo:function(){
-						if(this.update=='1'){
+					updateInfo: function() {
+						if(this.update == '1') {
 							this.$options.methods.submit();
-						}else{
-							this.update='1';
-							this.titleBar='提交';
-							attendanceDetialData.attendanceDetail.recordTime=getDate();
+						} else {
+							this.update = '1';
+							this.titleBar = '提交';
+							attendanceDetialData.attendanceDetail.recordTime = getDate();
 						}
-						
+
 					},
-					submit:function(){
-						var arr =[];
-						for(var i=0;i<attendanceDetialData.nodeSubJson.length;i++){
-							var obj=attendanceDetialData.nodeSubJson[i];
-							var params={
-								attendanceTime:obj.attendanceTime,
-								classNodes:obj.classNodes
+					submit: function() {
+						var arr = [];
+						for(var i = 0; i < attendanceDetialData.nodeSubJson.length; i++) {
+							var obj = attendanceDetialData.nodeSubJson[i];
+							var params = {
+								attendanceTime: obj.attendanceTime,
+								classNodes: '[' + obj.classNodes + ']'
 							}
 							arr.push(params);
 						}
 						console.log(JSON.stringify(arr))
-						var comData ={
-							id:attendanceDetialData.attendanceDetail.id,
-							gradeId:attendanceDetialData.attendanceDetail.gradeId,
-							classId:attendanceDetialData.attendanceDetail.classId,
-							studentId:attendanceDetialData.attendanceDetail.studentId,
-							studentName:attendanceDetialData.attendanceDetail.studentName,
-							quantizationAttendanceId:attendanceDetialData.attendanceDetail.quantizationAttendanceId,
-							nodeSubJson:arr,
-							explain:attendanceDetialData.content,
-							recordTime:attendanceDetialData.attendanceDetail.recordTime
+						var comData = {
+							id: attendanceDetialData.attendanceDetail.id,
+							gradeId: attendanceDetialData.attendanceDetail.gradeId,
+							classId: attendanceDetialData.attendanceDetail.classId,
+							studentId: attendanceDetialData.attendanceDetail.studentId,
+							studentName: attendanceDetialData.attendanceDetail.studentName,
+							quantizationAttendanceId: attendanceDetialData.attendanceDetail.quantizationAttendanceId,
+							nodeSubJson: arr,
+							explain: attendanceDetialData.content,
+							recordTime: attendanceDetialData.attendanceDetail.recordTime
 						}
-						
-						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId==12){
-							comData.outsidePermisionCode=attendanceDetialData.attendanceDetail.outsidePermisionCode
-						}else{
-							comData.outsidePermisionCode=''
+
+						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == 12) {
+							comData.outsidePermisionCode = attendanceDetialData.attendanceDetail.outsidePermisionCode
+						} else {
+							comData.outsidePermisionCode = ''
 						}
 						console.log(comData.outsidePermisionCode);
-						console.log(comData.outsidePermisionCode=='outSchool'); 
-						if(comData.outsidePermisionCode=='outSchool'){
-							comData.leaveSchoolTime=attendanceDetialData.attendanceDetail.leaveSchoolTime,
-							comData.backSchoolTime=attendanceDetialData.attendanceDetail.backSchoolTime
-						}else{
-							comData.leaveSchoolTime='',
-							comData.backSchoolTime='' 
+						console.log(comData.outsidePermisionCode == 'outSchool');
+						if(comData.outsidePermisionCode == 'outSchool') {
+							comData.leaveSchoolTime = attendanceDetialData.attendanceDetail.leaveSchoolTime,
+								comData.backSchoolTime = attendanceDetialData.attendanceDetail.backSchoolTime
+						} else {
+							comData.leaveSchoolTime = '',
+								comData.backSchoolTime = ''
 						}
 						console.log(JSON.stringify(comData));
-//						var wd = events.showWaiting();
-//						getSaveAttendance(comData,function(data) {
-//							wd.close();
-//							console.log('3.保存考勤' + JSON.stringify(data));
-//							if(data.RspCode == 0) {
-//								mui.toast(data.RspTxt);
-//							} else {
-//								mui.toast(data.RspTxt);
-//							} 
-//						});
+						var wd = events.showWaiting();
+						getSaveAttendance(comData, function(data) {
+							wd.close();
+							console.log('3.保存考勤' + JSON.stringify(data));
+							if(data.RspCode == 0) {
+								mui.toast(data.RspTxt);
+								setTimeout(function() {
+									mui.back();
+								}, 2000)
+							} else {
+								mui.toast(data.RspTxt);
+							}
+						});
 					}
 				}
 			});
-			
+
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
-				//比对时间大小
-			function compairTime(startTime,endTime){
+
+			//比对时间大小
+			function compairTime(startTime, endTime) {
 				console.log(endTime)
-				if(startTime=='请选择'||endTime=='请选择'){
+				if(startTime == '请选择' || endTime == '请选择') {
 					return true;
 				}
 				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
-				if(end>start){
+				if(end > start) {
 					return true;
 				}
 				return false;
 			}
-			
+
 			//获取当前日期
 			function getDate() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-//			            + " " + date.getHours() + seperator2 + date.getMinutes()
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+				//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
 		</script>
 	</body>
