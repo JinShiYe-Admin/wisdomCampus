@@ -42,6 +42,27 @@
 				color: #666;
 			}
 			
+			.aCss {
+				font-size: 15px;
+				color: #999999;
+				width: 130px;
+				float: left;
+			}
+			
+			.pCss {
+				font-size: 14px;
+				color: #666666;
+				margin-left: 70px;
+				margin-right: 10px;
+			}
+			
+			.rCss{
+				font-size: 14px;
+				color: #666666;
+				float: right;
+				margin:0px 17px 0 0;
+			}
+			
 			#notes {
 				border: none;
 				border-radius: initial;
@@ -50,6 +71,31 @@
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 25px;
+			}
+			
+			#notes2 {
+				border: none;
+				border-radius: initial;
+				height: 20rem;
+				border-top: 1px solid lightgray;
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray;
+				border-bottom:0;
+				margin: 3%;
+				font-size: 14px;
+				padding-bottom: 25px;
+			}
+			
+			.multimedia-header{
+			    width: 94%;
+			    border:0;
+			    border-left: 1px solid lightgray;
+			    border-right: 1px solid lightgray;
+			    border-bottom: 1px solid lightgray;
+			    margin: -20px 3% 5px;
+			}
+			.multimedia-footer{
+				border: 0;
 			}
 		</style>
 	</head>
@@ -88,25 +134,42 @@
 				</li>
 			</ul>
 			<p class="lineCell"></p>
+			<template v-if="isEdit=='show'">
+				<ul class="mui-table-view" v-if="dataFlag == 1">
+					<li class="mui-table-view-cell" style="margin-top: -10px;">
+						<a>
+							<p class="mui-pull-right liDetail">{{actionDetail.behaviorName}}</p>
+							<div class="mui-media-body liTitle">
+								行为细项
+							</div>
+						</a>
+					</li>
+				</ul>
+			</template>
+			<template v-else>
+				<ul class="mui-table-view" v-if="dataFlag == 1">
+					<li class="mui-table-view-cell" @tap="selectAction()">
+						<a  class="aCss">行为细项</a>
+						<span  class="mui-navigate-right  rCss">{{actionDetail.behaviorName}}</span>
+					</li>
+				</ul>
+			</template>
 			<ul class="mui-table-view" v-if="dataFlag == 1">
-				<li class="mui-table-view-cell" style="margin-top: -10px;">
-					<a>
-						<p class="mui-pull-right liDetail">{{actionDetail.behaviorName}}</p>
-						<div class="mui-media-body liTitle">
-							行为细项
-						</div>
-					</a>
-				</li>
 				<li class="mui-table-view-cell">
 					<a>
 						<div class="mui-media-body liTitle">
-							行为细项
+							行为说明
 						</div>
 					</a>
 				</li>
 			</ul>
-			<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
-			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }">
+			<template v-if="isEdit=='show'">
+				<textarea id="notes" maxlength="350" v-model="content" disabled placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+			</template>
+			<template v-else>
+				<textarea id="notes2" maxlength="350" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+			</template>
+			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }"  style="margin-bottom: -50px;">
 				<div id="MultiMedia_Body" class="multimedia-body"></div>
 			</div>
 			<ul class="mui-table-view" v-if="dataFlag == 1" :style="{display: isEdit=='edit'? 'none' : 'initial' }">	
@@ -119,32 +182,66 @@
 					</template>
 				</li>
 			</ul>
-			<ul class="mui-table-view" v-if="dataFlag == 1">	
-				<li class="mui-table-view-cell">
-					<a>
-						<p class="mui-pull-right liDetail">{{actionDetail.behaviorTime}}</p>
-						<div class="mui-media-body liTitle">
-							发生日期
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a>
-						<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
-						<div class="mui-media-body liTitle">
-							节次
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a>
-						<p class="mui-pull-right liDetail">{{actionDetail.subCode}}</p>
-						<div class="mui-media-body liTitle">
-							科目
-						</div>
-					</a>
-				</li>
-			</ul>
+			<template v-if="isEdit=='show'">
+				<ul class="mui-table-view" v-if="dataFlag == 1">	
+					<li class="mui-table-view-cell">
+						<a>
+							<p class="mui-pull-right liDetail">{{actionDetail.behaviorTime}}</p>
+							<div class="mui-media-body liTitle">
+								发生日期
+							</div>
+						</a>
+					</li>
+				</ul>
+			</template>
+			<template v-else>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectTime($event)">
+						<a  class="aCss">发生日期</a>
+						<p  data-options='{"type":"date"}' class="mui-navigate-right rCss">{{actionDetail.behaviorTime}}</p>
+					</li>
+				</ul>
+			</template>
+			<template v-if="isEdit=='show'">
+				<ul class="mui-table-view" v-if="dataFlag == 1">
+					<li class="mui-table-view-cell">
+						<a>
+							<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
+							<div class="mui-media-body liTitle">
+								节次
+							</div>
+						</a>
+					</li>
+				</ul>
+			</template>
+			<template v-else>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectJc()">
+						<a  class="aCss">节次</a>
+						<span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span>
+					</li>
+				</ul>
+			</template>
+			<template v-if="isEdit=='show'">
+				<ul class="mui-table-view" v-if="dataFlag == 1">
+					<li class="mui-table-view-cell">
+						<a>
+							<p class="mui-pull-right liDetail">{{actionDetail.subCode}}</p>
+							<div class="mui-media-body liTitle">
+								科目
+							</div>
+						</a>
+					</li>
+				</ul>
+			</template>
+			<template v-else>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectKm()">
+						<a  class="aCss">科目</a>
+						<span  class="mui-navigate-right  rCss">{{actionDetail.subCode}}</span>
+					</li>
+				</ul>
+			</template>
 			<p class="lineCell"></p>
 			<ul class="mui-table-view" v-if="dataFlag == 1">
 				<li class="mui-table-view-cell" style="margin-top: -10px;">
@@ -221,7 +318,7 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			mui.init();
+			var $M=mui.init();
 			
 			var talkReacordHead=new Vue({
 				el:'#talkReacordHead',
@@ -247,21 +344,55 @@
 					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
 					content:'',
 					time:getDate(),
-					actionText:'请选择',
-					actionValue:'',
-					jcText:'请选择',
-					jcValue:'',
-					kmText:'请选择',
-					kmValue:'',
 					isEdit:'show'
 				},
 				methods: {
 					checkEnc: function( index) {
 						var tempUrl = this.actionDetail.attachs[index].url;
 						plus.runtime.openURL(tempUrl);
+					},
+					selectTime:function(event){
+						var _self = event.target;
+						var optionsJson = _self.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						var id = _self.getAttribute('id');
+						_self.picker = new $M.DtPicker(options);
+						_self.picker.show(function(rs) {
+							console.log('选择结果: ' + rs.text);
+							actionDetialData.actionDetail.behaviorTime=rs.text;
+							_self.picker.dispose();
+							_self.picker = null;
+						});
+					},
+					selectAction:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(actionDetialData.actionList);
+						userPicker.show(function(items) {
+							actionDetialData.actionDetail.behaviorName=_getParam(items[0], 'text');
+							actionDetialData.actionDetail.quantizationBehaviorId=_getParam(items[0], 'value');
+						});
+					},
+					selectJc:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(actionDetialData.jcList);
+						userPicker.show(function(items) {
+							actionDetialData.actionDetail.period=_getParam(items[0], 'text');
+							actionDetialData.actionDetail.classNodes=_getParam(items[0], 'value');
+						});
+					},
+					selectKm:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(actionDetialData.kmList);
+						userPicker.show(function(items) {
+							actionDetialData.actionDetail.subCode=_getParam(items[0], 'text');
+							actionDetialData.actionDetail.kmValue=_getParam(items[0], 'value');
+						});
 					}
 				}
 			});
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			}
 			
 			var curPage = {};
 			
@@ -308,6 +439,11 @@
 						actionDetialData.actionDetail = sb;
 						actionDetialData.curPage = curPage;
 						actionDetialData.dataFlag = 1;
+						actionDetialData.content=sb.detail;
+						
+						actionDetialData.actionList=data.RspData.qb;
+						actionDetialData.jcList=data.RspData.cn;
+						
 						console.log(JSON.stringify(actionDetialData.actionDetail))
 					} else {
 						mui.toast(data.RspTxt);
@@ -395,33 +531,42 @@
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
 					if(actionDetialData.isEdit=='show'){
+						
 						actionDetialData.isEdit='edit'	
 						talkReacordHead.btnText='提交'
-						//TODO
-						multiMedia.addImages(["https://qn-educds.jiaobaowang.net/xiaoxuntong/notice/0_0_15015379418081942.png","https://qn-educds.jiaobaowang.net/xiaoxuntong/notice/3_3_15015379418081944.png"])
+						$('#MultiMedia').css('margin-bottom','0px');
+						
+						var imgUrl=[];
+						var _attachs=actionDetialData.actionDetail.attachs;
+						for(var i=0;i<_attachs.length;i++){
+							imgUrl.push(_attachs[i].url);
+						}
+						multiMedia.addImages(imgUrl);
+						
 					}else{
-						if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
+						if(actionDetialData.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 							mui.toast('通知内容不能为空');
-							document.getElementById("finish").disabled = false;
-						} else if(talkTitle.content.length > 350) {
-							mui.toast('内容最多350字');
-							document.getElementById("finish").disabled = false;
-						} else if(talkTitle.studentText=='请选择'){
-							mui.toast('请选择一个学生');
-							document.getElementById("finish").disabled = false;
-						} else if(talkTitle.studentText=='全部学生'){
-							mui.toast('只能选择一个学生');
 							document.getElementById("finish").disabled = false;
 						} else{
 							var wd = events.showWaiting();
 							document.getElementById("finish").disabled = true;
-							console.log(JSON.stringify(multiMedia))
-							console.log(JSON.stringify(multiMedia.data.PictureArray))
-							if(multiMedia.data.PictureArray.length == 0 ) { //没有传附件
+							var fj=[];
+							for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+								if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
+									continue
+								}	
+								fj.push('1');
+							}
+							if(fj.length==0){
 								addNotice(wd, '3', '', '', 0, '');
-							} else {
+							}else{
 								uploadFile(wd); //上传文件
 							}
+//							if(multiMedia.data.PictureArray.length == 0 ) { //没有传附件
+//								addNotice(wd, '3', '', '', 0, '');
+//							} else {
+//								uploadFile(wd); //上传文件
+//							}
 						}
 					}
 				});
@@ -436,38 +581,37 @@
 			 */
 			var addNotice = function(wd, encType, encAddr, encImg, encLen, encName) {
 				console.log('encImg:' + encImg);
-								console.log('encType:' + encType);
-								console.log('encAddr:' + encAddr);
-								console.log('encImg:' + encImg);
-								console.log('encLen:' + encLen);
+				console.log('encType:' + encType);
+				console.log('encAddr:' + encAddr);
+				console.log('encImg:' + encImg);
+				console.log('encLen:' + encLen);
 				var fj=[];
-				var enc_Url = encAddr.split("|");
-				if(encAddr.length > 0) {
-					var tempAddr = encAddr.split('|');
-					for(var i = 0; i < tempAddr.length; i++) {
-						var tempModel = tempAddr[i];
-						var temp000 = tempModel.split('/');
-						var attach={};
-						attach.oriName=temp000[temp000.length - 1];
-						attach.filePath=enc_Url[i];
-						fj.push(attach);
-					}
+				
+				for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+					console.log(multiMedia.data.PictureArray[i].path)
+					var path = multiMedia.data.PictureArray[i].path;
+					var temp000 = path.split('/');
+					var attach={};
+					attach.oriName=temp000[temp000.length - 1];
+					attach.filePath=path;
+					fj.push(attach);
 				}
 				var tempData = { 
-					id: '',
-					gradeId: talkTitle.gradeValue, 
-					classId: talkTitle.classesValue, 
-					studentId: talkTitle.studentValue, 
-					studentName: talkTitle.studentText, 
-					quantizationBehaviorId: talkTitle.actionValue, 
-					behaviorTime: talkTitle.time, 
-					behaviorDetail:talkTitle.content,
-					classNodes: talkTitle.jcValue, 
-					subCode: talkTitle.kmValue, 
-					recordTime: talkTitle.record, 
+					id: actionDetialData.actionDetail.id,
+					gradeId: actionDetialData.actionDetail.gradeId, 
+					classId: actionDetialData.actionDetail.classId, 
+					studentId: actionDetialData.actionDetail.studentId, 
+					studentName: actionDetialData.actionDetail.studentName, 
+					quantizationBehaviorId: actionDetialData.actionDetail.quantizationBehaviorId, 
+					behaviorTime: actionDetialData.actionDetail.behaviorTime, 
+					behaviorDetail:actionDetialData.content,
+					classNodes: actionDetialData.actionDetail.classNodes, 
+					subCode: actionDetialData.actionDetail.kmValue, 
+					recordTime: actionDetialData.actionDetail.recordTime, 
 					attachs: fj
 					
 				}
+				
 				console.log('tempData:'+JSON.stringify(tempData));
 				var wd = events.showWaiting();
 				getActionSaveBehavior(tempData,function(data) {
@@ -479,6 +623,7 @@
 							mui.back();
 						},2000)
 					} else {
+						document.getElementById("finish").disabled = true;
 						mui.toast(data.RspTxt);
 					} 
 				});
@@ -498,6 +643,9 @@
 
 				if(multiMedia.data.PictureArray.length != 0) { //图片
 					for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+						if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
+							continue
+						}	
 						getUpTokenData.fileArray.push(multiMedia.data.PictureArray[i].path);
 					}
 				} else if(multiMedia.data.VideoArray.length != 0) { //视频
@@ -517,8 +665,8 @@
 				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
 					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
-						//						console.log('上传配置 ' + JSON.stringify(data.configure));
-						//						console.log('上传凭证 ' + JSON.stringify(data.data));
+//												console.log('上传配置 ' + JSON.stringify(data.configure));
+//												console.log('上传凭证 ' + JSON.stringify(data.data));
 						QNUptoken = data.data; //token数据
 
 						if(multiMedia.data.PictureArray.length != 0) { //图片
@@ -530,8 +678,8 @@
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];
 									if(multiMedia.data.PictureArray[j].id == fileId) {
-										//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
-										//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
+//										console.log('QNUptoken.Data[i].Domain:' + QNUptoken.Data[i].Domain);
+//										console.log('+QNUptoken.Data[i].Key:' + QNUptoken.Data[i].Key);
 										multiMedia.data.PictureArray[j].domain = QNUptoken.Data[i].Domain + QNUptoken.Data[i].Key;
 										multiMedia.data.PictureArray[j].domain = window.storageKeyName.QNPB + QNUptoken.Data[i].Key;
 									}
