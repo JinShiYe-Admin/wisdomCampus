@@ -503,6 +503,7 @@ var MultiMedia = (function($, mod) {
 				domain: '', //图片地址
 				thumb: '' //图片缩略图地址
 			};
+			console.log("images========="+JSON.stringify(images))
 			self.data.PictureNum--;
 			self.data.PictureArray.push(images);
 			var element = document.createElement('div');
