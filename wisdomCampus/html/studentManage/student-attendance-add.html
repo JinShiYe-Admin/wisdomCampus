@@ -474,7 +474,7 @@
 							var obj = talkTitle.nodeSubJson[i];
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes:'['+obj.classNodes+']'
+								classNodes: '[' + obj.classNodes + ']'
 							}
 							arr.push(params);
 						}
@@ -482,6 +482,8 @@
 							mui.toast('请选择一个学生');
 						} else if(talkTitle.student == '全部学生') {
 							mui.toast('只能选择一个学生');
+						} else if(talkTitle.kValue == '请选择' || talkTitle.kValue == '') {
+							mui.toast('请选择行为细项');
 						} else {
 							console.log(JSON.stringify(arr))
 							var comData = {
