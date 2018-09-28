@@ -472,6 +472,12 @@
 						var arr = [];
 						for(var i = 0; i < talkTitle.nodeSubJson.length; i++) {
 							var obj = talkTitle.nodeSubJson[i];
+							console.log('obj.attendanceTime:'+obj.attendanceTime);
+							if (obj.attendanceTime == '请选择') {
+								mui.toast('请选择考勤日期');
+								return;
+								break;
+							}
 							var params = {
 								attendanceTime: obj.attendanceTime,
 								classNodes: '[' + obj.classNodes + ']'
