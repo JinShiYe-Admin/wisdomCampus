@@ -97,6 +97,20 @@
 			.multimedia-footer{
 				border: 0;
 			}
+			
+			.mui-table-view-cell:after {
+				right: 10px;
+			}
+			/**add*/
+			
+			.mui-navigate-right.rCss.no-icon:after {
+				content: ' ';
+			} 
+			
+			
+			.mui-popover-arrow {
+				display: none;
+			}
 		</style>
 	</head>
 
@@ -150,7 +164,7 @@
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell" @tap="selectAction()">
 						<a  class="aCss">行为细项</a>
-						<span  class="mui-navigate-right  rCss">{{actionDetail.behaviorName}}</span>
+						<span  class="mui-navigate-right rCss">{{actionDetail.behaviorName}}</span>
 					</li>
 				</ul>
 			</template>
@@ -216,9 +230,13 @@
 			</template>
 			<template v-else>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectJc()">
-						<a  class="aCss">节次</a>
-						<span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span>
+					<li class="mui-table-view-cell">
+						<a href="#selectClasses">
+							<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
+							<div class="mui-media-body liTitle">
+								节次
+							</div>
+						</a>
 					</li>
 				</ul>
 			</template>
@@ -261,6 +279,24 @@
 					</a>
 				</li>
 			</ul>
+			<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;">
+				<div class="mui-popover-arrow" style="display: none;"></div>
+				<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
+					<div class="mui-scroll">
+						<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+							<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+								<div class="mui-input-row mui-checkbox mui-right">
+									<label style="width: 100%;">{{jc.text}}</label>
+									<input :name="jc.text" :value="jc.value" type="checkbox">
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
+					<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event)">确定</button>
+				</div>
+			</div>
 		</div>
 		<div id="videoPopover" class="mui-popover">
 			<video id="video" style="position: absolute;z-index: 999;" controls="controls" webkit-playsinline playsinline>
@@ -285,7 +321,7 @@
 				<audio id="audio_audio" autoplay="autoplay" preload="auto"></audio>
 			</div>
 		</div> 
-		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/utils/mui.js"></script>
 		<script src="../../js/weui.min.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../../js/vue.min.js"></script>
@@ -372,13 +408,20 @@
 							actionDetialData.actionDetail.quantizationBehaviorId=_getParam(items[0], 'value');
 						});
 					},
-					selectJc:function(){
-						var userPicker = new $M.PopPicker({layer: 1});
-						userPicker.setData(actionDetialData.jcList);
-						userPicker.show(function(items) {
-							actionDetialData.actionDetail.period=_getParam(items[0], 'text');
-							actionDetialData.actionDetail.classNodes=_getParam(items[0], 'value');
-						});
+					selectJc: function(e) { //选择节次
+						var classes = [];
+						var names = [];
+						var obj = e.target;
+						var id = '#selectClasses';
+						$(id).find('li').each(function() {
+							if($(this).find('input').prop("checked")) {
+								names.push($(this).find('label').text());
+								classes.push($(this).find('input').val());
+							}
+						})
+						actionDetialData.actionDetail.period = names.join(",");
+						actionDetialData.actionDetail.classNodes = classes.join(",");
+						mui(id).popover('toggle');
 					},
 					selectKm:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
@@ -413,6 +456,7 @@
 						getActionDetailP();
 					}
 				});
+				mui('.mui-scroll-wrapper').scroll()
 			});
 			
 			var getActionDetailP = function() {
