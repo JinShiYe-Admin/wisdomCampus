@@ -12,10 +12,22 @@
 		<link rel="stylesheet" href="../../css/utils/preview.css" />
 		<link rel="stylesheet" href="../../css/utils/audiopopover.css" />
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
-
+		
 		<style type="text/css">
 			[v-cloak] {
 				visibility: hidden;
+			}
+			
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				position: relative;
+				display: block;
+				overflow: hidden;
+				margin: -11px -15px;
+				padding: inherit;
+				white-space: normal;
+				text-overflow: ellipsis;
+				color: inherit;
 			}
 			
 			body{
@@ -49,9 +61,9 @@
 				box-shadow: none;
 			}
 			
-			.mui-backdrop {
+			/*.mui-backdrop {
 				background-color: transparent;
-			}
+			}*/
 			
 			.aCss {
 				font-size: 15px;
@@ -152,6 +164,22 @@
 				border: 0;
 			}
 			/**add*/
+			
+			.mui-table-view-cell:after {
+				right: 10px;
+			}
+			/**add*/
+			
+			.mui-navigate-right.rCss.no-icon:after {
+				content: ' ';
+			} 
+			
+			
+			.mui-popover-arrow {
+				display: none;
+			}
+			
+			
 		</style>
 	</head>
 
@@ -161,7 +189,7 @@
 			<h1 class="mui-title" style="color: white;">新建学生行为</h1>
 			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;">提交</a>
 		</header>
-		<div class="mui-content mui-fullscreen" style="background: white;">
+		<div class="mui-content" style="background: white;">
 			<div id='talk'>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
@@ -187,18 +215,18 @@
 				<div class="mui-row title-body">
 					<span class="body-title" >行为说明</span>
 				</div>
-				<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="350" rows="3" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell"  @tap="selectTime($event)" >
 						<a  class="aCss">发生日期</a>
-						<pdata-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
+						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectJc()">
-						<a  class="aCss">节次</a>
-						<span  class="mui-navigate-right  rCss">{{jcText}}</span>
+					<li class="mui-table-view-cell" >
+						<a href="#selectClasses" class="aCss">节次</a>
+						<a href="#selectClasses" style="width: 75%;float: right;"><span  class="mui-navigate-right  rCss" >{{jcText}}</span></a>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectKm()">
 						<a  class="aCss">科目</a>
@@ -218,6 +246,24 @@
 							<p  class="rCss">{{record}}</p>
 						</li>
 					</ul>
+				</div>
+				<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;width: 80%;">
+					<div class="mui-popover-arrow" style="display: none;"></div>
+					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
+						<div class="mui-scroll">
+							<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+									<div class="mui-input-row mui-checkbox mui-right">
+										<label style="width: 100%;">{{jc.text}}</label>
+										<input :name="jc.text" :value="jc.value" type="checkbox">
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
+						<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event)">确定</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -244,8 +290,7 @@
 				<audio id="audio_audio" autoplay="autoplay" preload="auto"></audio>
 			</div>
 		</div>
-		<script src="../../js/mui.min.js"></script>
-		<script src="../../js/weui.min.js"></script>
+		<script src="../../js/utils/mui.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
@@ -341,13 +386,20 @@
 							talkTitle.actionValue=_getParam(items[0], 'value');
 						});
 					},
-					selectJc:function(){
-						var userPicker = new $M.PopPicker({layer: 1});
-						userPicker.setData(talkTitle.jcList);
-						userPicker.show(function(items) {
-							talkTitle.jcText=_getParam(items[0], 'text');
-							talkTitle.jcValue=_getParam(items[0], 'value');
-						});
+					selectJc: function(e) { //选择节次
+						var classes = [];
+						var names = [];
+						var obj = e.target;
+						var id = '#selectClasses';
+						$(id).find('li').each(function() {
+							if($(this).find('input').prop("checked")) {
+								names.push($(this).find('label').text());
+								classes.push($(this).find('input').val());
+							}
+						})
+						talkTitle.jcText = names.join(",");
+						talkTitle.jcValue = classes.join(",");
+						mui(id).popover('toggle');
 					},
 					selectKm:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
@@ -376,7 +428,6 @@
 						talkTitle.classesValue=allClasses.value;
 					}
 				});
-				
 				//行为详情 
 				var comData ={
 					id:-1
@@ -392,6 +443,7 @@
 //							mui.toast(data.RspTxt);
 					} 
 				});
+				mui('.mui-scroll-wrapper').scroll()
 			});
 			
 			
@@ -475,7 +527,7 @@
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
 					if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
-						mui.toast('通知内容不能为空');
+						mui.toast('行为说明不能为空');
 						document.getElementById("finish").disabled = false;
 					} else if(talkTitle.content.length > 350) {
 						mui.toast('内容最多350字');
@@ -529,6 +581,7 @@
 						fj.push(attach);
 					}
 				}
+				
 				var tempData = { 
 					id: '',
 					gradeId: talkTitle.gradeValue, 

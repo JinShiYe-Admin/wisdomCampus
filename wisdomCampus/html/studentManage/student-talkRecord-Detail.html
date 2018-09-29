@@ -40,6 +40,16 @@
 				padding-bottom: 35px;
 			}
 			
+			#notes {
+				border: none;
+				border-radius: initial;
+				height: 10rem;
+				border: 1px solid lightgray;
+				margin: 3%;
+				font-size: 14px;
+				padding-bottom: 25px;
+			}
+			
 			#notes2 {
 				border: none;
 				border-radius: initial;
@@ -47,7 +57,7 @@
 				border-top: 1px solid lightgray;
 				border-left: 1px solid lightgray;
 				border-right: 1px solid lightgray;
-				border-bottom:1px solid lightgray;
+				border-bottom:0;
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 25px;
@@ -77,7 +87,8 @@
 				font-size: 14px;
 				color: #666666;
 				margin-left: 70px;
-				margin-right: 10px;
+				margin-right: 15px;
+				float: right;
 			}
 			
 			.rCss{
@@ -198,26 +209,45 @@
 					<div class="mui-row title-body" style="font-size: 15px;color: #333;">
 						<span class="body-title" >谈话内容</span>
 					</div>
+					<template v-if="isEdit=='show'">
+						<textarea id="notes" maxlength="350" v-model="content" disabled style="width: 94%;"></textarea>
+					</template>
+					<template v-else>
+						<textarea id="notes2" maxlength="350" v-model="content" placeholder="请输入谈话内容说明（最多350字）" style="width: 94%;"></textarea>
+					</template>
 					
-					<textarea id="notes2" :disabled="isEdit=='show'"  v-model="content" style="width: 94%;">{{tc.chatDetail}}</textarea>
-					
-					<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'initial' : 'hidden' }">
+					<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'initial' : 'hidden' }"  style="margin-bottom: -50px;">
 						<div id="MultiMedia_Body" class="multimedia-body"></div>
 					</div>
-					<div v-cloak class="user-title-footer" style="margin: -15px 25px 10px;" v-for="(attach,index) in tc.attachs">
+					<!--<div v-cloak class="user-title-footer" style="" v-for="(attach,index) in tc.attachs" :style="{display: isEdit=='edit'? 'none' : 'initial' }">
 						<p class="ul-p">附件：<a @click="checkEncTc(index)">{{attach.attachName}}</a></p>
-					</div>
+					</div>-->
+					<ul class="mui-table-view" :style="{display: isEdit=='edit'? 'none' : 'initial' }">	
+						<li class="mui-table-view-cell">
+							<template v-if="tc.attachs!=[] && tc.attachs!=undefined && tc.attachs!=''">
+								<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
+								<div style="float:left;">
+									<p class="pClass" v-for="(attach,index) in tc.attachs"><a @tap="checkEncTc(index)">{{attach.attachName}}</a></p>
+								</div>
+							</template>
+						</li>
+					</ul>
 					<ul class="mui-table-view">
 						<template v-if="isEdit=='edit'">
 							<li class="mui-table-view-cell" @tap="selectTime($event)">
-								<a  class="aCss">谈话日期:</a>
-								<p  data-options='{"type":"date"}' class="mui-navigate-right pCss">{{talkTime}}</p>
+								<a  class="aCss">谈话日期</a>
+								<template v-if="tc.chatTime !='' && tc.chatTime!= null && tc.chatTime!=undefined">
+									<p  data-options='{}' class="mui-navigate-right pCss">{{tc.chatTime}}</p>
+								</template>
+								<template v-else>
+									<p  data-options='{}' class="mui-navigate-right pCss">{{talkTime}}</p>
+								</template>
 							</li>
 						</template>
 						<template v-else>
 							<li class="mui-table-view-cell">
 								<a  class="aCss">谈话日期:</a>
-								<p class="mui-navigate-right pCss">{{tc.chatTime}}</p>
+								<p class="pCss" style="margin:0;">{{tc.chatTime}}</p>
 							</li>
 						</template>
 					</ul>
@@ -315,15 +345,7 @@
 					content:'',
 					localTime: getDate(),//记录日期 取的是当前日期
 					teacher:personal.utname,//谈话/教育人 取的是当前登录老师
-					talkTime:'',
-					time:'2018年8月13日 第二节',
-					body:'【上课睡觉】王大陆同学上课不认真听讲，一直趴在桌子上睡觉，老师打了也不听。',
-					fj:'http://net.jiaobaowang.xiaoxuntong/download/sleep.jpg',
-					data1:'王老师|语文',
-					content:'',
-					time2:'2018-8-18',
-					data2:'王老师',
-					record:'2018-8-18'
+					talkTime: getDate2()
 				},
 				methods:{
 					selectTime:function(event){
@@ -335,14 +357,18 @@
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
 							talkTitle.talkTime=rs.text;
+							if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
+								talkTitle.tc.chatTime=rs.text;
+							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});
-					},checkEnc: function( index) {
+					},checkEnc: function(index) {
 						var tempUrl = this.sb.attachs[index].url;
 						plus.runtime.openURL(tempUrl);
-					},checkEncTc: function( index) {
+					},checkEncTc: function(index) {
 						var tempUrl = this.tc.attachs[index].url;
+						console.log(tempUrl)
 						plus.runtime.openURL(tempUrl);
 					}
 				}
@@ -404,6 +430,7 @@
 						talkTitle.sb=sb;
 						talkTitle.tc=data.RspData.tc;
 						talkTitle.curPage=curPage;
+						talkTitle.content=data.RspData.tc.chatDetail
 					} else {
 //							mui.toast(data.RspTxt);
 					}
@@ -491,6 +518,17 @@
 						if(actionHead.edit=='修改谈话' || actionHead.edit=='新增谈话' ){
 							talkTitle.isEdit='edit'	
 							actionHead.edit='提交'
+							
+							$('#MultiMedia').css('margin-bottom','0px');
+							console.log(JSON.stringify(talkTitle.tc))
+							var imgUrl=[];
+							if(talkTitle.tc.attachs !='' && talkTitle.tc.attachs !=null && talkTitle.tc.attachs !=undefined){
+								var _attachs=talkTitle.tc.attachs;
+								for(var i=0;i<_attachs.length;i++){
+									imgUrl.push(_attachs[i].url);
+								}
+								multiMedia.addImages(imgUrl);
+							}
 						}else{
 							if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 								mui.toast('通知内容不能为空');
@@ -501,9 +539,17 @@
 							} else {
 								var wd = events.showWaiting();
 								document.getElementById("finish").disabled = true;
-								if(multiMedia.data.PictureArray.length == 0 && multiMedia.data.VideoArray.length == 0 && multiMedia.data.AudioArray.length == 0) { //没有传附件
-									addNote(wd, '3', '', '', 0);
-								} else {
+								var fj=[];
+							for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+								if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
+										continue
+									}	
+									fj.push(multiMedia.data.PictureArray[i].path);
+								}
+								if(fj.length==0){
+									console.log()
+									addNote(wd, '3', '', '', 0, '');
+								}else{
 									uploadFile(wd); //上传文件
 								}
 							}
@@ -520,56 +566,85 @@
 			 */
 			function addNote(wd, encType, encAddr, encImg, encLen) {
 				console.log('encImg:' + encImg);
-				//附件名称
-				var encName = '';
-				if(encAddr.length > 0) {
-					var tempArray = [];
-					var tempAddr = encAddr.split('|');
+				console.log('encType:' + encType);
+				console.log('encAddr:' + encAddr);
+				console.log('encImg:' + encImg);
+				console.log('encLen:' + encLen);
+				console.log('multiMedia.data.PictureArray:' + JSON.stringify(multiMedia.data.PictureArray));
+				var fj=[];
+				var aaa=[];
+				if(encAddr !=''){
+					var enc_Url = encAddr.split("|");
+					aaa=enc_Url.distinct();
+				}
+				if(talkTitle.tc.attachs !=''&&talkTitle.tc.attachs !=null&&talkTitle.tc.attachs !=undefined){
+					
+					var _attachs=talkTitle.tc.attachs;
+					for(var i=0;i<_attachs.length;i++){
+						aaa.push(_attachs[i].url);
+					}
+				}
+				var dImg=multiMedia.data.deleteImg;
+				if(aaa.length > 0) {
+					var tempAddr = aaa;
 					for(var i = 0; i < tempAddr.length; i++) {
 						var tempModel = tempAddr[i];
 						var temp000 = tempModel.split('/');
-						tempArray.push(temp000[temp000.length - 1]);
+						var tempName =temp000[temp000.length - 1];
+						if(dImg.length>0){
+							for(var j=0;j<dImg.length;j++){
+								var deleteModel = dImg[j];
+								var tempDel = deleteModel.split('/');
+								var nameDel =tempDel[tempDel.length - 1];
+								if(nameDel!=tempName){
+									var attach={};
+									attach.oriName=tempName;
+									attach.filePath=tempAddr[i];
+									fj.push(attach);
+								}else{
+									console.log(deleteModel+'被删除')
+								}
+							}
+						}else{
+							var attach={};
+							attach.oriName=tempName;
+							attach.filePath=tempAddr[i];
+							fj.push(attach);
+						}
+						
 					}
-					encName = tempArray.join('|');
 				}
-				console.log('encName:'+encName);
 				
-				//1.新增学校通知（同时增加通知未读）
-//				var tempData1 = {
-//					schoolId: (personal.schid).toString(), //学校ID，统一部署的时候，学校ID传000000
-//					noticeContent: addNoticeContent.content, //内容
-//					noticEncName: encName, //附件名称，竖杠隔开
-//					noticeEncImgAddr: encImg, //附件缩略图地址，竖杠隔开
-//					noticeEncAddr: encAddr, //附件地址，竖杠隔开
-//					smsSync: addNoticeContent.msgFlag, //是否短信同步，先填0
-//					sendManId: (personal.utid).toString(), //发布人ID
-//					sendManCode: personal.uid, //发布人账号
-//					sendManName: personal.utname, //发布人姓名
-//					sendManImg: personal.imgurl, //发布人头像
-//					receiveManIds: arrayToStr(temp0), //接收人人ID，例如：[“1”,”2”,”3”]
-//					receiveManCodes: arrayToStr(temp1), //接收人账号，例如：[“1”,”2”,”3”]
-//					receiveManNames: arrayToStr(temp2), //接收人姓名，例如：[“1”,”2”,”3”]
-//					receiveManImgs: arrayToStr(temp3) //接收人头像
-//				}
-//				events.showWaiting();
-//				//1.新增学校通知（同时增加通知未读）
-//				addNoticePro(tempData1, function function_name(data) {
-//					events.closeWaiting();
-//					if(data.RspCode == 0) {
-//						addNoticeContent.content = '';
-//						if(temp4.length > 0&&addNoticeContent.msgFlag == 1) {
-//							var tempMobiles = temp4.join(',').toString();
-//							events.SendSmsForMobiles(tempMobiles, addNoticeContent.content);
-//						}
-//						mui.toast('成功');
-//						setTimeout(function() {
-//							mui.back();
-//						}, 1000);
-//					} else {
-//						document.getElementById("finish").disabled = false;
-//						mui.toast(data.RspTxt);
-//					}
-//				});
+				
+				console.log(":"+JSON.stringify(fj));
+				var tempData1 = {
+					sbId: talkTitle.sb.id, 
+					chatDetail: talkTitle.content,  
+					chatTime:talkTitle.talkTime,
+					teacher:talkTitle.teacher,
+					recordTime: talkTitle.localTime,  
+					attachs: fj
+				}
+				if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
+					tempData1.id=talkTitle.tc.id
+				}else{
+					tempData1.id="  "
+				}
+				
+				console.log("liushuai3"+JSON.stringify(tempData1));
+				events.showWaiting();
+				getTalkSaveChat(tempData1, function function_name(data) {
+					events.closeWaiting();
+					if(data.RspCode == 0) {
+						mui.toast('保存成功');
+						setTimeout(function(){
+							mui.back();
+						},2000)
+					} else {
+						document.getElementById("finish").disabled = false;
+						mui.toast(data.RspTxt);
+					}
+				});
 			}
 
 			/**
@@ -586,6 +661,9 @@
 
 				if(multiMedia.data.PictureArray.length != 0) { //图片
 					for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
+						if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
+							continue
+						}	
 						getUpTokenData.fileArray.push(multiMedia.data.PictureArray[i].path);
 					}
 				} else if(multiMedia.data.VideoArray.length != 0) { //视频
@@ -855,6 +933,41 @@
 //			            + " " + date.getHours() + seperator2 + date.getMinutes()
 //			            + seperator2 + date.getSeconds();
 			    return currentdate;
+			}
+			
+			function getDate2() {
+			    var date = new Date();
+			    var seperator1 = "-";
+			    var seperator2 = ":";
+			    var month = date.getMonth() + 1;
+			    var strDate = date.getDate();
+			    if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			    if (strDate >= 0 && strDate <= 9) {
+			        strDate = "0" + strDate;
+			    }
+			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+			            + " " + date.getHours() + seperator2 + date.getMinutes();
+//			            + seperator2 + date.getSeconds();
+			    return currentdate;
+			}
+			
+			Array.prototype.distinct = function() {
+				var arr = this,
+					result = [],
+					i,
+					j,
+					len = arr.length;
+				for(i = 0; i < len; i++) {
+					for(j = i + 1; j < len; j++) {
+						if(arr[i] === arr[j]) {
+							j = ++i;
+						}
+					}
+					result.push(arr[i]);
+				}
+				return result;
 			}
 		</script>
 	</body>
