@@ -192,9 +192,9 @@
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell"  @tap="selectTime($event)" >
+					<li class="mui-table-view-cell">
 						<a  class="aCss">发生日期</a>
-						<pdata-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
+						<p @tap="selectTime($event)" data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectJc()">
 						<a  class="aCss">节次</a>
