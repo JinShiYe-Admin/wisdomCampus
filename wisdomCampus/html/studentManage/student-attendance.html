@@ -83,6 +83,7 @@
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectAttendance()"><span>{{attendance}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 			</div>
 		</div>
 		<div id="actionArrayData">
@@ -182,7 +183,10 @@
 					student:'全部学生',//显示用
 					sGrade:"",//存值用
 					sClasses:"",//存值用
-					list:[]
+					list:[],
+					attendance:"全部类型",
+					attendanceValue:"",
+					atArray:[]
 				},
 				methods:{
 					selectGrade:function(){
@@ -202,6 +206,17 @@
 					},
 					selectClass:function(){
 						this.$options.methods.selectGrade();
+					},
+					selectAttendance:function(){
+						var userPicker = new m$.PopPicker({layer: 1});
+						userPicker.setData(selectTitle.atArray);
+						userPicker.show(function(items) {
+							selectTitle.attendance=_getParam(items[0], 'text');
+							selectTitle.attendanceValue=_getParam(items[0], 'value');
+							pageIndex = 1;
+							flagRef = 0;
+							getAttendanceList(pageIndex);
+						});
 					}
 				}
 			}); 
@@ -285,7 +300,8 @@
 					clsIds:classesValue,
 					stuId:'',
 					pageSize:pageSize,
-					pageNumber:index
+					pageNumber:index,
+					attendanceType:selectTitle.attendanceValue
 				}
 				var wd = events.showWaiting();
 				getAttendanceIndex(comData,function(data) {
@@ -294,6 +310,13 @@
 					if(data.RspCode == 0) {
 						//总页数
 						totalPageCount = data.RspData.totalRow;
+						var atArray=data.RspData.atArray;
+						var temp=[{
+							text:"全部类型",
+							value:""
+						}];
+						var signArr = temp.concat(atArray);
+						selectTitle.atArray=signArr;
 						pageIndex++;
 						if(flagRef == 0) { //刷新
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){

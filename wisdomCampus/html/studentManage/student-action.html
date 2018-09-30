@@ -82,6 +82,7 @@
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectBehavior()"><span>{{behavior}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 			</div>
 		</div>
 		<div id="actionArrayData">
@@ -181,7 +182,10 @@
 					student:'全部学生',//显示用
 					sGrade:"",//存值用
 					sClasses:"",//存值用
-					list:[]
+					list:[],
+					behavior:"全部行为",
+					behaviorValue:"",
+					btArray:[]
 				},
 				methods:{
 					selectGrade:function(){
@@ -201,6 +205,17 @@
 					},
 					selectClass:function(){
 						this.$options.methods.selectGrade();
+					},
+					selectBehavior:function(){
+						var userPicker = new m$.PopPicker({layer: 1});
+						userPicker.setData(selectTitle.btArray);
+						userPicker.show(function(items) {
+							selectTitle.behavior=_getParam(items[0], 'text');
+							selectTitle.behaviorValue=_getParam(items[0], 'value');
+							pageIndex = 1;
+							flagRef = 0;
+							getAttendanceList(pageIndex);
+						});
 					}
 				}
 			}); 
@@ -283,7 +298,8 @@
 					grdIds:gradeValue,
 					clsIds:classesValue,
 					pageSize:pageSize,
-					pageNumber:index
+					pageNumber:index,
+					behaviorType:selectTitle.behaviorValue
 				}
 				var wd = events.showWaiting();
 				getActionBehaviorIndex(comData,function(data) {
@@ -292,6 +308,13 @@
 					if(data.RspCode == 0) {
 						//总页数
 						totalPageCount = data.RspData.totalRow;
+						var btnArr=data.RspData.btArray;
+						var temp=[{
+							text:"全部行为",
+							value:""
+						}];
+						var signArr = temp.concat(btnArr);
+						selectTitle.btArray=signArr;
 						pageIndex++;
 						if(flagRef == 0) { //刷新
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){

@@ -191,7 +191,7 @@
 					<template v-if="actionDetail.attachs!=[] && actionDetail.attachs!=undefined && actionDetail.attachs!=''">
 						<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
 						<div style="float:left;">
-							<p class="pClass" v-for="(attach,index) in actionDetail.attachs"><a @click="checkEnc(index)">{{attach.attachName}}</a></p>
+							<p class="pClass" style="margin-bottom: 10px;" v-for="(attach,index) in actionDetail.attachs"><a @click="checkEnc(index)">{{attach.attachName}}</a></p>
 						</div>
 					</template>
 				</li>
@@ -218,30 +218,14 @@
 			</template>
 			<template v-if="isEdit=='show'">
 				<ul class="mui-table-view" v-if="dataFlag == 1">
-					<!--<li class="mui-table-view-cell">
-						<a>
-							<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
-							<div class="mui-media-body liTitle">
-								节次
-							</div>
-						</a>
-					</li>-->
 					<li class="mui-table-view-cell" >
 						<a class="aCss">节次</a>
-						<a style="width: 75%;float: right;"><span  class="rCss">{{actionDetail.period}}</span></a>
-					</li>
+						<a style="width: 75%;float: right;margin-right: -17px;"><span  class="rCss">{{actionDetail.period}}</span></a>
+					</li> 
 				</ul>
 			</template>
 			<template v-else>
 				<ul class="mui-table-view">
-					<!--<li class="mui-table-view-cell">
-						<a href="#selectClasses">
-							<p class="mui-pull-right liDetail">{{actionDetail.period}}</p>
-							<div class="mui-media-body liTitle">
-								节次
-							</div>
-						</a>
-					</li>-->
 					<li class="mui-table-view-cell" >
 						<a href="#selectClasses" class="aCss">节次</a>
 						<a href="#selectClasses" style="width:75%;float: right;"><span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span></a>
@@ -639,47 +623,35 @@
 				console.log('encImg:' + encImg);
 				console.log('encLen:' + encLen);
 				var fj=[];
-				var aaa=[];
-				if(encAddr !=''){
-					var enc_Url = encAddr.split("|");
-					aaa=enc_Url.distinct();
-				}
+				
+				/**过滤本地图片数组，去重删掉的本地图片*/
+				var localImg=[];
+				var dImg=multiMedia.data.deleteImg;
 				if(actionDetialData.actionDetail.attachs !=''&&actionDetialData.actionDetail.attachs !=null&&actionDetialData.actionDetail.attachs !=undefined){
 					var _attachs=actionDetialData.actionDetail.attachs;
 					for(var i=0;i<_attachs.length;i++){
-						aaa.push(_attachs[i].url);
-					}
-				}
-				var dImg=multiMedia.data.deleteImg;
-				if(aaa.length > 0) {
-					var tempAddr = aaa;
-					for(var i = 0; i < tempAddr.length; i++) {
-						var tempModel = tempAddr[i];
-						var temp000 = tempModel.split('/');
-						var tempName =temp000[temp000.length - 1];
+						var localUrl=_attachs[i].url;
 						if(dImg.length>0){
-							for(var j=0;j<dImg.length;j++){
-								var deleteModel = dImg[j];
-								var tempDel = deleteModel.split('/');
-								var nameDel =tempDel[tempDel.length - 1];
-								if(nameDel!=tempName){
-									var attach={};
-									attach.oriName=tempName;
-									attach.filePath=tempAddr[i];
-									fj.push(attach);
-								}else{
-									console.log(deleteModel+'被删除')
-								}
+							var index=$.inArray(localUrl, dImg);
+							if(index==-1){
+								localImg.push(localUrl);
 							}
 						}else{
-							var attach={};
-							attach.oriName=tempName;
-							attach.filePath=tempAddr[i];
-							fj.push(attach);
+							localImg.push(localUrl);
 						}
-						
 					}
 				}
+				console.log('localImg:' + localImg);
+				var checkimg=[];
+				if(encAddr !=''){
+					var enc_Url = encAddr.split("|");
+					checkimg = Deduplication(enc_Url);
+				}
+				console.log('checkimg:' + checkimg);
+				var fj=[];
+				fj=localImg.concat(checkimg);
+				console.log("fj:"+JSON.stringify(fj));
+				
 				var tempData = { 
 					id: actionDetialData.actionDetail.id,
 					gradeId: actionDetialData.actionDetail.gradeId, 
@@ -1008,21 +980,17 @@
 			    return currentdate;
 			}
 			
-			Array.prototype.distinct = function() {
-				var arr = this,
-					result = [],
-					i,
-					j,
-					len = arr.length;
-				for(i = 0; i < len; i++) {
-					for(j = i + 1; j < len; j++) {
-						if(arr[i] === arr[j]) {
-							j = ++i;
-						}
+			function Deduplication(Array){
+				var newArray = [];
+				for(var i=0; i<Array.length; i++){
+					var items = Array[i];
+					if(items !== '' && items !== null && items !== undefined){
+						if($.inArray(items,newArray) == -1){
+							newArray.push(items)
+						}	
 					}
-					result.push(arr[i]);
 				}
-				return result;
+				return newArray;
 			}
 		</script>
 	</body>
