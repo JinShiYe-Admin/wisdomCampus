@@ -217,7 +217,7 @@ var MultiMedia = (function($, mod) {
 		//删除数组
 		for(var i = 0; i < self.data.PictureArray.length; i++) {
 			if(self.data.PictureArray[i].id == id) {
-				console.log('删除的图片是：'+self.data.PictureArray[i])
+				console.log('删除的图片是：'+JSON.stringify(self.data.PictureArray[i]))
 				self.data.deleteImg.push(self.data.PictureArray[i].path);
 				self.data.PictureArray.splice(i, 1);
 				self.data.PictureNum++;

@@ -227,7 +227,7 @@
 							<template v-if="tc.attachs!=[] && tc.attachs!=undefined && tc.attachs!=''">
 								<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
 								<div style="float:left;">
-									<p class="pClass" v-for="(attach,index) in tc.attachs"><a @tap="checkEncTc(index)">{{attach.attachName}}</a></p>
+									<p class="pClass" style="margin-bottom: 10px;" v-for="(attach,index) in tc.attachs"><a @tap="checkEncTc(index)">{{attach.attachName}}</a></p>
 								</div>
 							</template>
 						</li>
@@ -514,7 +514,7 @@
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
-					events.hideKeyBoard(hideOption);
+						events.hideKeyBoard(hideOption);
 						if(actionHead.edit=='修改谈话' || actionHead.edit=='新增谈话' ){
 							talkTitle.isEdit='edit'	
 							actionHead.edit='提交'
@@ -572,50 +572,33 @@
 				console.log('encLen:' + encLen);
 				console.log('multiMedia.data.PictureArray:' + JSON.stringify(multiMedia.data.PictureArray));
 				var fj=[];
-				var aaa=[];
-				if(encAddr !=''){
-					var enc_Url = encAddr.split("|");
-					aaa=enc_Url.distinct();
-				}
+				
+				/**过滤本地图片数组，去重删掉的本地图片*/
+				var localImg=[];
+				var dImg=multiMedia.data.deleteImg;
 				if(talkTitle.tc.attachs !=''&&talkTitle.tc.attachs !=null&&talkTitle.tc.attachs !=undefined){
-					
 					var _attachs=talkTitle.tc.attachs;
 					for(var i=0;i<_attachs.length;i++){
-						aaa.push(_attachs[i].url);
-					}
-				}
-				var dImg=multiMedia.data.deleteImg;
-				if(aaa.length > 0) {
-					var tempAddr = aaa;
-					for(var i = 0; i < tempAddr.length; i++) {
-						var tempModel = tempAddr[i];
-						var temp000 = tempModel.split('/');
-						var tempName =temp000[temp000.length - 1];
+						var localUrl=_attachs[i].url;
 						if(dImg.length>0){
-							for(var j=0;j<dImg.length;j++){
-								var deleteModel = dImg[j];
-								var tempDel = deleteModel.split('/');
-								var nameDel =tempDel[tempDel.length - 1];
-								if(nameDel!=tempName){
-									var attach={};
-									attach.oriName=tempName;
-									attach.filePath=tempAddr[i];
-									fj.push(attach);
-								}else{
-									console.log(deleteModel+'被删除')
-								}
+							var index=$.inArray(localUrl, dImg);
+							if(index==-1){
+								localImg.push(localUrl);
 							}
 						}else{
-							var attach={};
-							attach.oriName=tempName;
-							attach.filePath=tempAddr[i];
-							fj.push(attach);
+							localImg.push(localUrl);
 						}
-						
 					}
 				}
-				
-				
+				console.log('localImg:' + localImg);
+				var checkimg=[];
+				if(encAddr !=''){
+					var enc_Url = encAddr.split("|");
+					checkimg = Deduplication(enc_Url);
+				}
+				console.log('checkimg:' + checkimg);
+				var fj=[];
+				fj=localImg.concat(checkimg);
 				console.log(":"+JSON.stringify(fj));
 				var tempData1 = {
 					sbId: talkTitle.sb.id, 
@@ -953,22 +936,19 @@
 			    return currentdate;
 			}
 			
-			Array.prototype.distinct = function() {
-				var arr = this,
-					result = [],
-					i,
-					j,
-					len = arr.length;
-				for(i = 0; i < len; i++) {
-					for(j = i + 1; j < len; j++) {
-						if(arr[i] === arr[j]) {
-							j = ++i;
-						}
+			function Deduplication(Array){
+				var newArray = [];
+				for(var i=0; i<Array.length; i++){
+					var items = Array[i];
+					if(items !== '' && items !== null && items !== undefined){
+						if($.inArray(items,newArray) == -1){
+							newArray.push(items)
+						}	
 					}
-					result.push(arr[i]);
 				}
-				return result;
+				return newArray;
 			}
+
 		</script>
 	</body>
 
