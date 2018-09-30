@@ -152,6 +152,14 @@
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
 						<a>
+							<p class="mui-pull-right liDetail">{{actionDetail.behaviorTypeTxt}}</p>
+							<div class="mui-media-body liTitle">
+								行为类型
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" style="">
+						<a>
 							<p class="mui-pull-right liDetail">{{actionDetail.behaviorName}}</p>
 							<div class="mui-media-body liTitle">
 								行为细项
@@ -162,6 +170,10 @@
 			</template>
 			<template v-else>
 				<ul class="mui-table-view" v-if="dataFlag == 1">
+					<li class="mui-table-view-cell" @tap="selectTypeAction()">
+						<a  class="aCss">行为类型</a>
+						<span  class="mui-navigate-right rCss">{{actionDetail.behaviorTypeTxt}}</span>
+					</li>
 					<li class="mui-table-view-cell" @tap="selectAction()">
 						<a  class="aCss">行为细项</a>
 						<span  class="mui-navigate-right rCss">{{actionDetail.behaviorName}}</span>
@@ -366,6 +378,7 @@
 					classesValue:'',
 					studentValue:'',
 					actionDetail: {},
+					actionDetailSum: {},
 					curPage:{},
 					actionList:[],
 					jcList:[],
@@ -390,6 +403,15 @@
 							actionDetialData.actionDetail.behaviorTime=rs.text;
 							_self.picker.dispose();
 							_self.picker = null;
+						});
+					},
+					selectTypeAction:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(actionDetialData.actionDetailSum.btArray);
+						userPicker.show(function(items) {
+							actionDetialData.actionDetail.behaviorTypeTxt=_getParam(items[0], 'text');
+							actionDetialData.actionDetail.behaviorType=_getParam(items[0], 'value');
+							setAttendanceType();
 						});
 					},
 					selectAction:function(){
@@ -425,6 +447,19 @@
 					}
 				}
 			});
+			
+			//将类型、细项的值对应
+			var setAttendanceType = function(){
+				for (var i = 0; i < actionDetialData.actionDetailSum.qb.length; i++) {
+					var tempModel = actionDetialData.actionDetailSum.qb[i];
+					if (tempModel.value == actionDetialData.actionDetail.behaviorType) {
+						actionDetialData.actionList = [].concat(tempModel.dataArray);
+						actionDetialData.actionDetail.behaviorName = '请选择';
+						actionDetialData.actionDetail.quantizationBehaviorId = '';
+						break;
+					}
+				}
+			}
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
@@ -472,6 +507,7 @@
 								}
 							}
 						}
+						actionDetialData.actionDetailSum = data.RspData;
 						actionDetialData.actionDetail = sb;
 						actionDetialData.curPage = curPage;
 						actionDetialData.dataFlag = 1;
@@ -659,6 +695,7 @@
 					studentId: actionDetialData.actionDetail.studentId, 
 					studentName: actionDetialData.actionDetail.studentName, 
 					quantizationBehaviorId: actionDetialData.actionDetail.quantizationBehaviorId, 
+					behaviorType:actionDetialData.actionDetail.behaviorType, 
 					behaviorTime: actionDetialData.actionDetail.behaviorTime, 
 					behaviorDetail:actionDetialData.content,
 					classNodes: actionDetialData.actionDetail.classNodes, 

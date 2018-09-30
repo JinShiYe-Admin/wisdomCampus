@@ -109,6 +109,10 @@
 				<div v-show="update=='1'" style="margin: -5px 0 -5px 0;">
 					<p class="lineCell"></p>
 					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="selectKqlx()">
+							<a class="aCss">考勤类型</a>
+							<span class="mui-navigate-right  rCss">{{attendanceDetail.attendanceTypeTxt}}</span>
+						</li>
 						<li class="mui-table-view-cell" @tap="selectKqxx()">
 							<a class="aCss">考勤细项</a>
 							<span class="mui-navigate-right  rCss">{{attendanceDetail.attendanceName}}</span>
@@ -150,6 +154,14 @@
 				<p class="lineCell"></p>
 				<ul class="mui-table-view" v-show="update=='0'" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
+						<a>
+							<p class="mui-pull-right liDetail">{{attendanceDetail.attendanceTypeTxt}}</p>
+							<div class="mui-media-body liTitle">
+								考勤类型
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" style="">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.attendanceName}}</p>
 							<div class="mui-media-body liTitle">
@@ -280,6 +292,7 @@
 						attendanceDetialData.qxList = data.RspData.permission;
 
 						attendanceDetialData.attendanceDetail = data.RspData.sa;
+						attendanceDetialData.attendanceDetailSum = data.RspData;
 						//合并对象
 						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
 						console.log('attendanceDetialData.attendanceDetail:' + JSON.stringify(attendanceDetialData.attendanceDetail));
@@ -304,6 +317,7 @@
 				data: {
 					dataFlag: 0,
 					attendanceDetail: {},
+					attendanceDetailSum: {},
 					kqxx: '请选择',
 					jc: '请选择',
 					kqrq: '请选择',
@@ -354,6 +368,21 @@
 							}
 							_self.picker.dispose();
 							_self.picker = null;
+						});
+					},
+					selectKqlx: function() { //选择考勤类型
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
+						userPicker.setData(attendanceDetialData.attendanceDetailSum.atArray);
+						userPicker.show(function(items) {
+							attendanceDetialData.attendanceDetail.attendanceName = _getParam(items[0], 'text');
+							attendanceDetialData.attendanceDetail.quantizationAttendanceId = _getParam(items[0], 'value');
+							attendanceDetialData.qxShow = '0';
+							setAttendanceType();
+//							if(_getParam(items[0], 'value') == '12') {
+//								attendanceDetialData.qxShow = '1';
+//							}
 						});
 					},
 					selectKqxx: function() { //选择考勤细项
@@ -430,6 +459,7 @@
 							studentId: attendanceDetialData.attendanceDetail.studentId,
 							studentName: attendanceDetialData.attendanceDetail.studentName,
 							quantizationAttendanceId: attendanceDetialData.attendanceDetail.quantizationAttendanceId,
+							attendanceType: attendanceDetialData.attendanceDetail.attendanceType,
 							nodeSubJson: arr,
 							explain: attendanceDetialData.content,
 							recordTime: attendanceDetialData.attendanceDetail.recordTime
@@ -466,6 +496,19 @@
 					}
 				}
 			});
+			
+			//将类型、细项的值对应
+			var setAttendanceType = function(){
+				for (var i = 0; i < attendanceDetialData.attendanceDetailSum.qa.length; i++) {
+					var tempModel = attendanceDetialData.attendanceDetailSum.qa[i];
+					if (tempModel.value == attendanceDetialData.attendanceDetail.attendanceType) {
+						attendanceDetialData.kqxxList = [].concat(tempModel.dataArray);
+						attendanceDetialData.attendanceDetail.attendanceName = '请选择';
+						attendanceDetialData.attendanceDetail.quantizationAttendanceId = '';
+						break;
+					}
+				}
+			}
 
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
