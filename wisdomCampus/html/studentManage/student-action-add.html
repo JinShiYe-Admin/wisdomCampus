@@ -207,6 +207,10 @@
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" @tap="selectActionType()">
+						<a class="aCss">行为类型</a>
+						<span class="mui-navigate-right  rCss">{{actionTypeText}}</span>
+					</li>
 					<li class="mui-table-view-cell" @tap="selectAction()">
 						<a  class="aCss">行为细项</a>
 						<span  class="mui-navigate-right  rCss">{{actionText}}</span>
@@ -331,6 +335,7 @@
 			var talkTitle =new Vue({
 				el:'#talk',
 				data:{
+					actionDetail:{},
 					list:[],
 					gradeText:'请选择',
 					classesText:'请选择',
@@ -339,10 +344,13 @@
 					classesValue:'',
 					studentValue:'',
 					actionList:[],
+					actionTypeList:[],
 					jcList:[],
 					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
 					actionText:'请选择',
 					actionValue:'',
+					actionTypeText:'请选择',
+					actionTypeValue:'',
 					content:'',
 					time:getDate(),
 					jcText:'请选择',
@@ -376,6 +384,15 @@
 							talkTitle.gradeValue=_getParam(items[0], 'value');
 							talkTitle.classesValue=_getParam(items[1], 'value');
 							talkTitle.studentValue=_getParam(items[2], 'value');
+						});
+					},
+					selectActionType:function(){
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.actionTypeList);
+						userPicker.show(function(items) {
+							talkTitle.actionTypeText=_getParam(items[0], 'text');
+							talkTitle.actionTypeValue=_getParam(items[0], 'value');
+							setAttendanceType();
 						});
 					},
 					selectAction:function(){
@@ -437,8 +454,14 @@
 					wd.close();
 					console.log('2.行为详情 ' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						talkTitle.actionList=data.RspData.qb;
+						talkTitle.actionDetail = data.RspData;
+						talkTitle.actionTypeList=data.RspData.btArray;
 						talkTitle.jcList=data.RspData.cn;
+						if (talkTitle.actionTypeList.length>0) {
+							talkTitle.actionTypeText = talkTitle.actionTypeList[0].text;
+							talkTitle.actionTypeValue = talkTitle.actionTypeList[0].value;
+							setAttendanceType();
+						}
 					} else {
 //							mui.toast(data.RspTxt);
 					} 
@@ -446,7 +469,18 @@
 				mui('.mui-scroll-wrapper').scroll()
 			});
 			
-			
+			//将考勤类型、考勤细项的值对应
+			var setAttendanceType = function(){
+				for (var i = 0; i < talkTitle.actionDetail.qb.length; i++) {
+					var tempModel = talkTitle.actionDetail.qb[i];
+					if (tempModel.value == talkTitle.actionTypeValue) {
+						talkTitle.actionList = [].concat(tempModel.dataArray);
+						talkTitle.actionText = '请选择';
+						talkTitle.actionValue = '';
+						break;
+					}
+				}
+			}
 			
 			var pathList = []; //记录需要删掉的图片和缩略图
 			var encNameList = []; //附件名称
@@ -538,8 +572,14 @@
 					} else if(talkTitle.studentText=='全部学生'){
 						mui.toast('只能选择一个学生');
 						document.getElementById("finish").disabled = false;
+					} else if(talkTitle.actionTypeValue=='请选择'||talkTitle.actionTypeValue==''){
+						mui.toast('请选择行为类型');
+						document.getElementById("finish").disabled = false;
 					} else if(talkTitle.actionValue=='请选择'||talkTitle.actionValue==''){
 						mui.toast('请选择行为细项');
+						document.getElementById("finish").disabled = false;
+					} else if(talkTitle.jcValue=='请选择'||talkTitle.jcValue==''||talkTitle.jcValue.length==0){
+						mui.toast('请选择节次');
 						document.getElementById("finish").disabled = false;
 					} else{
 						var wd = events.showWaiting();
@@ -589,6 +629,7 @@
 					studentId: talkTitle.studentValue, 
 					studentName: talkTitle.studentText, 
 					quantizationBehaviorId: talkTitle.actionValue, 
+					behaviorType: talkTitle.actionTypeValue, 
 					behaviorTime: talkTitle.time, 
 					behaviorDetail:talkTitle.content,
 					classNodes: talkTitle.jcValue, 

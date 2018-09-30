@@ -164,9 +164,13 @@
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectKqxx()">
+					<li class="mui-table-view-cell" @tap="selectkqlxName()">
+						<a class="aCss">考勤类型</a>
+						<span class="mui-navigate-right  rCss">{{kqlxName}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectkqxxName()">
 						<a class="aCss">考勤细项</a>
-						<span class="mui-navigate-right  rCss">{{kqxx}}</span>
+						<span class="mui-navigate-right  rCss">{{kqxxName}}</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="aCss">考勤说明</a>
@@ -300,7 +304,13 @@
 					wd.close();
 					console.log('2.考勤详情' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						talkTitle.kqxxList = data.RspData.qa;
+						talkTitle.kqDetail = data.RspData;
+						talkTitle.kqlxNameList = data.RspData.atArray;
+						if (talkTitle.kqlxNameList.length>0) {
+							talkTitle.kqlxName = talkTitle.kqlxNameList[0].text;
+							talkTitle.kqlxValue = talkTitle.kqlxNameList[0].value;
+							setAttendanceType();
+						}
 						talkTitle.jcList = data.RspData.cn;
 						talkTitle.qxList = data.RspData.permission;
 					} else {
@@ -308,21 +318,38 @@
 					}
 				});
 			});
+			//将考勤类型、考勤细项的值对应
+			var setAttendanceType = function(){
+				for (var i = 0; i < talkTitle.kqDetail.qa.length; i++) {
+					var tempModel = talkTitle.kqDetail.qa[i];
+					if (tempModel.value == talkTitle.kqlxValue) {
+						talkTitle.kqxxNameList = [].concat(tempModel.dataArray);
+//						talkTitle.kqxxName = talkTitle.kqxxNameList[0].text;
+//						talkTitle.kqxxValue = talkTitle.kqxxNameList[0].value;
+						talkTitle.kqxxName = '请选择';
+						talkTitle.kqxxValue = '';
+						break;
+					}
+				}
+			}
 
 			var talkTitle = new Vue({
 				el: '#talk',
 				data: {
+					kqDetail:{},
 					grade: '请选择',
 					classes: '请选择',
 					student: '请选择',
-					kqxx: '请选择',
+					kqxxName: '请选择',
+					kqlxName:'请选择',
 					jc: '请选择',
 					qx: '请选择',
 					kqrq: '请选择',
 					qxShow: '0',
 					sjShow: '0',
 					gradelist: [],
-					kqxxList: [],
+					kqxxNameList: [],
+					kqlxNameList: [],
 					jcList: [],
 					qxList: [],
 					nodeSubJson: [{
@@ -337,7 +364,8 @@
 					jlsj: getDate(), //存值用:记录时间
 					content: '', //存值用:考勤说明
 					qValue: '', //存值用:出入权限
-					kValue: '', //存值用:考勤细项
+					kqxxValue: '', //存值用:考勤细项
+					kqlxValue: '', //存值用:考勤类型
 					sGrade: "", //存值用:年级ID
 					sClasses: "", //存值用:班级ID
 					sStudent: "" //存值用:学生ID
@@ -404,18 +432,34 @@
 							talkTitle.sStudent = _getParam(items[2], 'value');
 						});
 					},
-					selectKqxx: function() { //选择考勤细项
+					selectkqxxName: function() { //选择考勤细项
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
-						userPicker.setData(talkTitle.kqxxList);
+						userPicker.setData(talkTitle.kqxxNameList);
 						userPicker.show(function(items) {
-							talkTitle.kqxx = _getParam(items[0], 'text');
-							talkTitle.kValue = _getParam(items[0], 'value');
+							talkTitle.kqxxName = _getParam(items[0], 'text');
+							talkTitle.kqxxValue = _getParam(items[0], 'value');
+							
 							talkTitle.qxShow = '0';
 							if(_getParam(items[0], 'value') == '12') {
 								talkTitle.qxShow = '1';
 							}
+						});
+					},
+					selectkqlxName: function() { //选择考勤类型
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
+						userPicker.setData(talkTitle.kqlxNameList);
+						userPicker.show(function(items) {
+							talkTitle.kqlxName = _getParam(items[0], 'text');
+							talkTitle.kqlxValue = _getParam(items[0], 'value');
+							talkTitle.qxShow = '0';
+							setAttendanceType();
+//							if(_getParam(items[0], 'value') == '12') {
+//								talkTitle.qxShow = '1';
+//							}
 						});
 					},
 					selectQx: function() { //选择权限
@@ -488,23 +532,26 @@
 							mui.toast('请选择一个学生');
 						} else if(talkTitle.student == '全部学生') {
 							mui.toast('只能选择一个学生');
-						} else if(talkTitle.kValue == '请选择' || talkTitle.kValue == '') {
+						} else if(talkTitle.kqlxValue == '请选择' || talkTitle.kqlxValue == '') {
+							mui.toast('请选择考勤类型');
+						} else if(talkTitle.kqxxValue == '请选择' || talkTitle.kqxxValue == '') {
 							mui.toast('请选择考勤细项');
-						} else {
+						}else {
 							console.log(JSON.stringify(arr))
 							var comData = {
 								id: '',
-								gradeId: talkTitle.sGrade,
-								classId: talkTitle.sClasses,
-								studentId: talkTitle.sStudent,
-								studentName: talkTitle.student,
-								quantizationAttendanceId: talkTitle.kValue,
-								nodeSubJson: arr,
-								explain: talkTitle.content,
-								outsidePermisionCode: talkTitle.qValue,
-								recordTime: talkTitle.jlsj,
-								leaveSchoolTime: talkTitle.lxsj,
-								backSchoolTime: talkTitle.hxsj
+								gradeId: talkTitle.sGrade,//年级id
+								classId: talkTitle.sClasses,//班级id
+								studentId: talkTitle.sStudent,//学生id
+								studentName: talkTitle.student,//学生姓名
+								quantizationAttendanceId: talkTitle.kqxxValue,//考勤细项id
+								attendanceType: talkTitle.kqlxValue,//考勤类型
+								nodeSubJson: arr,//考勤时间、节次组成的json数组字符串，其中attendanceTime表示考勤时间，classNodes表示考勤节次json数组
+								explain: talkTitle.content,//考勤说明
+								outsidePermisionCode: talkTitle.qValue,//出入校门权限编码
+								recordTime: talkTitle.jlsj,//记录时间
+								leaveSchoolTime: talkTitle.lxsj,//离校时间
+								backSchoolTime: talkTitle.hxsj//回校时间
 							}
 							console.log(JSON.stringify(comData));
 							var wd = events.showWaiting();
