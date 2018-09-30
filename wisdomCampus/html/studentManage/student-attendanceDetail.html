@@ -396,6 +396,12 @@
 							attendanceDetialData.qxShow = '0';
 							if(_getParam(items[0], 'value') == '12') {
 								attendanceDetialData.qxShow = '1';
+							}else{
+								attendanceDetialData.attendanceDetail.backSchoolTime='请选择';
+								attendanceDetialData.attendanceDetail.leaveSchoolTime='请选择';
+								attendanceDetialData.attendanceDetail.outsidePermisionCode='';
+								attendanceDetialData.attendanceDetail.permision='请选择'
+								attendanceDetialData.sjShow = '0';
 							}
 						});
 					},

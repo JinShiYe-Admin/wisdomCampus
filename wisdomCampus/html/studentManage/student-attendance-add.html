@@ -211,9 +211,9 @@
 						<img src="../../img/utils/add.png" style="width: 30px">
 					</li>
 				</ul>
-				<div style="background-color: #f2f3f5;height: 10px;"></div>
+				<div style="background-color: #f2f3f5;height: 10px;"  v-show="qxShow==1"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
+					<li class="mui-table-view-cell" @tap="selectQx()"  v-show="qxShow==1">
 						<a class="aCss">出入权限</a>
 						<span class="mui-navigate-right  rCss">{{qx}}</span>
 					</li>
@@ -444,6 +444,12 @@
 							talkTitle.qxShow = '0';
 							if(_getParam(items[0], 'value') == '12') {
 								talkTitle.qxShow = '1';
+							}else{
+								talkTitle.lxsj='请选择';
+								talkTitle.hxsj='请选择';
+								talkTitle.qx = '请选择';
+								talkTitle.qValue='';
+								talkTitle.sjShow = '0';
 							}
 						});
 					},
