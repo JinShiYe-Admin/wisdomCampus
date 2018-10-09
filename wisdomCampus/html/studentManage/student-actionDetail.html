@@ -291,7 +291,13 @@
 							<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 								<div class="mui-input-row mui-checkbox mui-right">
 									<label style="width: 100%;">{{jc.text}}</label>
-									<input :name="jc.text" :value="jc.value" type="checkbox">
+									<!--<input :name="jc.text" :value="jc.value" type="checkbox">-->
+									<template v-if="actionDetail.gradeId == jc.value">
+										<input :name="jc.text" :value="jc.value" type="checkbox" checked>
+									</template>
+									<template v-else>
+										<input :name="jc.text" :value="jc.value" type="checkbox">
+									</template>
 								</div>
 							</li>
 						</ul>
@@ -516,6 +522,7 @@
 						actionDetialData.actionList=data.RspData.qb;
 						actionDetialData.jcList=data.RspData.cn;
 						
+						setAttendanceType();
 						console.log(JSON.stringify(actionDetialData.actionDetail))
 					} else {
 						mui.toast(data.RspTxt);

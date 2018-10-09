@@ -247,7 +247,12 @@
 									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 										<div class="mui-input-row mui-checkbox mui-right">
 											<label style="width: 100%;">{{jc.text}}</label>
-											<input :name="jc.text" :value="jc.value" type="checkbox">
+											<template v-if="abc.classNodes.indexOf(jc.value) !=-1">
+												<input :name="jc.text" :value="jc.value" type="checkbox" checked>
+											</template>
+											<template v-else>
+												<input :name="jc.text" :value="jc.value" type="checkbox">
+											</template>
 										</div>
 									</li>
 								</ul>
