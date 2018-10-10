@@ -191,7 +191,7 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 3});
+						var userPicker = new m$.PopPicker({layer: 2});
 						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');

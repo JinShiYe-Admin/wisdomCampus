@@ -292,7 +292,7 @@
 				getAttendanceDetail(tempData, function funcName(data) {
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						attendanceDetialData.kqxxList = data.RspData.qa;
+						attendanceDetialData.kqxxList = data.RspData.qa[0].dataArray;
 						attendanceDetialData.jcList = data.RspData.cn;
 						attendanceDetialData.qxList = data.RspData.permission;
 
@@ -381,8 +381,8 @@
 						});
 						userPicker.setData(attendanceDetialData.attendanceDetailSum.atArray);
 						userPicker.show(function(items) {
-							attendanceDetialData.attendanceDetail.attendanceName = _getParam(items[0], 'text');
-							attendanceDetialData.attendanceDetail.quantizationAttendanceId = _getParam(items[0], 'value');
+							attendanceDetialData.attendanceDetail.attendanceTypeTxt = _getParam(items[0], 'text');
+							attendanceDetialData.attendanceDetail.attendanceType = _getParam(items[0], 'value');
 							attendanceDetialData.qxShow = '0';
 							setAttendanceType();
 //							if(_getParam(items[0], 'value') == '12') {
