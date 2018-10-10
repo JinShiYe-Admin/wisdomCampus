@@ -309,7 +309,7 @@
 					console.log('4.1 量化考评首页列表' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数
-						totalPageCount = data.RspData.totalRow;
+						totalPageCount = data.RspData.totalPage;
 						pageIndex++;
 						if(flagRef == 0) { //刷新
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){

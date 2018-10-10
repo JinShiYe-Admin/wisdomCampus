@@ -98,6 +98,7 @@
 									<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" :src=actionModel.stuImg>
 									<div class="mui-media-body" style="font-size: 14px;color: #333;">
 										{{actionModel.studentName}}【 {{actionModel.gradeName}}{{actionModel.className}}】
+										<span class="rightTag" style="font-size: 12px;color: #999;">{{actionModel.behaviorTime}}</span>
 										<p class='mui-ellipsis' style="font-size: 12px;color: #666;">{{actionModel.detail}}</p>
 									</div>
 								</a>
@@ -307,7 +308,7 @@
 					console.log('//6.学生行为首页列表:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数
-						totalPageCount = data.RspData.totalRow;
+						totalPageCount = data.RspData.totalPage;
 						var btnArr=data.RspData.btArray;
 						var temp=[{
 							text:"全部行为",

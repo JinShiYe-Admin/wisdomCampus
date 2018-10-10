@@ -82,7 +82,7 @@
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
-				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
+				<!--<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>-->
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectAttendance()"><span>{{attendance}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 			</div>
 		</div>
@@ -99,6 +99,7 @@
 									<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" :src=actionModel.stuImg>
 									<div class="mui-media-body" style="font-size: 14px;color: #333;">
 										{{actionModel.studentName}}【 {{actionModel.gradeName}}{{actionModel.className}}】
+										<span class="rightTag" style="font-size: 12px;color: #999;">{{actionModel.attendanceTime}}</span>
 										<p class='mui-ellipsis' style="font-size: 12px;color: #666;">{{actionModel.detail}}</p>
 									</div>
 								</a>
@@ -180,7 +181,7 @@
 				data:{
 					grade:'全部年级',//显示用
 					classes:'全部班级',//显示用
-					student:'全部学生',//显示用
+//					student:'全部学生',//显示用
 					sGrade:"",//存值用
 					sClasses:"",//存值用
 					list:[],
@@ -195,7 +196,7 @@
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							selectTitle.student=_getParam(items[2], 'text');
+//							selectTitle.student=_getParam(items[2], 'text');
 							selectTitle.sGrade=_getParam(items[0], 'value');
 							selectTitle.sClasses=_getParam(items[1], 'value');
 							
@@ -309,7 +310,7 @@
 					console.log('1.学生考勤列表首页:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数
-						totalPageCount = data.RspData.totalRow;
+						totalPageCount = data.RspData.totalPage;
 						var atArray=data.RspData.atArray;
 						var temp=[{
 							text:"全部类型",
