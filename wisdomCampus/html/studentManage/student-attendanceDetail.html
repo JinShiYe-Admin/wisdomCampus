@@ -73,12 +73,14 @@
 	</head>
 
 	<body>
-		<div id="attendanceDetialData">
+		<div id="title">
 			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
 				<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">考勤详情</h1>
 				<a class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="updateInfo()">{{titleBar}}</a>
 			</header>
+		</div>
+		<div id="attendanceDetialData">
 			<div class="mui-content">
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell">
@@ -317,6 +319,19 @@
 					}
 				});
 			}
+			
+			var title =new Vue({
+				el:'#title',
+				data:{
+					titleBar: '修改'
+				},
+				methods:{
+					updateInfo:function(){
+						attendanceDetialData.$options.methods.updateInfo();
+					}
+				}
+			});
+			
 			var attendanceDetialData = new Vue({
 				el: "#attendanceDetialData",
 				data: {
@@ -329,7 +344,6 @@
 					qxShow: '0',
 					sjShow: '0',
 					update: '0',
-					titleBar: '修改',
 					kqxxList: [],
 					jcList: [],
 					qxList: [],
@@ -443,11 +457,11 @@
 						mui(id).popover('toggle');
 					},
 					updateInfo: function() {
-						if(this.update == '1') {
-							this.$options.methods.submit();
+						if(attendanceDetialData.update == '1') {
+							attendanceDetialData.$options.methods.submit();
 						} else {
-							this.update = '1';
-							this.titleBar = '提交';
+							attendanceDetialData.update = '1';
+							title.titleBar = '提交';
 							attendanceDetialData.attendanceDetail.recordTime = getDate();
 						}
 

@@ -694,7 +694,16 @@
 				var fj=[];
 				fj=localImg.concat(checkimg);
 				console.log("fj:"+JSON.stringify(fj));
-				
+				var fjObj=[];
+				for(var i =0;i<fj.length;i++){
+					var items=fj[i];
+					var oriName =items.substring(items.lastIndexOf("/")+1);
+					var obj={
+						oriName:oriName,
+						filePath:items
+					}
+					fjObj.push(obj);
+				}
 				var tempData = { 
 					id: actionDetialData.actionDetail.id,
 					gradeId: actionDetialData.actionDetail.gradeId, 
@@ -708,7 +717,7 @@
 					classNodes: actionDetialData.actionDetail.classNodes, 
 					subCode: actionDetialData.actionDetail.kmValue, 
 					recordTime: actionDetialData.actionDetail.recordTime, 
-					attachs: fj
+					attachs: fjObj
 					
 				}
 				

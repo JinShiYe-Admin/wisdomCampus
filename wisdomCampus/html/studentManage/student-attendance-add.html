@@ -141,12 +141,14 @@
 	</head>
 
 	<body>
-		<div id='talk'>
+		<div id='title'>
 			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
 				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
 			</header>
+		</div>
+		<div id='talk'>
 			<div class="mui-content mui-fullscreen" style="background: white;">
 				<ul class="mui-table-view" style="margin-top:2px;">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
@@ -332,7 +334,17 @@
 					}
 				}
 			}
-
+			
+			var title =new Vue({
+				el:'#title',
+				data:{},
+				methods:{
+					submit:function(){
+						talkTitle.$options.methods.submit();
+					}
+				}
+			});
+			
 			var talkTitle = new Vue({
 				el: '#talk',
 				data: {

@@ -210,10 +210,10 @@ var studentMP = (function(mod) {
 				gradeids: tempGradeId.join(','), //需要查询的年级ID，多个代码用英文逗号隔开
 				appid: publicParameter.appid //系统所分配的应用ID
 			}
-			events.showWaiting();
+//			events.showWaiting();
 			//2.3 学校年级下班级
 			postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
-				events.closeWaiting();
+//				events.closeWaiting();
 				if(data.RspCode == 0) {
 					if(data.RspData) {
 						//将获取到的班级，塞到对应的年级数组
@@ -257,10 +257,10 @@ var studentMP = (function(mod) {
 			classids: tempClassId.join(','), //需要查询的班级ID，多个代码用英文逗号隔开
 			appid: publicParameter.appid //系统所分配的应用ID
 		}
-		events.showWaiting();
+//		events.showWaiting();
 		//2.6 学校班级学生
 		postDataEncry('ClassStu', enData0, comData0, 0, function(data) {
-			events.closeWaiting();
+//			events.closeWaiting();
 			if(data.RspCode == 0) {
 				if(data.RspData) {
 					//将获取到的学生，塞到对应的班级数组
