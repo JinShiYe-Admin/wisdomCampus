@@ -81,6 +81,7 @@ var studentMP = (function(mod) {
 							}
 						}
 					}
+					grdsArray = grdsArray.sort(compare('grdcode'));
 					console.log('合并clss后:' + JSON.stringify(grdsArray));
 					if(tempFlag0 == 0) {
 						getClassStu(callback);
@@ -129,8 +130,8 @@ var studentMP = (function(mod) {
 					tempCls.children.push(tempStu);
 				}
 				var tempClsModel = {
-						value: 0,
-						text: '全部学生'
+					value: 0,
+					text: '全部学生'
 				}
 				tempCls.children = [tempClsModel].concat(tempCls.children);
 				tempGrd.children.push(tempCls);
@@ -290,54 +291,54 @@ var studentMP = (function(mod) {
 	mod.getName = function(flag, GrdClsMsg, list, callback) {
 		switch(flag) {
 			case '0':
-			console.log("查询年级对应的名称")
-			for(var i = 0; i < list.length; i++) {
-				var tempDetail = list[i];
-				for(var a = 0; a < GrdClsMsg.length; a++) {
-					var tempGrdClsMsg = GrdClsMsg[a];
-					if(tempDetail.id == tempGrdClsMsg.value) {
-						tempDetail.name = tempGrdClsMsg.text;
-					}
-				}
-			}
-			break;
-			case '1':
-			console.log("查询班级对应的名称")
-			for(var i = 0; i < list.length; i++) {
-				var tempDetail = list[i];
-				for(var a = 0; a < GrdClsMsg.length; a++) {
-					var tempGrdClsMsg = GrdClsMsg[a];
-					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
-						var tempClass = tempGrdClsMsg.children[b];
-						if(tempDetail.id == tempClass.value) {
-							tempDetail.name = tempClass.text;
+				console.log("查询年级对应的名称")
+				for(var i = 0; i < list.length; i++) {
+					var tempDetail = list[i];
+					for(var a = 0; a < GrdClsMsg.length; a++) {
+						var tempGrdClsMsg = GrdClsMsg[a];
+						if(tempDetail.id == tempGrdClsMsg.value) {
+							tempDetail.name = tempGrdClsMsg.text;
 						}
 					}
 				}
-			}
 				break;
-			case '2':
-			console.log("查询学生对应的名称")
-			for(var i = 0; i < list.length; i++) {
-				var tempDetail = list[i];
-				for(var a = 0; a < GrdClsMsg.length; a++) {
-					var tempGrdClsMsg = GrdClsMsg[a];
-					for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
-						var tempClass = tempGrdClsMsg.children[b];
-						for(var c = 0; c < tempClass.children.length; c++) {
-							var tempStu = tempClass.children[c];
-							if(tempStu.id == tempDetail.value) {
-								tempDetail.name = tempStu.text;
+			case '1':
+				console.log("查询班级对应的名称")
+				for(var i = 0; i < list.length; i++) {
+					var tempDetail = list[i];
+					for(var a = 0; a < GrdClsMsg.length; a++) {
+						var tempGrdClsMsg = GrdClsMsg[a];
+						for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+							var tempClass = tempGrdClsMsg.children[b];
+							if(tempDetail.id == tempClass.value) {
+								tempDetail.name = tempClass.text;
 							}
 						}
 					}
 				}
-			}
-			break;
+				break;
+			case '2':
+				console.log("查询学生对应的名称")
+				for(var i = 0; i < list.length; i++) {
+					var tempDetail = list[i];
+					for(var a = 0; a < GrdClsMsg.length; a++) {
+						var tempGrdClsMsg = GrdClsMsg[a];
+						for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+							var tempClass = tempGrdClsMsg.children[b];
+							for(var c = 0; c < tempClass.children.length; c++) {
+								var tempStu = tempClass.children[c];
+								if(tempStu.id == tempDetail.value) {
+									tempDetail.name = tempStu.text;
+								}
+							}
+						}
+					}
+				}
+				break;
 		}
 		callback(list);
 	}
-	
+
 	//给数组去重
 	Array.prototype.unique = function(key) {
 		var arr = this;
@@ -361,6 +362,24 @@ var studentMP = (function(mod) {
 			}
 		}
 		return n;
+	}
+	//排序
+	var compare = function(prop) {
+		return function(obj1, obj2) {
+			var val1 = obj1[prop];
+			var val2 = obj2[prop];
+			if(!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+				val1 = Number(val1);
+				val2 = Number(val2);
+			}
+			if(val1 < val2) {
+				return -1;
+			} else if(val1 > val2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 	return mod;
 })(studentMP || {})

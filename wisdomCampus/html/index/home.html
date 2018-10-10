@@ -427,7 +427,12 @@
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
 					}else if(id == 3) {
-						utils.mOpenWithData("../../html/studentManage/student-index.html", id);
+						if (personal.utp==0&&(personal.grds.length>0||personal.clss.length>0)) {
+							utils.mOpenWithData("../../html/studentManage/student-index.html", id);
+						} else{
+							mui.toast("无此权限");
+						}
+						
 					} else {
 						mui.toast("此功能暂未开放");
 					}
