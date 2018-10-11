@@ -256,10 +256,16 @@
 					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 						<div class="mui-scroll">
 							<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+								<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck()">
+									<div class="mui-input-row mui-checkbox mui-right">
+										<label style="width: 100%;">全天</label>
+										<input name="全天" value="day" type="checkbox" >
+									</div>
+								</li>
 								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">{{jc.text}}</label>
-										<input :name="jc.text" :value="jc.value" type="checkbox">
+										<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="classCanCheck==-1">
 									</div>
 								</li>
 							</ul>
@@ -358,7 +364,8 @@
 					kmText:'请选择',
 					kmValue:'',
 					teacher:personal.utname,
-					record:getDate()
+					record:getDate(),
+					classCanCheck:1
 				},
 				methods:{
 					selectTime:function(event){
@@ -385,6 +392,13 @@
 							talkTitle.classesValue=_getParam(items[1], 'value');
 							talkTitle.studentValue=_getParam(items[2], 'value');
 						});
+					},
+					classItemCheck:function(){
+						if(this.classCanCheck==1){
+							this.classCanCheck=-1
+						}else{
+							this.classCanCheck=1
+						}
 					},
 					selectActionType:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
@@ -414,8 +428,10 @@
 								classes.push($(this).find('input').val());
 							}
 						})
-						talkTitle.jcText = names.join(",");
-						talkTitle.jcValue = classes.join(",");
+						if(names.length>0){
+							talkTitle.jcText = names.join(",");
+							talkTitle.jcValue = classes.join(",");
+						}
 						mui(id).popover('toggle');
 					},
 					selectKm:function(){

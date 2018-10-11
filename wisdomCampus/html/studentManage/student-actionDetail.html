@@ -288,15 +288,21 @@
 				<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 					<div class="mui-scroll">
 						<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+							<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck()">
+								<div class="mui-input-row mui-checkbox mui-right">
+									<label style="width: 100%;">全天</label>
+									<input name="全天" value="day" type="checkbox" >
+								</div>
+							</li>
 							<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 								<div class="mui-input-row mui-checkbox mui-right">
 									<label style="width: 100%;">{{jc.text}}</label>
 									<!--<input :name="jc.text" :value="jc.value" type="checkbox">-->
-									<template v-if="actionDetail.gradeId == jc.value">
-										<input :name="jc.text" :value="jc.value" type="checkbox" checked>
+									<template v-if="actionDetail.classNodes.indexOf(jc.value) !=-1">
+										<input :name="jc.text" :value="jc.value" type="checkbox" :checked="classCanCheck==-1? false:true" :disabled="classCanCheck==-1">
 									</template>
 									<template v-else>
-										<input :name="jc.text" :value="jc.value" type="checkbox">
+										<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="classCanCheck==-1">
 									</template>
 								</div>
 							</li>
@@ -391,7 +397,8 @@
 					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
 					content:'',
 					time:getDate(),
-					isEdit:'show'
+					isEdit:'show',
+					classCanCheck:1
 				},
 				methods: {
 					checkEnc: function( index) {
@@ -439,9 +446,18 @@
 								classes.push($(this).find('input').val());
 							}
 						})
-						actionDetialData.actionDetail.period = names.join(",");
-						actionDetialData.actionDetail.classNodes = classes.join(",");
+						if(names.length>0){
+							actionDetialData.actionDetail.period = names.join(",");
+							actionDetialData.actionDetail.classNodes = classes.join(",");
+						}
 						mui(id).popover('toggle');
+					},
+					classItemCheck:function(){
+						if(this.classCanCheck==1){
+							this.classCanCheck=-1
+						}else{
+							this.classCanCheck=1
+						}
 					},
 					selectKm:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
@@ -694,7 +710,16 @@
 				var fj=[];
 				fj=localImg.concat(checkimg);
 				console.log("fj:"+JSON.stringify(fj));
-				
+				var fjObj=[];
+				for(var i =0;i<fj.length;i++){
+					var items=fj[i];
+					var oriName =items.substring(items.lastIndexOf("/")+1);
+					var obj={
+						oriName:oriName,
+						filePath:items
+					}
+					fjObj.push(obj);
+				}
 				var tempData = { 
 					id: actionDetialData.actionDetail.id,
 					gradeId: actionDetialData.actionDetail.gradeId, 
@@ -708,7 +733,7 @@
 					classNodes: actionDetialData.actionDetail.classNodes, 
 					subCode: actionDetialData.actionDetail.kmValue, 
 					recordTime: actionDetialData.actionDetail.recordTime, 
-					attachs: fj
+					attachs: fjObj
 					
 				}
 				

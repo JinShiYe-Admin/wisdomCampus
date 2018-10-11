@@ -192,7 +192,7 @@
 		<div class="mui-content mui-fullscreen" style="background: white;">
 			<div id='talk'>
 				<div class="mui-row title-info">
-					<p v-cloak class="user-title">{{curPage.gradeName}}{{curPage.className}}{{curPage.stuName}}</p>
+					<p v-cloak class="user-title">{{curPage.gradeName}}{{curPage.className}}{{curPage.studentName}}</p>
 					<p v-cloak class="user-title-se">{{sb.behaviorTime}}&nbsp;{{sb.period}}</p>
 					<p v-cloak class="user-title-body">【{{sb.behaviorName}}】&nbsp;{{sb.behaviorDetail}}</p>
 					<div class="fj" v-if="sb.attachs==undefined || sb.attachs.length==0"></div>
@@ -205,7 +205,7 @@
 					<p  style="float: right;">{{sb.recorder}}</p>
 				</div>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
-				<div :style="{visibility: isEdit=='hide'? 'hidden' : 'initial' }">
+				<div :style="{display: isEdit=='hide'? 'none' : 'inherit'}">
 					<div class="mui-row title-body" style="font-size: 15px;color: #333;">
 						<span class="body-title" >谈话内容</span>
 					</div>
@@ -600,13 +600,25 @@
 				var fj=[];
 				fj=localImg.concat(checkimg);
 				console.log(":"+JSON.stringify(fj));
+				
+				var fjObj=[];
+				for(var i =0;i<fj.length;i++){
+					var items=fj[i];
+					var oriName =items.substring(items.lastIndexOf("/")+1);
+					var obj={
+						oriName:oriName,
+						filePath:items
+					}
+					fjObj.push(obj);
+				}
+				
 				var tempData1 = {
 					sbId: talkTitle.sb.id, 
 					chatDetail: talkTitle.content,  
 					chatTime:talkTitle.talkTime,
 					teacher:talkTitle.teacher,
 					recordTime: talkTitle.localTime,  
-					attachs: fj
+					attachs: fjObj
 				}
 				if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
 					tempData1.id=talkTitle.tc.id
@@ -614,7 +626,7 @@
 					tempData1.id="  "
 				}
 				
-				console.log("liushuai3"+JSON.stringify(tempData1));
+				console.log("tempData1："+JSON.stringify(tempData1));
 				events.showWaiting();
 				getTalkSaveChat(tempData1, function function_name(data) {
 					events.closeWaiting();
