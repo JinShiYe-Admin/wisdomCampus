@@ -76,7 +76,7 @@
 					<p @click="changeMarkMap" class="mui-pull-right">{{reviewDetialData.reviewDetial.markMap[reviewDetialData.markMapIndex].text}} ></p>
 				</a>
 				<div class="chart" id="lineChart"></div>
-				<h5 style="margin-top: 50px;">| 量化总评</h5>
+				<h5 style="margin-top: 50px;">| 量化均分</h5>
 				<!--<p class="mui-pull-right" style="margin-top: -20px;">请假 ></p>-->
 				<img @click="addSubDetail" class="mui-pull-right" style="margin-top: -20px;width: 35px;height: 35px;" src="../../img/utils/addMinScore.png" />
 				<div style="text-align: center;">
@@ -178,6 +178,7 @@
 						var tempArray3 = [];
 						for(var i = 0; i < data.RspData.gradeArray.length; i++) {
 							var tempModel = data.RspData.gradeArray[i];
+							tempModel.name = tempModel.name+'('+ tempModel.scoreDesc+'):'+tempModel.value;
 							tempArray3.push(tempModel.name);
 						}
 						reviewDetialData.pieChartDetail.legend.data = [].concat(tempArray3);
