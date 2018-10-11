@@ -67,7 +67,15 @@
 				right: 6px;
 			}
 			.mui-popover {
-				height: 80px;
+				height: 0px;
+			}
+			
+			.mui-popover.mui-popover-bottom.mui-active,.mui-popover.mui-popover-bottom{
+				background: rgba(0,0,0,0) !important;
+			}
+			.mui-icon-compose:before,.mui-icon-plus:before {
+				margin-right: 5px;
+				font-size: 18px;
 			}
 		</style>
 	</head>
@@ -111,9 +119,9 @@
 			
 			<div id="bottomPopover" class="mui-popover mui-popover-bottom">
 				<div class="mui-popover-arrow"></div>
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell" @tap="toPage('student-attendance-add.html')">添加</li>
-						<li class="mui-table-view-cell" @tap="toPage('student-attendance-count.html')">统计报表</li>
+					<ul class="mui-table-view" style="width: 125px;float: right;">
+						<li class="mui-table-view-cell" @tap="toPage('student-attendance-add.html')"><span class="mui-icon mui-icon-plus" style="font-size: 15px;">添加</span></li>
+						<li class="mui-table-view-cell" @tap="toPage('student-attendance-count.html')"><span class="mui-icon mui-icon-compose" style="font-size: 15px;">统计报表</span></li>
 					</ul>
 				</div>
 			</div>

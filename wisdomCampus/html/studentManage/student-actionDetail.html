@@ -292,7 +292,7 @@
 								<div class="mui-input-row mui-checkbox mui-right">
 									<label style="width: 100%;">{{jc.text}}</label>
 									<!--<input :name="jc.text" :value="jc.value" type="checkbox">-->
-									<template v-if="actionDetail.gradeId == jc.value">
+									<template v-if="actionDetail.classNodes.indexOf(jc.value) !=-1">
 										<input :name="jc.text" :value="jc.value" type="checkbox" checked>
 									</template>
 									<template v-else>
