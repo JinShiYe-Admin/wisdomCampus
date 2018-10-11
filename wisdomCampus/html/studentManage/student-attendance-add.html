@@ -213,9 +213,9 @@
 						<img src="../../img/utils/add.png" style="width: 30px">
 					</li>
 				</ul>
-				<div style="background-color: #f2f3f5;height: 10px;"  v-show="qxShow==1"></div>
+				<div style="background-color: #f2f3f5;height: 10px;" v-show="qxShow==1"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectQx()"  v-show="qxShow==1">
+					<li class="mui-table-view-cell" @tap="selectQx()" v-show="qxShow==1">
 						<a class="aCss">出入权限</a>
 						<span class="mui-navigate-right  rCss">{{qx}}</span>
 					</li>
@@ -308,7 +308,7 @@
 					if(data.RspCode == 0) {
 						talkTitle.kqDetail = data.RspData;
 						talkTitle.kqlxNameList = data.RspData.atArray;
-						if (talkTitle.kqlxNameList.length>0) {
+						if(talkTitle.kqlxNameList.length > 0) {
 							talkTitle.kqlxName = talkTitle.kqlxNameList[0].text;
 							talkTitle.kqlxValue = talkTitle.kqlxNameList[0].value;
 							setAttendanceType();
@@ -322,50 +322,63 @@
 				});
 			});
 			//将考勤类型、考勤细项的值对应
-			var setAttendanceType = function(){
-				for (var i = 0; i < talkTitle.kqDetail.qa.length; i++) {
+			var setAttendanceType = function() {
+				for(var i = 0; i < talkTitle.kqDetail.qa.length; i++) {
 					var tempModel = talkTitle.kqDetail.qa[i];
-					if (tempModel.value == talkTitle.kqlxValue) {
+					if(tempModel.value == talkTitle.kqlxValue) {
 						talkTitle.kqxxNameList = [].concat(tempModel.dataArray);
-//						talkTitle.kqxxName = talkTitle.kqxxNameList[0].text;
-//						talkTitle.kqxxValue = talkTitle.kqxxNameList[0].value;
+						//						talkTitle.kqxxName = talkTitle.kqxxNameList[0].text;
+						//						talkTitle.kqxxValue = talkTitle.kqxxNameList[0].value;
 						talkTitle.kqxxName = '请选择';
 						talkTitle.kqxxValue = '';
 						break;
 					}
 				}
 			}
-			
-			var getSchSubThread= function(){
-				var comDataKm = {}
-				getSchSub(comDataKm,function(data){
-					if(data.RspCode == 0) {
-						console.log("liushuai:"+data.RspTxt);
-					} else {
-						console.log("liushuai2:"+data.RspTxt);
-					}
-				})
+
+			var getSchSubThread = function() {
+				var enData1 = {};
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				//登录
+				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+
+				});
+				//				var comDataKm = {}
+				//				getSchSub(comDataKm,function(data){
+				//					if(data.RspCode == 0) {
+				//						console.log("liushuai:"+data.RspTxt);
+				//					} else {
+				//						console.log("liushuai2:"+data.RspTxt);
+				//					}
+				//				})
 			}
-			
-			var title =new Vue({
-				el:'#title',
-				data:{},
-				methods:{
-					submit:function(){
+
+			var title = new Vue({
+				el: '#title',
+				data: {},
+				methods: {
+					submit: function() {
 						talkTitle.$options.methods.submit();
 					}
 				}
 			});
-			
+
 			var talkTitle = new Vue({
 				el: '#talk',
 				data: {
-					kqDetail:{},
+					kqDetail: {},
 					grade: '请选择',
 					classes: '请选择',
 					student: '请选择',
 					kqxxName: '请选择',
-					kqlxName:'请选择',
+					kqlxName: '请选择',
 					jc: '请选择',
 					qx: '请选择',
 					kqrq: '请选择',
@@ -464,15 +477,15 @@
 						userPicker.show(function(items) {
 							talkTitle.kqxxName = _getParam(items[0], 'text');
 							talkTitle.kqxxValue = _getParam(items[0], 'value');
-							
+
 							talkTitle.qxShow = '0';
 							if(_getParam(items[0], 'value') == '12') {
 								talkTitle.qxShow = '1';
-							}else{
-								talkTitle.lxsj='请选择';
-								talkTitle.hxsj='请选择';
+							} else {
+								talkTitle.lxsj = '请选择';
+								talkTitle.hxsj = '请选择';
 								talkTitle.qx = '请选择';
-								talkTitle.qValue='';
+								talkTitle.qValue = '';
 								talkTitle.sjShow = '0';
 							}
 						});
@@ -487,9 +500,9 @@
 							talkTitle.kqlxValue = _getParam(items[0], 'value');
 							talkTitle.qxShow = '0';
 							setAttendanceType();
-//							if(_getParam(items[0], 'value') == '12') {
-//								talkTitle.qxShow = '1';
-//							}
+							//							if(_getParam(items[0], 'value') == '12') {
+							//								talkTitle.qxShow = '1';
+							//							}
 						});
 					},
 					selectQx: function() { //选择权限
@@ -546,8 +559,8 @@
 						var arr = [];
 						for(var i = 0; i < talkTitle.nodeSubJson.length; i++) {
 							var obj = talkTitle.nodeSubJson[i];
-							console.log('obj.attendanceTime:'+obj.attendanceTime);
-							if (obj.attendanceTime == '请选择') {
+							console.log('obj.attendanceTime:' + obj.attendanceTime);
+							if(obj.attendanceTime == '请选择') {
 								mui.toast('请选择考勤日期');
 								return;
 								break;
@@ -566,22 +579,22 @@
 							mui.toast('请选择考勤类型');
 						} else if(talkTitle.kqxxValue == '请选择' || talkTitle.kqxxValue == '') {
 							mui.toast('请选择考勤细项');
-						}else {
+						} else {
 							console.log(JSON.stringify(arr))
 							var comData = {
 								id: '',
-								gradeId: talkTitle.sGrade,//年级id
-								classId: talkTitle.sClasses,//班级id
-								studentId: talkTitle.sStudent,//学生id
-								studentName: talkTitle.student,//学生姓名
-								quantizationAttendanceId: talkTitle.kqxxValue,//考勤细项id
-								attendanceType: talkTitle.kqlxValue,//考勤类型
-								nodeSubJson: arr,//考勤时间、节次组成的json数组字符串，其中attendanceTime表示考勤时间，classNodes表示考勤节次json数组
-								explain: talkTitle.content,//考勤说明
-								outsidePermisionCode: talkTitle.qValue,//出入校门权限编码
-								recordTime: talkTitle.jlsj,//记录时间
-								leaveSchoolTime: talkTitle.lxsj,//离校时间
-								backSchoolTime: talkTitle.hxsj//回校时间
+								gradeId: talkTitle.sGrade, //年级id
+								classId: talkTitle.sClasses, //班级id
+								studentId: talkTitle.sStudent, //学生id
+								studentName: talkTitle.student, //学生姓名
+								quantizationAttendanceId: talkTitle.kqxxValue, //考勤细项id
+								attendanceType: talkTitle.kqlxValue, //考勤类型
+								nodeSubJson: arr, //考勤时间、节次组成的json数组字符串，其中attendanceTime表示考勤时间，classNodes表示考勤节次json数组
+								explain: talkTitle.content, //考勤说明
+								outsidePermisionCode: talkTitle.qValue, //出入校门权限编码
+								recordTime: talkTitle.jlsj, //记录时间
+								leaveSchoolTime: talkTitle.lxsj, //离校时间
+								backSchoolTime: talkTitle.hxsj //回校时间
 							}
 							console.log(JSON.stringify(comData));
 							var wd = events.showWaiting();
