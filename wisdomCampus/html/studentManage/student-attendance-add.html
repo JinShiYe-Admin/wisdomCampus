@@ -312,6 +312,7 @@
 							talkTitle.kqlxName = talkTitle.kqlxNameList[0].text;
 							talkTitle.kqlxValue = talkTitle.kqlxNameList[0].value;
 							setAttendanceType();
+							getSchSubThread();
 						}
 						talkTitle.jcList = data.RspData.cn;
 						talkTitle.qxList = data.RspData.permission;
@@ -333,6 +334,17 @@
 						break;
 					}
 				}
+			}
+			
+			var getSchSubThread= function(){
+				var comDataKm = {}
+				getSchSub(comDataKm,function(data){
+					if(data.RspCode == 0) {
+						console.log("liushuai:"+data.RspTxt);
+					} else {
+						console.log("liushuai2:"+data.RspTxt);
+					}
+				})
 			}
 			
 			var title =new Vue({

@@ -715,3 +715,16 @@ var getReviewEvaluationStuAnalysis = function(data0, callback) {
 }
 
 
+//顾工 2.8获取学校科目
+var getSchSub = function(data0, callback) {
+	var tempAttendUrl = window.storageKeyName.INTERFACEGU;
+	var personal = store.get(window.storageKeyName.PERSONALINFO);
+	var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+	var tempData = {
+		uuid: publicPar.uuid,
+		appid: publicPar.appid,
+		utoken: personal.utoken
+	}
+	var data=$.extend(data0, tempData);
+	xhrPost(tempAttendUrl + 'SchSub', data, callback)
+}
