@@ -176,7 +176,7 @@
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="aCss">考勤说明</a>
-						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明"></textarea>
+						<textarea id="notes" maxlength="120" v-model="content" placeholder="请输入考勤说明（最多120个字）"></textarea>
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
@@ -205,9 +205,9 @@
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
 							</li>
-							<li class="mui-table-view-cell" @tap="selectKm($event,index)"  style="margin-right: 35px;">
+							<li class="mui-table-view-cell" @tap="selectKm($event,index)"  style="margin-right: 35px;" v-if="ul.kmShow==1">
 								<a class="aCss">科目</a>
-								<p class="mui-navigate-right  rCss">{{ul.subname}}</p>
+								<p class="mui-navigate-right  rCss">{{ul.subName}}</p>
 							</li>
 						</ul>
 					</template>
@@ -413,9 +413,10 @@
 						attendanceTime: "请选择",
 						classNodes: [],
 						classNames: "请选择",
-						subcode:'',
-						subname:'请选择',
-						classCanCheck:1
+						subCodes:'',
+						subName:'请选择',
+						classCanCheck:1,
+						kmShow:1
 						
 					}], //存值用：时间和节次集合
 					jlr: personal.utname, //存值用：记录人
@@ -509,8 +510,8 @@
 							var nodes = talkTitle.nodeSubJson[index];
 							console.log("nodes==="+JSON.stringify(nodes))
 							console.log("index==="+JSON.stringify(index))
-							nodes.subname = _getParam(items[0], 'text');
-							nodes.subcode = _getParam(items[0], 'value');
+							nodes.subName = _getParam(items[0], 'text');
+							nodes.subCodes = _getParam(items[0], 'value');
 						});
 					},
 					selectkqxxName: function() { //选择考勤细项
@@ -581,13 +582,26 @@
 								classes.push('"day"');
 								nodes.classNodes =classes.join(",");
 								nodes.classNames ='全天';
+								nodes.kmShow=-1;
+								nodes.subName = '请选择';
+								nodes.subCodes = '';
 							}else{
 								nodes.classNodes = classes;
 								nodes.classNames = names.join(",");
+								if(classes.length==1){
+									nodes.kmShow=1;
+								}else{
+									nodes.kmShow=-1;
+									nodes.subName = '请选择';
+									nodes.subCodes = '';
+								}
 							}
 						}else{
 							nodes.classNodes=[];
 							nodes.classNames = '请选择';
+							nodes.kmShow=-1;
+							nodes.subName = '请选择';
+							nodes.subCodes = '';
 						}
 						mui(id).popover('toggle');
 					},
@@ -597,9 +611,10 @@
 							attendanceTime: "请选择",
 							classNodes: [],
 							classNames: "请选择",
-							subcode:'',
-							subname:'请选择',
-							classCanCheck:1
+							subCodes:'',
+							subName:'请选择',
+							classCanCheck:1,
+							kmShow:1
 						};
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
 					},
@@ -636,6 +651,8 @@
 							mui.toast('请选择考勤类型');
 						} else if(talkTitle.kqxxValue == '请选择' || talkTitle.kqxxValue == '') {
 							mui.toast('请选择考勤细项');
+						} else if(talkTitle.content.length > 120) {
+							mui.toast('内容最多120字');
 						} else {
 							console.log(JSON.stringify(arr))
 							var comData = {

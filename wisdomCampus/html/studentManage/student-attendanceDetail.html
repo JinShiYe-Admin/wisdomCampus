@@ -122,7 +122,7 @@
 						<li class="mui-table-view-cell">
 							<a class="aCss">考勤说明</a>
 						</li>
-						<textarea id="notes" maxlength="350" v-model="content" placeholder="请输入考勤说明" style="width: 94%;"></textarea>
+						<textarea id="notes" maxlength="120" v-model="content" placeholder="请输入考勤说明（最多120个字）" style="width: 94%;"></textarea>
 					</ul>
 					<template v-for="(ul,index) in nodeSubJson">
 						<ul :id="'ul'+index" class="mui-table-view">
@@ -136,9 +136,9 @@
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
 							</li>
-							<li class="mui-table-view-cell" @tap="selectKm($event,index)">
+							<li class="mui-table-view-cell" @tap="selectKm($event,index)" v-if="ul.kmShow==1">
 								<a class="aCss">科目</a>
-								<p class="mui-navigate-right rCss">{{ul.subname}}</p>
+								<p class="mui-navigate-right rCss">{{ul.subName}}</p>
 							</li>
 						</ul>
 					</template>
@@ -202,7 +202,7 @@
 					</li>
 					<li class="mui-table-view-cell">
 						<a>
-							<p class="mui-pull-right liDetail">{{attendanceDetail.period}}</p>
+							<p class="mui-pull-right liDetail" v-for="nodeSub in attendanceDetail.nodeSubJson">{{nodeSub.subName}}</p>
 							<div class="mui-media-body liTitle">
 								科目
 							</div>
@@ -331,12 +331,16 @@
 						attendanceDetialData.nodeSubJson[0].attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
 						attendanceDetialData.nodeSubJson[0].classNames = attendanceDetialData.attendanceDetail.period;
 						attendanceDetialData.nodeSubJson[0].classNodes = attendanceDetialData.attendanceDetail.classNodes;
-						// TODO subCode ——>subname  getName
 						
-						attendanceDetialData.nodeSubJson[0].subname = attendanceDetialData.attendanceDetail.subCode;
-						attendanceDetialData.nodeSubJson[0].subcode = attendanceDetialData.attendanceDetail.subCode;
+						attendanceDetialData.nodeSubJson[0].subCodes= attendanceDetialData.attendanceDetail.subCodes;
+						for(var i=0;i<attendanceDetialData.kmList.length;i++){
+							if(attendanceDetialData.kmList[i].value==attendanceDetialData.attendanceDetail.subCodes){
+								attendanceDetialData.nodeSubJson[0].subName=attendanceDetialData.kmList[i].text;
+							}
+						}
 						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
 							attendanceDetialData.nodeSubJson[0].classCanCheck=-1; 
+							attendanceDetialData.nodeSubJson[0].kmShow=-1; 
 						}
 						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
 							attendanceDetialData.qxShow = '1';
@@ -344,6 +348,7 @@
 						if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
 							attendanceDetialData.sjShow = '1';
 						}
+						
 					} else {
 						mui.toast(data.RspTxt);
 					}
@@ -417,9 +422,10 @@
 						attendanceTime: "请选择",
 						classNodes: [],
 						classNames: "请选择",
-						subcode:'',
-						subname:'请选择',
-						classCanCheck:1
+						subCodes:'',
+						subName:'请选择',
+						classCanCheck:1,
+						kmShow:1
 					}], //存值用：时间和节次集合
 					content: '', //存值用:考勤说明
 					attendanceDetail: ''
@@ -524,13 +530,24 @@
 								classes.push('"day"');
 								nodes.classNodes =classes.join(",");
 								nodes.classNames ='全天';
+								nodes.kmShow=-1;
+								nodes.subName = '请选择';
+								nodes.subCodes = '';
 							}else{
 								nodes.classNames = names.join(",");
 								nodes.classNodes = classes.join(",");
+								if(classes.length==1){
+									nodes.kmShow=1;
+								}else{
+									nodes.kmShow=-1;
+									nodes.subName = '请选择';
+									nodes.subCodes = '';
+								}
 							}
 						}else{
 							nodes.classNames = '请选择';
 							nodes.classNodes =  [];
+							nodes.kmShow=1;
 						}
 						mui(id).popover('toggle');
 					},
@@ -551,8 +568,8 @@
 							var nodes = attendanceDetialData.nodeSubJson[index];
 							console.log("nodes==="+JSON.stringify(nodes))
 							console.log("index==="+JSON.stringify(index))
-							nodes.subname = _getParam(items[0], 'text');
-							nodes.subcode = _getParam(items[0], 'value');
+							nodes.subName = _getParam(items[0], 'text');
+							nodes.subCodes = _getParam(items[0], 'value');
 						});
 					},
 					updateInfo: function() {
@@ -562,6 +579,11 @@
 							attendanceDetialData.update = '1';
 							title.titleBar = '提交';
 							attendanceDetialData.attendanceDetail.recordTime = getDate();
+							var nodes=attendanceDetialData.nodeSubJson[0];
+							if(nodes.kmShow==-1){
+								nodes.subName = '请选择';
+								nodes.subCodes = '';
+							}
 						}
 
 					},
@@ -575,6 +597,9 @@
 							}
 							arr.push(params);
 						}
+						 if(attendanceDetialData.content.length > 120) {
+							mui.toast('内容最多120字');
+						} 
 						console.log(JSON.stringify(arr))
 						var comData = {
 							id: attendanceDetialData.attendanceDetail.id,

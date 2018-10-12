@@ -190,10 +190,10 @@
 				</li>
 			</ul>
 			<template v-if="isEdit=='show'">
-				<textarea id="notes" maxlength="350" v-model="content" disabled placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 			</template>
 			<template v-else>
-				<textarea id="notes2" maxlength="350" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+				<textarea id="notes2" maxlength="120" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 			</template>
 			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }"  style="margin-bottom: -50px;">
 				<div id="MultiMedia_Body" class="multimedia-body"></div>
@@ -248,7 +248,7 @@
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell">
 						<a>
-							<p class="mui-pull-right liDetail">{{actionDetail.subCode}}</p>
+							<p class="mui-pull-right liDetail">{{kmText}}</p>
 							<div class="mui-media-body liTitle">
 								科目
 							</div>
@@ -257,10 +257,10 @@
 				</ul>
 			</template>
 			<template v-else>
-				<ul class="mui-table-view">
+				<ul class="mui-table-view" v-if="kmShow==1">
 					<li class="mui-table-view-cell" @tap="selectKm()">
 						<a  class="aCss">科目</a>
-						<span  class="mui-navigate-right  rCss">{{actionDetail.subCode}}</span>
+						<span  class="mui-navigate-right  rCss">{{kmText}}</span>
 					</li>
 				</ul>
 			</template>
@@ -387,7 +387,7 @@
 			var actionDetialData = new Vue({
 				el: "#actionDetialData",
 				data: {
-					dataFlag: 1,
+					dataFlag: 1,//无用
 					gradeText:'请选择',
 					classesText:'请选择',
 					studentText:'请选择',
@@ -400,10 +400,12 @@
 					actionList:[],
 					jcList:[],
 					kmList:[],
+					kmText:'请选择',
 					content:'',
 					time:getDate(),
 					isEdit:'show',
-					classCanCheck:1
+					classCanCheck:1,
+					kmShow:1
 				},
 				methods: {
 					checkEnc: function( index) {
@@ -455,13 +457,24 @@
 							if(classes.indexOf("day") != -1){
 								actionDetialData.actionDetail.period ='全天';
 								actionDetialData.actionDetail.classNodes = 'day';
+								actionDetialData.kmShow=-1;
+								actionDetialData.kmText='请选择';
+								actionDetialData.actionDetail.subCode='';
 							}else{
 								actionDetialData.actionDetail.period = names.join(",");
 								actionDetialData.actionDetail.classNodes = classes.join(",");
+								if(classes.length==1){
+									actionDetialData.kmShow=1;
+								}else{
+									actionDetialData.kmShow=-1;
+									actionDetialData.kmText='请选择';
+									actionDetialData.actionDetail.subCode='';
+								}
 							}
 						}else{
 							actionDetialData.actionDetail.period = '请选择';
 							actionDetialData.actionDetail.classNodes ='';
+							actionDetialData.kmShow=1;
 						}
 						mui(id).popover('toggle');
 					},
@@ -477,7 +490,7 @@
 						userPicker.setData(actionDetialData.kmList);
 						userPicker.show(function(items) {
 							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
-//							actionDetialData.actionDetail.subCode=_getParam(items[0], 'text');
+							actionDetialData.kmText=_getParam(items[0], 'text');
 						});
 					}
 				}
@@ -564,15 +577,17 @@
 					if(data.RspCode == 0) {
 						var sb=data.RspData.sb;
 						console.log("查询学生对应的名称")
+						
 						for(var a = 0; a < actionDetialData.list.length; a++) {
 							var tempGrdClsMsg = actionDetialData.list[a];
-							if(tempGrdClsMsg.id=sb.gradeId){
-								sb.gradeName=tempGrdClsMsg.text
-							}
-							for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
-								var tempClass = tempGrdClsMsg.children[b];
-								if(tempClass.id=sb.classId){
-									sb.className=tempClass.text
+								if(tempGrdClsMsg.value==sb.gradeId){
+									sb.gradeName=tempGrdClsMsg.text;
+									for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
+									var tempClass = tempGrdClsMsg.children[b];
+									if(tempClass.value==sb.classId){
+										sb.className=tempClass.text
+										break;
+									}
 								}
 							}
 						}
@@ -583,6 +598,12 @@
 						actionDetialData.content=sb.detail;
 						if(actionDetialData.actionDetail.classNodes=='day'){
 							actionDetialData.classCanCheck=-1;
+							actionDetialData.kmShow=-1;
+						}
+						for(var i=0;i<actionDetialData.kmList.length;i++){
+							if(actionDetialData.kmList[i].value==actionDetialData.actionDetail.subCode){
+								actionDetialData.kmText=actionDetialData.kmList[i].text;
+							}
 						}
 						actionDetialData.actionList=data.RspData.qb;
 						actionDetialData.jcList=data.RspData.cn;
@@ -688,11 +709,19 @@
 							}
 							multiMedia.addImages(imgUrl);
 						}
+						
+						if(actionDetialData.kmShow==-1){
+							actionDetialData.kmText='请选择';
+							actionDetialData.actionDetail.subCode='';
+						}
 					}else{
 						if(actionDetialData.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 							mui.toast('行为说明不能为空');
 							document.getElementById("finish").disabled = false;
-						} else{
+						} else if(actionDetialData.content.length > 120) {
+							mui.toast('内容最多120字');
+							document.getElementById("finish").disabled = false;
+						}  else{
 							var wd = events.showWaiting();
 							document.getElementById("finish").disabled = true;
 							var fj=[];
@@ -769,6 +798,12 @@
 					}
 					fjObj.push(obj);
 				}
+				
+				var kmValue ="";
+				if(actionDetialData.kmShow==1){
+					kmValue=actionDetialData.actionDetail.subCode;
+				}
+				
 				var tempData = { 
 					id: actionDetialData.actionDetail.id,
 					gradeId: actionDetialData.actionDetail.gradeId, 
@@ -780,7 +815,7 @@
 					behaviorTime: actionDetialData.actionDetail.behaviorTime, 
 					behaviorDetail:actionDetialData.content,
 					classNodes: actionDetialData.actionDetail.classNodes, 
-					subCode: actionDetialData.actionDetail.subCode, 
+					subCode: kmValue, 
 					recordTime: actionDetialData.actionDetail.recordTime, 
 					attachs: fjObj
 					

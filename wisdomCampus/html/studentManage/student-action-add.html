@@ -219,7 +219,7 @@
 				<div class="mui-row title-body">
 					<span class="body-title" >行为说明</span>
 				</div>
-				<textarea id="notes" maxlength="350" rows="3" v-model="content" placeholder="请输入行为说明（最多350字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
@@ -232,7 +232,7 @@
 						<a href="#selectClasses" class="aCss">节次</a>
 						<a href="#selectClasses" style="width: 75%;float: right;"><span  class="mui-navigate-right  rCss" >{{jcText}}</span></a>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectKm()">
+					<li class="mui-table-view-cell" @tap="selectKm()" v-if="kmShow==1">
 						<a  class="aCss">科目</a>
 						<span  class="mui-navigate-right  rCss">{{kmText}}</span>
 					</li>
@@ -352,7 +352,7 @@
 					actionList:[],
 					actionTypeList:[],
 					jcList:[],
-					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
+					kmList:[],
 					actionText:'请选择',
 					actionValue:'',
 					actionTypeText:'请选择',
@@ -362,10 +362,11 @@
 					jcText:'请选择',
 					jcValue:'',
 					kmText:'请选择',
-					kmValue:'',
+					kmValue:'', 
 					teacher:personal.utname,
 					record:getDate(),
-					classCanCheck:1
+					classCanCheck:1,
+					kmShow:1
 				},
 				methods:{
 					selectTime:function(event){
@@ -432,11 +433,22 @@
 							if(classes.indexOf("day") != -1){
 								talkTitle.jcText ='全天';
 								talkTitle.jcValue ='day';
+								talkTitle.kmShow=-1;
+								talkTitle.kmText='请选择';
+								talkTitle.kmValue='';
 							}else{
 								talkTitle.jcText = names.join(",");
 								talkTitle.jcValue = classes.join(",");
+								if(classes.length==1){
+									talkTitle.kmShow=1;
+								}else{
+									talkTitle.kmShow=-1;
+									talkTitle.kmText='请选择';
+									talkTitle.kmValue='';
+								}
 							}
 						}else{
+							talkTitle.kmShow=1;
 							talkTitle.jcText='请选择';
 							talkTitle.jcValue = '';
 						}
@@ -485,6 +497,7 @@
 							talkTitle.actionTypeText = talkTitle.actionTypeList[0].text;
 							talkTitle.actionTypeValue = talkTitle.actionTypeList[0].value;
 							setAttendanceType();
+							getSchSubThread();
 						}
 					} else {
 //							mui.toast(data.RspTxt);
@@ -492,7 +505,37 @@
 				});
 				mui('.mui-scroll-wrapper').scroll()
 			});
-			
+			var getSchSubThread = function() {
+				var enData1 = {};
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				//登录
+				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						console.log("data1:"+data1.RspTxt);
+						if(data1.RspData){
+							var kmList=data1.RspData.subs;
+							var newList=[];
+							for(var i=0;i<kmList.length;i++){
+								var temp={
+									text:kmList[i].subname,
+									value:kmList[i].subcode
+								}
+								newList.push(temp);
+							}
+							talkTitle.kmList=newList;
+						}
+					} else {
+						console.log("data1:"+data1.RspTxt);
+					}
+				});
+			}
 			//将类型、细项的值对应
 			var setAttendanceType = function(){
 				for (var i = 0; i < talkTitle.actionDetail.qb.length; i++) {
@@ -587,8 +630,8 @@
 					if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 						mui.toast('行为说明不能为空');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.content.length > 350) {
-						mui.toast('内容最多350字');
+					} else if(talkTitle.content.length > 120) {
+						mui.toast('内容最多120字');
 						document.getElementById("finish").disabled = false;
 					} else if(talkTitle.studentText=='请选择'){
 						mui.toast('请选择一个学生');
@@ -646,6 +689,11 @@
 					}
 				}
 				
+				var kmValue=''
+				if(talkTitle.kmShow==1){
+					kmValue=talkTitle.kmValue;
+				}
+				
 				var tempData = { 
 					id: '',
 					gradeId: talkTitle.gradeValue, 
@@ -657,7 +705,7 @@
 					behaviorTime: talkTitle.time, 
 					behaviorDetail:talkTitle.content,
 					classNodes: talkTitle.jcValue, 
-					subCode: talkTitle.kmValue, 
+					subCode: kmValue, 
 					recordTime: talkTitle.record, 
 					attachs: fj
 					
