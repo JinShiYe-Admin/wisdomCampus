@@ -150,7 +150,7 @@
 		</div>
 		<div id='talk'>
 			<div class="mui-content mui-fullscreen" style="background: white;">
-				<ul class="mui-table-view" style="margin-top:2px;">
+				<ul class="mui-table-view" style="margin-top:45px;">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">年级</a>
 						<span class="mui-navigate-right rCss">{{grade}}</span>
@@ -205,6 +205,10 @@
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
 							</li>
+							<li class="mui-table-view-cell" @tap="selectKm($event,index)"  style="margin-right: 35px;">
+								<a class="aCss">科目</a>
+								<p class="mui-navigate-right  rCss">{{ul.subname}}</p>
+							</li>
 						</ul>
 					</template>
 				</div>
@@ -248,10 +252,16 @@
 					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 						<div class="mui-scroll">
 							<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+								<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
+									<div class="mui-input-row mui-checkbox mui-right">
+										<label style="width: 100%;">全天</label>
+										<input name="全天" value="day" type="checkbox" >
+									</div>
+								</li>
 								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">{{jc.text}}</label>
-										<input :name="jc.text" :value="jc.value" type="checkbox">
+										<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="abc.classCanCheck==-1">
 									</div>
 								</li>
 							</ul>
@@ -348,16 +358,24 @@
 				};
 				//登录
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
-
+					if(data1.RspCode == 0) {
+						console.log("data1:"+data1.RspTxt);
+						if(data1.RspData){
+							var kmList=data1.RspData.subs;
+							var newList=[];
+							for(var i=0;i<kmList.length;i++){
+								var temp={
+									text:kmList[i].subname,
+									value:kmList[i].subcode
+								}
+								newList.push(temp);
+							}
+							talkTitle.kmList=newList;
+						}
+					} else {
+						console.log("data1:"+data1.RspTxt);
+					}
 				});
-				//				var comDataKm = {}
-				//				getSchSub(comDataKm,function(data){
-				//					if(data.RspCode == 0) {
-				//						console.log("liushuai:"+data.RspTxt);
-				//					} else {
-				//						console.log("liushuai2:"+data.RspTxt);
-				//					}
-				//				})
 			}
 
 			var title = new Vue({
@@ -387,13 +405,18 @@
 					gradelist: [],
 					kqxxNameList: [],
 					kqlxNameList: [],
+					kmList: [],
 					jcList: [],
 					qxList: [],
 					nodeSubJson: [{
 						canDelete: '1',
 						attendanceTime: "请选择",
 						classNodes: [],
-						classNames: "请选择"
+						classNames: "请选择",
+						subcode:'',
+						subname:'请选择',
+						classCanCheck:1
+						
 					}], //存值用：时间和节次集合
 					jlr: personal.utname, //存值用：记录人
 					lxsj: '请选择', //存值用：离校时间
@@ -469,6 +492,27 @@
 							talkTitle.sStudent = _getParam(items[2], 'value');
 						});
 					},
+					classItemCheck:function(index){
+						var nodeSubJson=talkTitle.nodeSubJson[index];
+						if(nodeSubJson.classCanCheck==1){
+							nodeSubJson.classCanCheck=-1
+						}else{
+							nodeSubJson.classCanCheck=1
+						}
+					},
+					selectKm: function(e, index) { //选择科目
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
+						userPicker.setData(talkTitle.kmList);
+						userPicker.show(function(items) {
+							var nodes = talkTitle.nodeSubJson[index];
+							console.log("nodes==="+JSON.stringify(nodes))
+							console.log("index==="+JSON.stringify(index))
+							nodes.subname = _getParam(items[0], 'text');
+							nodes.subcode = _getParam(items[0], 'value');
+						});
+					},
 					selectkqxxName: function() { //选择考勤细项
 						var userPicker = new $M.PopPicker({
 							layer: 1
@@ -531,9 +575,19 @@
 							}
 						})
 						var nodes = this.nodeSubJson[index];
-						nodes.classNodes = classes.join(",");
 						if(names.length > 0) {
-							nodes.classNames = names.join(",");
+							if(classes.indexOf("day") != -1){
+								classes=[];
+								classes.push('"day"');
+								nodes.classNodes =classes.join(",");
+								nodes.classNames ='全天';
+							}else{
+								nodes.classNodes = classes;
+								nodes.classNames = names.join(",");
+							}
+						}else{
+							nodes.classNodes=[];
+							nodes.classNames = '请选择';
 						}
 						mui(id).popover('toggle');
 					},
@@ -542,7 +596,10 @@
 							canDelete: '1',
 							attendanceTime: "请选择",
 							classNodes: [],
-							classNames: "请选择"
+							classNames: "请选择",
+							subcode:'',
+							subname:'请选择',
+							classCanCheck:1
 						};
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
 					},
@@ -567,7 +624,7 @@
 							}
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes: '[' + obj.classNodes + ']'
+								classNodes: '["' + obj.classNodes + ']'
 							}
 							arr.push(params);
 						}

@@ -81,7 +81,7 @@
 			</header>
 		</div>
 		<div id="attendanceDetialData">
-			<div class="mui-content">
+			<div class="mui-content" style="margin-top: 45px;">
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell">
 						<a>
@@ -135,6 +135,10 @@
 								<a :href="'#select'+index" style="float:right;width:75%">
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="selectKm($event,index)">
+								<a class="aCss">科目</a>
+								<p class="mui-navigate-right rCss">{{ul.subname}}</p>
 							</li>
 						</ul>
 					</template>
@@ -196,6 +200,14 @@
 							</div>
 						</a>
 					</li>
+					<li class="mui-table-view-cell">
+						<a>
+							<p class="mui-pull-right liDetail">{{attendanceDetail.period}}</p>
+							<div class="mui-media-body liTitle">
+								科目
+							</div>
+						</a>
+					</li>
 					<p v-if="attendanceDetail.quantizationAttendanceId==12" class="lineCell"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;" v-if="attendanceDetail.quantizationAttendanceId==12">
 						<a>
@@ -246,14 +258,25 @@
 						<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 							<div class="mui-scroll">
 								<ul class="mui-table-view" style="background: #393D49;color: #fff;">
+									<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
+										<div class="mui-input-row mui-checkbox mui-right">
+											<label style="width: 100%;">全天</label>
+											<template v-if="abc.classNodes.indexOf('day') !=-1">
+												<input name="全天" value="day" type="checkbox" checked>
+											</template>
+											<template v-else>
+												<input name="全天" value="day" type="checkbox" >
+											</template>
+										</div>
+									</li>
 									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 										<div class="mui-input-row mui-checkbox mui-right">
 											<label style="width: 100%;">{{jc.text}}</label>
 											<template v-if="abc.classNodes.indexOf(jc.value) !=-1">
-												<input :name="jc.text" :value="jc.value" type="checkbox" checked>
+												<input :name="jc.text" :value="jc.value" type="checkbox" :checked="abc.classCanCheck==-1? false:true" :disabled="abc.classCanCheck==-1">
 											</template>
 											<template v-else>
-												<input :name="jc.text" :value="jc.value" type="checkbox">
+												<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="abc.classCanCheck==-1">
 											</template>
 										</div>
 									</li>
@@ -284,7 +307,7 @@
 			mui.plusReady(function() {
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
-				getAttendanceDetailP();
+				getSchSubThread();
 				mui('.mui-scroll-wrapper').scroll();
 			});
 			var getAttendanceDetailP = function() {
@@ -308,6 +331,13 @@
 						attendanceDetialData.nodeSubJson[0].attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
 						attendanceDetialData.nodeSubJson[0].classNames = attendanceDetialData.attendanceDetail.period;
 						attendanceDetialData.nodeSubJson[0].classNodes = attendanceDetialData.attendanceDetail.classNodes;
+						// TODO subCode ——>subname  getName
+						
+						attendanceDetialData.nodeSubJson[0].subname = attendanceDetialData.attendanceDetail.subCode;
+						attendanceDetialData.nodeSubJson[0].subcode = attendanceDetialData.attendanceDetail.subCode;
+						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
+							attendanceDetialData.nodeSubJson[0].classCanCheck=-1; 
+						}
 						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
 							attendanceDetialData.qxShow = '1';
 						}
@@ -316,6 +346,40 @@
 						}
 					} else {
 						mui.toast(data.RspTxt);
+					}
+				});
+			}
+			
+			var getSchSubThread = function() {
+				var enData1 = {};
+				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				//登录
+				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						console.log("data1:"+data1.RspTxt);
+						if(data1.RspData){
+							var kmList=data1.RspData.subs;
+							var newList=[];
+							for(var i=0;i<kmList.length;i++){
+								var temp={
+									text:kmList[i].subname,
+									value:kmList[i].subcode
+								}
+								newList.push(temp);
+							}
+							attendanceDetialData.kmList=newList;
+							getAttendanceDetailP();
+						}
+					} else {
+						console.log("data1:"+data1.RspTxt);
 					}
 				});
 			}
@@ -345,13 +409,17 @@
 					sjShow: '0',
 					update: '0',
 					kqxxList: [],
+					kmList: [],
 					jcList: [],
 					qxList: [],
 					nodeSubJson: [{
 						canDelete: '0',
 						attendanceTime: "请选择",
 						classNodes: [],
-						classNames: "请选择"
+						classNames: "请选择",
+						subcode:'',
+						subname:'请选择',
+						classCanCheck:1
 					}], //存值用：时间和节次集合
 					content: '', //存值用:考勤说明
 					attendanceDetail: ''
@@ -450,11 +518,42 @@
 							}
 						})
 						var nodes = this.nodeSubJson[index];
-						nodes.classNodes = classes;
-						if(names.length > 0) {
-							nodes.classNames = names.join(",");
+						if(names.length>0){
+							if(classes.indexOf("day") != -1){
+								classes=[];
+								classes.push('"day"');
+								nodes.classNodes =classes.join(",");
+								nodes.classNames ='全天';
+							}else{
+								nodes.classNames = names.join(",");
+								nodes.classNodes = classes.join(",");
+							}
+						}else{
+							nodes.classNames = '请选择';
+							nodes.classNodes =  [];
 						}
 						mui(id).popover('toggle');
+					},
+					classItemCheck:function(index){
+						var nodeSubJson=attendanceDetialData.nodeSubJson[index];
+						if(nodeSubJson.classCanCheck==1){
+							nodeSubJson.classCanCheck=-1
+						}else{
+							nodeSubJson.classCanCheck=1
+						}
+					},
+					selectKm: function(e, index) { //选择科目
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
+						userPicker.setData(attendanceDetialData.kmList);
+						userPicker.show(function(items) {
+							var nodes = attendanceDetialData.nodeSubJson[index];
+							console.log("nodes==="+JSON.stringify(nodes))
+							console.log("index==="+JSON.stringify(index))
+							nodes.subname = _getParam(items[0], 'text');
+							nodes.subcode = _getParam(items[0], 'value');
+						});
 					},
 					updateInfo: function() {
 						if(attendanceDetialData.update == '1') {
@@ -472,7 +571,7 @@
 							var obj = attendanceDetialData.nodeSubJson[i];
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes: '[' + obj.classNodes + ']'
+								classNodes: '["' + obj.classNodes + '"]'
 							}
 							arr.push(params);
 						}

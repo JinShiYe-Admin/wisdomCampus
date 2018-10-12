@@ -232,7 +232,7 @@
 				<ul class="mui-table-view" v-if="dataFlag == 1">
 					<li class="mui-table-view-cell" >
 						<a class="aCss">节次</a>
-						<a style="width: 75%;float: right;margin-right: -17px;"><span  class="rCss">{{actionDetail.period}}</span></a>
+						<a style="width: 75%;float: right;margin-right: -30px;"><span  class="rCss">{{actionDetail.period}}</span></a>
 					</li> 
 				</ul>
 			</template>
@@ -291,7 +291,12 @@
 							<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck()">
 								<div class="mui-input-row mui-checkbox mui-right">
 									<label style="width: 100%;">全天</label>
-									<input name="全天" value="day" type="checkbox" >
+									<template v-if="actionDetail.classNodes=='day'">
+										<input name="全天" value="day" type="checkbox" checked> 
+									</template>
+									<template v-else>
+										<input name="全天" value="day" type="checkbox"> 
+									</template>
 								</div>
 							</li>
 							<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
@@ -394,7 +399,7 @@
 					curPage:{},
 					actionList:[],
 					jcList:[],
-					kmList:[{"text":"语文","value":"1"},{"text":"数学","value":"2"},{"text":"物理","value":"3"}],
+					kmList:[],
 					content:'',
 					time:getDate(),
 					isEdit:'show',
@@ -447,8 +452,16 @@
 							}
 						})
 						if(names.length>0){
-							actionDetialData.actionDetail.period = names.join(",");
-							actionDetialData.actionDetail.classNodes = classes.join(",");
+							if(classes.indexOf("day") != -1){
+								actionDetialData.actionDetail.period ='全天';
+								actionDetialData.actionDetail.classNodes = 'day';
+							}else{
+								actionDetialData.actionDetail.period = names.join(",");
+								actionDetialData.actionDetail.classNodes = classes.join(",");
+							}
+						}else{
+							actionDetialData.actionDetail.period = '请选择';
+							actionDetialData.actionDetail.classNodes ='';
 						}
 						mui(id).popover('toggle');
 					},
@@ -463,8 +476,8 @@
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.kmList);
 						userPicker.show(function(items) {
-							actionDetialData.actionDetail.subCode=_getParam(items[0], 'text');
-							actionDetialData.actionDetail.kmValue=_getParam(items[0], 'value');
+							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
+//							actionDetialData.actionDetail.subCode=_getParam(items[0], 'text');
 						});
 					}
 				}
@@ -502,11 +515,45 @@
 						var allClasses=allGrade.children[0];
 						actionDetialData.gradeValue=allGrade.value;
 						actionDetialData.classesValue=allClasses.value;
-						getActionDetailP();
+						getSchSubThread();
 					}
 				});
 				mui('.mui-scroll-wrapper').scroll()
 			});
+			
+			var getSchSubThread = function() {
+				var enData1 = {};
+				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				//登录
+				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						console.log("data1:"+data1.RspTxt);
+						if(data1.RspData){
+							var kmList=data1.RspData.subs;
+							var newList=[];
+							for(var i=0;i<kmList.length;i++){
+								var temp={
+									text:kmList[i].subname,
+									value:kmList[i].subcode
+								}
+								newList.push(temp);
+							}
+							actionDetialData.kmList=newList;
+							getActionDetailP();
+						}
+					} else {
+						console.log("data1:"+data1.RspTxt);
+					}
+				});
+			}
 			
 			var getActionDetailP = function() {
 				var tempData = {
@@ -534,7 +581,9 @@
 						actionDetialData.curPage = curPage;
 						actionDetialData.dataFlag = 1;
 						actionDetialData.content=sb.detail;
-						
+						if(actionDetialData.actionDetail.classNodes=='day'){
+							actionDetialData.classCanCheck=-1;
+						}
 						actionDetialData.actionList=data.RspData.qb;
 						actionDetialData.jcList=data.RspData.cn;
 						
@@ -731,7 +780,7 @@
 					behaviorTime: actionDetialData.actionDetail.behaviorTime, 
 					behaviorDetail:actionDetialData.content,
 					classNodes: actionDetialData.actionDetail.classNodes, 
-					subCode: actionDetialData.actionDetail.kmValue, 
+					subCode: actionDetialData.actionDetail.subCode, 
 					recordTime: actionDetialData.actionDetail.recordTime, 
 					attachs: fjObj
 					
