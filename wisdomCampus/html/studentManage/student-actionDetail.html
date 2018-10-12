@@ -502,8 +502,11 @@
 					var tempModel = actionDetialData.actionDetailSum.qb[i];
 					if (tempModel.value == actionDetialData.actionDetail.behaviorType) {
 						actionDetialData.actionList = [].concat(tempModel.dataArray);
-						actionDetialData.actionDetail.behaviorName = '请选择';
-						actionDetialData.actionDetail.quantizationBehaviorId = '';
+						if(actionDetialData.isEdit!='show'){
+							actionDetialData.actionDetail.behaviorName = '请选择';
+							actionDetialData.actionDetail.quantizationBehaviorId = '';
+						}
+						
 						break;
 					}
 				}
@@ -530,7 +533,7 @@
 						actionDetialData.classesValue=allClasses.value;
 						getSchSubThread();
 					}
-				});
+				},1);
 				mui('.mui-scroll-wrapper').scroll()
 			});
 			
@@ -605,6 +608,7 @@
 								actionDetialData.kmText=actionDetialData.kmList[i].text;
 							}
 						}
+						//TODO
 						actionDetialData.actionList=data.RspData.qb;
 						actionDetialData.jcList=data.RspData.cn;
 						
