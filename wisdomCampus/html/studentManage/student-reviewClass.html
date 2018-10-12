@@ -73,7 +73,7 @@
 			<div class="mui-content-padded">
 				<a>
 					<h5 class="mui-pull-left">| 考勤/行为趋势</h5>
-					<p @click="changeMarkMap" class="mui-pull-right">{{reviewDetialData.reviewDetial.markMap[reviewDetialData.markMapIndex].text}} ></p>
+					<p @click="changeMarkMap" class="mui-pull-right" style="margin-top: 10px;">{{reviewDetialData.reviewDetial.markMap[reviewDetialData.markMapIndex].text}} ></p>
 				</a>
 				<div class="chart" id="lineChart"></div>
 				<h5 style="margin-top: 50px;">| 量化均分</h5>
@@ -83,16 +83,18 @@
 					<p class="p_left">{{reviewDetial.averScore}}分</p>
 					<p class="p_right">/{{reviewDetial.aver2Grade}}</p>
 				</div>
-				<a style="margin-top: 50px;">
-					<div style="margin-left: 20%;display: inline;margin-top: 20px;">
-						<p class="p_right">最高:</p>
-						<p class="p_left">/{{reviewDetial.maxScore}}分</p>
-					</div>
-					<div style="margin-left: 25%;display: inline;">
-						<p class="p_right">最低:</p>
-						<p class="p_left">/{{reviewDetial.minScore}}分</p>
-					</div>
-				</a>
+				<div class="" style="margin-top: 5px;height: 10px;width: 100%;">
+					<a style="">
+						<div style="margin-left: 15%;display: inline;margin-top: 30px;">
+							<p class="p_right">最高:</p>
+							<p class="p_left">/{{reviewDetial.maxScore}}分</p>
+						</div>
+						<div style="margin-left: 15%;display: inline;">
+							<p class="p_right">最低:</p>
+							<p class="p_left">/{{reviewDetial.minScore}}分</p>
+						</div>
+					</a>
+				</div>
 				<h5>| 等级信息</h5>
 				<div class="chart" id="pieChart"></div>
 			</div>
@@ -178,7 +180,7 @@
 						var tempArray3 = [];
 						for(var i = 0; i < data.RspData.gradeArray.length; i++) {
 							var tempModel = data.RspData.gradeArray[i];
-							tempModel.name = tempModel.name+'('+ tempModel.scoreDesc+'):'+tempModel.value;
+							tempModel.name = tempModel.name + '(' + tempModel.scoreDesc + '):' + tempModel.value;
 							tempArray3.push(tempModel.name);
 						}
 						reviewDetialData.pieChartDetail.legend.data = [].concat(tempArray3);
@@ -289,6 +291,13 @@
 						//纵轴通常为数值型，但条形图时则纵轴为类目型 
 						yAxis: [{
 							type: 'value', //坐标轴类型，纵轴默认为数值型'value'
+							name: '次数',
+							nameLocation: 'middle',
+							nameTextStyle: {
+								color: "black",
+								fontSize: 14,
+								padding: 15
+							},
 							splitArea: { //分隔区域，默认不显示
 								show: true
 							}
@@ -317,7 +326,7 @@
 							type: 'pie',
 							//饼状图
 							radius: '80%',
-							center: ['60%', '50%'],
+							center: ['70%', '50%'],
 							avoidLabelOverlap: false,
 							//标签
 							label: {

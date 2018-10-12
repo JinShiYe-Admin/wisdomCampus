@@ -154,6 +154,7 @@
 								interval: 2,
 								rotate: 50
 							},
+							name: '时间',
 							type: 'category', //坐标轴类型，横轴默认为类目型'category'
 							data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'] //类目型坐标轴文本标签数组，指定label内容。 数组项通常为文本，'\n'指定换行
 						}],
@@ -161,14 +162,21 @@
 						//纵轴通常为数值型，但条形图时则纵轴为类目型 
 						yAxis: [{
 							type: 'value', //坐标轴类型，纵轴默认为数值型'value'
+							name: '分数',
+							nameLocation: 'middle',
+							nameTextStyle: {
+								color: "black",
+								fontSize: 14,
+								padding: 10
+							},
 							splitArea: { //分隔区域，默认不显示
 								show: true
 							}
 						}],
 						//sereis的数据: 用于设置图表数据之用。series是一个对象嵌套的结构；对象内包含对象
 						series: [{
-							symbol:false,
-							showAllSymbol:false,
+							symbol: false,
+							showAllSymbol: false,
 							name: '蒸发量', //系列名称，如果启用legend，该值将被legend.data索引相关
 							type: 'line', //图表类型，必要参数！如为空或不支持类型，则该系列数据不被显示。
 							data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6] //系列中的数据内容数组，折线图以及柱状图时数组长度等于所使用类目轴文本标签数组axis.data的长度，并且他们间是一一对应的。数组项通常为数值 
