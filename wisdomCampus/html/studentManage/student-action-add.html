@@ -429,8 +429,16 @@
 							}
 						})
 						if(names.length>0){
-							talkTitle.jcText = names.join(",");
-							talkTitle.jcValue = classes.join(",");
+							if(classes.indexOf("day") != -1){
+								talkTitle.jcText ='全天';
+								talkTitle.jcValue ='day';
+							}else{
+								talkTitle.jcText = names.join(",");
+								talkTitle.jcValue = classes.join(",");
+							}
+						}else{
+							talkTitle.jcText='请选择';
+							talkTitle.jcValue = '';
 						}
 						mui(id).popover('toggle');
 					},
