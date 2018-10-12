@@ -3,10 +3,15 @@ var studentMP = (function(mod) {
 	console.log('personal:' + JSON.stringify(personal));
 	publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 	var grdsArray = []; //年级数组
+	var sumFlag = 0; //需要主动添加全部
 	//学生管理模块，获取年级、班级、学生等
 	//gradeFalg，1查看(包含年级领导)，2添加、修改
 	//teacherFlag，1班主任和任课老师都有，2有班主任，没有任课老师
-	mod.getStudentManagePermission = function(gradeFalg, teacherFlag, callback) {
+	//tempSumFlag,1不需要主动添加“全部”
+	mod.getStudentManagePermission = function(gradeFalg, teacherFlag, callback, tempSumFlag) {
+		if(tempSumFlag == 1) {
+			sumFlag = tempSumFlag;
+		}
 		var enData0 = {};
 		//不需要加密的数据
 		var comData0 = {
@@ -129,39 +134,45 @@ var studentMP = (function(mod) {
 					}
 					tempCls.children.push(tempStu);
 				}
-				var tempClsModel = {
-					value: 0,
-					text: '全部学生'
+				if(sumFlag == 0) {
+					var tempClsModel = {
+						value: 0,
+						text: '全部学生'
+					}
+					tempCls.children = [tempClsModel].concat(tempCls.children);
 				}
-				tempCls.children = [tempClsModel].concat(tempCls.children);
 				tempGrd.children.push(tempCls);
 			}
-			var tempGrdModel = {
-				value: tempClsIDs1.join(','),
-				text: '全部班级',
-				children: [{
-					value: 0,
-					text: '全部学生'
-				}]
+			if(sumFlag == 0) {
+				var tempGrdModel = {
+					value: tempClsIDs1.join(','),
+					text: '全部班级',
+					children: [{
+						value: 0,
+						text: '全部学生'
+					}]
+				}
+				tempGrd.children = [tempGrdModel].concat(tempGrd.children);
 			}
-			tempGrd.children = [tempGrdModel].concat(tempGrd.children);
 			sumArray.push(tempGrd);
 		}
-		var temp0 = tempGrdIDs.join(',');
-		var temp1 = tempClsIDs.join(',');
-		var tempSum = {
-			value: temp0,
-			text: '全部年级',
-			children: [{
-				value: temp1,
-				text: '全部班级',
+		if(sumFlag == 0) {
+			var temp0 = tempGrdIDs.join(',');
+			var temp1 = tempClsIDs.join(',');
+			var tempSum = {
+				value: temp0,
+				text: '全部年级',
 				children: [{
-					value: 0,
-					text: '全部学生'
+					value: temp1,
+					text: '全部班级',
+					children: [{
+						value: 0,
+						text: '全部学生'
+					}]
 				}]
-			}]
+			}
+			sumArray = [tempSum].concat(sumArray);
 		}
-		sumArray = [tempSum].concat(sumArray);
 		callback(sumArray);
 	}
 
@@ -210,10 +221,10 @@ var studentMP = (function(mod) {
 				gradeids: tempGradeId.join(','), //需要查询的年级ID，多个代码用英文逗号隔开
 				appid: publicParameter.appid //系统所分配的应用ID
 			}
-//			events.showWaiting();
+			//			events.showWaiting();
 			//2.3 学校年级下班级
 			postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
-//				events.closeWaiting();
+				//				events.closeWaiting();
 				if(data.RspCode == 0) {
 					if(data.RspData) {
 						//将获取到的班级，塞到对应的年级数组
@@ -257,10 +268,10 @@ var studentMP = (function(mod) {
 			classids: tempClassId.join(','), //需要查询的班级ID，多个代码用英文逗号隔开
 			appid: publicParameter.appid //系统所分配的应用ID
 		}
-//		events.showWaiting();
+		//		events.showWaiting();
 		//2.6 学校班级学生
 		postDataEncry('ClassStu', enData0, comData0, 0, function(data) {
-//			events.closeWaiting();
+			//			events.closeWaiting();
 			if(data.RspCode == 0) {
 				if(data.RspData) {
 					//将获取到的学生，塞到对应的班级数组
