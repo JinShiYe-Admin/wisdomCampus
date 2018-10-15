@@ -578,15 +578,15 @@
 						var nodes = this.nodeSubJson[index];
 						if(names.length > 0) {
 							if(classes.indexOf("day") != -1){
-								classes=[];
-								classes.push('"day"');
-								nodes.classNodes =classes.join(",");
+								nodes.classNodes.push('day');
 								nodes.classNames ='全天';
 								nodes.kmShow=-1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							}else{
-								nodes.classNodes = classes;
+								for(var i=0;i<classes.length;i++){
+									nodes.classNodes.push(classes[i]);
+								}
 								nodes.classNames = names.join(",");
 								if(classes.length==1){
 									nodes.kmShow=1;
@@ -639,7 +639,8 @@
 							}
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes: '["' + obj.classNodes + ']'
+								classNodes: obj.classNodes,
+								subCodes:obj.subCodes
 							}
 							arr.push(params);
 						}
