@@ -130,8 +130,10 @@
 					if(array.length>0){
 						var allGrade=array[0];
 						var allClasses=allGrade.children[0];
+						var allStudent=allClasses.children[0];
 						selectTitle.sGrade=allGrade.value;
 						selectTitle.sClasses=allClasses.value;
+						selectTitle.sStudent=allStudent.value;
 						getAttendanceList(pageIndex);
 					}
 				});
@@ -187,6 +189,7 @@
 					type:'全部状态',
 					sGrade:"",//存值用
 					sClasses:"",//存值用
+					sStudent:"",//存值用
 					typeValue:"",//存值用
 					list:[],
 					typeList:[
@@ -206,6 +209,7 @@
 							
 							selectTitle.sGrade=_getParam(items[0], 'value');
 							selectTitle.sClasses=_getParam(items[1], 'value');
+							selectTitle.sStudent=_getParam(items[2], 'value');
 							
 							pageIndex = 1;
 							flagRef = 0;
@@ -285,10 +289,14 @@
 			function getAttendanceList(index) {
 				var gradeValue=selectTitle.sGrade;
 				var classesValue=selectTitle.sClasses;
+				var stuValue=selectTitle.sStudent;
+				if (stuValue==0) {
+					stuValue = '';
+				}
 				var comData ={
 					grdIds:gradeValue,
 					clsIds:classesValue,
-					stuId:'',
+					stuId:stuValue,
 					status:selectTitle.typeValue,
 					pageSize:pageSize,
 					pageNumber:index
