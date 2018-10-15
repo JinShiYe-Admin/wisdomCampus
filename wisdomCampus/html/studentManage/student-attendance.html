@@ -179,7 +179,11 @@
 //						plus.webview.open(url);
 						$("#bottomPopover").hide();
 						$(".mui-backdrop").hide();
-						utils.mOpenWithData(url, {});
+						if (personal.utp==0&&personal.clss.length>0) {
+							utils.mOpenWithData(url, {});
+						} else{
+							mui.toast("无此权限");
+						}
 					} 
 				}
 			});

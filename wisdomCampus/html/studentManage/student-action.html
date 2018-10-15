@@ -123,7 +123,6 @@
 						<li class="mui-table-view-cell" @tap="toPage('student-action-add.html')"><span class="mui-icon mui-icon-plus" style="font-size: 16px;">添加</span></li>
 						<li class="mui-table-view-cell" @tap="toPage('student-action-count.html')"><span class="mui-icon mui-icon-compose" style="font-size: 16px;">统计报表</span></li>
 					</ul>
-				</div>
 			</div>
 		</div>
 		<script src="../../js/mui2.js"></script>
@@ -179,7 +178,11 @@
 //						plus.webview.open(url);
 						$("#bottomPopover").hide();
 						$(".mui-backdrop").hide();
-						utils.mOpenWithData(url, {});
+						if (personal.utp==0&&personal.clss.length>0) {
+							utils.mOpenWithData(url, {});
+						} else{
+							mui.toast("无此权限");
+						}
 					} 
 				}
 			});
