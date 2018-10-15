@@ -28,20 +28,22 @@ var studentMP = (function(mod) {
 					var tempFlag0 = 0;
 					//如果是查看，需要判断是否是年级领导，将年级塞入数组
 					if(gradeFalg == 1) {
-						for(var i = 0; i < personal.grds.length; i++) {
-							var tempModel = personal.grds[i];
-							for(var a = 0; a < data.RspData.grds.length; a++) {
-								var tempModel1 = data.RspData.grds[a];
-								tempModel1.classArray = [];
-								if(tempModel.grdid == tempModel1.grdid) {
-									grdsArray.push(tempModel1);
+						if(personal.grds.length > 0) { //年级领导
+							for(var i = 0; i < personal.grds.length; i++) {
+								var tempModel = personal.grds[i];
+								for(var a = 0; a < data.RspData.grds.length; a++) {
+									var tempModel1 = data.RspData.grds[a];
+									tempModel1.classArray = [];
+									if(tempModel.grdid == tempModel1.grdid) {
+										grdsArray.push(tempModel1);
+									}
 								}
 							}
+							console.log('年级领导:' + JSON.stringify(grdsArray));
+							//2.3 学校年级下班级
+							getGradeClass(grdsArray, callback);
+							tempFlag0++;
 						}
-						console.log('年级领导:' + JSON.stringify(grdsArray));
-						//2.3 学校年级下班级
-						getGradeClass(grdsArray, callback);
-						tempFlag0++;
 					}
 					//是任课老师或者班主任
 					if(personal.clss.length > 0) {
@@ -272,6 +274,7 @@ var studentMP = (function(mod) {
 		//2.6 学校班级学生
 		postDataEncry('ClassStu', enData0, comData0, 0, function(data) {
 			//			events.closeWaiting();
+			console.log('2.6 学校班级学生:' + JSON.stringify(data));
 			if(data.RspCode == 0) {
 				if(data.RspData) {
 					//将获取到的学生，塞到对应的班级数组
