@@ -73,13 +73,11 @@
 	</head>
 
 	<body>
-		<div id="title">
-			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
-				<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
-				<h1 class="mui-title" style="color: white;">考勤详情</h1>
-				<a class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="updateInfo()">{{titleBar}}</a>
-			</header>
-		</div>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="title">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">考勤详情</h1>
+			<a class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="updateInfo()">{{titleBar}}</a>
+		</header>
 		<div id="attendanceDetialData">
 			<div class="mui-content" style="margin-top: 45px;">
 				<ul class="mui-table-view" v-if="dataFlag == 1">
@@ -310,50 +308,6 @@
 				getSchSubThread();
 				mui('.mui-scroll-wrapper').scroll();
 			});
-			var getAttendanceDetailP = function() {
-				var tempData = {
-					id: curPage.id
-				}
-				getAttendanceDetail(tempData, function funcName(data) {
-					console.log('data:' + JSON.stringify(data));
-					if(data.RspCode == 0) {
-						attendanceDetialData.kqxxList = data.RspData.qa[0].dataArray;
-						attendanceDetialData.jcList = data.RspData.cn;
-						attendanceDetialData.qxList = data.RspData.permission;
-
-						attendanceDetialData.attendanceDetail = data.RspData.sa;
-						attendanceDetialData.attendanceDetailSum = data.RspData;
-						//合并对象
-						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
-						console.log('attendanceDetialData.attendanceDetail:' + JSON.stringify(attendanceDetialData.attendanceDetail));
-						attendanceDetialData.dataFlag = 1;
-						attendanceDetialData.content = attendanceDetialData.attendanceDetail.explain;
-						attendanceDetialData.nodeSubJson[0].attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
-						attendanceDetialData.nodeSubJson[0].classNames = attendanceDetialData.attendanceDetail.period;
-						attendanceDetialData.nodeSubJson[0].classNodes = attendanceDetialData.attendanceDetail.classNodes;
-						
-						attendanceDetialData.nodeSubJson[0].subCodes= attendanceDetialData.attendanceDetail.subCodes;
-						for(var i=0;i<attendanceDetialData.kmList.length;i++){
-							if(attendanceDetialData.kmList[i].value==attendanceDetialData.attendanceDetail.subCodes){
-								attendanceDetialData.nodeSubJson[0].subName=attendanceDetialData.kmList[i].text;
-							}
-						}
-						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
-							attendanceDetialData.nodeSubJson[0].classCanCheck=-1; 
-							attendanceDetialData.nodeSubJson[0].kmShow=-1; 
-						}
-						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
-							attendanceDetialData.qxShow = '1';
-						}
-						if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
-							attendanceDetialData.sjShow = '1';
-						}
-						
-					} else {
-						mui.toast(data.RspTxt);
-					}
-				});
-			}
 			
 			var getSchSubThread = function() {
 				var enData1 = {};
@@ -366,7 +320,6 @@
 					utoken: personal.utoken, //用户令牌
 					appid: publicParameter.appid //系统所分配的应用ID
 				};
-				//登录
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						console.log("data1:"+data1.RspTxt);
@@ -385,6 +338,64 @@
 						}
 					} else {
 						console.log("data1:"+data1.RspTxt);
+					}
+				});
+			}
+			
+			var getAttendanceDetailP = function() {
+				var tempData = {
+					id: curPage.id
+				}
+				getAttendanceDetail(tempData, function funcName(data) {
+					console.log('data:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						attendanceDetialData.kqxxList = data.RspData.qa[0].dataArray;
+						attendanceDetialData.jcList = data.RspData.cn;
+						attendanceDetialData.qxList = data.RspData.permission;
+
+						attendanceDetialData.attendanceDetail = data.RspData.sa;
+						attendanceDetialData.attendanceDetailSum = data.RspData;
+						//合并对象
+						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
+						console.log('attendanceDetialData.attendanceDetail:' + JSON.stringify(attendanceDetialData.attendanceDetail));
+						attendanceDetialData.dataFlag = 1;
+						attendanceDetialData.content = attendanceDetialData.attendanceDetail.explain;
+						
+						var nodes={
+							canDelete: '0',
+							attendanceTime: "请选择",
+							classNodes: [],
+							classNames: "请选择",
+							subCodes:'',
+							subName:'请选择',
+							classCanCheck:1,
+							kmShow:1
+						}
+						
+						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
+						nodes.classNames = attendanceDetialData.attendanceDetail.period;
+						nodes.classNodes = attendanceDetialData.attendanceDetail.classNodes;
+						
+						nodes.subCodes= attendanceDetialData.attendanceDetail.subCodes;
+						for(var i=0;i<attendanceDetialData.kmList.length;i++){
+							if(attendanceDetialData.kmList[i].value==attendanceDetialData.attendanceDetail.subCodes){
+								nodes.subName=attendanceDetialData.kmList[i].text;
+							}
+						}
+						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
+							nodes.classCanCheck=-1; 
+							nodes.kmShow=-1; 
+						}
+						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
+							attendanceDetialData.qxShow = '1';
+						}
+						if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
+							attendanceDetialData.sjShow = '1';
+						}
+						attendanceDetialData.$set(attendanceDetialData.nodeSubJson, 0,nodes);
+						console.log(JSON.stringify(attendanceDetialData.nodeSubJson));
+					} else {
+						mui.toast(data.RspTxt);
 					}
 				});
 			}
@@ -527,15 +538,17 @@
 						if(names.length>0){
 							if(classes.indexOf("day") != -1){
 								classes=[];
-								classes.push('"day"');
+								classes.push('day');
 								nodes.classNodes =classes.join(",");
 								nodes.classNames ='全天';
 								nodes.kmShow=-1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							}else{
+								for(var i=0;i<classes.length;i++){
+									nodes.classNodes.push(classes[i]);
+								}
 								nodes.classNames = names.join(",");
-								nodes.classNodes = classes.join(",");
 								if(classes.length==1){
 									nodes.kmShow=1;
 								}else{
@@ -593,7 +606,7 @@
 							var obj = attendanceDetialData.nodeSubJson[i];
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes: '["' + obj.classNodes + '"]'
+								classNodes: obj.classNodes
 							}
 							arr.push(params);
 						}
