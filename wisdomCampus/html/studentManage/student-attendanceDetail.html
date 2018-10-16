@@ -69,6 +69,7 @@
 			.mui-popover-arrow {
 				display: none;
 			}
+			
 		</style>
 	</head>
 
@@ -206,7 +207,7 @@
 							</div>
 						</a>
 					</li>
-					<p v-if="attendanceDetail.quantizationAttendanceId==12" class="lineCell"></p>
+					<p  class="lineCell" style="margin-bottom: 0;"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;" v-if="attendanceDetail.quantizationAttendanceId==12">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.permision}}</p>
@@ -640,8 +641,6 @@
 						} else {
 							comData.outsidePermisionCode = ''
 						}
-						console.log(comData.outsidePermisionCode);
-						console.log(comData.outsidePermisionCode == 'outSchool');
 						if(comData.outsidePermisionCode == 'outSchool') {
 							comData.leaveSchoolTime = attendanceDetialData.attendanceDetail.leaveSchoolTime,
 								comData.backSchoolTime = attendanceDetialData.attendanceDetail.backSchoolTime
@@ -649,7 +648,7 @@
 							comData.leaveSchoolTime = '',
 								comData.backSchoolTime = ''
 						}
-						console.log(JSON.stringify(comData));
+						console.log(JSON.stringify(comData))
 						var wd = events.showWaiting();
 						getSaveAttendance(comData, function(data) {
 							wd.close();

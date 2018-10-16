@@ -147,7 +147,8 @@
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
 			
-			
+			var userPicker,userPickerType;
+			var canUpdate=true;
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
@@ -203,8 +204,6 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 2});
-						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
@@ -221,9 +220,7 @@
 						this.$options.methods.selectGrade();
 					},
 					selectAttendance:function(){
-						var userPicker = new m$.PopPicker({layer: 1});
-						userPicker.setData(selectTitle.atArray);
-						userPicker.show(function(items) {
+						userPickerType.show(function(items) {
 							selectTitle.attendance=_getParam(items[0], 'text');
 							selectTitle.attendanceValue=_getParam(items[0], 'value');
 							pageIndex = 1;
@@ -241,6 +238,8 @@
 				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					selectTitle.list=array;
+					userPicker = new m$.PopPicker({layer: 2});
+					userPicker.setData(selectTitle.list);
 					if(array.length>0){
 						var allGrade=array[0];
 						var allClasses=allGrade.children[0];
@@ -330,6 +329,11 @@
 						}];
 						var signArr = temp.concat(atArray);
 						selectTitle.atArray=signArr;
+						if(canUpdate){//考勤类型选择框只初始化一遍
+							canUpdate=false;
+							userPickerType = new m$.PopPicker({layer: 1});
+							userPickerType.setData(selectTitle.atArray);
+						}
 						pageIndex++;
 						if(flagRef == 0) { //刷新
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
