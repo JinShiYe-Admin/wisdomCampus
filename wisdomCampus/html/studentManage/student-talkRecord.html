@@ -122,11 +122,15 @@
 			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			
+			var userPicker,userPickerType;
 			mui.plusReady(function(){
 				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					selectTitle.list=array;
+					userPicker = new m$.PopPicker({layer: 3});
+					userPicker.setData(selectTitle.list);
+					userPickerType = new m$.PopPicker({layer: 1});
+					userPickerType.setData(selectTitle.typeList);
 					if(array.length>0){
 						var allGrade=array[0];
 						var allClasses=allGrade.children[0];
@@ -200,8 +204,6 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 3});
-						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
@@ -221,9 +223,7 @@
 					},
 					selectType:function(){
 						var obj=this;
-						var userPicker = new m$.PopPicker({layer: 1});
-						userPicker.setData(this.typeList);
-						userPicker.show(function(items) {
+						userPickerType.show(function(items) {
 							obj.type=_getParam(items[0], 'text')
 							obj.typeValue=_getParam(items[0], 'value')
 							

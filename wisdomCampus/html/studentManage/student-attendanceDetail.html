@@ -69,6 +69,7 @@
 			.mui-popover-arrow {
 				display: none;
 			}
+			
 		</style>
 	</head>
 
@@ -200,13 +201,13 @@
 					</li>
 					<li class="mui-table-view-cell">
 						<a>
-							<p class="mui-pull-right liDetail" v-for="nodeSub in attendanceDetail.nodeSubJson">{{nodeSub.subName}}</p>
+							<p class="mui-pull-right liDetail" v-for="nodeSub in attendanceDetialData.nodeSubJson">{{nodeSub.subName}}</p>
 							<div class="mui-media-body liTitle">
 								科目
 							</div>
 						</a>
 					</li>
-					<p v-if="attendanceDetail.quantizationAttendanceId==12" class="lineCell"></p>
+					<p  class="lineCell" style="margin-bottom: 0;"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;" v-if="attendanceDetail.quantizationAttendanceId==12">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.permision}}</p>
@@ -270,7 +271,7 @@
 									<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 										<div class="mui-input-row mui-checkbox mui-right">
 											<label style="width: 100%;">{{jc.text}}</label>
-											<template v-if="abc.classNodes.indexOf(jc.value) !=-1">
+											<template v-if="abc.classNodes.indexOf(String(jc.value)) !=-1">
 												<input :name="jc.text" :value="jc.value" type="checkbox" :checked="abc.classCanCheck==-1? false:true" :disabled="abc.classCanCheck==-1">
 											</template>
 											<template v-else>
@@ -374,12 +375,18 @@
 						
 						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
 						nodes.classNames = attendanceDetialData.attendanceDetail.period;
-						nodes.classNodes = attendanceDetialData.attendanceDetail.classNodes;
-						
+						var classArr=attendanceDetialData.attendanceDetail.classNodes.split(",");
+						nodes.classNodes=classArr;
+						if(classArr.length>1){
+							nodes.kmShow=-1; 
+						}
 						nodes.subCodes= attendanceDetialData.attendanceDetail.subCodes;
 						for(var i=0;i<attendanceDetialData.kmList.length;i++){
 							if(attendanceDetialData.kmList[i].value==attendanceDetialData.attendanceDetail.subCodes){
 								nodes.subName=attendanceDetialData.kmList[i].text;
+								break;
+							}else{
+								nodes.subName='暂无科目'
 							}
 						}
 						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
@@ -535,11 +542,10 @@
 							}
 						})
 						var nodes = this.nodeSubJson[index];
+						nodes.classNodes =  [];
 						if(names.length>0){
 							if(classes.indexOf("day") != -1){
-								classes=[];
-								classes.push('day');
-								nodes.classNodes =classes.join(",");
+								nodes.classNodes.push('day');
 								nodes.classNames ='全天';
 								nodes.kmShow=-1;
 								nodes.subName = '请选择';
@@ -593,10 +599,12 @@
 							title.titleBar = '提交';
 							attendanceDetialData.attendanceDetail.recordTime = getDate();
 							var nodes=attendanceDetialData.nodeSubJson[0];
-							if(nodes.kmShow==-1){
+							if(nodes.kmShow==1){
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							}
+							console.log(JSON.stringify(attendanceDetialData.nodeSubJson))
+							attendanceDetialData.$set(attendanceDetialData.nodeSubJson,0,nodes)
 						}
 
 					},
@@ -606,7 +614,8 @@
 							var obj = attendanceDetialData.nodeSubJson[i];
 							var params = {
 								attendanceTime: obj.attendanceTime,
-								classNodes: obj.classNodes
+								classNodes: obj.classNodes,
+								subCodes:obj.subCodes
 							}
 							arr.push(params);
 						}
@@ -632,8 +641,6 @@
 						} else {
 							comData.outsidePermisionCode = ''
 						}
-						console.log(comData.outsidePermisionCode);
-						console.log(comData.outsidePermisionCode == 'outSchool');
 						if(comData.outsidePermisionCode == 'outSchool') {
 							comData.leaveSchoolTime = attendanceDetialData.attendanceDetail.leaveSchoolTime,
 								comData.backSchoolTime = attendanceDetialData.attendanceDetail.backSchoolTime
@@ -641,7 +648,7 @@
 							comData.leaveSchoolTime = '',
 								comData.backSchoolTime = ''
 						}
-						console.log(JSON.stringify(comData));
+						console.log(JSON.stringify(comData))
 						var wd = events.showWaiting();
 						getSaveAttendance(comData, function(data) {
 							wd.close();
