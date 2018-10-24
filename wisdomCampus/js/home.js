@@ -89,7 +89,7 @@ var getHomeCircle = function(id) {
 		grideShow: 1
 	}, {
 		grideName: '学生管理',
-		grideShow: 1
+		grideShow: 0
 	}, {
 		grideName: '课堂管理',
 		grideShow: 0

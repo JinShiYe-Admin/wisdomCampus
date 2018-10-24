@@ -226,6 +226,7 @@ var studentMP = (function(mod) {
 			//			events.showWaiting();
 			//2.3 学校年级下班级
 			postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
+				console.log('2.3 学校年级下班级:' + JSON.stringify(data));
 				//				events.closeWaiting();
 				if(data.RspCode == 0) {
 					if(data.RspData) {
