@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1;//开发，1部署
+	mod.key = 0;//开发，1部署
 	var exLog = console.log;
 	console.log = function(hint, object) {
 		if(mod.key === 0) {

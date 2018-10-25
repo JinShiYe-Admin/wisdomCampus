@@ -121,7 +121,7 @@
 			<a id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;">{{btnText}}</a>
 		</header>
 		<div class="mui-content" id="actionDetialData" style="background: #fff;">
-			<ul class="mui-table-view" v-if="dataFlag == 1">
+			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<a>
 						<p class="mui-pull-right liDetail">{{actionDetail.gradeName}}</p>
@@ -149,7 +149,7 @@
 			</ul>
 			<p class="lineCell"></p>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" v-if="dataFlag == 1">
+				<ul class="mui-table-view" >
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
 						<a>
 							<p class="mui-pull-right liDetail">{{actionDetail.behaviorTypeTxt}}</p>
@@ -169,7 +169,7 @@
 				</ul>
 			</template>
 			<template v-else>
-				<ul class="mui-table-view" v-if="dataFlag == 1">
+				<ul class="mui-table-view" >
 					<li class="mui-table-view-cell" @tap="selectTypeAction()">
 						<a  class="aCss">行为类型</a>
 						<span  class="mui-navigate-right rCss">{{actionDetail.behaviorTypeTxt}}</span>
@@ -180,7 +180,7 @@
 					</li>
 				</ul>
 			</template>
-			<ul class="mui-table-view" v-if="dataFlag == 1">
+			<ul class="mui-table-view" >
 				<li class="mui-table-view-cell">
 					<a>
 						<div class="mui-media-body liTitle">
@@ -198,7 +198,7 @@
 			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }"  style="margin-bottom: -50px;">
 				<div id="MultiMedia_Body" class="multimedia-body"></div>
 			</div>
-			<ul class="mui-table-view" v-if="dataFlag == 1" :style="{display: isEdit=='edit'? 'none' : 'initial' }">	
+			<ul class="mui-table-view" :style="{display: isEdit=='edit'? 'none' : 'initial' }">	
 				<li class="mui-table-view-cell">
 					<template v-if="actionDetail.attachs!=[] && actionDetail.attachs!=undefined && actionDetail.attachs!=''">
 						<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
@@ -209,7 +209,7 @@
 				</li>
 			</ul>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" v-if="dataFlag == 1">	
+				<ul class="mui-table-view" >	
 					<li class="mui-table-view-cell">
 						<a>
 							<p class="mui-pull-right liDetail">{{actionDetail.behaviorTime}}</p>
@@ -229,7 +229,7 @@
 				</ul>
 			</template>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" v-if="dataFlag == 1">
+				<ul class="mui-table-view" >
 					<li class="mui-table-view-cell" >
 						<a class="aCss">节次</a>
 						<a style="width: 75%;float: right;margin-right: -30px;"><span  class="rCss">{{actionDetail.period}}</span></a>
@@ -238,14 +238,16 @@
 			</template>
 			<template v-else>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" >
-						<a href="#selectClasses" class="aCss">节次</a>
-						<a href="#selectClasses" style="width:75%;float: right;"><span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span></a>
+					<li class="mui-table-view-cell" @tap="selectJc()">
+						<!--<a href="#selectClasses" class="aCss">节次</a>
+						<a href="#selectClasses" style="width:75%;float: right;"><span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span></a>-->
+						<a class="aCss">节次</a>
+						<a style="width: 75%;float: right;margin-right: -30px;"><span  class="rCss">{{actionDetail.period}}</span></a>
 					</li>
 				</ul>
 			</template>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" v-if="dataFlag == 1">
+				<ul class="mui-table-view" >
 					<li class="mui-table-view-cell">
 						<a>
 							<p class="mui-pull-right liDetail">{{kmText}}</p>
@@ -265,7 +267,7 @@
 				</ul>
 			</template>
 			<p class="lineCell"></p>
-			<ul class="mui-table-view" v-if="dataFlag == 1">
+			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" style="margin-top: -10px;">
 					<a>
 						<p class="mui-pull-right liDetail">{{actionDetail.recorder}}</p>
@@ -283,7 +285,7 @@
 					</a>
 				</li>
 			</ul>
-			<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;">
+			<!--<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;">
 				<div class="mui-popover-arrow" style="display: none;"></div>
 				<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 					<div class="mui-scroll">
@@ -302,7 +304,6 @@
 							<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
 								<div class="mui-input-row mui-checkbox mui-right">
 									<label style="width: 100%;">{{jc.text}}</label>
-									<!--<input :name="jc.text" :value="jc.value" type="checkbox">-->
 									<template v-if="actionDetail.classNodes.indexOf(jc.value) !=-1">
 										<input :name="jc.text" :value="jc.value" type="checkbox" :checked="classCanCheck==-1? false:true" :disabled="classCanCheck==-1">
 									</template>
@@ -317,7 +318,7 @@
 				<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
 					<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event)">确定</button>
 				</div>
-			</div>
+			</div>-->
 		</div>
 		<div id="videoPopover" class="mui-popover">
 			<video id="video" style="position: absolute;z-index: 999;" controls="controls" webkit-playsinline playsinline>
@@ -387,7 +388,6 @@
 			var actionDetialData = new Vue({
 				el: "#actionDetialData",
 				data: {
-					dataFlag: 1,//无用
 					gradeText:'请选择',
 					classesText:'请选择',
 					studentText:'请选择',
@@ -443,48 +443,55 @@
 						});
 					},
 					selectJc: function(e) { //选择节次
-						var classes = [];
-						var names = [];
-						var obj = e.target;
-						var id = '#selectClasses';
-						$(id).find('li').each(function() {
-							if($(this).find('input').prop("checked")) {
-								names.push($(this).find('label').text());
-								classes.push($(this).find('input').val());
-							}
-						})
-						if(names.length>0){
-							if(classes.indexOf("day") != -1){
-								actionDetialData.actionDetail.period ='全天';
-								actionDetialData.actionDetail.classNodes = 'day';
-								actionDetialData.kmShow=-1;
-								actionDetialData.kmText='请选择';
-								actionDetialData.actionDetail.subCode='';
-							}else{
-								actionDetialData.actionDetail.period = names.join(",");
-								actionDetialData.actionDetail.classNodes = classes.join(",");
-								if(classes.length==1){
-									actionDetialData.kmShow=1;
-								}else{
-									actionDetialData.kmShow=-1;
-									actionDetialData.kmText='请选择';
-									actionDetialData.actionDetail.subCode='';
-								}
-							}
-						}else{
-							actionDetialData.actionDetail.period = '请选择';
-							actionDetialData.actionDetail.classNodes ='';
-							actionDetialData.kmShow=1;
-						}
-						mui(id).popover('toggle');
+//						var classes = [];
+//						var names = [];
+//						var obj = e.target;
+//						var id = '#selectClasses';
+//						$(id).find('li').each(function() {
+//							if($(this).find('input').prop("checked")) {
+//								names.push($(this).find('label').text());
+//								classes.push($(this).find('input').val());
+//							}
+//						})
+//						if(names.length>0){
+//							if(classes.indexOf("day") != -1){
+//								actionDetialData.actionDetail.period ='全天';
+//								actionDetialData.actionDetail.classNodes = 'day';
+//								actionDetialData.kmShow=-1;
+//								actionDetialData.kmText='请选择';
+//								actionDetialData.actionDetail.subCode='';
+//							}else{
+//								actionDetialData.actionDetail.period = names.join(",");
+//								actionDetialData.actionDetail.classNodes = classes.join(",");
+//								if(classes.length==1){
+//									actionDetialData.kmShow=1;
+//								}else{
+//									actionDetialData.kmShow=-1;
+//									actionDetialData.kmText='请选择';
+//									actionDetialData.actionDetail.subCode='';
+//								}
+//							}
+//						}else{
+//							actionDetialData.actionDetail.period = '请选择';
+//							actionDetialData.actionDetail.classNodes ='';
+//							actionDetialData.kmShow=1;
+//						}
+//						mui(id).popover('toggle');
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(actionDetialData.jcList);
+						userPicker.show(function(items) {
+							console.log(_getParam(items[0], 'text'));
+							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
+							actionDetialData.actionDetail.period=_getParam(items[0], 'text');
+						});
 					},
-					classItemCheck:function(){
-						if(this.classCanCheck==1){
-							this.classCanCheck=-1
-						}else{
-							this.classCanCheck=1
-						}
-					},
+//					classItemCheck:function(){
+//						if(this.classCanCheck==1){
+//							this.classCanCheck=-1
+//						}else{
+//							this.classCanCheck=1
+//						}
+//					},
 					selectKm:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.kmList);
@@ -597,7 +604,6 @@
 						actionDetialData.actionDetailSum = data.RspData;
 						actionDetialData.actionDetail = sb;
 						actionDetialData.curPage = curPage;
-						actionDetialData.dataFlag = 1;
 						actionDetialData.content=sb.detail;
 						if(actionDetialData.actionDetail.classNodes=='day'){
 							actionDetialData.classCanCheck=-1;
@@ -608,7 +614,6 @@
 								actionDetialData.kmText=actionDetialData.kmList[i].text;
 							}
 						}
-						//TODO
 						actionDetialData.actionList=data.RspData.qb;
 						actionDetialData.jcList=data.RspData.cn;
 						
@@ -826,20 +831,20 @@
 				}
 				
 				console.log('tempData:'+JSON.stringify(tempData));
-				var wd = events.showWaiting();
-				getActionSaveBehavior(tempData,function(data) {
-					wd.close();
-					console.log('8.保存行为信息 ' + JSON.stringify(data));
-					if(data.RspCode == 0) {
-						mui.toast('保存成功');
-						setTimeout(function(){
-							mui.back();
-						},2000)
-					} else {
-						document.getElementById("finish").disabled = false;
-						mui.toast(data.RspTxt);
-					} 
-				});
+//				var wd = events.showWaiting();
+//				getActionSaveBehavior(tempData,function(data) {
+//					wd.close();
+//					console.log('8.保存行为信息 ' + JSON.stringify(data));
+//					if(data.RspCode == 0) {
+//						mui.toast('保存成功');
+//						setTimeout(function(){
+//							mui.back();
+//						},2000)
+//					} else {
+//						document.getElementById("finish").disabled = false;
+//						mui.toast(data.RspTxt);
+//					} 
+//				});
 			}
 
 			/**

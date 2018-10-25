@@ -228,11 +228,13 @@
 						<a  class="aCss">发生日期</a>
 						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
-					<li class="mui-table-view-cell" >
-						<a href="#selectClasses" class="aCss">节次</a>
-						<a href="#selectClasses" style="width: 75%;float: right;"><span  class="mui-navigate-right  rCss" >{{jcText}}</span></a>
+					<li class="mui-table-view-cell" @tap="selectJc()">
+						<!--<a href="#selectClasses" class="aCss">节次</a>
+						<a href="#selectClasses" style="width: 75%;float: right;"><span  class="mui-navigate-right  rCss" >{{jcText}}</span></a>-->
+						<a  class="aCss">节次</a>
+						<span  class="mui-navigate-right  rCss">{{jcText}}</span>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectKm()" v-if="kmShow==1">
+					<li class="mui-table-view-cell" @tap="selectKm()" ><!--v-if="kmShow==1"-->
 						<a  class="aCss">科目</a>
 						<span  class="mui-navigate-right  rCss">{{kmText}}</span>
 					</li>
@@ -251,7 +253,7 @@
 						</li>
 					</ul>
 				</div>
-				<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;width: 80%;">
+				<!--<div id="selectClasses" class="mui-popover" ref="scrollBox" style="height: 300px;width: 80%;">
 					<div class="mui-popover-arrow" style="display: none;"></div>
 					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 						<div class="mui-scroll">
@@ -274,7 +276,7 @@
 					<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
 						<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event)">确定</button>
 					</div>
-				</div>
+				</div>-->
 			</div>
 		</div>
 		<div id="videoPopover" class="mui-popover">
@@ -419,40 +421,46 @@
 						});
 					},
 					selectJc: function(e) { //选择节次
-						var classes = [];
-						var names = [];
-						var obj = e.target;
-						var id = '#selectClasses';
-						$(id).find('li').each(function() {
-							if($(this).find('input').prop("checked")) {
-								names.push($(this).find('label').text());
-								classes.push($(this).find('input').val());
-							}
-						})
-						if(names.length>0){
-							if(classes.indexOf("day") != -1){
-								talkTitle.jcText ='全天';
-								talkTitle.jcValue ='day';
-								talkTitle.kmShow=-1;
-								talkTitle.kmText='请选择';
-								talkTitle.kmValue='';
-							}else{
-								talkTitle.jcText = names.join(",");
-								talkTitle.jcValue = classes.join(",");
-								if(classes.length==1){
-									talkTitle.kmShow=1;
-								}else{
-									talkTitle.kmShow=-1;
-									talkTitle.kmText='请选择';
-									talkTitle.kmValue='';
-								}
-							}
-						}else{
-							talkTitle.kmShow=1;
-							talkTitle.jcText='请选择';
-							talkTitle.jcValue = '';
-						}
-						mui(id).popover('toggle');
+//						var classes = [];
+//						var names = [];
+//						var obj = e.target;
+//						var id = '#selectClasses';
+//						$(id).find('li').each(function() {
+//							if($(this).find('input').prop("checked")) {
+//								names.push($(this).find('label').text());
+//								classes.push($(this).find('input').val());
+//							}
+//						})
+//						if(names.length>0){
+//							if(classes.indexOf("day") != -1){
+//								talkTitle.jcText ='全天';
+//								talkTitle.jcValue ='day';
+//								talkTitle.kmShow=-1;
+//								talkTitle.kmText='请选择';
+//								talkTitle.kmValue='';
+//							}else{
+//								talkTitle.jcText = names.join(",");
+//								talkTitle.jcValue = classes.join(",");
+//								if(classes.length==1){
+//									talkTitle.kmShow=1;
+//								}else{
+//									talkTitle.kmShow=-1;
+//									talkTitle.kmText='请选择';
+//									talkTitle.kmValue='';
+//								}
+//							}
+//						}else{
+//							talkTitle.kmShow=1;
+//							talkTitle.jcText='请选择';
+//							talkTitle.jcValue = '';
+//						}
+//						mui(id).popover('toggle');
+						var userPicker = new $M.PopPicker({layer: 1});
+						userPicker.setData(talkTitle.jcList);
+						userPicker.show(function(items) {
+							talkTitle.jcText=_getParam(items[0], 'text');
+							talkTitle.jcValue=_getParam(items[0], 'value');
+						});
 					},
 					selectKm:function(){
 						var userPicker = new $M.PopPicker({layer: 1});
@@ -515,7 +523,6 @@
 					utoken: personal.utoken, //用户令牌
 					appid: publicParameter.appid //系统所分配的应用ID
 				};
-				//登录
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						console.log("data1:"+data1.RspTxt);
@@ -711,20 +718,20 @@
 					
 				}
 				console.log('tempData:'+JSON.stringify(tempData));
-				var wd = events.showWaiting();
-				getActionSaveBehavior(tempData,function(data) {
-					wd.close();
-					console.log('8.保存行为信息 ' + JSON.stringify(data));
-					if(data.RspCode == 0) {
-						mui.toast('保存成功');
-						setTimeout(function(){
-							mui.back();
-						},2000)
-					} else {
-						document.getElementById("finish").disabled = false;
-						mui.toast(data.RspTxt);
-					} 
-				});
+//				var wd = events.showWaiting();
+//				getActionSaveBehavior(tempData,function(data) {
+//					wd.close();
+//					console.log('8.保存行为信息 ' + JSON.stringify(data));
+//					if(data.RspCode == 0) {
+//						mui.toast('保存成功');
+//						setTimeout(function(){
+//							mui.back();
+//						},2000)
+//					} else {
+//						document.getElementById("finish").disabled = false;
+//						mui.toast(data.RspTxt);
+//					} 
+//				});
 			}
 
 			/**
