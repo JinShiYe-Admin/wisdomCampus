@@ -342,7 +342,7 @@
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
 				//判断是否需要更新
-				setTimeout(appUpdate.updateApp(storageKeyName.SCHOOLID), 5000);
+				setTimeout(appUpdate.updateApp(personal.schid), 5000);
 			});
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {
@@ -559,7 +559,7 @@
 				var tempFlag = 0;
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					receiveManId: personal.utid
 				}
 				getNoReadCntByManPro(tempData, function function_name(data) {
@@ -586,7 +586,7 @@
 					}
 				});
 				tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					approveManId: personal.utid
 				}
 				getNoApproveCntByManPro(tempData, function function_name(data) {

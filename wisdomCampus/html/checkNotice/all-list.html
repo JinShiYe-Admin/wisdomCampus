@@ -421,7 +421,7 @@
 							if(id == "1" && title == "send") {
 								console.log('qqqqqq111');
 								tempData = {
-									schoolId: storageKeyName.SCHOOLID, //学校ID
+									schoolId: personal.schid, //学校ID
 									sendManId: personal.utid, //发送人ID
 									title: '', //标题
 									status: '0', //状态,0 全部,1 发出,2 撤销
@@ -459,7 +459,7 @@
 									tempStatus = 1
 								}
 								tempData = {
-									schoolId: storageKeyName.SCHOOLID, //学校ID
+									schoolId: personal.schid, //学校ID
 									sendMan: '', //发送人ID
 									receiveManId: personal.utid, //接收人ID
 									title: '', //标题
@@ -490,7 +490,7 @@
 							} else if(id == "2" && title == "send") {
 								console.log('qqqqqq333');
 								tempData = {
-									schoolId: storageKeyName.SCHOOLID, //学校ID
+									schoolId: personal.schid, //学校ID
 									applyManId: personal.utid, //申请人ID
 									title: '', //标题
 									status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
@@ -534,7 +534,7 @@
 									tempStatus = 1
 								}
 								tempData = {
-									schoolId: storageKeyName.SCHOOLID, //学校ID
+									schoolId: personal.schid, //学校ID
 									approveManId: personal.utid, //审批人ID
 									title: '', //标题
 									applyMan: '', //申请人姓名

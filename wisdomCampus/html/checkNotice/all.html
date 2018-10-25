@@ -388,7 +388,7 @@
 
 					if(title == "notice" && sendFlag == "send") {
 						tempData = {
-							schoolId: storageKeyName.SCHOOLID, //学校ID
+							schoolId: personal.schid, //学校ID
 							sendManId: personal.utid, //发送人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销
@@ -418,7 +418,7 @@
 					} else if(title == "notice" && sendFlag == "recevice") {
 
 						tempData = {
-							schoolId: storageKeyName.SCHOOLID, //学校ID
+							schoolId: personal.schid, //学校ID
 							sendMan: '', //发送人ID
 							receiveManId: personal.utid, //接收人ID
 							title: '', //标题
@@ -444,7 +444,7 @@
 						});
 					} else if(title == "apply" && sendFlag == "send") {
 						tempData = {
-							schoolId: storageKeyName.SCHOOLID, //学校ID
+							schoolId: personal.schid, //学校ID
 							applyManId: personal.utid, //申请人ID
 							title: '', //标题
 							status: '0', //状态,0 全部,1 发出,2 撤销，3 被退回
@@ -474,7 +474,7 @@
 						});
 					} else if(title == "apply" && sendFlag == "recevice") {
 						tempData = {
-							schoolId: storageKeyName.SCHOOLID, //学校ID
+							schoolId: personal.schid, //学校ID
 							approveManId: personal.utid, //审批人ID
 							title: '', //标题
 							applyMan: '', //申请人姓名

@@ -382,7 +382,7 @@
 			//17.获取选择用考勤类型
 			function getAttendType() {
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					pageIndex: '1', //当前页数
 					pageSize: '0' //每页记录数，0 为全部
 				}
@@ -404,7 +404,7 @@
 
 			function getAttendArea() {
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					stat: 1,
 					pageIndex: 1,
 					pageSize: 0

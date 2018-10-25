@@ -293,7 +293,7 @@
 			//12.获取考勤类型
 			var attend = function() {
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					pageIndex: 1,
 					pageSize: 0
 				}
@@ -308,7 +308,7 @@
 			//14.获取考勤地点
 			var area = function() {
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					stat: 0,
 					pageIndex: 1,
 					pageSize: 0

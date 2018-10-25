@@ -410,7 +410,7 @@
 				events.showWaiting();
 
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 					applyTitle: message.title, //标题
 					applyContent: message.content, //内容
 					applyEncName: encName, //附件名称
@@ -442,7 +442,7 @@
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 
 				var tempData = {
-					schoolId: storageKeyName.SCHOOLID, //学校ID
+					schoolId: personal.schid, //学校ID
 
 				}
 				getSelWorkFlowPro(tempData, function function_name(data) {
