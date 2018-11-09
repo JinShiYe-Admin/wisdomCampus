@@ -718,20 +718,20 @@
 					
 				}
 				console.log('tempData:'+JSON.stringify(tempData));
-//				var wd = events.showWaiting();
-//				getActionSaveBehavior(tempData,function(data) {
-//					wd.close();
-//					console.log('8.保存行为信息 ' + JSON.stringify(data));
-//					if(data.RspCode == 0) {
-//						mui.toast('保存成功');
-//						setTimeout(function(){
-//							mui.back();
-//						},2000)
-//					} else {
-//						document.getElementById("finish").disabled = false;
-//						mui.toast(data.RspTxt);
-//					} 
-//				});
+				var wd = events.showWaiting();
+				getActionSaveBehavior(tempData,function(data) {
+					wd.close();
+					console.log('8.保存行为信息 ' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						mui.toast('保存成功');
+						setTimeout(function(){
+							mui.back();
+						},2000)
+					} else {
+						document.getElementById("finish").disabled = false;
+						mui.toast(data.RspTxt);
+					} 
+				});
 			}
 
 			/**

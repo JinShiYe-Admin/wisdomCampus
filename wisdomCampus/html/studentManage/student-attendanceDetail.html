@@ -81,7 +81,7 @@
 		</header>
 		<div id="attendanceDetialData">
 			<div class="mui-content" style="margin-top: 45px;">
-				<ul class="mui-table-view" v-if="dataFlag == 1">
+				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.gradeName}}</p>
@@ -157,7 +157,7 @@
 					</ul>
 				</div>
 				<p class="lineCell"></p>
-				<ul class="mui-table-view" v-show="update=='0'" v-if="dataFlag == 1">
+				<ul class="mui-table-view" v-show="update=='0'">
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
 						<a>
 							<p class="mui-pull-right liDetail">{{attendanceDetail.attendanceTypeTxt}}</p>
@@ -257,14 +257,25 @@
 						<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 							<div class="mui-scroll">
 								<ul class="mui-table-view" style="background: #393D49;color: #fff;">
-									<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
+									<li  v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
 										<div class="mui-input-row mui-checkbox mui-right">
 											<label style="width: 100%;">全天</label>
 											<template v-if="abc.classNodes.indexOf('day') !=-1">
-												<input name="全天" value="day" type="checkbox" checked>
+												<input name="全天" value="day" type="checkbox" checked :disabled="abc.dayCanCheck==-1">
 											</template>
 											<template v-else>
-												<input name="全天" value="day" type="checkbox" >
+												<input name="全天" value="day" type="checkbox" :disabled="abc.dayCanCheck==-1">
+											</template>
+										</div>
+									</li>
+									<li  v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheckHalf(index)">
+										<div class="mui-input-row mui-checkbox mui-right">
+											<label style="width: 100%;">半天</label>
+											<template v-if="abc.classNodes.indexOf('halfday') !=-1">
+												<input name="半天" value="halfday" type="checkbox" checked :disabled="abc.halfDayCanCheck==-1">
+											</template>
+											<template v-else>
+												<input name="半天" value="halfday" type="checkbox" :disabled="abc.halfDayCanCheck==-1">
 											</template>
 										</div>
 									</li>
@@ -348,19 +359,18 @@
 					id: curPage.id
 				}
 				getAttendanceDetail(tempData, function funcName(data) {
+					var test_json={"code":"","msg":"","jsonString":"","state":"ok","jump":"","fileData":"","RspCode":"0000","RspTxt":"","RspData":{"qa":[{"dataArray":[{"text":"请假","type":1,"value":12,"test":"qj"},{"text":"迟到","type":0,"value":13,"test":"cd"},{"text":"早退","type":0,"value":14,"test":"zt"},{"text":"旷课","type":0,"value":15,"test":"kk"}],"value":"classAttendance"},{"dataArray":[{"text":"午休未归","type":0,"value":16,"test":"wxwg"},{"text":"午休吵闹","type":0,"value":17,"test":"wxcn"}],"value":"dormitoryAttendance"},{"dataArray":[{"text":"早操迟到","type":0,"value":18,"test":"zccd"},{"text":"旷操","type":0,"value":19,"test":"kc"}],"value":"outClassAttendance"}],"permission":[{"text":"可回宿舍","value":"backDorm"},{"text":"可出入校园","value":"outSchool"}],"cn":[{"text":"第一节","value":15},{"text":"第二节","value":16},{"text":"第三节","value":17},{"text":"第四节","value":18},{"text":"第五节","value":19},{"text":"第六节","value":20},{"text":"第七节","value":21},{"text":"第八节","value":22},{"text":"第九节","value":23},{"text":"第十节","value":24}],"sa":{"explain":"ggg","gradeId":14,"period":"第一节","recorder":null,"attendanceTime":"2018-10-15","permision":"","backSchoolTime":"","studentId":370,"attendanceType":"classAttendance","classId":3,"leaveSchoolTime":"","recordTime":"2018-10-15","outsidePermisionCode":"","studentName":"09","subCodes":"11","classNodes":"15","attendanceTypeTxt":"课堂考勤","createUser":150,"id":148,"quantizationAttendanceId":13,"attendanceName":"迟到"},"atArray":[{"text":"课堂考勤","value":"classAttendance"},{"text":"宿舍考勤","value":"dormitoryAttendance"},{"text":"课外考勤","value":"outClassAttendance"}]}};
+					data=test_json;
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						attendanceDetialData.kqxxList = data.RspData.qa[0].dataArray;
-						attendanceDetialData.jcList = data.RspData.cn;
-						attendanceDetialData.qxList = data.RspData.permission;
-
-						attendanceDetialData.attendanceDetail = data.RspData.sa;
-						attendanceDetialData.attendanceDetailSum = data.RspData;
-						//合并对象
-						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);
+						attendanceDetialData.kqxxList = data.RspData.qa[0].dataArray;//得到考勤细项数组
+						attendanceDetialData.jcList = data.RspData.cn;//得到节次数组
+						attendanceDetialData.qxList = data.RspData.permission;//得到权限数组
+						attendanceDetialData.attendanceDetail = data.RspData.sa;//得到考勤详情
+						attendanceDetialData.attendanceDetailSum = data.RspData;//得到所有的返回数据
+						attendanceDetialData.attendanceDetail = $.extend(attendanceDetialData.attendanceDetail, curPage);//合并对象
 						console.log('attendanceDetialData.attendanceDetail:' + JSON.stringify(attendanceDetialData.attendanceDetail));
-						attendanceDetialData.dataFlag = 1;
-						attendanceDetialData.content = attendanceDetialData.attendanceDetail.explain;
+						attendanceDetialData.content = attendanceDetialData.attendanceDetail.explain;//将考勤说明 的内容 赋值给textarea绑定的vue对象
 						
 						var nodes={
 							canDelete: '0',
@@ -370,16 +380,19 @@
 							subCodes:'',
 							subName:'请选择',
 							classCanCheck:1,
+							dayCanCheck:1,
+							halfDayCanCheck:1,
 							kmShow:1
 						}
 						
-						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;
+						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime;//给nodes对象赋值，用于修改操作
 						nodes.classNames = attendanceDetialData.attendanceDetail.period;
 						var classArr=attendanceDetialData.attendanceDetail.classNodes.split(",");
 						nodes.classNodes=classArr;
 						if(classArr.length>1){
 							nodes.kmShow=-1; 
 						}
+						
 						nodes.subCodes= attendanceDetialData.attendanceDetail.subCodes;
 						for(var i=0;i<attendanceDetialData.kmList.length;i++){
 							if(attendanceDetialData.kmList[i].value==attendanceDetialData.attendanceDetail.subCodes){
@@ -390,12 +403,38 @@
 							}
 						}
 						if(attendanceDetialData.attendanceDetail.classNodes=='day'){
+							nodes.halfDayCanCheck=-1;
 							nodes.classCanCheck=-1; 
 							nodes.kmShow=-1; 
 						}
-						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == '12') {
-							attendanceDetialData.qxShow = '1';
+						if(attendanceDetialData.attendanceDetail.classNodes=='halfday'){
+							nodes.dayCanCheck=-1;
+							nodes.classCanCheck=-1; 
+							nodes.kmShow=-1; 
 						}
+						//根据回传的考勤细项ID（quantizationAttendanceId） 和 考勤类型编码（attendanceType） 遍历 考勤类型与考勤细项关联数组（qa）,找到对应的考勤细项，判断是否选择的是请假或者缺勤，如果是，则显示全天、半天
+						var attendanceType=attendanceDetialData.attendanceDetail.attendanceType;
+						var qa=data.RspData.qa;
+						for(var i=0;i<qa.length;i++){
+							var value=qa[i].value;
+							if(attendanceType==value){
+								var dataArray=qa[i].dataArray;
+								var quantizationAttendanceId=attendanceDetialData.attendanceDetail.quantizationAttendanceId;
+								for(var j=0;j<dataArray.length;j++){
+									var dValue=dataArray[j].value;
+									if(quantizationAttendanceId==dValue){
+										var test=dataArray[j].test;
+										if(test=="qj"||test=="qq"){
+											attendanceDetialData.dayShow="1";
+										}
+										if(test=="qj"){
+											attendanceDetialData.qxShow="1";
+										}
+									}
+								}
+							}
+						}
+						
 						if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
 							attendanceDetialData.sjShow = '1';
 						}
@@ -422,7 +461,6 @@
 			var attendanceDetialData = new Vue({
 				el: "#attendanceDetialData",
 				data: {
-					dataFlag: 0,
 					attendanceDetail: {},
 					attendanceDetailSum: {},
 					kqxx: '请选择',
@@ -435,6 +473,7 @@
 					kmList: [],
 					jcList: [],
 					qxList: [],
+					dayShow: '0',
 					nodeSubJson: [{
 						canDelete: '0',
 						attendanceTime: "请选择",
@@ -443,6 +482,8 @@
 						subCodes:'',
 						subName:'请选择',
 						classCanCheck:1,
+						dayCanCheck:1,
+						halfDayCanCheck:1,
 						kmShow:1
 					}], //存值用：时间和节次集合
 					content: '', //存值用:考勤说明
@@ -505,7 +546,7 @@
 							attendanceDetialData.attendanceDetail.attendanceName = _getParam(items[0], 'text');
 							attendanceDetialData.attendanceDetail.quantizationAttendanceId = _getParam(items[0], 'value');
 							attendanceDetialData.qxShow = '0';
-							if(_getParam(items[0], 'value') == '12') {
+							if(_getParam(items[0], 'test') == 'qj') {
 								attendanceDetialData.qxShow = '1';
 							}else{
 								attendanceDetialData.attendanceDetail.backSchoolTime='请选择';
@@ -513,6 +554,9 @@
 								attendanceDetialData.attendanceDetail.outsidePermisionCode='';
 								attendanceDetialData.attendanceDetail.permision='请选择'
 								attendanceDetialData.sjShow = '0';
+							}
+							if(_getParam(items[0], 'test') == 'qj'||_getParam(items[0], 'test') == 'qq'){//如果是请假和缺勤，显示全天和半天
+								attendanceDetialData.dayShow='1';
 							}
 						});
 					},
@@ -550,6 +594,12 @@
 								nodes.kmShow=-1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
+							}else if(classes.indexOf("halfday") != -1){
+								nodes.classNodes.push('halfday');
+								nodes.classNames ='半天';
+								nodes.kmShow=-1;
+								nodes.subName = '请选择';
+								nodes.subCodes = '';
 							}else{
 								for(var i=0;i<classes.length;i++){
 									nodes.classNodes.push(classes[i]);
@@ -572,11 +622,34 @@
 					},
 					classItemCheck:function(index){
 						var nodeSubJson=attendanceDetialData.nodeSubJson[index];
-						if(nodeSubJson.classCanCheck==1){
-							nodeSubJson.classCanCheck=-1
-						}else{
-							nodeSubJson.classCanCheck=1
+						if(nodeSubJson.dayCanCheck==1){
+							if(nodeSubJson.classCanCheck==1){
+								nodeSubJson.classCanCheck=-1;
+							}else{
+								nodeSubJson.classCanCheck=1;
+							}
+							if(nodeSubJson.halfDayCanCheck==1){
+								nodeSubJson.halfDayCanCheck=-1;
+							}else{
+								nodeSubJson.halfDayCanCheck=1;
+							}
 						}
+					},
+					classItemCheckHalf:function(index){
+						var nodeSubJson=attendanceDetialData.nodeSubJson[index];
+						if(nodeSubJson.halfDayCanCheck==1){
+							if(nodeSubJson.classCanCheck==1){
+								nodeSubJson.classCanCheck=-1;
+							}else{
+								nodeSubJson.classCanCheck=1;
+							}
+							if(nodeSubJson.dayCanCheck==1){
+								nodeSubJson.dayCanCheck=-1;
+							}else{
+								nodeSubJson.dayCanCheck=1;
+							}
+						}
+						
 					},
 					selectKm: function(e, index) { //选择科目
 						var userPicker = new $M.PopPicker({
@@ -636,7 +709,7 @@
 							recordTime: attendanceDetialData.attendanceDetail.recordTime
 						}
 
-						if(attendanceDetialData.attendanceDetail.quantizationAttendanceId == 12) {
+						if(attendanceDetialData.qxShow =='1') {
 							comData.outsidePermisionCode = attendanceDetialData.attendanceDetail.outsidePermisionCode
 						} else {
 							comData.outsidePermisionCode = ''
@@ -649,19 +722,19 @@
 								comData.backSchoolTime = ''
 						}
 						console.log(JSON.stringify(comData))
-						var wd = events.showWaiting();
-						getSaveAttendance(comData, function(data) {
-							wd.close();
-							console.log('3.保存考勤' + JSON.stringify(data));
-							if(data.RspCode == 0) {
-								mui.toast(data.RspTxt);
-								setTimeout(function() {
-									mui.back();
-								}, 2000)
-							} else {
-								mui.toast(data.RspTxt);
-							}
-						});
+//						var wd = events.showWaiting();
+//						getSaveAttendance(comData, function(data) {
+//							wd.close();
+//							console.log('3.保存考勤' + JSON.stringify(data));
+//							if(data.RspCode == 0) {
+//								mui.toast(data.RspTxt);
+//								setTimeout(function() {
+//									mui.back();
+//								}, 2000)
+//							} else {
+//								mui.toast(data.RspTxt);
+//							}
+//						});
 					}
 				}
 			});

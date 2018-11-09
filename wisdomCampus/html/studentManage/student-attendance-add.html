@@ -252,10 +252,16 @@
 					<div class='mui-scroll-wrapper' style="margin: 7px 0 45px 0;">
 						<div class="mui-scroll">
 							<ul class="mui-table-view" style="background: #393D49;color: #fff;">
-								<li class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
+								<li v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">全天</label>
-										<input name="全天" value="day" type="checkbox" >
+										<input name="全天" value="day" type="checkbox" :disabled="abc.dayCanCheck==-1">
+									</div>
+								</li>
+								<li v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheckHalf(index)">
+									<div class="mui-input-row mui-checkbox mui-right">
+										<label style="width: 100%;">半天</label>
+										<input name="半天" value="halfday" type="checkbox" :disabled="abc.halfDayCanCheck==-1">
 									</div>
 								</li>
 								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
@@ -314,6 +320,47 @@
 				var wd = events.showWaiting();
 				getAttendanceDetail(comData, function(data) {
 					wd.close();
+					var test_json={
+						"code":"",
+						"msg":"",
+						"jsonString":"",
+						"state":"ok",
+						"jump":"",
+						"fileData":"",
+						"RspCode":"0000",
+						"RspTxt":"",
+						"RspData":{
+							"qa":[
+							{"dataArray":[
+							{"text":"请假","type":1,"value":12,"test":"qj"},
+							{"text":"迟到","type":0,"value":13,"test":"cd"},
+							{"text":"早退","type":0,"value":14,"test":"zt"},
+							{"text":"旷课","type":0,"value":15,"test":"kk"}],
+							"value":"classAttendance"},
+							{"dataArray":[
+							{"text":"午休未归","type":0,"value":16,"test":"wxwg"},
+							{"text":"午休吵闹","type":0,"value":17,"test":"wxcn"}
+							],"value":"dormitoryAttendance"},
+							{"dataArray":[{"text":"早操迟到","type":0,"value":18,"test":"zccd"},
+							{"text":"旷操","type":0,"value":19,"test":"kc"}],"value":"outClassAttendance"}],
+							"permission":[{"text":"可回宿舍","value":"backDorm"},{"text":"可出入校园","value":"outSchool"}],
+							"cn":[
+							{"text":"第一节","value":15},
+							{"text":"第二节","value":16},
+							{"text":"第三节","value":17},
+							{"text":"第四节","value":18},
+							{"text":"第五节","value":19},
+							{"text":"第六节","value":20},
+							{"text":"第七节","value":21},
+							{"text":"第八节","value":22},
+							{"text":"第九节","value":23},
+							{"text":"第十节","value":24}],"sa":{},
+							"atArray":[
+							{"text":"课堂考勤","value":"classAttendance"},
+							{"text":"宿舍考勤","value":"dormitoryAttendance"},
+							{"text":"课外考勤","value":"outClassAttendance"}]}}
+					
+					data=test_json
 					console.log('2.考勤详情' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						talkTitle.kqDetail = data.RspData;
@@ -402,6 +449,7 @@
 					kqrq: '请选择',
 					qxShow: '0',
 					sjShow: '0',
+					dayShow: '0',
 					gradelist: [],
 					kqxxNameList: [],
 					kqlxNameList: [],
@@ -416,6 +464,8 @@
 						subCodes:'',
 						subName:'请选择',
 						classCanCheck:1,
+						dayCanCheck:1,
+						halfDayCanCheck:1,
 						kmShow:1
 						
 					}], //存值用：时间和节次集合
@@ -495,11 +545,35 @@
 					},
 					classItemCheck:function(index){
 						var nodeSubJson=talkTitle.nodeSubJson[index];
-						if(nodeSubJson.classCanCheck==1){
-							nodeSubJson.classCanCheck=-1
-						}else{
-							nodeSubJson.classCanCheck=1
+						if(nodeSubJson.dayCanCheck==1){
+							if(nodeSubJson.classCanCheck==1){
+								nodeSubJson.classCanCheck=-1;
+							}else{
+								nodeSubJson.classCanCheck=1;
+							}
+							if(nodeSubJson.halfDayCanCheck==1){
+								nodeSubJson.halfDayCanCheck=-1;
+							}else{
+								nodeSubJson.halfDayCanCheck=1;
+							}
 						}
+						
+					},
+					classItemCheckHalf:function(index){
+						var nodeSubJson=talkTitle.nodeSubJson[index];
+						if(nodeSubJson.halfDayCanCheck==1){
+							if(nodeSubJson.classCanCheck==1){
+								nodeSubJson.classCanCheck=-1;
+							}else{
+								nodeSubJson.classCanCheck=1;
+							}
+							if(nodeSubJson.dayCanCheck==1){
+								nodeSubJson.dayCanCheck=-1;
+							}else{
+								nodeSubJson.dayCanCheck=1;
+							}
+						}
+						
 					},
 					selectKm: function(e, index) { //选择科目
 						var userPicker = new $M.PopPicker({
@@ -522,9 +596,9 @@
 						userPicker.show(function(items) {
 							talkTitle.kqxxName = _getParam(items[0], 'text');
 							talkTitle.kqxxValue = _getParam(items[0], 'value');
-
 							talkTitle.qxShow = '0';
-							if(_getParam(items[0], 'value') == '12') {
+							talkTitle.dayShow='0';
+							if(_getParam(items[0], 'test') == 'qj') {
 								talkTitle.qxShow = '1';
 							} else {
 								talkTitle.lxsj = '请选择';
@@ -532,6 +606,10 @@
 								talkTitle.qx = '请选择';
 								talkTitle.qValue = '';
 								talkTitle.sjShow = '0';
+							}
+							var type=_getParam(items[0], 'type');
+							if(_getParam(items[0], 'test') == 'qj'||_getParam(items[0], 'test') == 'qq'){//如果是请假和缺勤，显示全天和半天
+								talkTitle.dayShow='1';
 							}
 						});
 					},
@@ -584,6 +662,12 @@
 								nodes.kmShow=-1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
+							}else if(classes.indexOf("halfday") != -1){
+								nodes.classNodes.push('halfday');
+								nodes.classNames ='半天';
+								nodes.kmShow=-1;
+								nodes.subName = '请选择';
+								nodes.subCodes = '';
 							}else{
 								for(var i=0;i<classes.length;i++){
 									nodes.classNodes.push(classes[i]);
@@ -600,7 +684,7 @@
 						}else{
 							nodes.classNodes=[];
 							nodes.classNames = '请选择';
-							nodes.kmShow=-1;
+							nodes.kmShow=1;
 							nodes.subName = '请选择';
 							nodes.subCodes = '';
 						}
@@ -615,6 +699,8 @@
 							subCodes:'',
 							subName:'请选择',
 							classCanCheck:1,
+							dayCanCheck:1,
+							halfDayCanCheck:1,
 							kmShow:1
 						};
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
