@@ -187,7 +187,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="actionHead">
 			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">谈话记录详情</h1>
-			<a id="finish" class="mui-pull-right" style="color: white;font-size: 14px;">{{edit}}</a>
+			<a v-show="showFlag==1" id="finish" class="mui-pull-right" style="color: white;font-size: 14px;">{{edit}}</a>
 		</header>
 		<div class="mui-content mui-fullscreen" style="background: white;">
 			<div id='talk'>
@@ -331,6 +331,7 @@
 			var actionHead =new Vue({
 				el:'#actionHead',
 				data:{
+					showFlag:0,//0隐藏，1显示
 					edit:'修改'
 				}
 			});
@@ -386,7 +387,7 @@
 			mui.plusReady(function() {
 				init();
 				initListener(); //初始化监听
-				studentMP.getStudentManagePermission(2,1,function(array){
+				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					talkTitle.list=array;
 					getTalk();
@@ -414,6 +415,19 @@
 					console.log('3.2.谈话详情:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						var sb=data.RspData.sb;
+						var personal = store.get(window.storageKeyName.PERSONALINFO);
+						var tempCount = 0;
+						for (var i = 0; i < personal.clss.length; i++) {
+							var tempModel = personal.clss[i];
+							if (tempModel.clsid == sb.classId&&tempModel.isms==1) {
+								tempCount++;
+							}
+						}
+						if (tempCount>0) {
+							actionHead.showFlag = 1;
+						} else{
+							actionHead.showFlag = 0;
+						}
 						console.log("查询学生对应的名称")
 						for(var a = 0; a < talkTitle.list.length; a++) {
 							var tempGrdClsMsg = talkTitle.list[a];

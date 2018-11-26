@@ -83,7 +83,7 @@
 			<h1 class="mui-title" style="color: white;">学生量化考评</h1>
 			<!--<a href="#bottomPopover" class="mui-pull-right" style="color: white;width:120px;height: 45px; font-size: 25px;"><img style="width: 17px;float: right;margin: 12px 5px 0 0;" src="../../img/utils/more.png"/></a>-->
 		</header>
-		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 8;">
+		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -159,6 +159,8 @@
 			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
+			var userPicker = new m$.PopPicker({layer: 2});
+			var typePicker = new m$.PopPicker({layer: 1});
 			mui.plusReady(function(){
 				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
@@ -215,15 +217,12 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 2});
 						userPicker.setData(selectTitle.list);
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							
 							selectTitle.sGrade=_getParam(items[0], 'value');
 							selectTitle.sClasses=_getParam(items[1], 'value');
-							
 							pageIndex = 1;
 							flagRef = 0;
 							getReviewList(pageIndex);
@@ -234,13 +233,10 @@
 					},
 					selectType:function(){
 						var obj=this;
-						var userPicker = new m$.PopPicker({layer: 1});
-						userPicker.setData(this.typeList);
-						userPicker.show(function(items) {
-							obj.type=_getParam(items[0], 'text')
-							
-							obj.typeValue=_getParam(items[0], 'value')
-							
+						typePicker.setData(this.typeList);
+						typePicker.show(function(items) {
+							obj.type=_getParam(items[0], 'text');
+							obj.typeValue=_getParam(items[0], 'value');
 							pageIndex = 1;
 							flagRef = 0;
 							getReviewList(pageIndex);

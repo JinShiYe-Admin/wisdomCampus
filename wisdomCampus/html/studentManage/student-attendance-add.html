@@ -21,7 +21,6 @@
 			
 			.mui-content {
 				background: #f2f3f5;
-				/*line-height: 0px;*/
 			}
 			
 			#notes {
@@ -69,7 +68,6 @@
 			.mui-checkbox input[type=checkbox]:checked:before {
 				color: #00cfbd;
 			}
-			/**add*/
 			
 			.title-info {
 				padding: 18px 0 5px 0;
@@ -132,7 +130,6 @@
 			.mui-table-view-cell:after {
 				right: 10px;
 			}
-			/**add*/
 			
 			.mui-navigate-right.rCss.no-icon:after {
 				content: ' ';
@@ -141,13 +138,13 @@
 	</head>
 
 	<body>
-		<div id='title'>
+		<!--<div id='title'>-->
 			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
 				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
 				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
 			</header>
-		</div>
+		<!--</div>-->
 		<div id='talk'>
 			<div class="mui-content mui-fullscreen" style="background: white;">
 				<ul class="mui-table-view" style="margin-top:45px;">
@@ -201,7 +198,7 @@
 							</li>
 							<li class="mui-table-view-cell" style="margin-right: 35px;">
 								<a class="aCss">节次</a>
-								<a :href="'#select'+index" style="float:right;width:75%">
+								<a :href="'#select'+index" @tap="selectnodesub()" style="float:right;width:75%">
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
 							</li>
@@ -384,15 +381,18 @@
 				});
 			}
 
-			var title = new Vue({
-				el: '#title',
-				data: {},
-				methods: {
-					submit: function() {
-						talkTitle.$options.methods.submit();
-					}
-				}
-			});
+//			var title = new Vue({
+//				el: '#title',
+//				data: {},
+//				methods: {
+//					submit: function() {
+//						talkTitle.$options.methods.submit();
+//					}
+//				}
+//			});
+			document.getElementById('finish').addEventListener('tap',function () {
+			        talkTitle.$options.methods.submit();
+			})
 
 			var talkTitle = new Vue({
 				el: '#talk',
@@ -441,7 +441,11 @@
 					sStudent: "" //存值用:学生ID
 				},
 				methods: {
+					selectnodesub:function(){
+						document.activeElement.blur();
+					},
 					selectTime: function(event, lx, index) {
+						document.activeElement.blur();
 						var _self = event.target;
 						var obj = this;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
@@ -491,6 +495,7 @@
 						});
 					},
 					selectGrade: function() { //选择年级 班级 学生
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({
 							layer: 3
 						});
@@ -505,6 +510,7 @@
 						});
 					},
 					classItemCheck:function(index){
+						document.activeElement.blur();
 						var nodeSubJson=talkTitle.nodeSubJson[index];
 						if(nodeSubJson.dayCanCheck==1){
 							if(nodeSubJson.classCanCheck==1){
@@ -521,6 +527,7 @@
 						
 					},
 					classItemCheckHalf:function(index){
+						document.activeElement.blur();
 						var nodeSubJson=talkTitle.nodeSubJson[index];
 						if(nodeSubJson.halfDayCanCheck==1){
 							if(nodeSubJson.classCanCheck==1){
@@ -537,6 +544,7 @@
 						
 					},
 					selectKm: function(e, index) { //选择科目
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
@@ -550,6 +558,7 @@
 						});
 					},
 					selectkqxxName: function() { //选择考勤细项
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
@@ -575,6 +584,7 @@
 						});
 					},
 					selectkqlxName: function() { //选择考勤类型
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
@@ -590,6 +600,7 @@
 						});
 					},
 					selectQx: function() { //选择权限
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
@@ -604,6 +615,7 @@
 						});
 					},
 					selectJc: function(e, index) { //选择节次
+						document.activeElement.blur();
 						var classes = [];
 						var names = [];
 						var obj = e.target;
@@ -652,6 +664,7 @@
 						mui(id).popover('toggle');
 					},
 					addLi: function() {
+						document.activeElement.blur();
 						var nodes = {
 							canDelete: '1',
 							attendanceTime: "请选择",
@@ -667,6 +680,7 @@
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
 					},
 					deleteLi: function(e, index) { //添加考勤日期节次 项
+						document.activeElement.blur();
 						var obj = e.target;
 						if(this.nodeSubJson.length == 1) {
 							mui.toast("至少要填写一条考勤数据")
@@ -676,6 +690,7 @@
 
 					},
 					submit: function() {
+						document.activeElement.blur();
 						var arr = [];
 						for(var i = 0; i < talkTitle.nodeSubJson.length; i++) {
 							var obj = talkTitle.nodeSubJson[i];

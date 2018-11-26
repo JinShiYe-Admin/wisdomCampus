@@ -61,9 +61,9 @@
 				box-shadow: none;
 			}
 			
-			/*.mui-backdrop {
+			.mui-backdrop {
 				background-color: transparent;
-			}*/
+			}
 			
 			.aCss {
 				font-size: 15px;
@@ -372,6 +372,7 @@
 				},
 				methods:{
 					selectTime:function(event){
+						document.activeElement.blur();
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
 						var options = JSON.parse(optionsJson);
@@ -385,6 +386,7 @@
 						});
 					},
 					selectGrade:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 3});
 						userPicker.setData(talkTitle.list);
 						userPicker.show(function(items) {
@@ -397,6 +399,7 @@
 						});
 					},
 					classItemCheck:function(){
+						document.activeElement.blur();
 						if(this.classCanCheck==1){
 							this.classCanCheck=-1
 						}else{
@@ -404,6 +407,7 @@
 						}
 					},
 					selectActionType:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(talkTitle.actionTypeList);
 						userPicker.show(function(items) {
@@ -413,6 +417,7 @@
 						});
 					},
 					selectAction:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(talkTitle.actionList);
 						userPicker.show(function(items) {
@@ -421,6 +426,7 @@
 						});
 					},
 					selectJc: function(e) { //选择节次
+						document.activeElement.blur();
 //						var classes = [];
 //						var names = [];
 //						var obj = e.target;
@@ -463,6 +469,7 @@
 						});
 					},
 					selectKm:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(talkTitle.kmList);
 						userPicker.show(function(items) {

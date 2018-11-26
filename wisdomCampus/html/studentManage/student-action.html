@@ -87,7 +87,7 @@
 			<h1 class="mui-title" style="color: white;">学生行为记录</h1>
 			<a href="#bottomPopover" class="mui-pull-right" style="color: white;width:120px;height: 45px; font-size: 25px;"><img style="width: 17px;float: right;margin: 12px 5px 0 0;" src="../../img/utils/more.png"/></a>
 		</header>
-		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 8;">
+		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -100,7 +100,7 @@
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
-								<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
+								<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
 									<a class="mui-btn mui-btn-red">删除</a>
 								</div>
 								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
@@ -120,8 +120,8 @@
 			<div id="bottomPopover" class="mui-popover mui-popover-bottom">
 				<div class="mui-popover-arrow"></div>
 					<ul class="mui-table-view" style="width: 125px;float: right;font-size: 14px;">
-						<li class="mui-table-view-cell" @tap="toPage('student-action-add.html')"><span class="mui-icon mui-icon-plus" style="font-size: 16px;">添加</span></li>
-						<li class="mui-table-view-cell" @tap="toPage('student-action-count.html')"><span class="mui-icon mui-icon-compose" style="font-size: 16px;">统计报表</span></li>
+						<li class="mui-table-view-cell" @tap="toPage('student-action-add.html',0)"><span class="mui-icon mui-icon-plus" style="font-size: 16px;">添加</span></li>
+						<li class="mui-table-view-cell" @tap="toPage('student-action-count.html',1)"><span class="mui-icon mui-icon-compose" style="font-size: 16px;">统计报表</span></li>
 					</ul>
 			</div>
 		</div>
@@ -145,12 +145,13 @@
 			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			var userPicker,userPickerType;
 			var canUpdate=true;
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
+					personalModel:personal,
 					actionArray: []
 				},
 				methods: {
@@ -175,14 +176,18 @@
 //						console.log(JSON.stringify(actionArray[index]))
 						utils.mOpenWithData("../../html/studentManage/student-actionDetail.html", model);
 					},
-					toPage:function(url){//右上角弹出框
+					toPage:function(url,index){//右上角弹出框
 //						plus.webview.open(url);
 						$("#bottomPopover").hide();
 						$(".mui-backdrop").hide();
-						if (personal.utp==0&&personal.clss.length>0) {
-							utils.mOpenWithData(url, {});
+						if (index == 0) {
+							if (personal.utp==0&&personal.clss.length>0) {
+								utils.mOpenWithData(url, {});
+							} else{
+								mui.toast("无此权限");
+							}
 						} else{
-							mui.toast("无此权限");
+							utils.mOpenWithData(url, {});
 						}
 					} 
 				}
@@ -206,7 +211,7 @@
 						userPicker.show(function(items) {
 							selectTitle.grade=_getParam(items[0], 'text');
 							selectTitle.classes=_getParam(items[1], 'text');
-							selectTitle.student=_getParam(items[2], 'text');
+//							selectTitle.student=_getParam(items[2], 'text');
 							selectTitle.sGrade=_getParam(items[0], 'value');
 							selectTitle.sClasses=_getParam(items[1], 'value');
 							

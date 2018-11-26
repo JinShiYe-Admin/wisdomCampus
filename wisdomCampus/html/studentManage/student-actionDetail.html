@@ -118,7 +118,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="talkReacordHead">
 			<a   class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">行为详情</h1>
-			<a id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;">{{btnText}}</a>
+			<a v-show="showFlag==1" id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;">{{btnText}}</a>
 		</header>
 		<div class="mui-content" id="actionDetialData" style="background: #fff;">
 			<ul class="mui-table-view">
@@ -381,6 +381,7 @@
 			var talkReacordHead=new Vue({
 				el:'#talkReacordHead',
 				data:{
+					showFlag:0,//0隐藏，1显示
 					btnText:'修改'
 				} 
 			});
@@ -409,10 +410,12 @@
 				},
 				methods: {
 					checkEnc: function( index) {
+						document.activeElement.blur();
 						var tempUrl = this.actionDetail.attachs[index].url;
 						plus.runtime.openURL(tempUrl);
 					},
 					selectTime:function(event){
+						document.activeElement.blur();
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
 						var options = JSON.parse(optionsJson);
@@ -426,8 +429,12 @@
 						});
 					},
 					selectTypeAction:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.actionDetailSum.btArray);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.behaviorType);
+						}, 100);
 						userPicker.show(function(items) {
 							actionDetialData.actionDetail.behaviorTypeTxt=_getParam(items[0], 'text');
 							actionDetialData.actionDetail.behaviorType=_getParam(items[0], 'value');
@@ -435,14 +442,19 @@
 						});
 					},
 					selectAction:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.actionList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.quantizationBehaviorId);
+						}, 100);
 						userPicker.show(function(items) {
 							actionDetialData.actionDetail.behaviorName=_getParam(items[0], 'text');
 							actionDetialData.actionDetail.quantizationBehaviorId=_getParam(items[0], 'value');
 						});
 					},
 					selectJc: function(e) { //选择节次
+						document.activeElement.blur();
 //						var classes = [];
 //						var names = [];
 //						var obj = e.target;
@@ -479,6 +491,9 @@
 //						mui(id).popover('toggle');
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.jcList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.subCode);
+						}, 100);
 						userPicker.show(function(items) {
 							console.log(_getParam(items[0], 'text'));
 							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
@@ -493,8 +508,12 @@
 //						}
 //					},
 					selectKm:function(){
+						document.activeElement.blur();
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.kmList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.subCode);
+						}, 100);
 						userPicker.show(function(items) {
 							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
 							actionDetialData.kmText=_getParam(items[0], 'text');
@@ -530,7 +549,7 @@
 				initListener(); //初始化监听
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
-				studentMP.getStudentManagePermission(2,1,function(array){
+				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					actionDetialData.list=array;
 					if(array.length>0){
@@ -586,8 +605,13 @@
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						var sb=data.RspData.sb;
+						var personal = store.get(window.storageKeyName.PERSONALINFO);
 						console.log("查询学生对应的名称")
-						
+						if (sb.createUser == personal.utid) {
+							talkReacordHead.showFlag = 1;
+						} else{
+							talkReacordHead.showFlag = 0;
+						}
 						for(var a = 0; a < actionDetialData.list.length; a++) {
 							var tempGrdClsMsg = actionDetialData.list[a];
 								if(tempGrdClsMsg.value==sb.gradeId){
@@ -831,20 +855,20 @@
 				}
 				
 				console.log('tempData:'+JSON.stringify(tempData));
-//				var wd = events.showWaiting();
-//				getActionSaveBehavior(tempData,function(data) {
-//					wd.close();
-//					console.log('8.保存行为信息 ' + JSON.stringify(data));
-//					if(data.RspCode == 0) {
-//						mui.toast('保存成功');
-//						setTimeout(function(){
-//							mui.back();
-//						},2000)
-//					} else {
-//						document.getElementById("finish").disabled = false;
-//						mui.toast(data.RspTxt);
-//					} 
-//				});
+				var wd = events.showWaiting();
+				getActionSaveBehavior(tempData,function(data) {
+					wd.close();
+					console.log('8.保存行为信息 ' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						mui.toast('保存成功');
+						setTimeout(function(){
+							mui.back();
+						},2000)
+					} else {
+						document.getElementById("finish").disabled = false;
+						mui.toast(data.RspTxt);
+					} 
+				});
 			}
 
 			/**

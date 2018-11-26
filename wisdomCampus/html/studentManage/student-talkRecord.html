@@ -65,7 +65,7 @@
 			<h1 class="mui-title" style="color: white;">学生谈话记录</h1>
 			<!--<a @tap="revoke()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>-->
 		</header>
-		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 8;">
+		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
 			<div class="mui-segmented-control" >
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -78,7 +78,7 @@
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell mui-media"   v-for="(actionModel,index) in actionArray">
-							<div class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
+							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
@@ -123,6 +123,7 @@
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
 			var userPicker,userPickerType;
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.plusReady(function(){
 				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
@@ -146,6 +147,7 @@
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
+					personalModel:personal,
 					actionArray: []
 				},
 				methods: {

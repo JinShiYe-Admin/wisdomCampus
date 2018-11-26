@@ -43,6 +43,9 @@ audio:not([controls]) {
 	display: none;
 	height: 0
 }
+.mui-backdrop {
+				background-color: transparent;
+			}
 
 [hidden],
 template {

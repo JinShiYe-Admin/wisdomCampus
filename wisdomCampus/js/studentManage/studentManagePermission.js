@@ -263,41 +263,45 @@ var studentMP = (function(mod) {
 				tempClassId.push(tempCls.clsid);
 			}
 		}
-		var enData0 = {};
-		//不需要加密的数据
-		var comData0 = {
-			uuid: publicParameter.uuid, //用户设备号
-			utoken: personal.utoken, //用户令牌
-			classids: tempClassId.join(','), //需要查询的班级ID，多个代码用英文逗号隔开
-			appid: publicParameter.appid //系统所分配的应用ID
-		}
-		//		events.showWaiting();
-		//2.6 学校班级学生
-		postDataEncry('ClassStu', enData0, comData0, 0, function(data) {
-			//			events.closeWaiting();
-			console.log('2.6 学校班级学生:' + JSON.stringify(data));
-			if(data.RspCode == 0) {
-				if(data.RspData) {
-					//将获取到的学生，塞到对应的班级数组
-					for(var i = 0; i < data.RspData.clssstus.length; i++) {
-						var tempStu = data.RspData.clssstus[i];
-						for(var a = 0; a < grdsArray.length; a++) {
-							var tempModel = grdsArray[a]; //年级
-							for(var b = 0; b < tempModel.classArray.length; b++) {
-								var tempCls = tempModel.classArray[b]; //班级
-								if(tempCls.clsid == tempStu.clsid) {
-									tempCls.studentArray.push(tempStu);
+		if(tempClassId.length == 0) {
+			dataFormat(callback);
+		} else {
+			var enData0 = {};
+			//不需要加密的数据
+			var comData0 = {
+				uuid: publicParameter.uuid, //用户设备号
+				utoken: personal.utoken, //用户令牌
+				classids: tempClassId.join(','), //需要查询的班级ID，多个代码用英文逗号隔开
+				appid: publicParameter.appid //系统所分配的应用ID
+			}
+			//		events.showWaiting();
+			//2.6 学校班级学生
+			postDataEncry('ClassStu', enData0, comData0, 0, function(data) {
+				//			events.closeWaiting();
+				console.log('2.6 学校班级学生:' + JSON.stringify(data));
+				if(data.RspCode == 0) {
+					if(data.RspData) {
+						//将获取到的学生，塞到对应的班级数组
+						for(var i = 0; i < data.RspData.clssstus.length; i++) {
+							var tempStu = data.RspData.clssstus[i];
+							for(var a = 0; a < grdsArray.length; a++) {
+								var tempModel = grdsArray[a]; //年级
+								for(var b = 0; b < tempModel.classArray.length; b++) {
+									var tempCls = tempModel.classArray[b]; //班级
+									if(tempCls.clsid == tempStu.clsid) {
+										tempCls.studentArray.push(tempStu);
+									}
 								}
 							}
 						}
+						console.log('获取到学生后合并:' + JSON.stringify(grdsArray));
+						dataFormat(callback);
 					}
-					console.log('获取到学生后合并:' + JSON.stringify(grdsArray));
-					dataFormat(callback);
+				} else {
+					mui.toast(data.RspTxt, "cancel");
 				}
-			} else {
-				mui.toast(data.RspTxt, "cancel");
-			}
-		});
+			});
+		}
 	}
 
 	//根据flag获取id对应的年级、班级、学生 name   0获取年级名次  1获取班级名称  2获取学生名称
