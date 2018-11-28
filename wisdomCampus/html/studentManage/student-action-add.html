@@ -179,7 +179,9 @@
 				display: none;
 			}
 			
-			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+				background-color: #fff;
+			}
 		</style>
 	</head>
 
@@ -731,6 +733,7 @@
 					console.log('8.保存行为信息 ' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						mui.toast('保存成功');
+						mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
 						setTimeout(function(){
 							mui.back();
 						},2000)

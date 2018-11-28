@@ -260,6 +260,12 @@
 				$(".mui-backdrop").hide();
 			});
 			
+			//接收添加或详情页通知的刷新列表事件
+			window.addEventListener('refreshList', function() {
+				pageIndex = 1;
+				flagRef = 0;
+				getAttendanceList(pageIndex);
+			});
 			 
 			//阻尼系数、初始化刷新加载更多
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -274,10 +280,8 @@
 				down: {
 					callback: function() {
 						var self = this;
-						//console.log("下拉刷新");
 						pageIndex = 1;
 						flagRef = 0;
-						//54.科教频道_个人收藏列表
 						getAttendanceList(pageIndex);
 						setTimeout(function() {
 							//结束下拉刷新
@@ -310,6 +314,8 @@
 			});
 			//6.学生行为首页列表
 			function getAttendanceList(index) {
+				console.log("pageIndex===="+pageIndex);
+				console.log("flagRef===="+flagRef);
 				var gradeValue=selectTitle.sGrade;
 				var classesValue=selectTitle.sClasses;
 				var comData ={
@@ -319,9 +325,14 @@
 					pageNumber:index,
 					behaviorType:selectTitle.behaviorValue
 				}
-				var wd = events.showWaiting();
+				var wd;
+				if(flagRef==0){
+					wd= events.showWaiting();
+				}
 				getActionBehaviorIndex(comData,function(data) {
-					wd.close();
+					if(flagRef==0){
+						wd.close();
+					}
 					console.log('//6.学生行为首页列表:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数

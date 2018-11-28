@@ -646,6 +646,7 @@
 					events.closeWaiting();
 					if(data.RspCode == 0) {
 						mui.toast('保存成功');
+						mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
 						setTimeout(function(){
 							mui.back();
 						},2000)

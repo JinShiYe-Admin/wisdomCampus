@@ -179,6 +179,7 @@
 				$("#bottomPopover").hide();
 				$(".mui-backdrop").hide();
 			});
+			
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
@@ -290,6 +291,8 @@
 			});
 			//4.1 量化考评首页列表
 			function getReviewList(index) {
+				console.log("pageIndex===="+pageIndex);
+				console.log("flagRef===="+flagRef);
 				var gradeValue=selectTitle.sGrade;
 				var classesValue=selectTitle.sClasses;
 				var comData ={
@@ -299,9 +302,14 @@
 					pageSize:pageSize,
 					pageNumber:index
 				}
-				var wd = events.showWaiting();
+				var wd;
+				if(flagRef==0){
+					wd= events.showWaiting();
+				}
 				getReviewEvaluationIndex(comData,function(data) {
-					wd.close();
+					if(flagRef==0){
+						wd.close();
+					}
 					console.log('4.1 量化考评首页列表' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//总页数

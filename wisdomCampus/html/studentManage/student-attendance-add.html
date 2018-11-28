@@ -66,7 +66,7 @@
 			}
 			
 			.mui-checkbox input[type=checkbox]:checked:before {
-				color: #00cfbd;
+				color: #63BBFF;
 			}
 			
 			.title-info {
@@ -133,6 +133,10 @@
 			
 			.mui-navigate-right.rCss.no-icon:after {
 				content: ' ';
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+				background-color: #fff;
 			}
 		</style>
 	</head>
@@ -271,7 +275,7 @@
 						</div>
 					</div>
 					<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
-						<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;" @tap="selectJc($event,index)">确定</button>
+						<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #63BBFF;border: 0px;" @tap="selectJc($event,index)">确定</button>
 					</div>
 				</div>
 			</template>
@@ -470,25 +474,26 @@
 								}
 							} else if(lx =='jlsj'){
 								talkTitle.jlsj = rs.text;
-							} else if(lx == 'kqrq') {
+							} 
+							else if(lx == 'kqrq') {
 								var stime = rs.text;
-								var isContains = false;
-								for(var i = 0; i < obj.nodeSubJson.length; i++) {
-									var time = obj.nodeSubJson[i].attendanceTime;
-									if(time == stime) {
-										isContains = true;
-									}
-								}
-								if(!isContains) {
+//								var isContains = false;
+//								for(var i = 0; i < obj.nodeSubJson.length; i++) {
+//									var time = obj.nodeSubJson[i].attendanceTime;
+//									if(time == stime) {
+//										isContains = true;
+//									}
+//								}
+//								if(!isContains) {
 									if(compairTime2(getDate(), stime)) {
 										var nodes = obj.nodeSubJson[index];
 										nodes.attendanceTime = rs.text;
 									} else {
 										mui.toast('时间不能早于当前时间');
 									}
-								} else {
-									mui.toast('不能选择相同时间');
-								}
+//								} else {
+//									mui.toast('不能选择相同时间');
+//								}
 							} 
 							_self.picker.dispose();
 							_self.picker = null;
@@ -629,6 +634,13 @@
 						var nodes = this.nodeSubJson[index];
 						nodes.classNodes =  [];
 						if(names.length > 0) {
+							//TODO 判断同一个日期下，是否有重复选择的节次
+							if(nodes.attendanceTime=="请选择"){
+								mui.toast('请先选择考勤日期');
+								mui(id).popover('toggle');
+								return 0;
+							}
+							
 							if(classes.indexOf("day") != -1){
 								nodes.classNodes.push('day');
 								nodes.classNames ='全天';
@@ -654,6 +666,25 @@
 									nodes.subCodes = '';
 								}
 							}
+							
+							
+							var nodeSub=this.nodeSubJson;
+							for(var i=0;i<nodeSub.length;i++){
+								var nodeChilds=nodeSub[i];
+								if(i==index){
+									continue
+								}else{
+									console.log("liushuai2:");
+									if(JSON.stringify(nodeChilds)==JSON.stringify(nodes)){
+											mui.toast('同一个日期下不能选择相同的节次');
+											nodes.classNames ="请选择";
+											nodes.classNodes = [];
+											mui(id).popover('toggle');
+											return 0;
+									}
+								}
+							}
+							
 						}else{
 							nodes.classNodes=[];
 							nodes.classNames = '请选择';
@@ -753,6 +784,7 @@
 								console.log('3.保存考勤' + JSON.stringify(data));
 								if(data.RspCode == 0) {
 									mui.toast('保存成功');
+									mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
 									setTimeout(function() {
 										mui.back();
 									}, 2000)

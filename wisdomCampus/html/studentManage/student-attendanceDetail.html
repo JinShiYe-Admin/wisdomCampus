@@ -70,6 +70,14 @@
 				display: none;
 			}
 			
+			.mui-checkbox input[type=checkbox]:checked:before {
+				color: #63BBFF;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+				background-color: #fff;
+			}
+			
 		</style>
 	</head>
 
@@ -303,7 +311,7 @@
 							</div>
 						</div>
 						<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
-							<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #00CFBD;border: 0px;"
+							<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #63BBFF;border: 0px;"
 							 @tap="selectJc($event,index)">确定</button>
 						</div>
 					</div>
@@ -788,6 +796,7 @@
 							console.log('3.保存考勤' + JSON.stringify(data));
 							if (data.RspCode == 0) {
 								mui.toast(data.RspTxt);
+								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
 								setTimeout(function() {
 									mui.back();
 								}, 2000)
