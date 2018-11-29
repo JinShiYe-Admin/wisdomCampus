@@ -413,7 +413,7 @@
 					if(data.RspCode == 0) {
 						if(mobiles.length > 0&&smsSync == 1) {
 							var tempMobiles = mobiles.join(',').toString();
-							events.SendSmsForMobiles(tempMobiles, message.content);
+							events.SendSmsForMobiles(tempMobiles, message.title);
 						}
 						mui.toast("发布成功")
 						setTimeout(function() {

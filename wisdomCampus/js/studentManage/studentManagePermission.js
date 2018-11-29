@@ -130,6 +130,7 @@ var studentMP = (function(mod) {
 				for(var b = 0; b < tempModel1.studentArray.length; b++) {
 					var tempModel2 = tempModel1.studentArray[b];
 					var tempStu = {
+						imgurl: tempModel2.imgurl,
 						value: tempModel2.stuid,
 						text: tempModel2.stuname
 						//						img:tempModel2
@@ -194,7 +195,15 @@ var studentMP = (function(mod) {
 							tempDetail.className = tempClass.text;
 							for(var c = 0; c < tempClass.children.length; c++) {
 								var tempStu = tempClass.children[c];
-								tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
+								if(tempStu.imgurl == null) {
+									tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
+								} else {
+									if (check_is_img(tempStu.imgurl)) {
+										tempDetail.stuImg = tempStu.imgurl;
+									} else{
+										tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
+									}
+								}
 								if(tempStu.value == tempDetail.studentId) {
 									tempDetail.stuName = tempStu.text;
 								}
@@ -205,6 +214,14 @@ var studentMP = (function(mod) {
 			}
 		}
 		callback(pageList);
+	}
+
+	function check_is_img(url) {
+		if(/.(png|jpg|jpeg|gif)$/g.test(url)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//2.3 学校年级下班级
