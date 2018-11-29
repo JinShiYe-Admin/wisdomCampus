@@ -226,7 +226,7 @@
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell"  @tap="selectTime($event)" >
+					<li class="mui-table-view-cell"  @tap="selectTime($event,'fsrq')" data-options='{"type":"date"}'>
 						<a  class="aCss">发生日期</a>
 						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
@@ -249,9 +249,13 @@
 							<a class="aCss">记录人</a>
 							<span  class="rCss">{{teacher}}</span>
 						</li>
-						<li class="mui-table-view-cell">
+						<!--<li class="mui-table-view-cell">
 							<a class="aCss">记录时间</a>
 							<p  class="rCss">{{record}}</p>
+						</li>-->
+						<li class="mui-table-view-cell" @tap="selectTime($event,'record',-1)" data-options='{"type":"date"}'>
+							<a class="aCss">记录时间</a>
+							<p data-options='{"type":"date"}' class="mui-navigate-right rCss ">{{record}}</p>
 						</li>
 					</ul>
 				</div>
@@ -373,7 +377,7 @@
 					kmShow:1
 				},
 				methods:{
-					selectTime:function(event){
+					selectTime:function(event,lx){
 						document.activeElement.blur();
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
@@ -382,7 +386,11 @@
 						_self.picker = new $M.DtPicker(options);
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
-							talkTitle.time=rs.text;
+							if(lx == 'fsrq') {
+								talkTitle.time=rs.text;
+							} else if(lx == 'record') {
+								talkTitle.record=rs.text;
+							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});

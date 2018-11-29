@@ -469,7 +469,7 @@
 							attendanceDetialData.sjShow = '1';
 						}
 						attendanceDetialData.$set(attendanceDetialData.nodeSubJson, 0, nodes);
-						console.log(JSON.stringify(attendanceDetialData.nodeSubJson));
+						console.log("liushuai:"+JSON.stringify(attendanceDetialData.nodeSubJson));
 					} else {
 						mui.toast(data.RspTxt);
 					}
@@ -718,11 +718,12 @@
 							layer: 1
 						});
 						userPicker.setData(attendanceDetialData.kmList);
+						var nodes = attendanceDetialData.nodeSubJson[index];
+						console.log("liushuai:"+nodes.subCodes)
 						setTimeout(function() {
 							userPicker.pickers[0].setSelectedValue(nodes.subCodes);
 						}, 100);
 						userPicker.show(function(items) {
-							var nodes = attendanceDetialData.nodeSubJson[index];
 							console.log("nodes===" + JSON.stringify(nodes))
 							console.log("index===" + JSON.stringify(index))
 							nodes.subName = _getParam(items[0], 'text');
@@ -738,7 +739,7 @@
 							title.titleBar = '提交';
 							attendanceDetialData.attendanceDetail.recordTime = getDate();
 							var nodes = attendanceDetialData.nodeSubJson[0];
-							if (nodes.kmShow == 1) {
+							if (nodes.kmShow == 0) {
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							}
