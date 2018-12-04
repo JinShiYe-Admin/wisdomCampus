@@ -105,6 +105,25 @@
 					showPage:0
 				}
 			});
+			
+			//遮罩层
+			var flag = false;
+			var mask=mui.createMask(closeMask);
+			function closeMask(){
+				return flag;
+			}
+			
+			
+			//关闭遮罩
+			window.addEventListener('closeMask', function() {
+				flag = true;
+        		mask.close();
+			});
+			//显示遮罩
+			window.addEventListener('showMask', function() {
+				flag = false;
+				mask.show();
+			});
 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {

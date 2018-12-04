@@ -143,7 +143,7 @@
 
 	<body>
 		<!--<div id='title'>-->
-			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;z-index: 20181024;">
 				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
 				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
@@ -300,6 +300,7 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+
 
 			mui.plusReady(function() {
 				mui('.mui-scroll-wrapper').scroll()
