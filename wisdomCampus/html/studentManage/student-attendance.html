@@ -84,7 +84,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="actionHead">
 			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">学生考勤</h1>
-			<a href="#bottomPopover" class="mui-pull-right" style="color: white;width:120px;height: 45px; font-size: 25px;"><img style="width: 17px;float: right;margin: 12px 5px 0 0;" src="../../img/utils/more.png"/></a>
+			<a href="#bottomPopover" class="mui-pull-right" style="color: white;width:120px;height: 45px; font-size: 25px;" @tap="showMask()"><img style="width: 17px;float: right;margin: 12px 5px 0 0;" src="../../img/utils/more.png"/></a>
 		</header>
 		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
 			<div class="mui-segmented-control" >
@@ -149,6 +149,23 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			var userPicker,userPickerType;
 			var canUpdate=true;
+			
+			var actionHead=new Vue({
+				el:"#actionHead",
+				data:{},
+				methods:{
+					showMask:function(){
+						mui.fire(plus.webview.currentWebview().opener(), 'showMask', {});
+					}
+				}
+			});
+			//遮罩层点击事件，通知父页面遮罩层也关闭
+			window.addEventListener('tap', function(e) {
+				if(e.target.className == 'mui-backdrop mui-active'){
+					mui.fire(plus.webview.currentWebview().opener(), 'closeMask', {});
+				}
+			},true);
+			
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
@@ -181,6 +198,8 @@
 //						plus.webview.open(url);
 						$("#bottomPopover").hide();
 						$(".mui-backdrop").hide();
+						mui('#bottomPopover').popover('hide'); 
+						mui.fire(plus.webview.currentWebview().opener(), 'closeMask', {});
 						if (index == 0) {
 							if (personal.utp==0&&personal.clss.length>0) {
 								utils.mOpenWithData(url, {});
@@ -356,6 +375,7 @@
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array=="+JSON.stringify(array));
 								actionArrayData.actionArray = array;
+								mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,50);
 							})
 						} else { //加载更多
 							//合并数组
