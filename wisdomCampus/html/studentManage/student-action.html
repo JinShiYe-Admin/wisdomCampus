@@ -106,7 +106,7 @@
 								<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
 									<img class="mui-media-object mui-pull-left" style="width: 40px;height: 40px;" :src=actionModel.stuImg>
 									<div class="mui-media-body" style="font-size: 14px;color: #333;">
-										{{actionModel.studentName}}【 {{actionModel.gradeName}}{{actionModel.className}}】
+										{{actionModel.studentName}}【{{actionModel.gradeName}}{{actionModel.className}}】
 										<span class="rightTag" style="font-size: 12px;color: #999;">{{actionModel.behaviorTime}}</span>
 										<p class='mui-ellipsis' style="font-size: 12px;color: #666;">{{actionModel.detail}}</p>
 									</div>
@@ -360,7 +360,7 @@
 							//合并数组
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
-								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
+								actionArrayData.actionArray = actionArrayData.actionArray.concat(array);
 							})
 						}
 					} else {

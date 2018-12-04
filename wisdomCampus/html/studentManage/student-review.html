@@ -188,7 +188,11 @@
 				methods: {
 					gotoDeatil:function(model,index){
 						console.log('点击第'+index+'个标签进入详情');
-						utils.mOpenWithData("../../html/studentManage/student-reviewClass.html", model);	
+						var tempM = {
+							model:model,
+							stuArray:selectTitle.list
+						}
+						utils.mOpenWithData("../../html/studentManage/student-reviewClass.html", tempM);	
 					},
 					toPage:function(url){
 //						plus.webview.open(url);

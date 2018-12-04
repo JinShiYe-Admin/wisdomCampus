@@ -12,12 +12,11 @@
 		<link rel="stylesheet" href="../../css/utils/preview.css" />
 		<link rel="stylesheet" href="../../css/utils/audiopopover.css" />
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
-		
+
 		<style type="text/css">
 			[v-cloak] {
 				visibility: hidden;
 			}
-			
 			
 			.mui-table-view-cell>a:not(.mui-btn) {
 				position: relative;
@@ -30,7 +29,7 @@
 				color: inherit;
 			}
 			
-			body{
+			body {
 				background: #fff;
 			}
 			
@@ -46,7 +45,7 @@
 				border-top: 1px solid lightgray;
 				border-left: 1px solid lightgray;
 				border-right: 1px solid lightgray;
-				border-bottom:0;
+				border-bottom: 0;
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 25px;
@@ -79,11 +78,11 @@
 				margin-right: 10px;
 			}
 			
-			.rCss{
+			.rCss {
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:0px 17px 0 0;
+				margin: 0px 17px 0 0;
 			}
 			
 			.mui-table-view-cell {
@@ -93,17 +92,18 @@
 			.mui-checkbox input[type=checkbox]:checked:before {
 				color: #00cfbd;
 			}
-			
 			/**add*/
+			
 			.title-info {
 				padding: 18px 0 5px 0;
 				text-align: center;
 				background: #fff;
 			}
-			.title-body{
+			
+			.title-body {
 				margin-top: 5px;
 				background: #fff;
-				padding:10px 0 0 10px;
+				padding: 10px 0 0 10px;
 			}
 			
 			.user-title {
@@ -112,7 +112,7 @@
 				font-weight: bold;
 			}
 			
-			.user-title-se{
+			.user-title-se {
 				font-size: 13px;
 				color: #6d6d6d;
 			}
@@ -147,20 +147,21 @@
 				font-size: 13px;
 			}
 			
-			.body-title{
+			.body-title {
 				font-size: 15px;
 				margin-left: 5px;
 			}
 			
-			.multimedia-header{
-			    width: 94%;
-			    border:0;
-			    border-left: 1px solid lightgray;
-			    border-right: 1px solid lightgray;
-			    border-bottom: 1px solid lightgray;
-			    margin: -20px 3% 5px;
+			.multimedia-header {
+				width: 94%;
+				border: 0;
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray;
+				border-bottom: 1px solid lightgray;
+				margin: -20px 3% 5px;
 			}
-			.multimedia-footer{
+			
+			.multimedia-footer {
 				border: 0;
 			}
 			/**add*/
@@ -172,14 +173,13 @@
 			
 			.mui-navigate-right.rCss.no-icon:after {
 				content: ' ';
-			} 
-			
+			}
 			
 			.mui-popover-arrow {
 				display: none;
 			}
 			
-			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
 				background-color: #fff;
 			}
 		</style>
@@ -196,15 +196,15 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">年级</a>
-						<span  class="mui-navigate-right rCss">{{gradeText}}</span>
+						<span class="mui-navigate-right rCss">{{gradeText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">班级</a>
-						<span  class="mui-navigate-right  rCss">{{classesText}}</span>
+						<span class="mui-navigate-right  rCss">{{classesText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectGrade()">
 						<a class="aCss">姓名</a>
-						<span  class="mui-navigate-right  rCss">{{studentText}}</span>
+						<span class="mui-navigate-right  rCss">{{studentText}}</span>
 					</li>
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
@@ -214,40 +214,41 @@
 						<span class="mui-navigate-right  rCss">{{actionTypeText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectAction()">
-						<a  class="aCss">行为细项</a>
-						<span  class="mui-navigate-right  rCss">{{actionText}}</span>
+						<a class="aCss">行为细项</a>
+						<span class="mui-navigate-right  rCss">{{actionText}}</span>
 					</li>
 				</ul>
 				<div class="mui-row title-body">
-					<span class="body-title" >行为说明</span>
+					<span class="body-title">行为说明</span>
 				</div>
 				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell"  @tap="selectTime($event,'fsrq')" data-options='{"type":"date"}'>
-						<a  class="aCss">发生日期</a>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'fsrq')" data-options='{"type":"date"}'>
+						<a class="aCss">发生日期</a>
 						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectJc()">
 						<!--<a href="#selectClasses" class="aCss">节次</a>
 						<a href="#selectClasses" style="width: 75%;float: right;"><span  class="mui-navigate-right  rCss" >{{jcText}}</span></a>-->
-						<a  class="aCss">节次</a>
-						<span  class="mui-navigate-right  rCss">{{jcText}}</span>
+						<a class="aCss">节次</a>
+						<span class="mui-navigate-right  rCss">{{jcText}}</span>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectKm()" ><!--v-if="kmShow==1"-->
-						<a  class="aCss">科目</a>
-						<span  class="mui-navigate-right  rCss">{{kmText}}</span>
+					<li class="mui-table-view-cell" @tap="selectKm()">
+						<!--v-if="kmShow==1"-->
+						<a class="aCss">科目</a>
+						<span class="mui-navigate-right  rCss">{{kmText}}</span>
 					</li>
 				</ul>
-				
+
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div id="bootom-card" style="margin-bottom: 30px">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="aCss">记录人</a>
-							<span  class="rCss">{{teacher}}</span>
+							<span class="rCss">{{teacher}}</span>
 						</li>
 						<!--<li class="mui-table-view-cell">
 							<a class="aCss">记录时间</a>
@@ -329,55 +330,55 @@
 		<script type="text/javascript" src="../../js/utils/showvideoutil.js"></script>
 		<script type="text/javascript" src="../../js/utils/showaudio.js"></script>
 		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
-		
+
 		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/utils/cloudutil.js"></script>
 		<script src='../../js/utils/store.js'></script>
-		
+
 		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
 		<!--<script src="../../js/utils/mui.picker.js"></script>-->
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var $M=mui.init();
+			var $M = mui.init();
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			
-			var talkTitle =new Vue({
-				el:'#talk',
-				data:{
-					actionDetail:{},
-					list:[],
-					gradeText:'请选择',
-					classesText:'请选择',
-					studentText:'请选择',
-					gradeValue:'',
-					classesValue:'',
-					studentValue:'',
-					actionList:[],
-					actionTypeList:[],
-					jcList:[],
-					kmList:[],
-					actionText:'请选择',
-					actionValue:'',
-					actionTypeText:'请选择',
-					actionTypeValue:'',
-					content:'',
-					time:getDate(),
-					jcText:'请选择',
-					jcValue:'',
-					kmText:'请选择',
-					kmValue:'', 
-					teacher:personal.utname,
-					record:getDate(),
-					classCanCheck:1,
-					kmShow:1
+
+			var talkTitle = new Vue({
+				el: '#talk',
+				data: {
+					actionDetail: {},
+					list: [],
+					gradeText: '请选择',
+					classesText: '请选择',
+					studentText: '请选择',
+					gradeValue: '',
+					classesValue: '',
+					studentValue: '',
+					actionList: [],
+					actionTypeList: [],
+					jcList: [],
+					kmList: [],
+					actionText: '请选择',
+					actionValue: '',
+					actionTypeText: '请选择',
+					actionTypeValue: '',
+					content: '',
+					time: getDate(),
+					jcText: '请选择',
+					jcValue: '',
+					kmText: '请选择',
+					kmValue: '',
+					teacher: personal.utname,
+					record: getDate(),
+					classCanCheck: 1,
+					kmShow: 1
 				},
-				methods:{
-					selectTime:function(event,lx){
+				methods: {
+					selectTime: function(event, lx) {
 						document.activeElement.blur();
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
@@ -387,104 +388,118 @@
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
 							if(lx == 'fsrq') {
-								talkTitle.time=rs.text;
+								talkTitle.time = rs.text;
 							} else if(lx == 'record') {
-								talkTitle.record=rs.text;
+								talkTitle.record = rs.text;
 							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});
 					},
-					selectGrade:function(){
+					selectGrade: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({layer: 3});
-						userPicker.setData(talkTitle.list);
-						userPicker.show(function(items) {
-							talkTitle.gradeText=_getParam(items[0], 'text');
-							talkTitle.classesText=_getParam(items[1], 'text');
-							talkTitle.studentText=_getParam(items[2], 'text');
-							talkTitle.gradeValue=_getParam(items[0], 'value');
-							talkTitle.classesValue=_getParam(items[1], 'value');
-							talkTitle.studentValue=_getParam(items[2], 'value');
-						});
-					},
-					classItemCheck:function(){
-						document.activeElement.blur();
-						if(this.classCanCheck==1){
-							this.classCanCheck=-1
-						}else{
-							this.classCanCheck=1
+						if(talkTitle.list.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 3
+							});
+							userPicker.setData(talkTitle.list);
+							userPicker.show(function(items) {
+								talkTitle.gradeText = _getParam(items[0], 'text');
+								talkTitle.classesText = _getParam(items[1], 'text');
+								talkTitle.studentText = _getParam(items[2], 'text');
+								talkTitle.gradeValue = _getParam(items[0], 'value');
+								talkTitle.classesValue = _getParam(items[1], 'value');
+								talkTitle.studentValue = _getParam(items[2], 'value');
+							});
+						} else {
+							mui.toast('此班级暂无学生');
 						}
 					},
-					selectActionType:function(){
+					classItemCheck: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({layer: 1});
+						if(this.classCanCheck == 1) {
+							this.classCanCheck = -1
+						} else {
+							this.classCanCheck = 1
+						}
+					},
+					selectActionType: function() {
+						document.activeElement.blur();
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.actionTypeList);
 						userPicker.show(function(items) {
-							talkTitle.actionTypeText=_getParam(items[0], 'text');
-							talkTitle.actionTypeValue=_getParam(items[0], 'value');
+							talkTitle.actionTypeText = _getParam(items[0], 'text');
+							talkTitle.actionTypeValue = _getParam(items[0], 'value');
 							setAttendanceType();
 						});
 					},
-					selectAction:function(){
+					selectAction: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({layer: 1});
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.actionList);
 						userPicker.show(function(items) {
-							talkTitle.actionText=_getParam(items[0], 'text');
-							talkTitle.actionValue=_getParam(items[0], 'value');
+							talkTitle.actionText = _getParam(items[0], 'text');
+							talkTitle.actionValue = _getParam(items[0], 'value');
 						});
 					},
 					selectJc: function(e) { //选择节次
 						document.activeElement.blur();
-//						var classes = [];
-//						var names = [];
-//						var obj = e.target;
-//						var id = '#selectClasses';
-//						$(id).find('li').each(function() {
-//							if($(this).find('input').prop("checked")) {
-//								names.push($(this).find('label').text());
-//								classes.push($(this).find('input').val());
-//							}
-//						})
-//						if(names.length>0){
-//							if(classes.indexOf("day") != -1){
-//								talkTitle.jcText ='全天';
-//								talkTitle.jcValue ='day';
-//								talkTitle.kmShow=-1;
-//								talkTitle.kmText='请选择';
-//								talkTitle.kmValue='';
-//							}else{
-//								talkTitle.jcText = names.join(",");
-//								talkTitle.jcValue = classes.join(",");
-//								if(classes.length==1){
-//									talkTitle.kmShow=1;
-//								}else{
-//									talkTitle.kmShow=-1;
-//									talkTitle.kmText='请选择';
-//									talkTitle.kmValue='';
-//								}
-//							}
-//						}else{
-//							talkTitle.kmShow=1;
-//							talkTitle.jcText='请选择';
-//							talkTitle.jcValue = '';
-//						}
-//						mui(id).popover('toggle');
-						var userPicker = new $M.PopPicker({layer: 1});
+						//						var classes = [];
+						//						var names = [];
+						//						var obj = e.target;
+						//						var id = '#selectClasses';
+						//						$(id).find('li').each(function() {
+						//							if($(this).find('input').prop("checked")) {
+						//								names.push($(this).find('label').text());
+						//								classes.push($(this).find('input').val());
+						//							}
+						//						})
+						//						if(names.length>0){
+						//							if(classes.indexOf("day") != -1){
+						//								talkTitle.jcText ='全天';
+						//								talkTitle.jcValue ='day';
+						//								talkTitle.kmShow=-1;
+						//								talkTitle.kmText='请选择';
+						//								talkTitle.kmValue='';
+						//							}else{
+						//								talkTitle.jcText = names.join(",");
+						//								talkTitle.jcValue = classes.join(",");
+						//								if(classes.length==1){
+						//									talkTitle.kmShow=1;
+						//								}else{
+						//									talkTitle.kmShow=-1;
+						//									talkTitle.kmText='请选择';
+						//									talkTitle.kmValue='';
+						//								}
+						//							}
+						//						}else{
+						//							talkTitle.kmShow=1;
+						//							talkTitle.jcText='请选择';
+						//							talkTitle.jcValue = '';
+						//						}
+						//						mui(id).popover('toggle');
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.jcList);
 						userPicker.show(function(items) {
-							talkTitle.jcText=_getParam(items[0], 'text');
-							talkTitle.jcValue=_getParam(items[0], 'value');
+							talkTitle.jcText = _getParam(items[0], 'text');
+							talkTitle.jcValue = _getParam(items[0], 'value');
 						});
 					},
-					selectKm:function(){
+					selectKm: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({layer: 1});
+						var userPicker = new $M.PopPicker({
+							layer: 1
+						});
 						userPicker.setData(talkTitle.kmList);
 						userPicker.show(function(items) {
-							talkTitle.kmText=_getParam(items[0], 'text');
-							talkTitle.kmValue=_getParam(items[0], 'value');
+							talkTitle.kmText = _getParam(items[0], 'text');
+							talkTitle.kmValue = _getParam(items[0], 'value');
 						});
 					}
 				}
@@ -492,41 +507,41 @@
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
-			mui.plusReady(function(){
+
+			mui.plusReady(function() {
 				init();
 				initListener(); //初始化监听
-				studentMP.getStudentManagePermission(2,1,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-					talkTitle.list=array;
-					if(array.length>0){
-						var allGrade=array[0];
-						var allClasses=allGrade.children[0];
-						talkTitle.gradeValue=allGrade.value;
-						talkTitle.classesValue=allClasses.value;
+				studentMP.getStudentManagePermission(2, 1, function(array) {
+					console.log("ABCD==" + JSON.stringify(array))
+					talkTitle.list = array;
+					if(array.length > 0) {
+						var allGrade = array[0];
+						var allClasses = allGrade.children[0];
+						talkTitle.gradeValue = allGrade.value;
+						talkTitle.classesValue = allClasses.value;
 					}
-				},1);
+				}, 1);
 				//行为详情 
-				var comData ={
-					id:-1
+				var comData = {
+					id: -1
 				}
 				var wd = events.showWaiting();
-				getActionDetail(comData,function(data) {
+				getActionDetail(comData, function(data) {
 					wd.close();
 					console.log('2.行为详情 ' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						talkTitle.actionDetail = data.RspData;
-						talkTitle.actionTypeList=data.RspData.btArray;
-						talkTitle.jcList=data.RspData.cn;
-						if (talkTitle.actionTypeList.length>0) {
+						talkTitle.actionTypeList = data.RspData.btArray;
+						talkTitle.jcList = data.RspData.cn;
+						if(talkTitle.actionTypeList.length > 0) {
 							talkTitle.actionTypeText = talkTitle.actionTypeList[0].text;
 							talkTitle.actionTypeValue = talkTitle.actionTypeList[0].value;
 							setAttendanceType();
 							getSchSubThread();
 						}
 					} else {
-//							mui.toast(data.RspTxt);
-					} 
+						//							mui.toast(data.RspTxt);
+					}
 				});
 				mui('.mui-scroll-wrapper').scroll()
 			});
@@ -542,29 +557,29 @@
 				};
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
 					if(data1.RspCode == 0) {
-						console.log("data1:"+data1.RspTxt);
-						if(data1.RspData){
-							var kmList=data1.RspData.subs;
-							var newList=[];
-							for(var i=0;i<kmList.length;i++){
-								var temp={
-									text:kmList[i].subname,
-									value:kmList[i].subcode
+						console.log("data1:" + data1.RspTxt);
+						if(data1.RspData) {
+							var kmList = data1.RspData.subs;
+							var newList = [];
+							for(var i = 0; i < kmList.length; i++) {
+								var temp = {
+									text: kmList[i].subname,
+									value: kmList[i].subcode
 								}
 								newList.push(temp);
 							}
-							talkTitle.kmList=newList;
+							talkTitle.kmList = newList;
 						}
 					} else {
-						console.log("data1:"+data1.RspTxt);
+						console.log("data1:" + data1.RspTxt);
 					}
 				});
 			}
 			//将类型、细项的值对应
-			var setAttendanceType = function(){
-				for (var i = 0; i < talkTitle.actionDetail.qb.length; i++) {
+			var setAttendanceType = function() {
+				for(var i = 0; i < talkTitle.actionDetail.qb.length; i++) {
 					var tempModel = talkTitle.actionDetail.qb[i];
-					if (tempModel.value == talkTitle.actionTypeValue) {
+					if(tempModel.value == talkTitle.actionTypeValue) {
 						talkTitle.actionList = [].concat(tempModel.dataArray);
 						talkTitle.actionText = '请选择';
 						talkTitle.actionValue = '';
@@ -572,7 +587,7 @@
 					}
 				}
 			}
-			
+
 			var pathList = []; //记录需要删掉的图片和缩略图
 			var encNameList = []; //附件名称
 			var QNUptoken; //token数据
@@ -591,7 +606,7 @@
 				TotalAudio: 0, //音频的个数
 				TotalVideo: 0, //视频的个数
 			});
-			
+
 			/*
 			 * 初始化控件
 			 */
@@ -657,27 +672,27 @@
 					} else if(talkTitle.content.length > 120) {
 						mui.toast('内容最多120字');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.studentText=='请选择'){
+					} else if(talkTitle.studentText == '请选择') {
 						mui.toast('请选择一个学生');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.studentText=='全部学生'){
+					} else if(talkTitle.studentText == '全部学生') {
 						mui.toast('只能选择一个学生');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.actionTypeValue=='请选择'||talkTitle.actionTypeValue==''){
+					} else if(talkTitle.actionTypeValue == '请选择' || talkTitle.actionTypeValue == '') {
 						mui.toast('请选择行为类型');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.actionValue=='请选择'||talkTitle.actionValue==''){
+					} else if(talkTitle.actionValue == '请选择' || talkTitle.actionValue == '') {
 						mui.toast('请选择行为细项');
 						document.getElementById("finish").disabled = false;
-					} else if(talkTitle.jcValue=='请选择'||talkTitle.jcValue==''||talkTitle.jcValue.length==0){
+					} else if(talkTitle.jcValue == '请选择' || talkTitle.jcValue == '' || talkTitle.jcValue.length == 0) {
 						mui.toast('请选择节次');
 						document.getElementById("finish").disabled = false;
-					} else{
+					} else {
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
 						console.log(JSON.stringify(multiMedia))
 						console.log(JSON.stringify(multiMedia.data.PictureArray))
-						if(multiMedia.data.PictureArray.length == 0 ) { //没有传附件
+						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
 							addNotice(wd, '3', '', '', 0, '');
 						} else {
 							uploadFile(wd); //上传文件
@@ -695,60 +710,60 @@
 			 */
 			var addNotice = function(wd, encType, encAddr, encImg, encLen, encName) {
 				console.log('encImg:' + encImg);
-								console.log('encType:' + encType);
-								console.log('encAddr:' + encAddr);
-								console.log('encImg:' + encImg);
-								console.log('encLen:' + encLen);
-				var fj=[];
+				console.log('encType:' + encType);
+				console.log('encAddr:' + encAddr);
+				console.log('encImg:' + encImg);
+				console.log('encLen:' + encLen);
+				var fj = [];
 				var enc_Url = encAddr.split("|");
 				if(encAddr.length > 0) {
 					var tempAddr = encAddr.split('|');
 					for(var i = 0; i < tempAddr.length; i++) {
 						var tempModel = tempAddr[i];
 						var temp000 = tempModel.split('/');
-						var attach={};
-						attach.oriName=temp000[temp000.length - 1];
-						attach.filePath=enc_Url[i];
+						var attach = {};
+						attach.oriName = temp000[temp000.length - 1];
+						attach.filePath = enc_Url[i];
 						fj.push(attach);
 					}
 				}
-				
-				var kmValue=''
-				if(talkTitle.kmShow==1){
-					kmValue=talkTitle.kmValue;
+
+				var kmValue = ''
+				if(talkTitle.kmShow == 1) {
+					kmValue = talkTitle.kmValue;
 				}
-				
-				var tempData = { 
+
+				var tempData = {
 					id: '',
-					gradeId: talkTitle.gradeValue, 
-					classId: talkTitle.classesValue, 
-					studentId: talkTitle.studentValue, 
-					studentName: talkTitle.studentText, 
-					quantizationBehaviorId: talkTitle.actionValue, 
-					behaviorType: talkTitle.actionTypeValue, 
-					behaviorTime: talkTitle.time, 
-					behaviorDetail:talkTitle.content,
-					classNodes: talkTitle.jcValue, 
-					subCode: kmValue, 
-					recordTime: talkTitle.record, 
+					gradeId: talkTitle.gradeValue,
+					classId: talkTitle.classesValue,
+					studentId: talkTitle.studentValue,
+					studentName: talkTitle.studentText,
+					quantizationBehaviorId: talkTitle.actionValue,
+					behaviorType: talkTitle.actionTypeValue,
+					behaviorTime: talkTitle.time,
+					behaviorDetail: talkTitle.content,
+					classNodes: talkTitle.jcValue,
+					subCode: kmValue,
+					recordTime: talkTitle.record,
 					attachs: fj
-					
+
 				}
-				console.log('tempData:'+JSON.stringify(tempData));
+				console.log('tempData:' + JSON.stringify(tempData));
 				var wd = events.showWaiting();
-				getActionSaveBehavior(tempData,function(data) {
+				getActionSaveBehavior(tempData, function(data) {
 					wd.close();
 					console.log('8.保存行为信息 ' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						mui.toast('保存成功');
 						mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
-						setTimeout(function(){
+						setTimeout(function() {
 							mui.back();
-						},2000)
+						}, 2000)
 					} else {
 						document.getElementById("finish").disabled = false;
 						mui.toast(data.RspTxt);
-					} 
+					}
 				});
 			}
 
@@ -780,8 +795,8 @@
 					}
 				}
 				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
-								console.log('uploadNum:' + uploadNum);
-								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+				console.log('uploadNum:' + uploadNum);
+				console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
 				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
 					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
@@ -1023,24 +1038,24 @@
 					}
 				}
 			}
-			
+
 			//获取当前日期
 			function getDate() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-//			            + " " + date.getHours() + seperator2 + date.getMinutes()
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+				//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
 		</script>
 	</body>

@@ -135,7 +135,7 @@
 				content: ' ';
 			}
 			
-			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
 				background-color: #fff;
 			}
 		</style>
@@ -143,11 +143,11 @@
 
 	<body>
 		<!--<div id='title'>-->
-			<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
-				<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
-				<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
-				<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
-			</header>
+		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;">
+			<a onclick="mui.back()" class="mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">学生考勤添加</h1>
+			<a id="finish" class="mui-pull-right" style="color: white;font-size: 15px;" @tap="submit()">提交</a>
+		</header>
 		<!--</div>-->
 		<div id='talk'>
 			<div class="mui-content mui-fullscreen" style="background: white;">
@@ -206,7 +206,7 @@
 									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
 								</a>
 							</li>
-							<li class="mui-table-view-cell" @tap="selectKm($event,index)"  style="margin-right: 35px;" v-if="ul.kmShow==1">
+							<li class="mui-table-view-cell" @tap="selectKm($event,index)" style="margin-right: 35px;" v-if="ul.kmShow==1">
 								<a class="aCss">科目</a>
 								<p class="mui-navigate-right  rCss">{{ul.subName}}</p>
 							</li>
@@ -313,7 +313,7 @@
 						talkTitle.sGrade = allGrade.value;
 						talkTitle.sClasses = allClasses.value;
 					}
-				},1);
+				}, 1);
 				//得到考勤细项、节次、出入权限等列表信息
 				var comData = {
 					id: 666
@@ -366,36 +366,36 @@
 				//登录
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
 					if(data1.RspCode == 0) {
-						console.log("data1:"+data1.RspTxt);
-						if(data1.RspData){
-							var kmList=data1.RspData.subs;
-							var newList=[];
-							for(var i=0;i<kmList.length;i++){
-								var temp={
-									text:kmList[i].subname,
-									value:kmList[i].subcode
+						console.log("data1:" + data1.RspTxt);
+						if(data1.RspData) {
+							var kmList = data1.RspData.subs;
+							var newList = [];
+							for(var i = 0; i < kmList.length; i++) {
+								var temp = {
+									text: kmList[i].subname,
+									value: kmList[i].subcode
 								}
 								newList.push(temp);
 							}
-							talkTitle.kmList=newList;
+							talkTitle.kmList = newList;
 						}
 					} else {
-						console.log("data1:"+data1.RspTxt);
+						console.log("data1:" + data1.RspTxt);
 					}
 				});
 			}
 
-//			var title = new Vue({
-//				el: '#title',
-//				data: {},
-//				methods: {
-//					submit: function() {
-//						talkTitle.$options.methods.submit();
-//					}
-//				}
-//			});
-			document.getElementById('finish').addEventListener('tap',function () {
-			        talkTitle.$options.methods.submit();
+			//			var title = new Vue({
+			//				el: '#title',
+			//				data: {},
+			//				methods: {
+			//					submit: function() {
+			//						talkTitle.$options.methods.submit();
+			//					}
+			//				}
+			//			});
+			document.getElementById('finish').addEventListener('tap', function() {
+				talkTitle.$options.methods.submit();
 			})
 
 			var talkTitle = new Vue({
@@ -424,13 +424,13 @@
 						attendanceTime: "请选择",
 						classNodes: [],
 						classNames: "请选择",
-						subCodes:'',
-						subName:'请选择',
-						classCanCheck:1,
-						dayCanCheck:1,
-						halfDayCanCheck:1,
-						kmShow:1
-						
+						subCodes: '',
+						subName: '请选择',
+						classCanCheck: 1,
+						dayCanCheck: 1,
+						halfDayCanCheck: 1,
+						kmShow: 1
+
 					}], //存值用：时间和节次集合
 					jlr: personal.utname, //存值用：记录人
 					lxsj: '请选择', //存值用：离校时间
@@ -445,7 +445,7 @@
 					sStudent: "" //存值用:学生ID
 				},
 				methods: {
-					selectnodesub:function(){
+					selectnodesub: function() {
 						document.activeElement.blur();
 					},
 					selectTime: function(event, lx, index) {
@@ -453,7 +453,7 @@
 						var _self = event.target;
 						var obj = this;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
-						if(lx == 'kqrq'||lx=='jlsj') {
+						if(lx == 'kqrq' || lx == 'jlsj') {
 							optionsJson = '{"type":"date"}';
 						}
 						var options = JSON.parse(optionsJson);
@@ -472,81 +472,84 @@
 								} else {
 									mui.toast('结束时间不能早于开始时间');
 								}
-							} else if(lx =='jlsj'){
+							} else if(lx == 'jlsj') {
 								talkTitle.jlsj = rs.text;
-							} 
-							else if(lx == 'kqrq') {
+							} else if(lx == 'kqrq') {
 								var stime = rs.text;
-//								var isContains = false;
-//								for(var i = 0; i < obj.nodeSubJson.length; i++) {
-//									var time = obj.nodeSubJson[i].attendanceTime;
-//									if(time == stime) {
-//										isContains = true;
-//									}
-//								}
-//								if(!isContains) {
-									if(compairTime2(getDate(), stime)) {
-										var nodes = obj.nodeSubJson[index];
-										nodes.attendanceTime = rs.text;
-									} else {
-										mui.toast('时间不能早于当前时间');
-									}
-//								} else {
-//									mui.toast('不能选择相同时间');
-//								}
-							} 
+								//								var isContains = false;
+								//								for(var i = 0; i < obj.nodeSubJson.length; i++) {
+								//									var time = obj.nodeSubJson[i].attendanceTime;
+								//									if(time == stime) {
+								//										isContains = true;
+								//									}
+								//								}
+								//								if(!isContains) {
+								if(compairTime2(getDate(), stime)) {
+									var nodes = obj.nodeSubJson[index];
+									nodes.attendanceTime = rs.text;
+								} else {
+									mui.toast('时间不能早于当前时间');
+								}
+								//								} else {
+								//									mui.toast('不能选择相同时间');
+								//								}
+							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});
 					},
 					selectGrade: function() { //选择年级 班级 学生
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 3
-						});
-						userPicker.setData(talkTitle.gradelist);
-						userPicker.show(function(items) {
-							talkTitle.grade = _getParam(items[0], 'text');
-							talkTitle.classes = _getParam(items[1], 'text');
-							talkTitle.student = _getParam(items[2], 'text');
-							talkTitle.sGrade = _getParam(items[0], 'value');
-							talkTitle.sClasses = _getParam(items[1], 'value');
-							talkTitle.sStudent = _getParam(items[2], 'value');
-						});
+						if(talkTitle.gradelist.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 3
+							});
+							userPicker.setData(talkTitle.gradelist);
+							userPicker.show(function(items) {
+								talkTitle.grade = _getParam(items[0], 'text');
+								talkTitle.classes = _getParam(items[1], 'text');
+								talkTitle.student = _getParam(items[2], 'text');
+								talkTitle.sGrade = _getParam(items[0], 'value');
+								talkTitle.sClasses = _getParam(items[1], 'value');
+								talkTitle.sStudent = _getParam(items[2], 'value');
+							});
+						} else {
+							mui.toast('此班级暂无学生');
+						}
 					},
-					classItemCheck:function(index){
+					classItemCheck: function(index) {
 						document.activeElement.blur();
-						var nodeSubJson=talkTitle.nodeSubJson[index];
-						if(nodeSubJson.dayCanCheck==1){
-							if(nodeSubJson.classCanCheck==1){
-								nodeSubJson.classCanCheck=-1;
-							}else{
-								nodeSubJson.classCanCheck=1;
+						var nodeSubJson = talkTitle.nodeSubJson[index];
+						if(nodeSubJson.dayCanCheck == 1) {
+							if(nodeSubJson.classCanCheck == 1) {
+								nodeSubJson.classCanCheck = -1;
+							} else {
+								nodeSubJson.classCanCheck = 1;
 							}
-							if(nodeSubJson.halfDayCanCheck==1){
-								nodeSubJson.halfDayCanCheck=-1;
-							}else{
-								nodeSubJson.halfDayCanCheck=1;
+							if(nodeSubJson.halfDayCanCheck == 1) {
+								nodeSubJson.halfDayCanCheck = -1;
+							} else {
+								nodeSubJson.halfDayCanCheck = 1;
 							}
 						}
-						
+
 					},
-					classItemCheckHalf:function(index){
+					classItemCheckHalf: function(index) {
 						document.activeElement.blur();
-						var nodeSubJson=talkTitle.nodeSubJson[index];
-						if(nodeSubJson.halfDayCanCheck==1){
-							if(nodeSubJson.classCanCheck==1){
-								nodeSubJson.classCanCheck=-1;
-							}else{
-								nodeSubJson.classCanCheck=1;
+						var nodeSubJson = talkTitle.nodeSubJson[index];
+						if(nodeSubJson.halfDayCanCheck == 1) {
+							if(nodeSubJson.classCanCheck == 1) {
+								nodeSubJson.classCanCheck = -1;
+							} else {
+								nodeSubJson.classCanCheck = 1;
 							}
-							if(nodeSubJson.dayCanCheck==1){
-								nodeSubJson.dayCanCheck=-1;
-							}else{
-								nodeSubJson.dayCanCheck=1;
+							if(nodeSubJson.dayCanCheck == 1) {
+								nodeSubJson.dayCanCheck = -1;
+							} else {
+								nodeSubJson.dayCanCheck = 1;
 							}
 						}
-						
+
 					},
 					selectKm: function(e, index) { //选择科目
 						document.activeElement.blur();
@@ -556,8 +559,8 @@
 						userPicker.setData(talkTitle.kmList);
 						userPicker.show(function(items) {
 							var nodes = talkTitle.nodeSubJson[index];
-							console.log("nodes==="+JSON.stringify(nodes))
-							console.log("index==="+JSON.stringify(index))
+							console.log("nodes===" + JSON.stringify(nodes))
+							console.log("index===" + JSON.stringify(index))
 							nodes.subName = _getParam(items[0], 'text');
 							nodes.subCodes = _getParam(items[0], 'value');
 						});
@@ -572,7 +575,7 @@
 							talkTitle.kqxxName = _getParam(items[0], 'text');
 							talkTitle.kqxxValue = _getParam(items[0], 'value');
 							talkTitle.qxShow = '0';
-							talkTitle.dayShow='0';
+							talkTitle.dayShow = '0';
 							if(_getParam(items[0], 'showInOut') == '1') {
 								talkTitle.qxShow = '1';
 							} else {
@@ -582,9 +585,9 @@
 								talkTitle.qValue = '';
 								talkTitle.sjShow = '0';
 							}
-							var type=_getParam(items[0], 'type');
-							if(_getParam(items[0], 'showInOut') == '1'){//如果是请假和缺勤，显示全天和半天
-								talkTitle.dayShow='1';
+							var type = _getParam(items[0], 'type');
+							if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
+								talkTitle.dayShow = '1';
 							}
 						});
 					},
@@ -632,62 +635,61 @@
 							}
 						})
 						var nodes = this.nodeSubJson[index];
-						nodes.classNodes =  [];
+						nodes.classNodes = [];
 						if(names.length > 0) {
 							//TODO 判断同一个日期下，是否有重复选择的节次
-							if(nodes.attendanceTime=="请选择"){
+							if(nodes.attendanceTime == "请选择") {
 								mui.toast('请先选择考勤日期');
 								mui(id).popover('toggle');
 								return 0;
 							}
-							
-							if(classes.indexOf("day") != -1){
+
+							if(classes.indexOf("day") != -1) {
 								nodes.classNodes.push('day');
-								nodes.classNames ='全天';
-								nodes.kmShow=-1;
+								nodes.classNames = '全天';
+								nodes.kmShow = -1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
-							}else if(classes.indexOf("halfDay") != -1){
+							} else if(classes.indexOf("halfDay") != -1) {
 								nodes.classNodes.push('halfDay');
-								nodes.classNames ='半天';
-								nodes.kmShow=-1;
+								nodes.classNames = '半天';
+								nodes.kmShow = -1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
-							}else{
-								for(var i=0;i<classes.length;i++){
+							} else {
+								for(var i = 0; i < classes.length; i++) {
 									nodes.classNodes.push(classes[i]);
 								}
 								nodes.classNames = names.join(",");
-								if(classes.length==1){
-									nodes.kmShow=1;
-								}else{
-									nodes.kmShow=-1;
+								if(classes.length == 1) {
+									nodes.kmShow = 1;
+								} else {
+									nodes.kmShow = -1;
 									nodes.subName = '请选择';
 									nodes.subCodes = '';
 								}
 							}
-							
-							
-							var nodeSub=this.nodeSubJson;
-							for(var i=0;i<nodeSub.length;i++){
-								var nodeChilds=nodeSub[i];
-								if(i==index){
+
+							var nodeSub = this.nodeSubJson;
+							for(var i = 0; i < nodeSub.length; i++) {
+								var nodeChilds = nodeSub[i];
+								if(i == index) {
 									continue
-								}else{
-									if(JSON.stringify(nodeChilds)==JSON.stringify(nodes)){
-											mui.toast('同一个日期下不能选择相同的节次');
-											nodes.classNames ="请选择";
-											nodes.classNodes = [];
-											mui(id).popover('toggle');
-											return 0;
+								} else {
+									if(JSON.stringify(nodeChilds) == JSON.stringify(nodes)) {
+										mui.toast('同一个日期下不能选择相同的节次');
+										nodes.classNames = "请选择";
+										nodes.classNodes = [];
+										mui(id).popover('toggle');
+										return 0;
 									}
 								}
 							}
-							
-						}else{
-							nodes.classNodes=[];
+
+						} else {
+							nodes.classNodes = [];
 							nodes.classNames = '请选择';
-							nodes.kmShow=1;
+							nodes.kmShow = 1;
 							nodes.subName = '请选择';
 							nodes.subCodes = '';
 						}
@@ -700,12 +702,12 @@
 							attendanceTime: "请选择",
 							classNodes: [],
 							classNames: "请选择",
-							subCodes:'',
-							subName:'请选择',
-							classCanCheck:1,
-							dayCanCheck:1,
-							halfDayCanCheck:1,
-							kmShow:1
+							subCodes: '',
+							subName: '请选择',
+							classCanCheck: 1,
+							dayCanCheck: 1,
+							halfDayCanCheck: 1,
+							kmShow: 1
 						};
 						Vue.set(this.nodeSubJson, this.nodeSubJson.length, nodes)
 					},
@@ -733,7 +735,7 @@
 							var params = {
 								attendanceTime: obj.attendanceTime,
 								classNodes: obj.classNodes,
-								subCodes:obj.subCodes
+								subCodes: obj.subCodes
 							}
 							arr.push(params);
 						}
@@ -749,16 +751,16 @@
 							mui.toast('内容最多120字');
 						} else {
 							console.log(JSON.stringify(arr))
-							var lxsj,hxsj;
-							if(talkTitle.lxsj=='请选择'){
-								lxsj=''
-							}else{
-								lxsj=talkTitle.lxsj;
+							var lxsj, hxsj;
+							if(talkTitle.lxsj == '请选择') {
+								lxsj = ''
+							} else {
+								lxsj = talkTitle.lxsj;
 							}
-							if(talkTitle.hxsj=='请选择'){
-								hxsj=''
-							}else{
-								hxsj=talkTitle.hxsj;
+							if(talkTitle.hxsj == '请选择') {
+								hxsj = ''
+							} else {
+								hxsj = talkTitle.hxsj;
 							}
 							var comData = {
 								id: '',
@@ -772,7 +774,7 @@
 								explain: talkTitle.content, //考勤说明
 								outsidePermisionCode: talkTitle.qValue, //出入校门权限编码
 								recordTime: talkTitle.jlsj, //记录时间
-								recorder:talkTitle.jlr,//记录人
+								recorder: talkTitle.jlr, //记录人
 								leaveSchoolTime: lxsj, //离校时间
 								backSchoolTime: hxsj //回校时间
 							}

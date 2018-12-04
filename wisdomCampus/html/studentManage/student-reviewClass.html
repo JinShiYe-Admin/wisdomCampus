@@ -147,6 +147,7 @@
 		<script src="../../js/lib/jquery.js"></script>
 		<script src="../../js/mui.js"></script>
 		<script src="../../js/echarts.common.min.js"></script>
+		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 
 		<script type="text/javascript">
@@ -162,7 +163,7 @@
 			//获取班级考评详情
 			var getReviewDetailP = function() {
 				var tempData = {
-					id: curPage.id
+					id: curPage.model.id
 				}
 				events.showWaiting();
 				//4.2.考评详情
@@ -170,30 +171,34 @@
 					events.closeWaiting();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						reviewDetialData.reviewDetial = data.RspData;
-						reviewDetialData.dataFlag = 1;
-						popoverDetailData.popoverDetail = data.RspData;
-						popoverDetailData.dataFlag = 1;
-						//线图
-						setLineData();
-						//饼图
-						var tempArray3 = [];
-						for(var i = 0; i < data.RspData.gradeArray.length; i++) {
-							var tempModel = data.RspData.gradeArray[i];
-							tempModel.name = tempModel.name + '(' + tempModel.scoreDesc + '):' + tempModel.value;
-							tempArray3.push(tempModel.name);
-						}
-						reviewDetialData.pieChartDetail.legend.data = [].concat(tempArray3);
-						reviewDetialData.pieChartDetail.series[0].data = [].concat(data.RspData.gradeArray);
-						reviewDetialData.dataFlag = 1;
-						setTimeout(function() {
-							var lineChart = echarts.init(document.getElementById('lineChart'));
-							// 使用刚指定的配置项和数据显示图表。
-							lineChart.setOption(reviewDetialData.lineEchartDetail);
-							var pieChart = echarts.init(document.getElementById('pieChart'));
-							// 使用刚指定的配置项和数据显示图表。
-							pieChart.setOption(reviewDetialData.pieChartDetail);
-						}, 300);
+						//合并数组
+						studentMP.setGrdNameClsName(curPage.stuArray, data.RspData.serArray, function(array) {
+							data.RspData.serArray = [].concat(array);
+							reviewDetialData.reviewDetial = data.RspData;
+							reviewDetialData.dataFlag = 1;
+							popoverDetailData.popoverDetail = data.RspData;
+							popoverDetailData.dataFlag = 1;
+							//线图
+							setLineData();
+							//饼图
+							var tempArray3 = [];
+							for(var i = 0; i < data.RspData.gradeArray.length; i++) {
+								var tempModel = data.RspData.gradeArray[i];
+								tempModel.name = tempModel.name + '(' + tempModel.scoreDesc + '):' + tempModel.value;
+								tempArray3.push(tempModel.name);
+							}
+							reviewDetialData.pieChartDetail.legend.data = [].concat(tempArray3);
+							reviewDetialData.pieChartDetail.series[0].data = [].concat(data.RspData.gradeArray);
+							reviewDetialData.dataFlag = 1;
+							setTimeout(function() {
+								var lineChart = echarts.init(document.getElementById('lineChart'));
+								// 使用刚指定的配置项和数据显示图表。
+								lineChart.setOption(reviewDetialData.lineEchartDetail);
+								var pieChart = echarts.init(document.getElementById('pieChart'));
+								// 使用刚指定的配置项和数据显示图表。
+								pieChart.setOption(reviewDetialData.pieChartDetail);
+							}, 300);
+						})
 					} else {
 						mui.toast(data.RspTxt);
 					}

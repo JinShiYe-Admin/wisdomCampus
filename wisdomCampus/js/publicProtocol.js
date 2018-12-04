@@ -714,3 +714,33 @@ var getReviewEvaluationStuAnalysis = function(data0, callback) {
 	xhrPost(tempAttendUrl1 + 'evaluationStuAnalysis', data0, callback);
 }
 
+//5.1. 学生评语首页列表
+var getCommentIndex = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'comment/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'commentIndex', data0, callback);
+}
+//5.2. 学生评语详情 
+var getCommentDetail = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'comment/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'detail', data0, callback);
+}
+//5.3. 保存学生评语
+var getCommentSave = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'comment/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'save', data0, callback);
+}
+//5.4. 删除评语记录
+var getCommentDelete = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'comment/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'delete', data0, callback);
+}
+//5.5. 根据学生条件查询评语记录-对应APP端新增时上一个下一个功能
+var getCommentDetailByStudent = function(data0, callback) {
+	var tempAttendUrl1 = window.storageKeyName.STUDENTMANAGE + 'comment/';
+	data0 = extendParameter1(data0);
+	xhrPost(tempAttendUrl1 + 'detailByStudent', data0, callback);
+}

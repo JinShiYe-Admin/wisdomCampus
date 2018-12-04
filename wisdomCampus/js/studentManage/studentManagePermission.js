@@ -195,17 +195,17 @@ var studentMP = (function(mod) {
 							tempDetail.className = tempClass.text;
 							for(var c = 0; c < tempClass.children.length; c++) {
 								var tempStu = tempClass.children[c];
-								if(tempStu.imgurl == null) {
-									tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
-								} else {
-									if (check_is_img(tempStu.imgurl)) {
-										tempDetail.stuImg = tempStu.imgurl;
-									} else{
-										tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
-									}
-								}
 								if(tempStu.value == tempDetail.studentId) {
 									tempDetail.stuName = tempStu.text;
+									if(tempStu.imgurl == null) {
+										tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
+									} else {
+										if(check_is_img(tempStu.imgurl)) {
+											tempDetail.stuImg = tempStu.imgurl;
+										} else {
+											tempDetail.stuImg = '../../img/utils/noImgPerson.jpg';
+										}
+									}
 								}
 							}
 						}

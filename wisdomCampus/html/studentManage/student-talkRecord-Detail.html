@@ -18,7 +18,7 @@
 				visibility: hidden;
 			}
 			
-			body{
+			body {
 				background: #fff;
 			}
 			
@@ -34,7 +34,7 @@
 				border-top: 1px solid lightgray;
 				border-left: 1px solid lightgray;
 				border-right: 1px solid lightgray;
-				border-bottom:0;
+				border-bottom: 0;
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 35px;
@@ -57,7 +57,7 @@
 				border-top: 1px solid lightgray;
 				border-left: 1px solid lightgray;
 				border-right: 1px solid lightgray;
-				border-bottom:0;
+				border-bottom: 0;
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 25px;
@@ -91,11 +91,11 @@
 				float: right;
 			}
 			
-			.rCss{
+			.rCss {
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:0px 17px 0 0;
+				margin: 0px 17px 0 0;
 			}
 			
 			.mui-table-view-cell {
@@ -105,17 +105,18 @@
 			.mui-checkbox input[type=checkbox]:checked:before {
 				color: #00cfbd;
 			}
-			
 			/**add*/
+			
 			.title-info {
 				padding: 18px 0 5px 0;
 				text-align: center;
 				background: #fff;
 			}
-			.title-body{
+			
+			.title-body {
 				margin-top: 5px;
 				background: #fff;
-				padding:10px 0 0 10px;
+				padding: 10px 0 0 10px;
 			}
 			
 			.user-title {
@@ -124,7 +125,7 @@
 				font-weight: bold;
 			}
 			
-			.user-title-se{
+			.user-title-se {
 				font-size: 13px;
 				color: #6d6d6d;
 			}
@@ -159,26 +160,28 @@
 				font-size: 13px;
 			}
 			
-			.body-title{
+			.body-title {
 				font-size: 17px;
 			}
 			
-			.multimedia-header{
-			    width: 94%;
-			    border:0;
-			    border-left: 1px solid lightgray;
-			    border-right: 1px solid lightgray;
-			    border-bottom: 1px solid lightgray;
-			    margin: -20px 3% 5px;
+			.multimedia-header {
+				width: 94%;
+				border: 0;
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray;
+				border-bottom: 1px solid lightgray;
+				margin: -20px 3% 5px;
 			}
-			.multimedia-footer{
+			
+			.multimedia-footer {
 				border: 0;
 			}
-			.fj{
-				float:left;
+			
+			.fj {
+				float: left;
 				font-size: 14px;
 				color: #6D6D6D;
-				margin:5px 5px 0 10px !important;
+				margin: 5px 5px 0 10px !important;
 			}
 			/**add*/
 		</style>
@@ -199,16 +202,18 @@
 					<div class="fj" v-if="sb.attachs==undefined || sb.attachs.length==0"></div>
 					<div class="fj" v-else>附件:</div>
 					<div v-cloak style="float: left;margin:5px 0 0 0;">
-						<p style="word-break: break-all;text-align: left;" v-for="(attach,index) in sb.attachs"><a @click="checkEnc(index)">{{attach.attachName}}</a></p>
-					</div> 
+						<p style="word-break: break-all;text-align: left;" v-for="(attach,index) in sb.attachs">
+							<a @click="checkEnc(index)">{{attach.attachName}}</a>
+						</p>
+					</div>
 				</div>
 				<div class="mui-row title-info" style="margin: -52px 15px 0 0;">
-					<p  style="float: right;">{{sb.recorder}}</p>
+					<p style="float: right;">{{sb.recorder}}</p>
 				</div>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<div :style="{display: isEdit=='hide'? 'none' : 'inherit'}">
 					<div class="mui-row title-body" style="font-size: 15px;color: #333;">
-						<span class="body-title" >谈话内容</span>
+						<span class="body-title">谈话内容</span>
 					</div>
 					<template v-if="isEdit=='show'">
 						<textarea id="notes" maxlength="350" v-model="content" disabled style="width: 94%;"></textarea>
@@ -216,19 +221,21 @@
 					<template v-else>
 						<textarea id="notes2" maxlength="350" v-model="content" placeholder="请输入谈话内容说明（最多350字）" style="width: 94%;"></textarea>
 					</template>
-					
-					<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'initial' : 'hidden' }"  style="margin-bottom: -50px;">
+
+					<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'initial' : 'hidden' }" style="margin-bottom: -50px;">
 						<div id="MultiMedia_Body" class="multimedia-body"></div>
 					</div>
 					<!--<div v-cloak class="user-title-footer" style="" v-for="(attach,index) in tc.attachs" :style="{display: isEdit=='edit'? 'none' : 'initial' }">
 						<p class="ul-p">附件：<a @click="checkEncTc(index)">{{attach.attachName}}</a></p>
 					</div>-->
-					<ul class="mui-table-view" :style="{display: isEdit=='edit'? 'none' : 'initial' }">	
+					<ul class="mui-table-view" :style="{display: isEdit=='edit'? 'none' : 'initial' }">
 						<li class="mui-table-view-cell">
 							<template v-if="tc.attachs!=[] && tc.attachs!=undefined && tc.attachs!=''">
-								<div style="float:left;font-size: 15px;color: black;margin-right: 5px;" >附件:</div>
+								<div style="float:left;font-size: 15px;color: black;margin-right: 5px;">附件:</div>
 								<div style="float:left;">
-									<p class="pClass" style="margin-bottom: 10px;" v-for="(attach,index) in tc.attachs"><a @tap="checkEncTc(index)">{{attach.attachName}}</a></p>
+									<p class="pClass" style="margin-bottom: 10px;" v-for="(attach,index) in tc.attachs">
+										<a @tap="checkEncTc(index)">{{attach.attachName}}</a>
+									</p>
 								</div>
 							</template>
 						</li>
@@ -236,19 +243,14 @@
 					<ul class="mui-table-view">
 						<template v-if="isEdit=='edit'">
 							<li class="mui-table-view-cell" @tap="selectTime($event,'thrq')" data-options='{"type":"date"}'>
-								<a  class="aCss">谈话日期</a>
-								<template v-if="tc.chatTime !='' && tc.chatTime!= null && tc.chatTime!=undefined">
-									<p  data-options='{}' class="mui-navigate-right pCss">{{tc.chatTime}}</p>
-								</template>
-								<template v-else>
-									<p  data-options='{}' class="mui-navigate-right pCss">{{talkTime}}</p>
-								</template>
+								<a class="aCss">谈话日期</a>
+								<p data-options='{}' class="mui-navigate-right pCss">{{talkTime}}</p>
 							</li>
 						</template>
 						<template v-else>
 							<li class="mui-table-view-cell">
-								<a  class="aCss">谈话日期:</a>
-								<p class="pCss" style="margin:0;">{{tc.chatTime}}</p>
+								<a class="aCss">谈话日期:</a>
+								<p class="pCss" style="margin:0;">{{talkTime}}</p>
 							</li>
 						</template>
 					</ul>
@@ -258,21 +260,21 @@
 							<template v-if="isEdit=='edit'">
 								<li class="mui-table-view-cell">
 									<a class="aCss">谈话/教育人 </a>
-									<span  class="rCss">{{teacher}}</span>
+									<span class="rCss">{{teacher}}</span>
 								</li>
 								<li class="mui-table-view-cell" @tap="selectTime($event,'jlrq')" data-options='{"type":"date"}'>
-									<a class="aCss">记录日期110</a>
-									<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{tc.recordTime}}</p>
+									<a class="aCss">记录日期</a>
+									<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{localTime}}</p>
 								</li>
 							</template>
 							<template v-else>
 								<li class="mui-table-view-cell">
 									<a class="aCss">谈话/教育人 </a>
-									<span  class="rCss">{{tc.teacher}}</span>
+									<span class="rCss">{{tc.teacher}}</span>
 								</li>
 								<li class="mui-table-view-cell">
 									<a class="aCss">记录日期 </a>
-									<span  class="rCss">{{tc.recordTime}}</span>
+									<span class="rCss">{{localTime}}</span>
 								</li>
 							</template>
 						</ul>
@@ -329,28 +331,28 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var actionHead =new Vue({
-				el:'#actionHead',
-				data:{
-					showFlag:0,//0隐藏，1显示
-					edit:'修改'
+			var actionHead = new Vue({
+				el: '#actionHead',
+				data: {
+					showFlag: 0, //0隐藏，1显示
+					edit: '修改'
 				}
 			});
-			
-			var talkTitle =new Vue({
-				el:'#talk',
-				data:{
-					sb:'',
-					tc:'',
-					curPage:'',
-					isEdit:'',
-					content:'',
-					localTime: getDate(),//记录日期 取的是当前日期
-					teacher:personal.utname,//谈话/教育人 取的是当前登录老师
+
+			var talkTitle = new Vue({
+				el: '#talk',
+				data: {
+					sb: '',
+					tc: '',
+					curPage: '',
+					isEdit: '',
+					content: '',
+					localTime: getDate(), //记录日期 取的是当前日期
+					teacher: personal.utname, //谈话/教育人 取的是当前登录老师
 					talkTime: getDate2()
 				},
-				methods:{
-					selectTime:function(event,lx){
+				methods: {
+					selectTime: function(event, lx) {
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
 						var options = JSON.parse(optionsJson);
@@ -358,22 +360,24 @@
 						_self.picker = new $M.DtPicker(options);
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
-							if(lx == 'thrq'){
-								talkTitle.talkTime=rs.text;
-								if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
-									talkTitle.tc.chatTime=rs.text;
-								}
-							}else if(lx == 'jlrq'){
-								talkTitle.tc.recordTime=rs.text;
+							if(lx == 'thrq') { //谈话日期
+								talkTitle.talkTime = rs.text;
+								//								if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
+								//									talkTitle.talkTime=rs.text;
+								//								}
+							} else if(lx == 'jlrq') { //记录日期
+								talkTitle.localTime = rs.text;
 							}
-							
+
 							_self.picker.dispose();
 							_self.picker = null;
 						});
-					},checkEnc: function(index) {
+					},
+					checkEnc: function(index) {
 						var tempUrl = this.sb.attachs[index].url;
 						plus.runtime.openURL(tempUrl);
-					},checkEncTc: function(index) {
+					},
+					checkEncTc: function(index) {
 						var tempUrl = this.tc.attachs[index].url;
 						console.log(tempUrl)
 						plus.runtime.openURL(tempUrl);
@@ -386,77 +390,81 @@
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 			console.log('publicParameter:' + JSON.stringify(personal));
-			var	curPage = utils.getDataFromUrl(window.location.href);
+			var curPage = utils.getDataFromUrl(window.location.href);
 			console.log('2222:' + JSON.stringify(curPage));
-			
-			var $M=mui.init();
+
+			var $M = mui.init();
 			mui.plusReady(function() {
 				init();
 				initListener(); //初始化监听
-				studentMP.getStudentManagePermission(1,1,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-					talkTitle.list=array;
+				studentMP.getStudentManagePermission(1, 1, function(array) {
+					console.log("ABCD==" + JSON.stringify(array))
+					talkTitle.list = array;
 					getTalk();
 				});
 			});
-			
-			if(curPage.id==null){
-				talkTitle.isEdit='hide'	
-				actionHead.edit='新增谈话'
-			}else{
-				talkTitle.isEdit='show'
-				actionHead.edit='修改谈话'
+
+			if(curPage.id == null) {
+				talkTitle.isEdit = 'hide'
+				actionHead.edit = '新增谈话'
+			} else {
+				talkTitle.isEdit = 'show'
+				actionHead.edit = '修改谈话'
 			}
-			talkTitle.curPage=curPage;
-			
+			talkTitle.curPage = curPage;
+
 			//3.2.谈话详情
 			function getTalk() {
-				var comData ={
-					id:curPage.id,
-					sbId:curPage.sbId
+				var comData = {
+					id: curPage.id,
+					sbId: curPage.sbId
 				}
 				var wd = events.showWaiting();
-				getTalkDetail(comData,function(data) {
+				getTalkDetail(comData, function(data) {
 					wd.close();
 					console.log('3.2.谈话详情:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						var sb=data.RspData.sb;
+						var sb = data.RspData.sb;
 						var personal = store.get(window.storageKeyName.PERSONALINFO);
 						var tempCount = 0;
-						for (var i = 0; i < personal.clss.length; i++) {
+						for(var i = 0; i < personal.clss.length; i++) {
 							var tempModel = personal.clss[i];
-							if (tempModel.clsid == sb.classId&&tempModel.isms==1) {
+							if(tempModel.clsid == sb.classId && tempModel.isms == 1) {
 								tempCount++;
 							}
 						}
-						if (tempCount>0) {
+						if(tempCount > 0) {
 							actionHead.showFlag = 1;
-						} else{
+						} else {
 							actionHead.showFlag = 0;
 						}
 						console.log("查询学生对应的名称")
 						for(var a = 0; a < talkTitle.list.length; a++) {
 							var tempGrdClsMsg = talkTitle.list[a];
-							if(tempGrdClsMsg.id=sb.gradeId){
-								sb.gradeName=tempGrdClsMsg.text
+							if(tempGrdClsMsg.id = sb.gradeId) {
+								sb.gradeName = tempGrdClsMsg.text
 							}
 							for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
 								var tempClass = tempGrdClsMsg.children[b];
-								if(tempClass.id=sb.classId){
-									sb.className=tempClass.text
+								if(tempClass.id = sb.classId) {
+									sb.className = tempClass.text
 								}
 							}
 						}
-						talkTitle.sb=sb;
-						talkTitle.tc=data.RspData.tc;
-						talkTitle.curPage=curPage;
-						talkTitle.content=data.RspData.tc.chatDetail
+						talkTitle.sb = sb;
+						talkTitle.tc = data.RspData.tc;
+						if(talkTitle.tc.recordTime) {
+							talkTitle.localTime = talkTitle.tc.recordTime;
+							talkTitle.talkTime = talkTitle.tc.chatTime;
+						}
+						talkTitle.curPage = curPage;
+						talkTitle.content = data.RspData.tc.chatDetail
 					} else {
-//							mui.toast(data.RspTxt);
+						//							mui.toast(data.RspTxt);
 					}
 				});
 			};
-			
+
 			var pathList = []; //记录需要删掉的图片和缩略图
 			var QNUptoken; //token数据
 			var uploadNum = 0; //记录上传的次数
@@ -534,46 +542,46 @@
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
-						events.hideKeyBoard(hideOption);
-						if(actionHead.edit=='修改谈话' || actionHead.edit=='新增谈话' ){
-							talkTitle.isEdit='edit'	
-							actionHead.edit='提交'
-							
-							$('#MultiMedia').css('margin-bottom','0px');
-							console.log(JSON.stringify(talkTitle.tc))
-							var imgUrl=[];
-							if(talkTitle.tc.attachs !='' && talkTitle.tc.attachs !=null && talkTitle.tc.attachs !=undefined){
-								var _attachs=talkTitle.tc.attachs;
-								for(var i=0;i<_attachs.length;i++){
-									imgUrl.push(_attachs[i].url);
-								}
-								multiMedia.addImages(imgUrl);
+					events.hideKeyBoard(hideOption);
+					if(actionHead.edit == '修改谈话' || actionHead.edit == '新增谈话') {
+						talkTitle.isEdit = 'edit'
+						actionHead.edit = '提交'
+
+						$('#MultiMedia').css('margin-bottom', '0px');
+						console.log(JSON.stringify(talkTitle.tc))
+						var imgUrl = [];
+						if(talkTitle.tc.attachs != '' && talkTitle.tc.attachs != null && talkTitle.tc.attachs != undefined) {
+							var _attachs = talkTitle.tc.attachs;
+							for(var i = 0; i < _attachs.length; i++) {
+								imgUrl.push(_attachs[i].url);
 							}
-						}else{
-							if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
-								mui.toast('通知内容不能为空');
-								document.getElementById("finish").disabled = false;
-							} else if(talkTitle.content.length > 350) {
-								mui.toast('内容最多350字');
-								document.getElementById("finish").disabled = false;
-							} else {
-								var wd = events.showWaiting();
-								document.getElementById("finish").disabled = true;
-								var fj=[];
+							multiMedia.addImages(imgUrl);
+						}
+					} else {
+						if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
+							mui.toast('通知内容不能为空');
+							document.getElementById("finish").disabled = false;
+						} else if(talkTitle.content.length > 350) {
+							mui.toast('内容最多350字');
+							document.getElementById("finish").disabled = false;
+						} else {
+							var wd = events.showWaiting();
+							document.getElementById("finish").disabled = true;
+							var fj = [];
 							for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
-								if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
-										continue
-									}	
-									fj.push(multiMedia.data.PictureArray[i].path);
+								if(multiMedia.data.PictureArray[i].path.indexOf('http://') != -1 || multiMedia.data.PictureArray[i].path.indexOf('https://') != -1) {
+									continue
 								}
-								if(fj.length==0){
-									console.log()
-									addNote(wd, '3', '', '', 0, '');
-								}else{
-									uploadFile(wd); //上传文件
-								}
+								fj.push(multiMedia.data.PictureArray[i].path);
+							}
+							if(fj.length == 0) {
+								console.log()
+								addNote(wd, '3', '', '', 0, '');
+							} else {
+								uploadFile(wd); //上传文件
 							}
 						}
+					}
 				});
 			}
 
@@ -591,71 +599,71 @@
 				console.log('encImg:' + encImg);
 				console.log('encLen:' + encLen);
 				console.log('multiMedia.data.PictureArray:' + JSON.stringify(multiMedia.data.PictureArray));
-				var fj=[];
-				
+				var fj = [];
+
 				/**过滤本地图片数组，去重删掉的本地图片*/
-				var localImg=[];
-				var dImg=multiMedia.data.deleteImg;
-				if(talkTitle.tc.attachs !=''&&talkTitle.tc.attachs !=null&&talkTitle.tc.attachs !=undefined){
-					var _attachs=talkTitle.tc.attachs;
-					for(var i=0;i<_attachs.length;i++){
-						var localUrl=_attachs[i].url;
-						if(dImg.length>0){
-							var index=$.inArray(localUrl, dImg);
-							if(index==-1){
+				var localImg = [];
+				var dImg = multiMedia.data.deleteImg;
+				if(talkTitle.tc.attachs != '' && talkTitle.tc.attachs != null && talkTitle.tc.attachs != undefined) {
+					var _attachs = talkTitle.tc.attachs;
+					for(var i = 0; i < _attachs.length; i++) {
+						var localUrl = _attachs[i].url;
+						if(dImg.length > 0) {
+							var index = $.inArray(localUrl, dImg);
+							if(index == -1) {
 								localImg.push(localUrl);
 							}
-						}else{
+						} else {
 							localImg.push(localUrl);
 						}
 					}
 				}
 				console.log('localImg:' + localImg);
-				var checkimg=[];
-				if(encAddr !=''){
+				var checkimg = [];
+				if(encAddr != '') {
 					var enc_Url = encAddr.split("|");
 					checkimg = Deduplication(enc_Url);
 				}
 				console.log('checkimg:' + checkimg);
-				var fj=[];
-				fj=localImg.concat(checkimg);
-				console.log(":"+JSON.stringify(fj));
-				
-				var fjObj=[];
-				for(var i =0;i<fj.length;i++){
-					var items=fj[i];
-					var oriName =items.substring(items.lastIndexOf("/")+1);
-					var obj={
-						oriName:oriName,
-						filePath:items
+				var fj = [];
+				fj = localImg.concat(checkimg);
+				console.log(":" + JSON.stringify(fj));
+
+				var fjObj = [];
+				for(var i = 0; i < fj.length; i++) {
+					var items = fj[i];
+					var oriName = items.substring(items.lastIndexOf("/") + 1);
+					var obj = {
+						oriName: oriName,
+						filePath: items
 					}
 					fjObj.push(obj);
 				}
-				
+
 				var tempData1 = {
-					sbId: talkTitle.sb.id, 
-					chatDetail: talkTitle.content,  
-					chatTime:talkTitle.talkTime,
-					teacher:talkTitle.teacher,
-					recordTime: talkTitle.localTime,  
+					sbId: talkTitle.sb.id,
+					chatDetail: talkTitle.content,
+					chatTime: talkTitle.talkTime,
+					teacher: talkTitle.teacher,
+					recordTime: talkTitle.localTime,
 					attachs: fjObj
 				}
-				if(talkTitle.tc !=''||talkTitle.tc !=null||talkTitle.tc !=undefined){
-					tempData1.id=talkTitle.tc.id
-				}else{
-					tempData1.id="  "
+				if(talkTitle.tc != '' || talkTitle.tc != null || talkTitle.tc != undefined) {
+					tempData1.id = talkTitle.tc.id
+				} else {
+					tempData1.id = "  "
 				}
-				
-				console.log("tempData1："+JSON.stringify(tempData1));
+
+				console.log("tempData1：" + JSON.stringify(tempData1));
 				events.showWaiting();
 				getTalkSaveChat(tempData1, function function_name(data) {
 					events.closeWaiting();
 					if(data.RspCode == 0) {
 						mui.toast('保存成功');
 						mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
-						setTimeout(function(){
+						setTimeout(function() {
 							mui.back();
-						},2000)
+						}, 2000)
 					} else {
 						document.getElementById("finish").disabled = false;
 						mui.toast(data.RspTxt);
@@ -677,9 +685,9 @@
 
 				if(multiMedia.data.PictureArray.length != 0) { //图片
 					for(var i = 0; i < multiMedia.data.PictureArray.length; i++) {
-						if(multiMedia.data.PictureArray[i].path.indexOf('http://')!=-1 ||multiMedia.data.PictureArray[i].path.indexOf('https://')!=-1){
+						if(multiMedia.data.PictureArray[i].path.indexOf('http://') != -1 || multiMedia.data.PictureArray[i].path.indexOf('https://') != -1) {
 							continue
-						}	
+						}
 						getUpTokenData.fileArray.push(multiMedia.data.PictureArray[i].path);
 					}
 				} else if(multiMedia.data.VideoArray.length != 0) { //视频
@@ -931,57 +939,56 @@
 					}
 				}
 			}
-			
+
 			//获取当前日期
 			function getDate() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-//			            + " " + date.getHours() + seperator2 + date.getMinutes()
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+				//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
-			
+
 			function getDate2() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-			            + " " + date.getHours() + seperator2 + date.getMinutes();
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate +
+					" " + date.getHours() + seperator2 + date.getMinutes();
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
-			
-			function Deduplication(Array){
+
+			function Deduplication(Array) {
 				var newArray = [];
-				for(var i=0; i<Array.length; i++){
+				for(var i = 0; i < Array.length; i++) {
 					var items = Array[i];
-					if(items !== '' && items !== null && items !== undefined){
-						if($.inArray(items,newArray) == -1){
+					if(items !== '' && items !== null && items !== undefined) {
+						if($.inArray(items, newArray) == -1) {
 							newArray.push(items)
-						}	
+						}
 					}
 				}
 				return newArray;
 			}
-
 		</script>
 	</body>
 

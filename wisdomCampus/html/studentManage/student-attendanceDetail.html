@@ -340,6 +340,7 @@
 			});
 
 			var getSchSubThread = function() {
+				var wd = events.showWaiting();
 				var enData1 = {};
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -351,6 +352,7 @@
 					appid: publicParameter.appid //系统所分配的应用ID
 				};
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					wd.close();
 					if (data1.RspCode == 0) {
 						console.log("data1:" + data1.RspTxt);
 						if (data1.RspData) {
@@ -368,16 +370,19 @@
 						}
 					} else {
 						console.log("data1:" + data1.RspTxt);
+						mui.toast(data1.RspTxt);
 					}
 				});
 			}
 
 			var getAttendanceDetailP = function() {
+				var wd = events.showWaiting();
 				var tempData = {
 					id: curPage.id
 				}
 				getAttendanceDetail(tempData, function funcName(data) {
 					console.log('data:' + JSON.stringify(data));
+					wd.close();
 					if (data.RspCode == 0) {
 						var personal = store.get(window.storageKeyName.PERSONALINFO);
 						if (data.RspData.sa.createUser == personal.utid) {
@@ -737,7 +742,7 @@
 						} else {
 							attendanceDetialData.update = '1';
 							title.titleBar = '提交';
-							attendanceDetialData.attendanceDetail.recordTime = getDate();
+//							attendanceDetialData.attendanceDetail.recordTime = getDate();
 							var nodes = attendanceDetialData.nodeSubJson[0];
 							if (nodes.kmShow == 0) {
 								nodes.subName = '请选择';

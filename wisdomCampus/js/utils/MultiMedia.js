@@ -438,11 +438,18 @@ var MultiMedia = (function($, mod) {
 	 * @param {Object} num
 	 */
 	proto.picturesPick = function(NumPick) {
-		////console.log('picturesPick');
+//		console.log('picturesPick:'+NumPick);
 		var self = this;
 		mod.galleryPickFalse('image', true, NumPick, function(event) {
+//			console.log('event.files.length:'+event.files.length);
 			var wd = events.showWaiting('处理中...');
-			var files = event.files; // 保存多选的图片或视频文件路径
+			var files = []; // 保存多选的图片或视频文件路径
+			if (NumPick<event.files.length) {
+				files = event.files.slice(0,NumPick);
+			} else{
+				files = event.files;
+			}
+//			console.log('files.length:'+files.length);
 			var myDate = new Date();
 			var num = 0;
 			var tempArrary = [];
@@ -455,18 +462,20 @@ var MultiMedia = (function($, mod) {
 					dst: dst //压缩后的路径
 				});
 			}
-
+//			console.log('tempArrary:'+tempArrary.length);
 			for(var i = 0; i < tempArrary.length; i++) {
 				compress.compressImageTo_1MB({
 					path: tempArrary[i].fpath,
 					dst: tempArrary[i].dst
 				}, function(event) {
+//					console.log('1111111');
 					num++;
 					var target = event.target;
 					var nameArray = target.split('/');
 					var name = nameArray[nameArray.length - 1];
 					var id = name.split('_')[1];
 					tempArrary[id].target = target;
+//					console.log('num:'+num+',files.length:'+files.length);
 					if(num == files.length) {
 						var tempFiles = [];
 						for(var i = 0; i < tempArrary.length; i++) {
@@ -476,6 +485,7 @@ var MultiMedia = (function($, mod) {
 						wd.close();
 					}
 				}, function(error) {
+//					console.log('1111119');
 					mui.toast(error.message);
 					wd.close();
 				});
@@ -722,8 +732,14 @@ var MultiMedia = (function($, mod) {
 	 */
 	mod.galleryPickFalse = function(filter, multiple, maximum, successCB, errorCB) {
 		////console.log('galleryPickFalse | filter ' + filter + ' | multiple ' + multiple + ' | maximum ' + maximum);
+		var tempFlag = 0;
 		plus.gallery.pick(function(event) {
-			successCB(event);
+//			console.log('plus.gallery000');
+			if (tempFlag == 0) {
+				tempFlag = 1;
+//				console.log('plus.gallery001');
+				successCB(event);
+			}
 		}, function(error) {
 			mod.galleryPickError(error, errorCB);
 		}, {
