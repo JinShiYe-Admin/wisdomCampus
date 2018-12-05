@@ -151,12 +151,15 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var m$=mui.init()
+			var m$=mui.init();
+			var userPicker;
 			mui.plusReady(function(){
 				//得到年级、班级、学生数据
 				studentMP.getStudentManagePermission(1,1,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					selectTitle.gradelist=array; 
+					userPicker = new m$.PopPicker({layer: 2});
+					userPicker.setData(array);
 					if(array.length>0){
 						var allGrade=array[0];
 						var allClasses=allGrade.children[0];
@@ -182,8 +185,6 @@
 				},
 				methods:{
 					selectGrade:function(){
-						var userPicker = new m$.PopPicker({layer: 2});
-						userPicker.setData(selectTitle.gradelist);
 						userPicker.show(function(items) {
 							var grade=_getParam(items[0], 'text');
 							var classes=_getParam(items[1], 'text');

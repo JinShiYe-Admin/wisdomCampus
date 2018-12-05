@@ -115,6 +115,17 @@
 			.mui-table-view-cell>a:not(.mui-btn).mui-active{
 				background-color: #fff;
 			}
+			.mui-table-view.bottom-line:after{
+				    position: absolute;
+				    right: 0;
+				    bottom: 0;
+				    left: 0;
+				    height: 0;
+				    content: '';
+				    -webkit-transform: scaleY(.5);
+				    transform: scaleY(.5);
+				    background-color: #c8c7cc;
+			}
 		</style>
 	</head>
 
@@ -125,7 +136,7 @@
 			<a v-show="showFlag==1" id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;">{{btnText}}</a>
 		</header>
 		<div class="mui-content" id="actionDetialData" style="background: #fff;">
-			<ul class="mui-table-view">
+			<ul class="mui-table-view" style="margin-top: 0;">
 				<li class="mui-table-view-cell">
 					<a>
 						<p class="mui-pull-right liDetail">{{actionDetail.gradeName}}</p>
@@ -174,7 +185,7 @@
 			</template>
 			<template v-else>
 				<ul class="mui-table-view" >
-					<li class="mui-table-view-cell" @tap="selectTypeAction()">
+					<li class="mui-table-view-cell" @tap="selectTypeAction()" style="margin-top: -10px;">
 						<a  class="aCss">行为类型</a>
 						<span  class="mui-navigate-right rCss">{{actionDetail.behaviorTypeTxt}}</span>
 					</li>
@@ -184,7 +195,7 @@
 					</li>
 				</ul>
 			</template>
-			<ul class="mui-table-view" >
+			<ul class="mui-table-view bottom-line" >
 				<li class="mui-table-view-cell">
 					<a>
 						<div class="mui-media-body liTitle">
@@ -194,10 +205,10 @@
 				</li>
 			</ul>
 			<template v-if="isEdit=='show'">
-				<textarea id="notes" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 94%;margin-top: 5px;"></textarea>
 			</template>
 			<template v-else>
-				<textarea id="notes2" maxlength="120" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
+				<textarea id="notes2" maxlength="120" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;margin-top: 5px;"></textarea>
 			</template>
 			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }"  style="margin-bottom: -50px;">
 				<div id="MultiMedia_Body" class="multimedia-body"></div>
