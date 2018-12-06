@@ -418,7 +418,7 @@
 							halfDayCanCheck: 1,
 							kmShow: 1
 						}
-
+						//TODO jckmShow判断是否显示科目和节次
 						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime; //给nodes对象赋值，用于修改操作
 						nodes.classNames = attendanceDetialData.attendanceDetail.period;
 						var classArr = attendanceDetialData.attendanceDetail.classNodes.split(",");
@@ -474,7 +474,7 @@
 							attendanceDetialData.sjShow = '1';
 						}
 						attendanceDetialData.$set(attendanceDetialData.nodeSubJson, 0, nodes);
-						console.log("liushuai:"+JSON.stringify(attendanceDetialData.nodeSubJson));
+						console.log("abc:"+JSON.stringify(attendanceDetialData.nodeSubJson));
 					} else {
 						mui.toast(data.RspTxt);
 					}
@@ -510,6 +510,7 @@
 					jcList: [],
 					qxList: [],
 					dayShow: '0',
+					jckmShow: '0',
 					nodeSubJson: [{
 						canDelete: '0',
 						attendanceTime: "请选择",
@@ -585,6 +586,12 @@
 						userPicker.show(function(items) {
 							attendanceDetialData.attendanceDetail.attendanceTypeTxt = _getParam(items[0], 'text');
 							attendanceDetialData.attendanceDetail.attendanceType = _getParam(items[0], 'value');
+							var showCnSub = _getParam(items[0], 'showCnSub');
+							if(showCnSub=='1'){//如果是课堂考勤，才能选节次和科目
+								attendanceDetialData.jckmShow='1';
+							}else{
+								attendanceDetialData.jckmShow='0';
+							}
 							attendanceDetialData.qxShow = '0';
 							setAttendanceType();
 							//							if(_getParam(items[0], 'value') == '12') {
@@ -724,7 +731,7 @@
 						});
 						userPicker.setData(attendanceDetialData.kmList);
 						var nodes = attendanceDetialData.nodeSubJson[index];
-						console.log("liushuai:"+nodes.subCodes)
+						console.log("abc:"+nodes.subCodes)
 						setTimeout(function() {
 							userPicker.pickers[0].setSelectedValue(nodes.subCodes);
 						}, 100);
@@ -758,6 +765,16 @@
 						var arr = [];
 						for (var i = 0; i < attendanceDetialData.nodeSubJson.length; i++) {
 							var obj = attendanceDetialData.nodeSubJson[i];
+							if(obj.attendanceTime == '请选择') {
+								mui.toast('请选择考勤日期');
+								break;
+							}
+							if(attendanceDetialData.jckmShow==1){
+								if(obj.classNodes.length===0){
+									mui.toast('请选择考勤节次');
+									break;
+								}
+							}
 							var params = {
 								attendanceTime: obj.attendanceTime,
 								classNodes: obj.classNodes,
@@ -796,20 +813,20 @@
 								comData.backSchoolTime = ''
 						}
 						console.log(JSON.stringify(comData))
-						var wd = events.showWaiting();
-						getSaveAttendance(comData, function(data) {
-							wd.close();
-							console.log('3.保存考勤' + JSON.stringify(data));
-							if (data.RspCode == 0) {
-								mui.toast(data.RspTxt);
-								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
-								setTimeout(function() {
-									mui.back();
-								}, 2000)
-							} else {
-								mui.toast(data.RspTxt);
-							}
-						});
+//						var wd = events.showWaiting();
+//						getSaveAttendance(comData, function(data) {
+//							wd.close();
+//							console.log('3.保存考勤' + JSON.stringify(data));
+//							if (data.RspCode == 0) {
+//								mui.toast(data.RspTxt);
+//								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
+//								setTimeout(function() {
+//									mui.back();
+//								}, 2000)
+//							} else {
+//								mui.toast(data.RspTxt);
+//							}
+//						});
 					}
 				}
 			});

@@ -195,21 +195,30 @@
 						</ul>-->
 					<template v-for="(ul,index) in nodeSubJson">
 						<ul :id="'ul'+index" class="mui-table-view">
-							<img src="../../img/utils/delete.png" v-show="ul.canDelete==1" style="width: 30px;float: right;margin:31px 5px 0 0;" @tap="deleteLi($event,index)">
-							<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}' style="margin-right: 35px;">
-								<a class="aCss">考勤日期</a>
-								<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
-							</li>
-							<li class="mui-table-view-cell" style="margin-right: 35px;">
-								<a class="aCss">节次</a>
-								<a :href="'#select'+index" @tap="selectnodesub()" style="float:right;width:75%">
-									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
-								</a>
-							</li>
-							<li class="mui-table-view-cell" @tap="selectKm($event,index)" style="margin-right: 35px;" v-if="ul.kmShow==1">
-								<a class="aCss">科目</a>
-								<p class="mui-navigate-right  rCss">{{ul.subName}}</p>
-							</li>
+							<template v-if="jckmShow=='1'">
+								<img src="../../img/utils/delete.png" v-show="ul.canDelete==1" style="width: 30px;float: right;margin:31px 5px 0 0;" @tap="deleteLi($event,index)">
+								<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}' style="margin-right: 35px;">
+									<a class="aCss">考勤日期</a>
+									<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
+								</li>
+								<li class="mui-table-view-cell" style="margin-right: 35px;">
+									<a class="aCss">节次</a>
+									<a :href="'#select'+index" @tap="selectnodesub()" style="float:right;width:75%">
+										<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
+									</a>
+								</li>
+								<li class="mui-table-view-cell" @tap="selectKm($event,index)" style="margin-right: 35px;" v-if="ul.kmShow==1">
+									<a class="aCss">科目</a>
+									<p class="mui-navigate-right  rCss">{{ul.subName}}</p>
+								</li>
+							</template>
+							<template v-else-if="jckmShow=='0'">
+								<img src="../../img/utils/delete.png" v-show="ul.canDelete==1" style="width: 30px;float: right;margin:6px 5px 0 0;" @tap="deleteLi($event,index)">
+								<li class="mui-table-view-cell" @tap="selectTime($event,'kqrq',index)" data-options='{"type":"date"}' style="margin-right: 35px;">
+									<a class="aCss">考勤日期</a>
+									<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
+								</li>
+							</template>
 						</ul>
 					</template>
 				</div>
@@ -328,6 +337,12 @@
 						if(talkTitle.kqlxNameList.length > 0) {
 							talkTitle.kqlxName = talkTitle.kqlxNameList[0].text;
 							talkTitle.kqlxValue = talkTitle.kqlxNameList[0].value;
+							if(talkTitle.kqlxNameList[0].showCnSub=='1'){
+								talkTitle.jckmShow='1';
+							}else{
+								talkTitle.jckmShow='0';
+							}
+							
 							setAttendanceType();
 							getSchSubThread();
 						}
@@ -413,6 +428,7 @@
 					qxShow: '0',
 					sjShow: '0',
 					dayShow: '0',
+					jckmShow: '0',
 					gradelist: [],
 					kqxxNameList: [],
 					kqlxNameList: [],
@@ -600,6 +616,12 @@
 						userPicker.show(function(items) {
 							talkTitle.kqlxName = _getParam(items[0], 'text');
 							talkTitle.kqlxValue = _getParam(items[0], 'value');
+							var showCnSub = _getParam(items[0], 'showCnSub');
+							if(showCnSub=='1'){//如果是课堂考勤，才能选节次和科目
+								talkTitle.jckmShow='1';
+							}else{
+								talkTitle.jckmShow='0';
+							}
 							talkTitle.qxShow = '0';
 							setAttendanceType();
 							//							if(_getParam(items[0], 'value') == '12') {
@@ -729,8 +751,13 @@
 							console.log('obj.attendanceTime:' + obj.attendanceTime);
 							if(obj.attendanceTime == '请选择') {
 								mui.toast('请选择考勤日期');
-								return;
 								break;
+							}
+							if(talkTitle.jckmShow==1){
+								if(obj.classNodes.length===0){
+									mui.toast('请选择考勤节次');
+									break;
+								}
 							}
 							var params = {
 								attendanceTime: obj.attendanceTime,
