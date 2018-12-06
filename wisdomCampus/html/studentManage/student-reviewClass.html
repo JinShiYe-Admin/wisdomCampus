@@ -78,7 +78,7 @@
 				<div class="chart" id="lineChart"></div>
 				<h5 style="margin-top: 50px;">| 量化均分</h5>
 				<!--<p class="mui-pull-right" style="margin-top: -20px;">请假 ></p>-->
-				<img @click="addSubDetail" class="mui-pull-right" style="margin-top: -20px;width: 35px;height: 35px;" src="../../img/utils/addMinScore.png" />
+				<img @click="addSubDetail" class="mui-pull-right" style="margin-top: -20px;width: 32px;height: 32	·	px;" src="../../img/utils/addMinScore.png" />
 				<div style="text-align: center;">
 					<p class="p_left">{{reviewDetial.averScore}}分</p>
 					<p class="p_right">/{{reviewDetial.aver2Grade}}</p>
@@ -101,7 +101,7 @@
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell mui-media" @click="clickStuDetail(stuModel)" v-for="(stuModel,index) in reviewDetial.serArray">
 					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../../img/utils/noImgPerson.jpg">
+						<img class="mui-media-object mui-pull-left" :src=stuModel.stuImg>
 						<div class="mui-media-body">
 							<p class="mui-pull-left" style="margin-top: 10px;">{{stuModel.studentName}}</p>
 							<p class="mui-pull-right" style="margin-top: 10px;margin-right: 30px;">{{stuModel.score}}分/{{stuModel.evaGrade}}</p>
@@ -171,8 +171,14 @@
 					events.closeWaiting();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
+						for(var i = 0; i < data.RspData.serArray.length; i++) {
+							var tempModel = data.RspData.serArray[i];
+							tempModel.gradeId = data.RspData.sqe.grdId;
+							tempModel.classId = data.RspData.sqe.classId;
+						}
 						//合并数组
 						studentMP.setGrdNameClsName(curPage.stuArray, data.RspData.serArray, function(array) {
+							console.log('array:' + JSON.stringify(array));
 							data.RspData.serArray = [].concat(array);
 							reviewDetialData.reviewDetial = data.RspData;
 							reviewDetialData.dataFlag = 1;
@@ -297,6 +303,8 @@
 						yAxis: [{
 							type: 'value', //坐标轴类型，纵轴默认为数值型'value'
 							name: '次数',
+							min: 0,
+							minInterval: 1,
 							nameLocation: 'middle',
 							nameTextStyle: {
 								color: "black",

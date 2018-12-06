@@ -1,11 +1,11 @@
- //此js用于保存本地存储时，用到的key值
+//此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 0;//开发，1部署
+	mod.key = 1; //0开发，1云测试，2部署
 	var exLog = console.log;
 	console.log = function(hint, object) {
-		if(mod.key === 0) {
+		if(mod.key === 1) {
 			var argus = hint;
 			if(typeof(object) !== 'undefined') {
 				argus = hint + JSON.stringify(object);
@@ -21,8 +21,8 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/'; //孔工接口
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
 			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
-			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';
-			mod.STUDENTMANAGE='https://gxkf.jiaobaowang.net:9443/sm/app/';//学生管理
+			mod.ANDROIDUPDATEURL = 'http://192.168.1.121:8081/app/versionCode.xml';
+			mod.STUDENTMANAGE = 'https://gxkf.jiaobaowang.net:9443/sm/app/'; //学生管理
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
@@ -32,15 +32,39 @@ var storageKeyName = (function(mod) {
 			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8007/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8007/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			break;
-		case 1: //发布
-//			mod.SCHOOLID = 100130; //学校ID
+		case 1: //云测试
 			mod.SCHOOLID = 0; //学校ID
-            mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
-            mod.INTERFACEGU = 'https://boss.zhuxue101.net:444/api/data/'; //顾工接口
-            mod.INTERFACEKONG = 'https://zyja.zhuxue101.net/SchoolOAService/'; //孔工接口
-            mod.INTERFACESIGNINKONG = 'https://zyja.zhuxue101.net/SchoolAttendanceService/'; //孔工接口
-            mod.TEACHERIMG = 'https://boss.zhuxue101.net/upuserimg.ashx?userid='; //老师上传头像
-            mod.ANDROIDUPDATEURL='http://boss.zhuxue101.net:8002/versionCode.xml';
+			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/'; //顾工接口
+			mod.INTERFACEKONG = 'https://zyja.zhuxue101.net/SchoolOAService/'; //孔工接口
+			mod.INTERFACESIGNINKONG = 'https://zyja.zhuxue101.net/SchoolAttendanceService/'; //孔工接口IMG
+			mod.TEACHERIMG = 'https://boss.zhuxue101.net/upuserimg.ashx?userid='; //老师上传头像
+			mod.ANDROIDUPDATEURL = 'http://boss.zhuxue101.net:8002/versionCode.xml';
+			mod.STUDENTMANAGE = 'https://gxkf.jiaobaowang.net:9443/sm/app/'; //学生管理
+			
+//			 mod.INTERFACEGU = 'https://boss.zhuxue101.net:444/api/data/'; //顾工接口
+//          mod.INTERFACEKONG = 'https://zyja.zhuxue101.net/SchoolOAService/'; //孔工接口
+//          mod.INTERFACESIGNINKONG = 'https://zyja.zhuxue101.net/SchoolAttendanceService/'; //孔工接口
+//          mod.TEACHERIMG = 'https://boss.zhuxue101.net/upuserimg.ashx?userid='; //老师上传头像
+//          mod.ANDROIDUPDATEURL='http://boss.zhuxue101.net:8002/versionCode.xml';
+
+			//---七牛空间和接口---
+			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
+			mod.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
+			mod.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
+			mod.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
+			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8007/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
+			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8007/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+			break;
+		case 2: //发布
+			mod.SCHOOLID = 100005; //学校ID
+			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/'; //顾工接口
+			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/'; //孔工接口
+			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
+			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
+			mod.ANDROIDUPDATEURL = 'http://192.168.1.121:8081/app/versionCode.xml';
+			mod.STUDENTMANAGE = 'https://gxkf.jiaobaowang.net:9443/sm/app/'; //学生管理
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
@@ -85,10 +109,10 @@ var storageKeyName = (function(mod) {
 	mod.WAITING = '加载中...'; //
 	mod.UPLOADING = '上传中...';
 	mod.SIGNKEY = 'jsy309'; //签名密钥
-	
+
 	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
 	mod.ICONNUM = 0; //角标数量
-	
+
 	/**
 	 * 在本地存永久数据
 	 * @param {Object} key
