@@ -137,16 +137,18 @@
 								<a class="aCss">考勤日期</a>
 								<p class="mui-navigate-right rCss">{{ul.attendanceTime}}</p>
 							</li>
-							<li class="mui-table-view-cell">
-								<a class="aCss">节次</a>
-								<a :href="'#select'+index" @tap="selectnodesub()" style="float:right;width:75%">
-									<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
-								</a>
-							</li>
-							<li class="mui-table-view-cell" @tap="selectKm($event,index)" v-if="ul.kmShow==1">
-								<a class="aCss">科目</a>
-								<p class="mui-navigate-right rCss">{{ul.subName}}</p>
-							</li>
+							<template v-if="jckmShow=='1'">
+								<li class="mui-table-view-cell">
+									<a class="aCss">节次</a>
+									<a :href="'#select'+index" @tap="selectnodesub()" style="float:right;width:75%">
+										<p class="mui-navigate-right  rCss">{{ul.classNames}}</p>
+									</a>
+								</li>
+								<li class="mui-table-view-cell" @tap="selectKm($event,index)" v-if="ul.kmShow==1">
+									<a class="aCss">科目</a>
+									<p class="mui-navigate-right rCss">{{ul.subName}}</p>
+								</li>
+							</template>
 						</ul>
 					</template>
 					<ul class="mui-table-view">
@@ -199,22 +201,24 @@
 							</div>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a>
-							<p class="mui-pull-right liDetail">{{attendanceDetail.period}}</p>
-							<div class="mui-media-body liTitle">
-								节次
-							</div>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a>
-							<p class="mui-pull-right liDetail" v-for="nodeSub in attendanceDetialData.nodeSubJson">{{nodeSub.subName}}</p>
-							<div class="mui-media-body liTitle">
-								科目
-							</div>
-						</a>
-					</li>
+					<template v-if="jckmShow=='1'">
+						<li class="mui-table-view-cell">
+							<a>
+								<p class="mui-pull-right liDetail">{{attendanceDetail.period}}</p>
+								<div class="mui-media-body liTitle">
+									节次
+								</div>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a>
+								<p class="mui-pull-right liDetail" v-for="nodeSub in attendanceDetialData.nodeSubJson">{{nodeSub.subName}}</p>
+								<div class="mui-media-body liTitle">
+									科目
+								</div>
+							</a>
+						</li>
+					</template>
 					<p class="lineCell" style="margin-bottom: 0;"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;" v-if="attendanceDetail.quantizationAttendanceId==12">
 						<a>
@@ -418,61 +422,74 @@
 							halfDayCanCheck: 1,
 							kmShow: 1
 						}
-						//TODO jckmShow判断是否显示科目和节次
-						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime; //给nodes对象赋值，用于修改操作
-						nodes.classNames = attendanceDetialData.attendanceDetail.period;
-						var classArr = attendanceDetialData.attendanceDetail.classNodes.split(",");
-						nodes.classNodes = classArr;
-						if (classArr.length > 1) {
-							nodes.kmShow = -1;
-						}
-
-						nodes.subCodes = attendanceDetialData.attendanceDetail.subCodes;
-						for (var i = 0; i < attendanceDetialData.kmList.length; i++) {
-							if (attendanceDetialData.kmList[i].value == attendanceDetialData.attendanceDetail.subCodes) {
-								nodes.subName = attendanceDetialData.kmList[i].text;
-								break;
-							} else {
-								nodes.subName = '暂无科目'
+						var atArr=attendanceDetialData.attendanceDetailSum.atArray;
+						var attendanceType = attendanceDetialData.attendanceDetail.attendanceType;
+						for(var i=0;i<atArr.length;i++){
+							var value=atArr[i].value;
+							var t_showCnSub=atArr[i].showCnSub;
+							if(attendanceType==value&&t_showCnSub==1){//如果是课堂考勤
+								attendanceDetialData.jckmShow=="1";
+							}else{
+								attendanceDetialData.jckmShow=="0";
 							}
 						}
-						if (attendanceDetialData.attendanceDetail.classNodes == 'day') {
-							nodes.halfDayCanCheck = -1;
-							nodes.classCanCheck = -1;
-							nodes.kmShow = -1;
-						}
-						if (attendanceDetialData.attendanceDetail.classNodes == 'halfDay') {
-							nodes.dayCanCheck = -1;
-							nodes.classCanCheck = -1;
-							nodes.kmShow = -1;
-						}
-						//根据回传的考勤细项ID（quantizationAttendanceId） 和 考勤类型编码（attendanceType） 遍历 考勤类型与考勤细项关联数组（qa）,找到对应的考勤细项，判断是否选择的是请假或者缺勤，如果是，则显示全天、半天
-						var attendanceType = attendanceDetialData.attendanceDetail.attendanceType;
-						var qa = data.RspData.qa;
-						for (var i = 0; i < qa.length; i++) {
-							var value = qa[i].value;
-							if (attendanceType == value) {
-								var dataArray = qa[i].dataArray;
-								var quantizationAttendanceId = attendanceDetialData.attendanceDetail.quantizationAttendanceId;
-								for (var j = 0; j < dataArray.length; j++) {
-									var dValue = dataArray[j].value;
-									if (quantizationAttendanceId == dValue) {
-										var showInOut = dataArray[j].showInOut;
-										var text = dataArray[j].text;
-										if (showInOut == "1") {
-											attendanceDetialData.dayShow = "1";
-										}
-										if (text.indexOf('请假') != -1) {
-											attendanceDetialData.qxShow = "1";
+						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime; //给nodes对象赋值，用于修改操作
+						if(attendanceDetialData.showCnSub=="1"){//如果是课堂考勤，解析节次和科目信息
+							nodes.classNames = attendanceDetialData.attendanceDetail.period;
+							var classArr = attendanceDetialData.attendanceDetail.classNodes.split(",");
+							nodes.classNodes = classArr;
+							if (classArr.length > 1) {
+								nodes.kmShow = -1;
+							}
+	
+							nodes.subCodes = attendanceDetialData.attendanceDetail.subCodes;
+							for (var i = 0; i < attendanceDetialData.kmList.length; i++) {
+								if (attendanceDetialData.kmList[i].value == attendanceDetialData.attendanceDetail.subCodes) {
+									nodes.subName = attendanceDetialData.kmList[i].text;
+									break;
+								} else {
+									nodes.subName = '暂无科目'
+								}
+							}
+							if (attendanceDetialData.attendanceDetail.classNodes == 'day') {
+								nodes.halfDayCanCheck = -1;
+								nodes.classCanCheck = -1;
+								nodes.kmShow = -1;
+							}
+							if (attendanceDetialData.attendanceDetail.classNodes == 'halfDay') {
+								nodes.dayCanCheck = -1;
+								nodes.classCanCheck = -1;
+								nodes.kmShow = -1;
+							}
+							//根据回传的考勤细项ID（quantizationAttendanceId） 和 考勤类型编码（attendanceType） 遍历 考勤类型与考勤细项关联数组（qa）,找到对应的考勤细项，判断是否选择的是请假或者缺勤，如果是，则显示全天、半天
+							
+							var qa = data.RspData.qa;
+							for (var i = 0; i < qa.length; i++) {
+								var value = qa[i].value;
+								if (attendanceType == value) {
+									var dataArray = qa[i].dataArray;
+									var quantizationAttendanceId = attendanceDetialData.attendanceDetail.quantizationAttendanceId;
+									for (var j = 0; j < dataArray.length; j++) {
+										var dValue = dataArray[j].value;
+										if (quantizationAttendanceId == dValue) {
+											var showInOut = dataArray[j].showInOut;
+											var text = dataArray[j].text;
+											if (showInOut == "1") {
+												attendanceDetialData.dayShow = "1";
+											}
+											if (text.indexOf('请假') != -1) {
+												attendanceDetialData.qxShow = "1";
+											}
 										}
 									}
 								}
 							}
+	
+							if (attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
+								attendanceDetialData.sjShow = '1';
+							}
 						}
-
-						if (attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
-							attendanceDetialData.sjShow = '1';
-						}
+						
 						attendanceDetialData.$set(attendanceDetialData.nodeSubJson, 0, nodes);
 						console.log("abc:"+JSON.stringify(attendanceDetialData.nodeSubJson));
 					} else {
@@ -765,10 +782,6 @@
 						var arr = [];
 						for (var i = 0; i < attendanceDetialData.nodeSubJson.length; i++) {
 							var obj = attendanceDetialData.nodeSubJson[i];
-							if(obj.attendanceTime == '请选择') {
-								mui.toast('请选择考勤日期');
-								break;
-							}
 							if(attendanceDetialData.jckmShow==1){
 								if(obj.classNodes.length===0){
 									mui.toast('请选择考勤节次');
@@ -813,20 +826,20 @@
 								comData.backSchoolTime = ''
 						}
 						console.log(JSON.stringify(comData))
-//						var wd = events.showWaiting();
-//						getSaveAttendance(comData, function(data) {
-//							wd.close();
-//							console.log('3.保存考勤' + JSON.stringify(data));
-//							if (data.RspCode == 0) {
-//								mui.toast(data.RspTxt);
-//								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
-//								setTimeout(function() {
-//									mui.back();
-//								}, 2000)
-//							} else {
-//								mui.toast(data.RspTxt);
-//							}
-//						});
+						var wd = events.showWaiting();
+						getSaveAttendance(comData, function(data) {
+							wd.close();
+							console.log('3.保存考勤' + JSON.stringify(data));
+							if (data.RspCode == 0) {
+								mui.toast(data.RspTxt);
+								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
+								setTimeout(function() {
+									mui.back();
+								}, 2000)
+							} else {
+								mui.toast(data.RspTxt);
+							}
+						});
 					}
 				}
 			});
