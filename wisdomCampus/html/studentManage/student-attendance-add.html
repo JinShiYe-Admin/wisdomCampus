@@ -475,6 +475,19 @@
 						var options = JSON.parse(optionsJson);
 						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
+						//设置默认值
+						setTimeout(function() {
+							if(lx == 'lxsj') {
+								_self.picker.setSelectedValue(talkTitle.lxsj);
+							} else if(lx == 'hxsj') {
+								_self.picker.setSelectedValue(talkTitle.hxsj);
+							} else if(lx == 'jlsj') {
+								_self.picker.setSelectedValue(talkTitle.jlsj);
+							} else if(lx == 'kqrq') {
+								var nodes = obj.nodeSubJson[index];
+								_self.picker.setSelectedValue(nodes.attendanceTime);
+							}
+						}, 100);
 						_self.picker.show(function(rs) {
 							if(lx == 'lxsj') {
 								if(compairTime(rs.text, talkTitle.hxsj)) {

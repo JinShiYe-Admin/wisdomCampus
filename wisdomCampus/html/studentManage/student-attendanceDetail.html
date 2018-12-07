@@ -558,6 +558,18 @@
 						var options = JSON.parse(optionsJson);
 						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
+						setTimeout(function() {
+							if(lx == 'lxsj') {
+								_self.picker.setSelectedValue(attendanceDetialData.attendanceDetail.leaveSchoolTime);
+							} else if(lx == 'hxsj') {
+								_self.picker.setSelectedValue(attendanceDetialData.attendanceDetail.backSchoolTime);
+							} else if(lx == 'jlsj') {
+								_self.picker.setSelectedValue(attendanceDetialData.attendanceDetail.recordTime);
+							} else if(lx == 'kqrq') {
+								var nodes = obj.nodeSubJson[index];
+								_self.picker.setSelectedValue(nodes.attendanceTime);
+							}
+						}, 100);
 						_self.picker.show(function(rs) {
 
 							if (lx == 'lxsj') {

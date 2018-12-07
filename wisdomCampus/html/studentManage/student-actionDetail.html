@@ -445,6 +445,14 @@
 						var options = JSON.parse(optionsJson);
 						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
+						//设置默认值
+						setTimeout(function() {
+							if(lx == 'fsrq') {
+								_self.picker.setSelectedValue(actionDetialData.actionDetail.behaviorTime);
+							} else if(lx == 'jlsj') {
+								_self.picker.setSelectedValue(actionDetialData.actionDetail.recordTime);
+							} 
+						}, 100);
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text+"，lx="+lx);
 							if(lx == 'fsrq') {
