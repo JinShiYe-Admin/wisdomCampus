@@ -444,16 +444,16 @@
 
 			mui.plusReady(function() {
 //				init();
-//				initListener(); //初始化监听
+				initListener(); //初始化监听
 				studentMP.getStudentManagePermission(2, 1, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
 					commentSum.stuList = array;
-					if(array.length > 0) {
-						var allGrade = array[0];
-						var allClasses = allGrade.children[0];
-						commentSum.gradeValue = allGrade.value;
-						commentSum.classesValue = allClasses.value;
-					}
+//					if(array.length > 0) {
+//						var allGrade = array[0];
+//						var allClasses = allGrade.children[0];
+//						commentSum.gradeValue = allGrade.value;
+//						commentSum.classesValue = allClasses.value;
+//					}
 				}, 1);
 				//5.2. 学生评语详情
 				var comData = {
@@ -524,16 +524,16 @@
 			var multiMedia; //多媒体控件
 
 			//多媒体控件
-			multiMedia = MultiMedia.multiMedia({
-				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
-				Key: personal.utid, //utid
-				Picture: true, //是否显示图片图标
-				Audio: false, //是否显示音频图标
-				Video: false, //是否显示视频图标
-				TotalPicture: 9, //图片的个数
-				TotalAudio: 0, //音频的个数
-				TotalVideo: 0, //视频的个数
-			});
+//			multiMedia = MultiMedia.multiMedia({
+//				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+//				Key: personal.utid, //utid
+//				Picture: true, //是否显示图片图标
+//				Audio: false, //是否显示音频图标
+//				Video: false, //是否显示视频图标
+//				TotalPicture: 9, //图片的个数
+//				TotalAudio: 0, //音频的个数
+//				TotalVideo: 0, //视频的个数
+//			});
 
 			/*
 			 * 初始化控件
@@ -587,9 +587,9 @@
 			 */
 			function initListener() {
 				//点击图片收回键盘
-				mui('body').on('tap', 'img', function() {
-					document.activeElement.blur();
-				});
+//				mui('body').on('tap', 'img', function() {
+//					document.activeElement.blur();
+//				});
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
@@ -618,13 +618,13 @@
 					} else {
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
-						console.log(JSON.stringify(multiMedia))
-						console.log(JSON.stringify(multiMedia.data.PictureArray))
-						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
+//						console.log(JSON.stringify(multiMedia))
+//						console.log(JSON.stringify(multiMedia.data.PictureArray))
+//						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
 							addNotice(wd, '3', '', '', 0, '');
-						} else {
-							uploadFile(wd); //上传文件
-						}
+//						} else {
+//							uploadFile(wd); //上传文件
+//						}
 					}
 				});
 			}
