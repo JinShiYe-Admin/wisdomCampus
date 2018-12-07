@@ -14,7 +14,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
 var utils = (function(mod) {
 	//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
 	mod.setBadgeNumber = function(flag, count) {
-		console.log('setBadgeNumber:'+flag+',count:'+count);
+		console.log('setBadgeNumber:' + flag + ',count:' + count);
 		if(flag == 0) {
 			store.set(window.storageKeyName.BADGENUMBER, count);
 			plus.runtime.setBadgeNumber(count);
@@ -34,6 +34,19 @@ var utils = (function(mod) {
 			store.set(window.storageKeyName.BADGENUMBER, badgeNumber);
 			plus.runtime.setBadgeNumber(badgeNumber);
 		}
+	}
+
+	//比对时间大小
+	mod.compairTime = function(startTime, endTime) {
+		if(startTime == '请选择' || endTime == '请选择') {
+			return true;
+		}
+		var start = new Date(startTime.replace("-", "/").replace("-", "/"));
+		var end = new Date(endTime.replace("-", "/").replace("-", "/"));
+		if(end > start) {
+			return true;
+		}
+		return false;
 	}
 
 	mod.getUUID = function() {
@@ -90,11 +103,11 @@ var utils = (function(mod) {
 		var dataStr = JSON.stringify(data);
 		console.log("mOpen " + url + ' ' + dataStr);
 		mui.openWindow({
-			url:	url + "?v=" + Math.random() + "&data=" + encodeURIComponent(dataStr)
-			,id:ids[ids.length - 1]
-			,waiting:{
-		      autoShow:false,//自动显示等待框，默认为true
-		    }
+			url: url + "?v=" + Math.random() + "&data=" + encodeURIComponent(dataStr),
+			id: ids[ids.length - 1],
+			waiting: {
+				autoShow: false, //自动显示等待框，默认为true
+			}
 		});
 	}
 
@@ -394,8 +407,8 @@ var utils = (function(mod) {
 	 */
 	mod.getUrlParam = function(url_string, param) {
 		if(!url_string) {
-				url_string = location.href;
-			}
+			url_string = location.href;
+		}
 		try {
 			var eurl = new URL(url_string);
 			return eurl.searchParams.get(param);

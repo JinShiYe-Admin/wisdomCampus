@@ -209,34 +209,34 @@
 				</ul>
 				<div style="background-color: #f2f3f5;height: 10px;"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectActionType()">
-						<a class="aCss">行为类型</a>
-						<span class="mui-navigate-right  rCss">{{actionTypeText}}</span>
+					<li class="mui-table-view-cell" @tap="selectTimeType()">
+						<a class="aCss">年份</a>
+						<span class="mui-navigate-right rCss">{{timeTypeText}}</span>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectAction()">
-						<a class="aCss">行为细项</a>
-						<span class="mui-navigate-right  rCss">{{actionText}}</span>
+					<li class="mui-table-view-cell" @tap="selectSysTermType()">
+						<a class="aCss">学期</a>
+						<span class="mui-navigate-right rCss">{{SysTermTypeText}}</span>
+					</li>
+					<li class="mui-table-view-cell" @tap="selectCommentType()">
+						<a class="aCss">评价类型</a>
+						<span class="mui-navigate-right rCss">{{commentTypeText}}</span>
 					</li>
 				</ul>
 				<div class="mui-row title-body">
-					<span class="body-title">行为说明</span>
+					<span class="body-title">学生评语</span>
 				</div>
-				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入评语（最多120字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectTime($event,'fsrq')" data-options='{"type":"date"}'>
-						<a class="aCss">发生日期</a>
-						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{time}}</p>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'begin')" data-options='{"type":"date"}'>
+						<a class="aCss">评价开始时间</a>
+						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{beginTime}}</p>
 					</li>
-					<li class="mui-table-view-cell" @tap="selectJc()">
-						<a class="aCss">节次</a>
-						<span class="mui-navigate-right  rCss">{{jcText}}</span>
-					</li>
-					<li class="mui-table-view-cell" @tap="selectKm()">
-						<a class="aCss">科目</a>
-						<span class="mui-navigate-right  rCss">{{kmText}}</span>
+					<li class="mui-table-view-cell" @tap="selectTime($event,'end')" data-options='{"type":"date"}'>
+						<a class="aCss">评价结束时间</a>
+						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{endTime}}</p>
 					</li>
 				</ul>
 
@@ -244,12 +244,12 @@
 				<div id="bootom-card" style="margin-bottom: 30px">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
-							<a class="aCss">记录人</a>
+							<a class="aCss">撰写人</a>
 							<span class="rCss">{{teacher}}</span>
 						</li>
-						<li class="mui-table-view-cell" @tap="selectTime($event,'record',-1)" data-options='{"type":"date"}'>
-							<a class="aCss">记录时间</a>
-							<p data-options='{"type":"date"}' class="mui-navigate-right rCss ">{{record}}</p>
+						<li class="mui-table-view-cell" @tap="selectTime($event,'write')" data-options='{"type":"date"}'>
+							<a class="aCss">撰写时间</a>
+							<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{writeTime}}</p>
 						</li>
 					</ul>
 				</div>
@@ -315,64 +315,91 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-
+			//年份选择器
+			var timeTypePicker = new $M.PopPicker({
+				layer: 1
+			});
+			//学期选择器
+			var systermTypePicker = new $M.PopPicker({
+				layer: 1
+			});
+			//评价类型选择器
+			var commentTypePicker = new $M.PopPicker({
+				layer: 1
+			});
+			//年级、班级、学生选择器
+			var stuPicker = new $M.PopPicker({
+				layer: 3
+			});
 			var commentSum = new Vue({
 				el: '#talk',
 				data: {
-					actionDetail: {},
-					list: [],
-					gradeText: '请选择',
-					classesText: '请选择',
-					studentText: '请选择',
-					gradeValue: '',
-					classesValue: '',
-					studentValue: '',
-					actionList: [],
-					actionTypeList: [],
-					jcList: [],
-					kmList: [],
-					actionText: '请选择',
-					actionValue: '',
-					actionTypeText: '请选择',
-					actionTypeValue: '',
+					commentDetail: {},
+					stuList: [], //年级、班级、学生数组
+					gradeText: '请选择', //年级显示
+					classesText: '请选择', //班级显示
+					studentText: '请选择', //学生显示
+					gradeValue: '', //年级选择的值
+					classesValue: '', //班级选择的值
+					studentValue: '', //学生选择的值
+					timeTypeList: [], //年份选择列表
+					timeTypeText: '请选择', //年份选择后显示
+					timeTypeValue: '', //年份选择的值
+					SysTermTypeList: [], //学期选择列表
+					SysTermTypeText: '请选择', //学期选择后显示
+					SysTermTypeValue: '', //学期选择的值
+					commentTypeList: [], //评价类型选择列表
+					commentTypeText: '请选择', //评价类型选择后显示
+					commentTypeValue: '', //评价类型选择的值
 					content: '',
-					time: getDate(),
-					jcText: '请选择',
-					jcValue: '',
-					kmText: '请选择',
-					kmValue: '',
-					teacher: personal.utname,
-					record: getDate(),
-					classCanCheck: 1,
-					kmShow: 1
+					beginTime: getDate(), //开始时间
+					endTime: getDate(), //结束时间
+					writeTime: getDate(), //撰写时间
+					teacher: personal.utname //撰写人
 				},
 				methods: {
-					selectTime: function(event, lx) {
+					selectTime: function(event, lx) { //三个时间选择
 						document.activeElement.blur();
 						var _self = event.target;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
 						var options = JSON.parse(optionsJson);
-						var id = _self.getAttribute('id');
 						_self.picker = new $M.DtPicker(options);
+						//设置默认值
+						setTimeout(function() {
+							if(lx == 'begin') {
+								_self.picker.setSelectedValue(commentSum.beginTime);
+							} else if(lx == 'end') {
+								_self.picker.setSelectedValue(commentSum.endTime);
+							} else if(lx == 'write') {
+								_self.picker.setSelectedValue(commentSum.writeTime);
+							}
+						}, 100);
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
-							if(lx == 'fsrq') {
-								commentSum.time = rs.text;
-							} else if(lx == 'record') {
-								commentSum.record = rs.text;
+							if(lx == 'begin') {
+								if(utils.compairTime(rs.text, commentSum.endTime)) {
+									commentSum.beginTime = rs.text;
+								} else {
+									mui.toast('开始时间不能晚于结束时间');
+								}
+							} else if(lx == 'end') {
+								if(utils.compairTime(commentSum.beginTime, rs.text)) {
+									commentSum.endTime = rs.text;
+								} else {
+									mui.toast('开始时间不能晚于结束时间');
+								}
+							} else if(lx == 'write') {
+								commentSum.writeTime = rs.text;
 							}
 							_self.picker.dispose();
 							_self.picker = null;
 						});
 					},
-					selectGrade: function() {
+					selectGrade: function() { //年级、班级、学生选择
 						document.activeElement.blur();
-						if(commentSum.list.length > 0) {
-							var userPicker = new $M.PopPicker({
-								layer: 3
-							});
-							userPicker.setData(commentSum.list);
-							userPicker.show(function(items) {
+						if(commentSum.stuList.length > 0) {
+							stuPicker.setData(commentSum.stuList);
+							stuPicker.show(function(items) {
 								commentSum.gradeText = _getParam(items[0], 'text');
 								commentSum.classesText = _getParam(items[1], 'text');
 								commentSum.studentText = _getParam(items[2], 'text');
@@ -384,57 +411,28 @@
 							mui.toast('此班级暂无学生');
 						}
 					},
-					classItemCheck: function() {
+					selectTimeType: function() { //选择年份
 						document.activeElement.blur();
-						if(this.classCanCheck == 1) {
-							this.classCanCheck = -1
-						} else {
-							this.classCanCheck = 1
-						}
-					},
-					selectActionType: function() {
-						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(commentSum.actionTypeList);
-						userPicker.show(function(items) {
-							commentSum.actionTypeText = _getParam(items[0], 'text');
-							commentSum.actionTypeValue = _getParam(items[0], 'value');
-							setAttendanceType();
+						timeTypePicker.setData(commentSum.timeTypeList);
+						timeTypePicker.show(function(items) {
+							commentSum.timeTypeText = _getParam(items[0], 'text');
+							commentSum.timeTypeValue = _getParam(items[0], 'value');
 						});
 					},
-					selectAction: function() {
+					selectCommentType: function() { //选择评价类型
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(commentSum.actionList);
-						userPicker.show(function(items) {
-							commentSum.actionText = _getParam(items[0], 'text');
-							commentSum.actionValue = _getParam(items[0], 'value');
+						commentTypePicker.setData(commentSum.commentTypeList);
+						commentTypePicker.show(function(items) {
+							commentSum.commentTypeText = _getParam(items[0], 'text');
+							commentSum.commentTypeValue = _getParam(items[0], 'value');
 						});
 					},
-					selectJc: function(e) { //选择节次
+					selectSysTermType: function() { //选择学期
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(commentSum.jcList);
-						userPicker.show(function(items) {
-							commentSum.jcText = _getParam(items[0], 'text');
-							commentSum.jcValue = _getParam(items[0], 'value');
-						});
-					},
-					selectKm: function() {
-						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(commentSum.kmList);
-						userPicker.show(function(items) {
-							commentSum.kmText = _getParam(items[0], 'text');
-							commentSum.kmValue = _getParam(items[0], 'value');
+						systermTypePicker.setData(commentSum.SysTermTypeList);
+						systermTypePicker.show(function(items) {
+							commentSum.SysTermTypeText = _getParam(items[0], 'text');
+							commentSum.SysTermTypeValue = _getParam(items[0], 'value');
 						});
 					}
 				}
@@ -448,7 +446,7 @@
 				initListener(); //初始化监听
 				studentMP.getStudentManagePermission(2, 1, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
-					commentSum.list = array;
+					commentSum.stuList = array;
 					if(array.length > 0) {
 						var allGrade = array[0];
 						var allClasses = allGrade.children[0];
@@ -465,22 +463,28 @@
 					wd.close();
 					console.log('5.2. 学生评语详情:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						commentSum.actionDetail = data.RspData;
-						commentSum.actionTypeList = data.RspData.btArray;
-						commentSum.jcList = data.RspData.cn;
-						if(commentSum.actionTypeList.length > 0) {
-							commentSum.actionTypeText = commentSum.actionTypeList[0].text;
-							commentSum.actionTypeValue = commentSum.actionTypeList[0].value;
-							setAttendanceType();
-							getSchSubThread();
-						}
+						commentSum.commentDetail = data.RspData;
+						commentSum.commentTypeList = data.RspData.commentTypeArray;
 					} else {
 						//							mui.toast(data.RspTxt);
 					}
 				});
-				mui('.mui-scroll-wrapper').scroll()
+				mui('.mui-scroll-wrapper').scroll();
+				//获取学期列表
+				getSysTerm();
+				//获取当前年份，生成年份列表
+				var myDate = new Date().getFullYear();
+				console.log('myDate:' + myDate);
+				for(var i = myDate; i < myDate + 5; i++) {
+					var tepModel = {
+						text: i + '年',
+						value: i
+					}
+					commentSum.timeTypeList.push(tepModel);
+				}
 			});
-			var getSchSubThread = function() {
+			//3.4 系统学期
+			var getSysTerm = function() {
 				var enData1 = {};
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
@@ -490,37 +494,25 @@
 					utoken: personal.utoken, //用户令牌
 					appid: publicParameter.appid //系统所分配的应用ID
 				};
-				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+				postDataEncry('SysTerm', enData1, comData1, 0, function(data1) {
 					if(data1.RspCode == 0) {
-						console.log("data1:" + data1.RspTxt);
+						console.log("3.4 系统学期:" + JSON.stringify(data1));
 						if(data1.RspData) {
-							var kmList = data1.RspData.subs;
+							var termList = data1.RspData.systerm;
 							var newList = [];
-							for(var i = 0; i < kmList.length; i++) {
+							for(var i = 0; i < termList.length; i++) {
 								var temp = {
-									text: kmList[i].subname,
-									value: kmList[i].subcode
+									text: termList[i].termname,
+									value: termList[i].termcode
 								}
 								newList.push(temp);
 							}
-							commentSum.kmList = newList;
+							commentSum.SysTermTypeList = newList;
 						}
 					} else {
 						console.log("data1:" + data1.RspTxt);
 					}
 				});
-			}
-			//将类型、细项的值对应
-			var setAttendanceType = function() {
-				for(var i = 0; i < commentSum.actionDetail.qb.length; i++) {
-					var tempModel = commentSum.actionDetail.qb[i];
-					if(tempModel.value == commentSum.actionTypeValue) {
-						commentSum.actionList = [].concat(tempModel.dataArray);
-						commentSum.actionText = '请选择';
-						commentSum.actionValue = '';
-						break;
-					}
-				}
 			}
 
 			var pathList = []; //记录需要删掉的图片和缩略图
@@ -602,7 +594,7 @@
 				document.getElementById('finish').addEventListener('tap', function() {
 					events.hideKeyBoard(hideOption);
 					if(commentSum.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
-						mui.toast('行为说明不能为空');
+						mui.toast('评语不能为空');
 						document.getElementById("finish").disabled = false;
 					} else if(commentSum.content.length > 120) {
 						mui.toast('内容最多120字');
@@ -613,14 +605,14 @@
 					} else if(commentSum.studentText == '全部学生') {
 						mui.toast('只能选择一个学生');
 						document.getElementById("finish").disabled = false;
-					} else if(commentSum.actionTypeValue == '请选择' || commentSum.actionTypeValue == '') {
-						mui.toast('请选择行为类型');
+					} else if(commentSum.timeTypeText == '请选择') {
+						mui.toast('请选择年份');
 						document.getElementById("finish").disabled = false;
-					} else if(commentSum.actionValue == '请选择' || commentSum.actionValue == '') {
-						mui.toast('请选择行为细项');
+					} else if(commentSum.SysTermTypeValue == '请选择') {
+						mui.toast('请选择学期');
 						document.getElementById("finish").disabled = false;
-					} else if(commentSum.jcValue == '请选择' || commentSum.jcValue == '' || commentSum.jcValue.length == 0) {
-						mui.toast('请选择节次');
+					} else if(commentSum.commentTypeText == '请选择') {
+						mui.toast('请选择评价类型');
 						document.getElementById("finish").disabled = false;
 					} else {
 						var wd = events.showWaiting();
@@ -637,7 +629,7 @@
 			}
 
 			/**
-			 * 增加笔记
+			 * 5.3. 保存学生评语
 			 * @param {Object} wd 等待框
 			 * @param {Object} encType 附件类型，1图片2音视频3仅文字
 			 * @param {Object} encAddr 附件地址
@@ -662,33 +654,25 @@
 						fj.push(attach);
 					}
 				}
-
-				var kmValue = ''
-				if(commentSum.kmShow == 1) {
-					kmValue = commentSum.kmValue;
-				}
-
 				var tempData = {
-					id: '',
-					gradeId: commentSum.gradeValue,
-					classId: commentSum.classesValue,
-					studentId: commentSum.studentValue,
-					studentName: commentSum.studentText,
-					quantizationBehaviorId: commentSum.actionValue,
-					behaviorType: commentSum.actionTypeValue,
-					behaviorTime: commentSum.time,
-					behaviorDetail: commentSum.content,
-					classNodes: commentSum.jcValue,
-					subCode: kmValue,
-					recordTime: commentSum.record,
-					attachs: fj
-
+					id: '', //评语记录id
+					gradeId: commentSum.gradeValue, //年级id
+					classId: commentSum.classesValue, //班级id
+					studentId: commentSum.studentValue, //学生id
+					studentName: commentSum.studentText, //学生姓名
+					year: commentSum.timeTypeValue, //年份
+					termCode: commentSum.SysTermTypeValue, //学期编码
+					commentType: commentSum.commentTypeValue, //评语类型
+					beginTime: commentSum.beginTime, //评语开始时间
+					endTime: commentSum.endTime, //评语结束时间
+					commentTime: commentSum.writeTime, //撰写时间
+					comment: commentSum.content //评语
 				}
 				console.log('tempData:' + JSON.stringify(tempData));
 				var wd = events.showWaiting();
-				getActionSaveBehavior(tempData, function(data) {
+				getCommentSave(tempData, function(data) {
 					wd.close();
-					console.log('8.保存行为信息 ' + JSON.stringify(data));
+					console.log('5.3. 保存学生评语 ' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						mui.toast('保存成功');
 						mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
