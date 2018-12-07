@@ -121,7 +121,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="commentHead">
 			<a   class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">评语详情</h1>
-			<a v-show="showFlag==1" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="update()">{{btnText}}</a>
+			<a v-show="showFlag==1" id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="update()">{{btnText}}</a>
 		</header>
 		<div class="mui-content" id="commentData" style="background: #fff;">
 			<ul class="mui-table-view" style="margin-top: 0;">
@@ -354,6 +354,9 @@
 					selectTimeType: function() { //选择年份
 						document.activeElement.blur();
 						timeTypePicker.setData(commentData.timeTypeList);
+//						setTimeout(function() {
+//							timeTypePicker.pickers[0].setSelectedValue(commentData.commentDetail.year);
+//						}, 100);
 						timeTypePicker.show(function(items) {
 							commentData.commentDetail.year = _getParam(items[0], 'text');
 							commentData.timeTypeValue = _getParam(items[0], 'value');
@@ -362,6 +365,9 @@
 					selectCommentType: function() { //选择评价类型
 						document.activeElement.blur();
 						commentTypePicker.setData(commentData.commentTypeList);
+						setTimeout(function() {
+							timeTypePicker.pickers[0].setSelectedValue(commentData.commentTypeValue);
+						}, 100);
 						commentTypePicker.show(function(items) {
 							commentData.commentDetail.commentTypeName = _getParam(items[0], 'text');
 							commentData.commentTypeValue = _getParam(items[0], 'value');
@@ -370,6 +376,9 @@
 					selectSysTermType: function() { //选择学期
 						document.activeElement.blur();
 						systermTypePicker.setData(commentData.SysTermTypeList);
+						setTimeout(function() {
+							systermTypePicker.pickers[0].setSelectedValue(commentData.commentDetail.termCode);
+						}, 100);
 						systermTypePicker.show(function(items) {
 							commentData.SysTermTypeText = _getParam(items[0], 'text');
 							commentData.commentDetail.termCode = _getParam(items[0], 'value');
@@ -424,7 +433,7 @@
 							document.getElementById("finish").disabled = true;
 							var tempData = {
 								id: curPage.id, //评语记录id
-								gradeId: commentData.commentDetail.gradeId, //年级id
+								gradeId: commentData.commentDetail.grdId, //年级id
 								classId: commentData.commentDetail.classId, //班级id
 								studentId: commentData.commentDetail.studentId, //学生id
 								studentName: commentData.commentDetail.studentName, //学生姓名
@@ -437,21 +446,21 @@
 								comment: commentData.content //评语
 							}
 							console.log('tempData:' + JSON.stringify(tempData));
-//							var wd = events.showWaiting();
-//							getCommentSave(tempData, function(data) {
-//								wd.close();
-//								console.log('5.3. 保存学生评语 ' + JSON.stringify(data));
-//								if(data.RspCode == 0) {
-//									mui.toast('保存成功');
-//									mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
-//									setTimeout(function() {
-//										mui.back();
-//									}, 2000)
-//								} else {
-//									document.getElementById("finish").disabled = false;
-//									mui.toast(data.RspTxt);
-//								}
-//							});
+							var wd = events.showWaiting();
+							getCommentSave(tempData, function(data) {
+								wd.close();
+								console.log('5.3. 保存学生评语 ' + JSON.stringify(data));
+								if(data.RspCode == 0) {
+									mui.toast('保存成功');
+									mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
+									setTimeout(function() {
+										mui.back();
+									}, 2000)
+								} else {
+									document.getElementById("finish").disabled = false;
+									mui.toast(data.RspTxt);
+								}
+							});
 						}
 					}
 				}
@@ -478,6 +487,8 @@
 					if(data.RspCode == 0) {
 						commentData.commentDetail = data.RspData.comment;
 						commentData.commentDetail.year=commentData.commentDetail.year+"年";
+						commentData.timeTypeValue=commentData.commentDetail.year;
+						commentData.commentTypeValue=commentData.commentDetail.commentType;
 						commentData.commentTypeList = data.RspData.commentTypeArray;
 						commentData.content=data.RspData.comment.commentText;
 						if (commentData.commentDetail.createUser == personal.utid) {
