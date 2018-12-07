@@ -45,7 +45,8 @@
 				border-top: 1px solid lightgray;
 				border-left: 1px solid lightgray;
 				border-right: 1px solid lightgray;
-				border-bottom: 0;
+				/*border-bottom: 0;*/
+				border-bottom: 1px solid lightgray;
 				margin: 3%;
 				font-size: 14px;
 				padding-bottom: 25px;
@@ -226,9 +227,9 @@
 					<span class="body-title">学生评语</span>
 				</div>
 				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入评语（最多120字）" style="width: 94%;"></textarea>
-				<div id="MultiMedia">
+				<!--<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
-				</div>
+				</div>-->
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectTime($event,'begin')" data-options='{"type":"date"}'>
 						<a class="aCss">评价开始时间</a>
@@ -255,7 +256,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="videoPopover" class="mui-popover">
+		<!--<div id="videoPopover" class="mui-popover">
 			<video id="video" style="position: absolute;z-index: 999;" controls="controls" webkit-playsinline playsinline>
 				您的浏览器不支持 video 标签。
 			</video>
@@ -277,7 +278,7 @@
 				</div>
 				<audio id="audio_audio" autoplay="autoplay" preload="auto"></audio>
 			</div>
-		</div>
+		</div>-->
 		<script src="../../js/utils/mui.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../../js/vue.min.js"></script>
@@ -442,8 +443,8 @@
 			}
 
 			mui.plusReady(function() {
-				init();
-				initListener(); //初始化监听
+//				init();
+//				initListener(); //初始化监听
 				studentMP.getStudentManagePermission(2, 1, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
 					commentSum.stuList = array;
