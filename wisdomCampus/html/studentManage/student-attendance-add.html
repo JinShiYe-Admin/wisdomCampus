@@ -764,12 +764,12 @@
 							console.log('obj.attendanceTime:' + obj.attendanceTime);
 							if(obj.attendanceTime == '请选择') {
 								mui.toast('请选择考勤日期');
-								break;
+								return 0;
 							}
 							if(talkTitle.jckmShow==1){
 								if(obj.classNodes.length===0){
 									mui.toast('请选择考勤节次');
-									break;
+									return 0;
 								}
 							}
 							var params = {
