@@ -507,7 +507,7 @@
 				//获取当前年份，生成年份列表
 				var myDate = new Date().getFullYear();
 				console.log('myDate:' + myDate);
-				for(var i = myDate; i < myDate + 5; i++) {
+				for(var i = myDate-5; i < myDate + 5; i++) {
 					var tepModel = {
 						text: i + '年',
 						value: i
