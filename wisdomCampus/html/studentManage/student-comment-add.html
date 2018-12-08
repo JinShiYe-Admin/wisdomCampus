@@ -344,8 +344,8 @@
 					classesValue: '', //班级选择的值
 					studentValue: '', //学生选择的值
 					timeTypeList: [], //年份选择列表
-					timeTypeText: '请选择', //年份选择后显示
-					timeTypeValue: '', //年份选择的值
+					timeTypeText: new Date().getFullYear()+'年', //年份选择后显示
+					timeTypeValue: new Date().getFullYear(), //年份选择的值
 					SysTermTypeList: [], //学期选择列表
 					SysTermTypeText: '请选择', //学期选择后显示
 					SysTermTypeValue: '', //学期选择的值
@@ -415,10 +415,17 @@
 					selectTimeType: function() { //选择年份
 						document.activeElement.blur();
 						timeTypePicker.setData(commentSum.timeTypeList);
+						timeTypePicker.pickers[0].setSelectedValue(commentSum.timeTypeValue);
 						timeTypePicker.show(function(items) {
 							commentSum.timeTypeText = _getParam(items[0], 'text');
 							commentSum.timeTypeValue = _getParam(items[0], 'value');
 						});
+//						var dtpicker = new mui.DtPicker({
+//							"type": "year"
+//						})
+//						dtpicker.show(function(e) {
+//							console.log(e);
+//						})
 					},
 					selectCommentType: function() { //选择评价类型
 						document.activeElement.blur();
@@ -443,17 +450,17 @@
 			}
 
 			mui.plusReady(function() {
-//				init();
+				//				init();
 				initListener(); //初始化监听
 				studentMP.getStudentManagePermission(2, 1, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
 					commentSum.stuList = array;
-//					if(array.length > 0) {
-//						var allGrade = array[0];
-//						var allClasses = allGrade.children[0];
-//						commentSum.gradeValue = allGrade.value;
-//						commentSum.classesValue = allClasses.value;
-//					}
+					//					if(array.length > 0) {
+					//						var allGrade = array[0];
+					//						var allClasses = allGrade.children[0];
+					//						commentSum.gradeValue = allGrade.value;
+					//						commentSum.classesValue = allClasses.value;
+					//					}
 				}, 1);
 				//5.2. 学生评语详情
 				var comData = {
@@ -476,7 +483,7 @@
 				//获取当前年份，生成年份列表
 				var myDate = new Date().getFullYear();
 				console.log('myDate:' + myDate);
-				for(var i = myDate; i < myDate + 5; i++) {
+				for(var i = myDate-5; i < myDate + 6; i++) {
 					var tepModel = {
 						text: i + '年',
 						value: i
@@ -524,16 +531,16 @@
 			var multiMedia; //多媒体控件
 
 			//多媒体控件
-//			multiMedia = MultiMedia.multiMedia({
-//				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
-//				Key: personal.utid, //utid
-//				Picture: true, //是否显示图片图标
-//				Audio: false, //是否显示音频图标
-//				Video: false, //是否显示视频图标
-//				TotalPicture: 9, //图片的个数
-//				TotalAudio: 0, //音频的个数
-//				TotalVideo: 0, //视频的个数
-//			});
+			//			multiMedia = MultiMedia.multiMedia({
+			//				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+			//				Key: personal.utid, //utid
+			//				Picture: true, //是否显示图片图标
+			//				Audio: false, //是否显示音频图标
+			//				Video: false, //是否显示视频图标
+			//				TotalPicture: 9, //图片的个数
+			//				TotalAudio: 0, //音频的个数
+			//				TotalVideo: 0, //视频的个数
+			//			});
 
 			/*
 			 * 初始化控件
@@ -587,9 +594,9 @@
 			 */
 			function initListener() {
 				//点击图片收回键盘
-//				mui('body').on('tap', 'img', function() {
-//					document.activeElement.blur();
-//				});
+				//				mui('body').on('tap', 'img', function() {
+				//					document.activeElement.blur();
+				//				});
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
@@ -618,13 +625,13 @@
 					} else {
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
-//						console.log(JSON.stringify(multiMedia))
-//						console.log(JSON.stringify(multiMedia.data.PictureArray))
-//						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
-							addNotice(wd, '3', '', '', 0, '');
-//						} else {
-//							uploadFile(wd); //上传文件
-//						}
+						//						console.log(JSON.stringify(multiMedia))
+						//						console.log(JSON.stringify(multiMedia.data.PictureArray))
+						//						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
+						addNotice(wd, '3', '', '', 0, '');
+						//						} else {
+						//							uploadFile(wd); //上传文件
+						//						}
 					}
 				});
 			}
