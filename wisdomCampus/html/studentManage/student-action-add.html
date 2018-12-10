@@ -411,6 +411,11 @@
 								layer: 3
 							});
 							userPicker.setData(talkTitle.list);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.gradeValue);
+								userPicker.pickers[1].setSelectedValue(talkTitle.classesValue);
+								userPicker.pickers[2].setSelectedValue(talkTitle.studentValue);
+							}, 100);
 							userPicker.show(function(items) {
 								talkTitle.gradeText = _getParam(items[0], 'text');
 								talkTitle.classesText = _getParam(items[1], 'text');
@@ -437,6 +442,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.actionTypeList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.actionTypeText = _getParam(items[0], 'text');
 							talkTitle.actionTypeValue = _getParam(items[0], 'value');
@@ -449,6 +457,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.actionList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.actionValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.actionText = _getParam(items[0], 'text');
 							talkTitle.actionValue = _getParam(items[0], 'value');
@@ -494,6 +505,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.jcList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.jcText = _getParam(items[0], 'text');
 							talkTitle.jcValue = _getParam(items[0], 'value');
@@ -505,6 +519,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.kmList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.kmText = _getParam(items[0], 'text');
 							talkTitle.kmValue = _getParam(items[0], 'value');
