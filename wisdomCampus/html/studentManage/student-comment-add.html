@@ -600,7 +600,7 @@
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
-					events.hideKeyBoard(hideOption);
+//					events.hideKeyBoard(hideOption);
 					if(commentSum.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 						mui.toast('评语不能为空');
 						document.getElementById("finish").disabled = false;
@@ -623,12 +623,12 @@
 						mui.toast('请选择评价类型');
 						document.getElementById("finish").disabled = false;
 					} else {
-						var wd = events.showWaiting();
+//						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
 						//						console.log(JSON.stringify(multiMedia))
 						//						console.log(JSON.stringify(multiMedia.data.PictureArray))
 						//						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
-						addNotice(wd, '3', '', '', 0, '');
+						addNotice("wd", '3', '', '', 0, '');
 						//						} else {
 						//							uploadFile(wd); //上传文件
 						//						}

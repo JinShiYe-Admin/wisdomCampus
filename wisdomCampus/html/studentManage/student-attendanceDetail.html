@@ -648,8 +648,11 @@
 								attendanceDetialData.attendanceDetail.permision = '请选择'
 								attendanceDetialData.sjShow = '0';
 							}
+							console.log("liushuai:"+_getParam(items[0], 'showInOut'));
 							if (_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
 								attendanceDetialData.dayShow = '1';
+							}else{
+								attendanceDetialData.dayShow = '0';
 							}
 						});
 					},

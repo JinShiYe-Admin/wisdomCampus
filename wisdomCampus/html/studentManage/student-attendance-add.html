@@ -585,9 +585,13 @@
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
+						var nodes = talkTitle.nodeSubJson[index];
 						userPicker.setData(talkTitle.kmList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(nodes.subCodes);
+						}, 100);
 						userPicker.show(function(items) {
-							var nodes = talkTitle.nodeSubJson[index];
+							
 							console.log("nodes===" + JSON.stringify(nodes))
 							console.log("index===" + JSON.stringify(index))
 							nodes.subName = _getParam(items[0], 'text');
@@ -600,6 +604,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.kqxxNameList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.kqxxValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.kqxxName = _getParam(items[0], 'text');
 							talkTitle.kqxxValue = _getParam(items[0], 'value');
@@ -626,6 +633,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.kqlxNameList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.kqlxValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.kqlxName = _getParam(items[0], 'text');
 							talkTitle.kqlxValue = _getParam(items[0], 'value');
@@ -648,6 +658,9 @@
 							layer: 1
 						});
 						userPicker.setData(talkTitle.qxList);
+						setTimeout(function() {
+							userPicker.pickers[0].setSelectedValue(talkTitle.qValue);
+						}, 100);
 						userPicker.show(function(items) {
 							talkTitle.qx = _getParam(items[0], 'text');
 							talkTitle.qValue = _getParam(items[0], 'value');
@@ -672,7 +685,6 @@
 						var nodes = this.nodeSubJson[index];
 						nodes.classNodes = [];
 						if(names.length > 0) {
-							//TODO 判断同一个日期下，是否有重复选择的节次
 							if(nodes.attendanceTime == "请选择") {
 								mui.toast('请先选择考勤日期');
 								mui(id).popover('toggle');
