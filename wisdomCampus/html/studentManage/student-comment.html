@@ -13,48 +13,58 @@
 			[v-cloak] {
 				visibility: hidden;
 			}
-			body{
+			
+			body {
 				background: #fff;
 			}
-			.mui-segmented-control{
+			
+			.mui-segmented-control {
 				border: 0px;
 				background: #F0F0F0;
 			}
-			.mui-segmented-control .mui-control-item{
+			
+			.mui-segmented-control .mui-control-item {
 				border: 0px;
 				color: #666;
 				font-size: 12px;
-			}			
+			}
+			
 			.mui-segmented-control .mui-control-item.mui-active {
-			    background-color: transparent;
-			    color: #666;
+				background-color: transparent;
+				color: #666;
 				font-size: 12px;
 			}
-			.mui-segmented-control .mui-control-item span{
+			
+			.mui-segmented-control .mui-control-item span {
 				font-size: 12px;
 				padding: 0 0 0 5px;
 				color: #666;
 			}
-			.leftTag{
+			
+			.leftTag {
 				font-size: 14px;
 			}
-			.rightTag{
+			
+			.rightTag {
 				font-size: 13px;
 				float: right;
 				color: #999999;
 			}
-			.rightTagTh{
+			
+			.rightTagTh {
 				font-size: 13px;
 				float: right;
 			}
-			.mui-ellipsis{
+			
+			.mui-ellipsis {
 				font-size: 13px;
 				float: left;
 				color: #999999;
 				width: 75%;
 			}
-			.mui-table-view-cell:after{
-				left:0px;
+			
+			.mui-table-view-cell:after {
+				left: 0px;
 			}
 		</style>
 	</head>
@@ -66,7 +76,7 @@
 			<a @tap="addComment()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>
 		</header>
 		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
-			<div class="mui-segmented-control" >
+			<div class="mui-segmented-control">
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -77,7 +87,7 @@
 			<div class="mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell mui-media"   v-for="(actionModel,index) in actionArray">
+						<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
 							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
@@ -112,27 +122,31 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var m$=mui.init()
+			var m$ = mui.init()
 			var pageIndex = 1; //请求数据页面
 			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			var userPicker,userPickerType;
+			var userPicker, userPickerType;
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			mui.plusReady(function(){
-				studentMP.getStudentManagePermission(1,1,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-					selectTitle.list=array;
-					userPicker = new m$.PopPicker({layer: 3});
+			mui.plusReady(function() {
+				studentMP.getStudentManagePermission(1, 1, function(array) {
+					console.log("ABCD==" + JSON.stringify(array))
+					selectTitle.list = array;
+					userPicker = new m$.PopPicker({
+						layer: 3
+					});
 					userPicker.setData(selectTitle.list);
-					userPickerType = new m$.PopPicker({layer: 1});
-					if(array.length>0){
-						var allGrade=array[0];
-						var allClasses=allGrade.children[0];
-						var allStudent=allClasses.children[0];
-						selectTitle.sGrade=allGrade.value;
-						selectTitle.sClasses=allClasses.value;
-						selectTitle.sStudent=allStudent.value;
+					userPickerType = new m$.PopPicker({
+						layer: 1
+					});
+					if(array.length > 0) {
+						var allGrade = array[0];
+						var allClasses = allGrade.children[0];
+						var allStudent = allClasses.children[0];
+						selectTitle.sGrade = allGrade.value;
+						selectTitle.sClasses = allClasses.value;
+						selectTitle.sStudent = allStudent.value;
 						getCommentList(pageIndex);
 					}
 				});
@@ -141,18 +155,18 @@
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
-					personalModel:personal,
+					personalModel: personal,
 					actionArray: []
 				},
 				methods: {
-					deleteItem:function(event,index){
-						var dom=event.target;
+					deleteItem: function(event, index) {
+						var dom = event.target;
 						var li = dom.parentNode.parentNode;
 						var btnArray = ['确认', '取消'];
 						mui.confirm('确认删除该条记录？', '智慧校园', btnArray, function(e) {
-							if (e.index == 0) {
-								console.log("删除第"+index+"个item");
-								attendanceDelete(index,li);
+							if(e.index == 0) {
+								console.log("删除第" + index + "个item");
+								attendanceDelete(index, li);
 							} else {
 								setTimeout(function() {
 									m$.swipeoutClose(li);
@@ -160,84 +174,87 @@
 							}
 						});
 					},
-					gotoDeatil:function(index,model){//item点击事件
+					gotoDeatil: function(index, model) { //item点击事件
 						utils.mOpenWithData("../../html/studentManage/student-comment-Detail.html", model);
 					}
 				}
 			});
-			
-			var commentHead =new Vue({
-				el:'#commentHead',
-				data:{},
-				methods:{
-					addComment:function(){
-						utils.mOpenWithData("../../html/studentManage/student-comment-add.html", {});
+
+			var commentHead = new Vue({
+				el: '#commentHead',
+				data: {},
+				methods: {
+					addComment: function() {
+						if(personal.utp == 0 && personal.clss.length > 0) {
+							utils.mOpenWithData("../../html/studentManage/student-comment-add.html", {});
+						} else {
+							mui.toast("无此权限");
+						}
 					}
 				}
 			});
-			
-			var selectTitle =new Vue({
-				el:"#selectTitle",
-				data:{
-					grade:'全部年级',
-					classes:'全部班级',
-					student:'全部学生',//显示用
-					type:'全部类型',
-					sGrade:"",//存值用
-					sClasses:"",//存值用
-					sStudent:"",//存值用
-					typeValue:"",//存值用
-					list:[],
-					typeList:[
-							 {value: '',text: '全部类型'}
-						 ]
+
+			var selectTitle = new Vue({
+				el: "#selectTitle",
+				data: {
+					grade: '全部年级',
+					classes: '全部班级',
+					student: '全部学生', //显示用
+					type: '全部类型',
+					sGrade: "", //存值用
+					sClasses: "", //存值用
+					sStudent: "", //存值用
+					typeValue: "", //存值用
+					list: [],
+					typeList: [{
+						value: '',
+						text: '全部类型'
+					}]
 				},
-				methods:{
-					selectGrade:function(){
+				methods: {
+					selectGrade: function() {
 						userPicker.show(function(items) {
-							selectTitle.grade=_getParam(items[0], 'text');
-							selectTitle.classes=_getParam(items[1], 'text');
-							selectTitle.student=_getParam(items[2], 'text');
-							
-							selectTitle.sGrade=_getParam(items[0], 'value');
-							selectTitle.sClasses=_getParam(items[1], 'value');
-							selectTitle.sStudent=_getParam(items[2], 'value');
-							
+							selectTitle.grade = _getParam(items[0], 'text');
+							selectTitle.classes = _getParam(items[1], 'text');
+							selectTitle.student = _getParam(items[2], 'text');
+
+							selectTitle.sGrade = _getParam(items[0], 'value');
+							selectTitle.sClasses = _getParam(items[1], 'value');
+							selectTitle.sStudent = _getParam(items[2], 'value');
+
 							pageIndex = 1;
 							flagRef = 0;
 							getCommentList(pageIndex);
 						});
 					},
-					selectClass:function(){
+					selectClass: function() {
 						this.$options.methods.selectGrade();
 					},
-					selectType:function(){
+					selectType: function() {
 						userPickerType.setData(selectTitle.typeList);
-						var obj=this;
+						var obj = this;
 						userPickerType.show(function(items) {
-							obj.type=_getParam(items[0], 'text')
-							obj.typeValue=_getParam(items[0], 'value')
-							
+							obj.type = _getParam(items[0], 'text')
+							obj.typeValue = _getParam(items[0], 'value')
+
 							pageIndex = 1;
 							flagRef = 0;
 							getCommentList(pageIndex);
 						});
 					}
 				}
-			}); 
+			});
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
-			
-			
+
 			//接收添加或详情页通知的刷新列表事件
 			window.addEventListener('refreshList', function() {
 				pageIndex = 1;
 				flagRef = 0;
 				getCommentList(pageIndex);
 			});
-			
+
 			//阻尼系数、初始化刷新加载更多
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
@@ -283,31 +300,31 @@
 					}
 				}
 			});
-			
+
 			//5.1. 学生评语首页列表
 			function getCommentList(index) {
-				console.log("pageIndex===="+pageIndex);
-				console.log("flagRef===="+flagRef);
-				var gradeValue=selectTitle.sGrade;
-				var classesValue=selectTitle.sClasses;
-				var stuValue=selectTitle.sStudent;
-				if (stuValue==0) {
+				console.log("pageIndex====" + pageIndex);
+				console.log("flagRef====" + flagRef);
+				var gradeValue = selectTitle.sGrade;
+				var classesValue = selectTitle.sClasses;
+				var stuValue = selectTitle.sStudent;
+				if(stuValue == 0) {
 					stuValue = '';
 				}
-				var comData ={
-					grdIds:gradeValue,
-					clsIds:classesValue,
-					stuId:stuValue,
-					commentType:selectTitle.typeValue,
-					pageSize:pageSize,
-					pageNumber:index
+				var comData = {
+					grdIds: gradeValue,
+					clsIds: classesValue,
+					stuId: stuValue,
+					commentType: selectTitle.typeValue,
+					pageSize: pageSize,
+					pageNumber: index
 				}
 				var wd;
-				if(flagRef==0){
-					wd= events.showWaiting();
+				if(flagRef == 0) {
+					wd = events.showWaiting();
 				}
-				getCommentIndex(comData,function(data) {
-					if(flagRef==0){
+				getCommentIndex(comData, function(data) {
+					if(flagRef == 0) {
 						wd.close();
 					}
 					console.log('5.1. 学生评语首页列表:' + JSON.stringify(data));
@@ -315,39 +332,42 @@
 						//总页数
 						totalPageCount = data.RspData.totalPage;
 						pageIndex++;
-						selectTitle.typeList = [{value: '',text: '全部类型'}];
-						for (var i = 0; i < data.RspData.commentTypeArray.length; i++) {
+						selectTitle.typeList = [{
+							value: '',
+							text: '全部类型'
+						}];
+						for(var i = 0; i < data.RspData.commentTypeArray.length; i++) {
 							var tempM = data.RspData.commentTypeArray[i];
 							var tempModel = {
-								value:tempM.value,
-								text:tempM.text
+								value: tempM.value,
+								text: tempM.text
 							}
 							selectTitle.typeList.push(tempModel);
 						}
 						if(flagRef == 0) { //刷新
-							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
-								console.log("array=="+JSON.stringify(array));
+							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
+								console.log("array==" + JSON.stringify(array));
 								actionArrayData.actionArray = array;
 							})
 						} else { //加载更多
 							//合并数组
-							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
-								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
+							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
+								console.log("array222222222222==" + JSON.stringify(actionArrayData.actionArray));
 								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
 							})
 						}
 					} else {
-//							mui.toast(data.RspTxt);
+						//							mui.toast(data.RspTxt);
 					}
 				});
 			};
 			//5.4. 删除评语记录
-			function attendanceDelete(index,li) {
-				var comData ={
-					id:index
+			function attendanceDelete(index, li) {
+				var comData = {
+					id: index
 				}
 				var wd = events.showWaiting();
-				getCommentDelete(comData,function(data) {
+				getCommentDelete(comData, function(data) {
 					wd.close();
 					console.log('5.4. 删除评语记录:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
@@ -359,5 +379,5 @@
 			};
 		</script>
 	</body>
- 
+
 </html>

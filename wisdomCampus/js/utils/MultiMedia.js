@@ -217,7 +217,7 @@ var MultiMedia = (function($, mod) {
 		//删除数组
 		for(var i = 0; i < self.data.PictureArray.length; i++) {
 			if(self.data.PictureArray[i].id == id) {
-				console.log('删除的图片是：'+JSON.stringify(self.data.PictureArray[i]))
+//				console.log('删除的图片是：'+JSON.stringify(self.data.PictureArray[i]))
 				self.data.deleteImg.push(self.data.PictureArray[i].path);
 				self.data.PictureArray.splice(i, 1);
 				self.data.PictureNum++;
@@ -414,7 +414,7 @@ var MultiMedia = (function($, mod) {
 			var myDate = new Date();
 			var fileName = self.options.Key + myDate.getTime() + (Math.floor(Math.random() * 10)) + '.png';
 			var dst = '_documents/' + imageId + '_' + fileName;
-			imageId++;
+//			imageId++;
 			compress.compressImageTo_1MB({
 				path: path,
 				dst: dst
@@ -455,7 +455,7 @@ var MultiMedia = (function($, mod) {
 			var tempArrary = [];
 			for(var i = 0; i < files.length; i++) {
 				var fileName = imageId + '_' + i + '_' + self.options.Key + myDate.getTime() + (Math.floor(Math.random() * 10)) + '.png';
-				imageId++;
+//				imageId++;
 				var dst = '_documents/' + fileName;
 				tempArrary.push({
 					fpath: files[i], //文件路径
@@ -506,6 +506,7 @@ var MultiMedia = (function($, mod) {
 		var marginLeft = self.data.PictureMarginLeft;
 		var group = 'MultiMedia_Picture';
 		for(var i = 0; i < paths.length; i++) {
+			imageId++;
 			////console.log('addImages ' + paths[i]);
 			var pathArrary = paths[i].split('/');
 			var name = pathArrary[pathArrary.length - 1];
@@ -516,7 +517,7 @@ var MultiMedia = (function($, mod) {
 				domain: '', //图片地址
 				thumb: '' //图片缩略图地址
 			};
-			console.log("images========="+JSON.stringify(images))
+//			console.log("images========="+JSON.stringify(images))
 			self.data.PictureNum--;
 			self.data.PictureArray.push(images);
 			var element = document.createElement('div');

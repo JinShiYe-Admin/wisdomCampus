@@ -127,7 +127,7 @@
 			<ul class="mui-table-view" style="margin-top: 0;">
 				<li class="mui-table-view-cell">
 					<a>
-						<p class="mui-pull-right liDetail">{{commentDetail.grdId}}</p>
+						<p class="mui-pull-right liDetail">{{commentDetail.gradeName}}</p>
 						<div class="mui-media-body liTitle">
 							年级
 						</div>
@@ -135,7 +135,7 @@
 				</li>
 				<li class="mui-table-view-cell">
 					<a>
-						<p class="mui-pull-right liDetail">{{commentDetail.classId}}</p>
+						<p class="mui-pull-right liDetail">{{commentDetail.className}}</p>
 						<div class="mui-media-body liTitle">
 							班级
 						</div>
@@ -354,9 +354,9 @@
 					selectTimeType: function() { //选择年份
 						document.activeElement.blur();
 						timeTypePicker.setData(commentData.timeTypeList);
-//						setTimeout(function() {
-//							timeTypePicker.pickers[0].setSelectedValue(commentData.commentDetail.year);
-//						}, 100);
+						setTimeout(function() {
+							timeTypePicker.pickers[0].setSelectedValue(commentData.timeTypeValue);
+						}, 100);
 						timeTypePicker.show(function(items) {
 							commentData.commentDetail.year = _getParam(items[0], 'text');
 							commentData.timeTypeValue = _getParam(items[0], 'value');
@@ -387,9 +387,9 @@
 					selectTime: function(event, lx) { //三个时间选择
 						document.activeElement.blur();
 						var _self = event.target;
-						var optionsJson = _self.getAttribute('data-options') || '{}';
-						var options = JSON.parse(optionsJson);
-						_self.picker = new $M.DtPicker(options);
+//						var optionsJson = _self.getAttribute('data-options') || '{}';
+//						var options = JSON.parse(optionsJson);
+						_self.picker = new $M.DtPicker({"type": "date"});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'beginTime') {
@@ -486,8 +486,11 @@
 					console.log('5.2. 学生评语详情:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						commentData.commentDetail = data.RspData.comment;
-						commentData.commentDetail.year=commentData.commentDetail.year+"年";
+						//将从上个界面传值的年级、班级名称赋值
+						commentData.commentDetail.gradeName = curPage.gradeName;
+						commentData.commentDetail.className = curPage.className;
 						commentData.timeTypeValue=commentData.commentDetail.year;
+						commentData.commentDetail.year=commentData.commentDetail.year+"年";
 						commentData.commentTypeValue=commentData.commentDetail.commentType;
 						commentData.commentTypeList = data.RspData.commentTypeArray;
 						commentData.content=data.RspData.comment.commentText;

@@ -257,7 +257,7 @@
 						<!--<a href="#selectClasses" class="aCss">节次</a>
 						<a href="#selectClasses" style="width:75%;float: right;"><span  class="mui-navigate-right  rCss">{{actionDetail.period}}</span></a>-->
 						<a class="aCss">节次</a>
-						<a style="width: 75%;float: right;margin-right: -30px;"><span  class="rCss">{{actionDetail.period}}</span></a>
+						<a style="width: 75%;float: right;"><span  class="mui-navigate-right rCss">{{actionDetail.period}}</span></a>
 					</li>
 				</ul>
 			</template>
@@ -441,10 +441,9 @@
 					selectTime:function(event,lx){
 						document.activeElement.blur();
 						var _self = event.target;
-						var optionsJson = _self.getAttribute('data-options') || '{}';
-						var options = JSON.parse(optionsJson);
-						var id = _self.getAttribute('id');
-						_self.picker = new $M.DtPicker(options);
+//						var optionsJson = _self.getAttribute('data-options') || '{}';
+//						var options = JSON.parse(optionsJson);
+						_self.picker = new $M.DtPicker({"type": "date"});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'fsrq') {
@@ -528,11 +527,11 @@
 						var userPicker = new $M.PopPicker({layer: 1});
 						userPicker.setData(actionDetialData.jcList);
 						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.subCode);
+							userPicker.pickers[0].setSelectedValue(actionDetialData.actionDetail.classNodes);
 						}, 100);
 						userPicker.show(function(items) {
 							console.log(_getParam(items[0], 'text'));
-							actionDetialData.actionDetail.subCode=_getParam(items[0], 'value');
+							actionDetialData.actionDetail.classNodes=_getParam(items[0], 'value');
 							actionDetialData.actionDetail.period=_getParam(items[0], 'text');
 						});
 					},
@@ -585,7 +584,9 @@
 				initListener(); //初始化监听
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
+				var wd = events.showWaiting();
 				studentMP.getStudentManagePermission(1,1,function(array){
+					wd.close();
 					console.log("ABCD=="+JSON.stringify(array))
 					actionDetialData.list=array;
 					if(array.length>0){
@@ -600,6 +601,7 @@
 			});
 			
 			var getSchSubThread = function() {
+				var wd = events.showWaiting();
 				var enData1 = {};
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -612,6 +614,7 @@
 				};
 				//登录
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					wd.close();
 					if(data1.RspCode == 0) {
 						console.log("data1:"+data1.RspTxt);
 						if(data1.RspData){
@@ -634,10 +637,12 @@
 			}
 			
 			var getActionDetailP = function() {
+				var wd = events.showWaiting();
 				var tempData = {
 					id: curPage.id
 				} 
 				getActionDetail(tempData, function funcName(data) {
+					wd.close();
 					console.log('data:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						var sb=data.RspData.sb;
