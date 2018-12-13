@@ -299,6 +299,7 @@
 			mui(".mui-scroll-wrapper .mui-scroll").pullToRefresh({
 				down: {
 					callback: function() {
+						console.log("下拉刷新");
 						var self = this;
 						pageIndex = 1;
 						flagRef = 0;
@@ -312,7 +313,7 @@
 				up: {
 					callback: function() {
 						var self = this;
-						//console.log("上拉加载更多");
+						console.log("上拉加载更多");
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
@@ -374,14 +375,14 @@
 						if(flagRef == 0) { //刷新
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array=="+JSON.stringify(array));
-								actionArrayData.actionArray = array;
-								mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,50);
+								actionArrayData.actionArray = [].concat(array);
+								mui('.mui-scroll-wrapper').scroll().setTranslate(0,0);
 							})
 						} else { //加载更多
 							//合并数组
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
-								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
+								actionArrayData.actionArray = actionArrayData.actionArray.concat(array);
 							})
 						}
 					} else {

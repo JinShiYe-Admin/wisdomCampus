@@ -17,7 +17,7 @@ var MultiMedia = (function($, mod) {
 	/**
 	 * 图片Id
 	 */
-	var imageId = 0;
+//	var imageId = 0;
 
 	/**
 	 * 多媒体对象
@@ -26,6 +26,7 @@ var MultiMedia = (function($, mod) {
 	var MultiMedia = function(options) {
 		//配置参数
 		this.options = $.extend(true, {
+			imageId:0,//图片Id
 			Id: '_MSL_MultiMedia', //整个控件的ID
 			Key: 'key', //用户的utid
 			MultiMediaId: '', //存放多媒体对象控件的ID
@@ -413,8 +414,8 @@ var MultiMedia = (function($, mod) {
 			var wd = events.showWaiting('处理中...');
 			var myDate = new Date();
 			var fileName = self.options.Key + myDate.getTime() + (Math.floor(Math.random() * 10)) + '.png';
-			var dst = '_documents/' + imageId + '_' + fileName;
-//			imageId++;
+			var dst = '_documents/' + self.options.imageId + '_' + fileName;
+			self.options.imageId++;
 			compress.compressImageTo_1MB({
 				path: path,
 				dst: dst
@@ -449,13 +450,13 @@ var MultiMedia = (function($, mod) {
 			} else{
 				files = event.files;
 			}
-//			console.log('files.length:'+files.length);
+//			console.log('files.length:'+files.length+',self.options.imageId:'+self.options.imageId);
 			var myDate = new Date();
 			var num = 0;
 			var tempArrary = [];
 			for(var i = 0; i < files.length; i++) {
-				var fileName = imageId + '_' + i + '_' + self.options.Key + myDate.getTime() + (Math.floor(Math.random() * 10)) + '.png';
-//				imageId++;
+				var fileName = self.options.imageId + '_' + i + '_' + self.options.Key + myDate.getTime() + (Math.floor(Math.random() * 10)) + '.png';
+				self.options.imageId++;
 				var dst = '_documents/' + fileName;
 				tempArrary.push({
 					fpath: files[i], //文件路径
@@ -506,7 +507,6 @@ var MultiMedia = (function($, mod) {
 		var marginLeft = self.data.PictureMarginLeft;
 		var group = 'MultiMedia_Picture';
 		for(var i = 0; i < paths.length; i++) {
-			imageId++;
 			////console.log('addImages ' + paths[i]);
 			var pathArrary = paths[i].split('/');
 			var name = pathArrary[pathArrary.length - 1];

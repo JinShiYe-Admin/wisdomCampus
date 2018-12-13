@@ -75,5 +75,11 @@
 			"html/studentManage/student-attendanceDetail.html",
 			"html/studentManage/student-attendance-count.html"
 		]
+	},
+	"html/studentManage/student-action.html": {
+		"refer": [
+			"html/studentManage/student-action-add.html",
+			"html/studentManage/student-actionDetail.html"
+		]
 	}
 }

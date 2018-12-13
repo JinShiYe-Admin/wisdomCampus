@@ -580,7 +580,6 @@
 							//记录图片和缩略图地址
 							for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
 								for(var i = 0; i < QNUptoken.Data.length; i++) {
-									console.log(JSON.stringify(QNUptoken.Data[i]));
 									var filePath = QNUptoken.Data[i].P_Key.split("/");
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];

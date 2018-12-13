@@ -348,12 +348,13 @@
 							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
 								console.log("array==" + JSON.stringify(array));
 								actionArrayData.actionArray = array;
+								mui('.mui-scroll-wrapper').scroll().setTranslate(0,0);
 							})
 						} else { //加载更多
 							//合并数组
 							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
 								console.log("array222222222222==" + JSON.stringify(actionArrayData.actionArray));
-								actionArrayData.actionArray = actionArrayData.actionArray.concat(data.RspData.list);
+								actionArrayData.actionArray = actionArrayData.actionArray.concat(array);
 							})
 						}
 					} else {

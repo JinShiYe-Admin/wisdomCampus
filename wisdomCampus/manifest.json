@@ -430,6 +430,14 @@
 					"html/studentManage/student-attendance-count.html"
 				],
 				"priority": 0
+			},
+			"html/studentManage/student-action.html": {
+				"resources": [],
+				"refer": [
+					"html/studentManage/student-action-add.html",
+					"html/studentManage/student-actionDetail.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

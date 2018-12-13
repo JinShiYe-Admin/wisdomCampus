@@ -459,11 +459,11 @@
 						if(talkTitle.tc.recordTime) {
 							talkTitle.localTime = talkTitle.tc.recordTime;
 							talkTitle.talkTime = talkTitle.tc.chatTime;
+							talkTitle.content = data.RspData.tc.chatDetail;
 						}
 						talkTitle.curPage = curPage;
-						talkTitle.content = data.RspData.tc.chatDetail
 					} else {
-						//							mui.toast(data.RspTxt);
+						mui.toast(data.RspTxt);
 					}
 				});
 			};
@@ -545,7 +545,6 @@
 
 				//完成
 				document.getElementById('finish').addEventListener('tap', function() {
-					events.hideKeyBoard(hideOption);
 					if(actionHead.edit == '修改谈话' || actionHead.edit == '新增谈话') {
 						talkTitle.isEdit = 'edit'
 						actionHead.edit = '提交'
@@ -559,6 +558,7 @@
 								imgUrl.push(_attachs[i].url);
 							}
 							multiMedia.addImages(imgUrl);
+							multiMedia.options.imageId = imgUrl.length+1;
 						}
 					} else {
 						if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
@@ -718,7 +718,6 @@
 							//记录图片和缩略图地址
 							for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
 								for(var i = 0; i < QNUptoken.Data.length; i++) {
-									console.log(JSON.stringify(QNUptoken.Data[i]));
 									var filePath = QNUptoken.Data[i].P_Key.split("/");
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];

@@ -29,20 +29,26 @@ var studentMP = (function(mod) {
 					//如果是查看，需要判断是否是年级领导，将年级塞入数组
 					if(gradeFalg == 1) {
 						if(personal.grds.length > 0) { //年级领导
+							var tempflag = 0;
 							for(var i = 0; i < personal.grds.length; i++) {
 								var tempModel = personal.grds[i];
-								for(var a = 0; a < data.RspData.grds.length; a++) {
-									var tempModel1 = data.RspData.grds[a];
-									tempModel1.classArray = [];
-									if(tempModel.grdid == tempModel1.grdid) {
-										grdsArray.push(tempModel1);
+								if(tempModel.isfinish == 0) {
+									for(var a = 0; a < data.RspData.grds.length; a++) {
+										var tempModel1 = data.RspData.grds[a];
+										tempModel1.classArray = [];
+										if(tempModel.grdid == tempModel1.grdid) {
+											grdsArray.push(tempModel1);
+											tempflag++;
+										}
 									}
 								}
 							}
 							console.log('年级领导:' + JSON.stringify(grdsArray));
 							//2.3 学校年级下班级
-							getGradeClass(grdsArray, callback);
-							tempFlag0++;
+							if(tempflag > 0) {
+								getGradeClass(grdsArray, callback);
+								tempFlag0++;
+							}
 						}
 					}
 					//是任课老师或者班主任
@@ -51,6 +57,7 @@ var studentMP = (function(mod) {
 						var tempClass1 = [].concat(personal.clss);
 						//去重
 						tempClass1 = tempClass1.unique('grdid');
+						personal.clss = personal.clss.unique('clsid');
 						console.log('tempClass1:' + JSON.stringify(tempClass1));
 						for(var a = 0; a < data.RspData.grds.length; a++) {
 							var tempModel1 = data.RspData.grds[a];

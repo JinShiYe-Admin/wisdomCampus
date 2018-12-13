@@ -487,8 +487,8 @@
 					}
 				}
 				uploadNum = getUpTokenData.fileArray.length; //记录上传的次数
-								console.log('uploadNum:' + uploadNum);
-								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
+//								console.log('uploadNum:' + uploadNum);
+//								console.log('getUpTokenData:' + JSON.stringify(getUpTokenData));
 				CloudFileUtil.getUpLoadTokens(getUpTokenData, function(data) {
 					//					console.log("getUpLoadTokens111111 " + JSON.stringify(data));
 					if(data.code == 1) {
@@ -500,7 +500,7 @@
 							//记录图片和缩略图地址
 							for(var j = 0; j < multiMedia.data.PictureArray.length; j++) {
 								for(var i = 0; i < QNUptoken.Data.length; i++) {
-									console.log(JSON.stringify(QNUptoken.Data[i]));
+//									console.log(JSON.stringify(QNUptoken.Data[i]));
 									var filePath = QNUptoken.Data[i].P_Key.split("/");
 									var fileName = filePath[filePath.length - 1];
 									var fileId = fileName.split("_")[0];

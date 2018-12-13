@@ -204,7 +204,7 @@ var compress = (function(mod) {
 				//var size = event.size; // 压缩转换后图片的大小，单位为字节（Byte）
 				//var width = event.width; // 压缩转换后图片的实际宽度，单位为px
 				//var height = event.height; // 压缩转换后图片的实际高度，单位为px
-				console.log('compressImageTo_xx 成功 target:' + event.target + ' size:' + event.size + ' width:' + event.width + ' height:' + event.height);
+//				console.log('compressImageTo_xx 成功 target:' + event.target + ' size:' + event.size + ' width:' + event.width + ' height:' + event.height);
 				if(event.size <= sizeMax) {
 					successCallBack(event);
 				} else {
