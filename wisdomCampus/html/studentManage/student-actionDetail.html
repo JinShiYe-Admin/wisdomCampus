@@ -440,7 +440,7 @@
 					},
 					selectTime:function(event,lx){
 						document.activeElement.blur();
-						var _self = event.target;
+						_self = event.target;
 //						var optionsJson = _self.getAttribute('data-options') || '{}';
 //						var options = JSON.parse(optionsJson);
 						_self.picker = new $M.DtPicker({"type": "date"});
@@ -584,19 +584,9 @@
 				initListener(); //初始化监听
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
-				var wd = events.showWaiting();
-				studentMP.getStudentManagePermission(1,1,function(array){
-					wd.close();
-					console.log("ABCD=="+JSON.stringify(array))
-					actionDetialData.list=array;
-					if(array.length>0){
-						var allGrade=array[0];
-						var allClasses=allGrade.children[0];
-						actionDetialData.gradeValue=allGrade.value;
-						actionDetialData.classesValue=allClasses.value;
-						getSchSubThread();
-					}
-				},1);
+				actionDetialData.gradeValue=curPage.gradeId;
+				actionDetialData.classesValue=curPage.classId;
+				getSchSubThread();
 				mui('.mui-scroll-wrapper').scroll()
 			});
 			
@@ -653,19 +643,8 @@
 						} else{
 							talkReacordHead.showFlag = 0;
 						}
-						for(var a = 0; a < actionDetialData.list.length; a++) {
-							var tempGrdClsMsg = actionDetialData.list[a];
-								if(tempGrdClsMsg.value==sb.gradeId){
-									sb.gradeName=tempGrdClsMsg.text;
-									for(var b = 0; b < tempGrdClsMsg.children.length; b++) {
-									var tempClass = tempGrdClsMsg.children[b];
-									if(tempClass.value==sb.classId){
-										sb.className=tempClass.text
-										break;
-									}
-								}
-							}
-						}
+						sb.gradeName=curPage.gradeName;
+						sb.className=curPage.className;
 						actionDetialData.actionDetailSum = data.RspData;
 						actionDetialData.actionDetail = sb;
 						actionDetialData.curPage = curPage;

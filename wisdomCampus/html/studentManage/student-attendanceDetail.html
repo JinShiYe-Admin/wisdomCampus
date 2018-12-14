@@ -51,7 +51,14 @@
 				font-size: 14px;
 				padding-bottom: 25px;
 			}
-			
+			#notes2 {
+				border: none;
+				border-radius: initial;
+				height: 15rem;
+				border: 1px solid lightgray;
+				font-size: 14px;
+				margin-bottom: 0px;
+			}
 			.aCss {
 				font-size: 15px;
 				color: #999999;
@@ -189,8 +196,8 @@
 							<div class="mui-media-body liTitle">
 								考勤说明
 							</div>
-							<p class="liDetail" style="margin-top: 5px;padding: 5px 5px 5px;">{{attendanceDetail.explain}}</p>
 						</a>
+						<textarea id="notes2" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 100%;margin-top: 5px;"></textarea>
 					</li>
 					<p class="lineCell"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;">

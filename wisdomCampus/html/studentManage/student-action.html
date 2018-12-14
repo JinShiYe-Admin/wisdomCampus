@@ -78,6 +78,16 @@
 				margin-right: 5px;
 				font-size: 18px;
 			}
+			
+			.mui-backdrop {
+			    position: fixed;
+			    z-index: 998;
+			    top: 0;
+			    right: 0;
+			    bottom: 0;
+			    left: 0;
+			    background-color: rgba(0, 0, 0, 0.1);
+			}
 		</style>
 	</head>
 
@@ -302,7 +312,8 @@
 						var self = this;
 						pageIndex = 1;
 						flagRef = 0;
-						getAttendanceList(pageIndex);
+//						getAttendanceList(pageIndex);
+location.reload() 
 						setTimeout(function() {
 							//结束下拉刷新
 							self.endPullDownToRefresh();

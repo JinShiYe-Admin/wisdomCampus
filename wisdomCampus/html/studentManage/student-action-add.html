@@ -221,7 +221,7 @@
 				<div class="mui-row title-body">
 					<span class="body-title">行为说明</span>
 				</div>
-				<textarea id="notes" maxlength="120" rows="3" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" rows="3" onfocus="test()" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
@@ -346,6 +346,15 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			var userPicker233,userPicker;
+			function test(){
+				if(userPicker233!=""&&userPicker233!=undefined&&userPicker233!=null){
+//					userPicker233.dispose();
+				}
+				if(userPicker!=""&&userPicker!=undefined&&userPicker!=null){
+//					userPicker.dispose();
+				}
+			}
 
 			var talkTitle = new Vue({
 				el: '#talk',
@@ -438,14 +447,14 @@
 					},
 					selectActionType: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
+						userPicker233 = new $M.PopPicker({
 							layer: 1
 						});
-						userPicker.setData(talkTitle.actionTypeList);
+						userPicker233.setData(talkTitle.actionTypeList);
 						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
+							userPicker233.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
 						}, 100);
-						userPicker.show(function(items) {
+						userPicker233.show(function(items) {
 							talkTitle.actionTypeText = _getParam(items[0], 'text');
 							talkTitle.actionTypeValue = _getParam(items[0], 'value');
 							setAttendanceType();
@@ -453,7 +462,7 @@
 					},
 					selectAction: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
+						userPicker = new $M.PopPicker({
 							layer: 1
 						});
 						userPicker.setData(talkTitle.actionList);
