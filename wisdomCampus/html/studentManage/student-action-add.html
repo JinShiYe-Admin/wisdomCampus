@@ -221,7 +221,7 @@
 				<div class="mui-row title-body">
 					<span class="body-title">行为说明</span>
 				</div>
-				<textarea id="notes" maxlength="120" rows="3" onfocus="test()" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
+				<textarea id="notes" maxlength="120" rows="3" onfocus="hidePicker()" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;"></textarea>
 				<div id="MultiMedia">
 					<div id="MultiMedia_Body" class="multimedia-body"></div>
 				</div>
@@ -346,13 +346,12 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			var userPicker233,userPicker;
-			function test(){
-				if(userPicker233!=""&&userPicker233!=undefined&&userPicker233!=null){
-//					userPicker233.dispose();
-				}
-				if(userPicker!=""&&userPicker!=undefined&&userPicker!=null){
-//					userPicker.dispose();
+			//输入控件获取焦点时，隐藏时间选择器
+			var _selfTimePicker;
+			function hidePicker(){
+				if(_selfTimePicker.picker!=null){
+					_selfTimePicker.picker.dispose();
+					_selfTimePicker.picker = null;
 				}
 			}
 
@@ -389,28 +388,28 @@
 				methods: {
 					selectTime: function(event, lx) {
 						document.activeElement.blur();
-						var _self = event.target;
+						_selfTimePicker = event.target;
 //						var optionsJson = _self.getAttribute('data-options') || '{}';
 //						var options = JSON.parse(optionsJson);
 //						var id = _self.getAttribute('id');
-						_self.picker = new $M.DtPicker({"type": "date"});
+						_selfTimePicker.picker = new $M.DtPicker({"type": "date"});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'fsrq') {
-								_self.picker.setSelectedValue(talkTitle.time);
+								_selfTimePicker.picker.setSelectedValue(talkTitle.time);
 							} else if(lx == 'record') {
-								_self.picker.setSelectedValue(talkTitle.record);
+								_selfTimePicker.picker.setSelectedValue(talkTitle.record);
 							} 
 						}, 100);
-						_self.picker.show(function(rs) {
+						_selfTimePicker.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
 							if(lx == 'fsrq') {
 								talkTitle.time = rs.text;
 							} else if(lx == 'record') {
 								talkTitle.record = rs.text;
 							}
-							_self.picker.dispose();
-							_self.picker = null;
+							_selfTimePicker.picker.dispose();
+							_selfTimePicker.picker = null;
 						});
 					},
 					selectGrade: function() {

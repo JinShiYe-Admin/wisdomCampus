@@ -208,7 +208,7 @@
 				<textarea id="notes" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 94%;margin-top: 5px;"></textarea>
 			</template>
 			<template v-else>
-				<textarea id="notes2" maxlength="120" v-model="content" placeholder="请输入行为说明（最多120字）" style="width: 94%;margin-top: 5px;"></textarea>
+				<textarea id="notes2" maxlength="120" v-model="content" onfocus="hidePicker()"  placeholder="请输入行为说明（最多120字）" style="width: 94%;margin-top: 5px;"></textarea>
 			</template>
 			<div id="MultiMedia" :style="{visibility: isEdit=='edit'? 'visible' : 'hidden' }"  style="margin-bottom: -50px;">
 				<div id="MultiMedia_Body" class="multimedia-body"></div>
@@ -402,6 +402,15 @@
 		<script type="text/javascript">
 			var $M=mui.init();
 			
+			//输入控件获取焦点时，隐藏时间选择器
+			var _selfTimePicker;
+			function hidePicker(){
+				if(_selfTimePicker.picker!=null){
+					_selfTimePicker.picker.dispose();
+					_selfTimePicker.picker = null;
+				}
+			}
+			
 			var talkReacordHead=new Vue({
 				el:'#talkReacordHead',
 				data:{
@@ -440,27 +449,27 @@
 					},
 					selectTime:function(event,lx){
 						document.activeElement.blur();
-						_self = event.target;
+						_selfTimePicker = event.target;
 //						var optionsJson = _self.getAttribute('data-options') || '{}';
 //						var options = JSON.parse(optionsJson);
-						_self.picker = new $M.DtPicker({"type": "date"});
+						_selfTimePicker.picker = new $M.DtPicker({"type": "date"});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'fsrq') {
-								_self.picker.setSelectedValue(actionDetialData.actionDetail.behaviorTime);
+								_selfTimePicker.picker.setSelectedValue(actionDetialData.actionDetail.behaviorTime);
 							} else if(lx == 'jlsj') {
-								_self.picker.setSelectedValue(actionDetialData.actionDetail.recordTime);
+								_selfTimePicker.picker.setSelectedValue(actionDetialData.actionDetail.recordTime);
 							} 
 						}, 100);
-						_self.picker.show(function(rs) {
+						_selfTimePicker.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text+"，lx="+lx);
 							if(lx == 'fsrq') {
 								actionDetialData.actionDetail.behaviorTime=rs.text;
 							} else if(lx == 'jlsj') {
 								actionDetialData.actionDetail.recordTime=rs.text;
 							}
-							_self.picker.dispose();
-							_self.picker = null;
+							_selfTimePicker.picker.dispose();
+							_selfTimePicker.picker = null;
 						});
 					},
 					selectTypeAction:function(){
