@@ -81,5 +81,10 @@
 			"html/studentManage/student-action-add.html",
 			"html/studentManage/student-actionDetail.html"
 		]
+	},
+	"html/studentManage/student-talkRecord.html": {
+		"refer": [
+			"html/studentManage/student-talkRecord-Detail.html"
+		]
 	}
 }

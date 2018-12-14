@@ -438,6 +438,13 @@
 					"html/studentManage/student-actionDetail.html"
 				],
 				"priority": 0
+			},
+			"html/studentManage/student-talkRecord.html": {
+				"resources": [],
+				"refer": [
+					"html/studentManage/student-talkRecord-Detail.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

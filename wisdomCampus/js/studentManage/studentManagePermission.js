@@ -154,17 +154,21 @@ var studentMP = (function(mod) {
 				tempGrd.children.push(tempCls);
 			}
 			if(sumFlag == 0) {
-				var tempGrdModel = {
-					value: tempClsIDs1.join(','),
-					text: '全部班级',
-					children: [{
-						value: 0,
-						text: '全部学生'
-					}]
+				if(tempClsIDs1.length > 0) {
+					var tempGrdModel = {
+						value: tempClsIDs1.join(','),
+						text: '全部班级',
+						children: [{
+							value: 0,
+							text: '全部学生'
+						}]
+					}
+					tempGrd.children = [tempGrdModel].concat(tempGrd.children);
 				}
-				tempGrd.children = [tempGrdModel].concat(tempGrd.children);
 			}
-			sumArray.push(tempGrd);
+			if(tempClsIDs1.length > 0) {
+				sumArray.push(tempGrd);
+			}
 		}
 		if(sumFlag == 0) {
 			var temp0 = tempGrdIDs.join(',');

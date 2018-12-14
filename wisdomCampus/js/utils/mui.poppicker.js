@@ -10,14 +10,14 @@
 
 	//创建 DOM
 	$.dom = function(str) {
-		if (typeof(str) !== 'string') {
-			if ((str instanceof Array) || (str[0] && str.length)) {
+		if(typeof(str) !== 'string') {
+			if((str instanceof Array) || (str[0] && str.length)) {
 				return [].slice.call(str);
 			} else {
 				return [str];
 			}
 		}
-		if (!$.__create_dom_div__) {
+		if(!$.__create_dom_div__) {
 			$.__create_dom_div__ = document.createElement('div');
 		}
 		$.__create_dom_div__.innerHTML = str;
@@ -62,9 +62,9 @@
 				self.hide();
 			}, false);
 			self.ok.addEventListener('tap', function(event) {
-				if (self.callback) {
+				if(self.callback) {
 					var rs = self.callback(self.getSelectedItems());
-					if (rs !== false) {
+					if(rs !== false) {
 						self.hide();
 					}
 				}
@@ -86,7 +86,7 @@
 			var layer = self.options.layer || 1;
 			var width = (100 / layer) + '%';
 			self.pickers = [];
-			for (var i = 1; i <= layer; i++) {
+			for(var i = 1; i <= layer; i++) {
 				var pickerElement = $.dom(pickerBuffer)[0];
 				pickerElement.style.width = width;
 				self.body.appendChild(pickerElement);
@@ -94,7 +94,7 @@
 				self.pickers.push(picker);
 				pickerElement.addEventListener('change', function(event) {
 					var nextPickerElement = this.nextSibling;
-					if (nextPickerElement && nextPickerElement.picker) {
+					if(nextPickerElement && nextPickerElement.picker) {
 						var eventData = event.detail || {};
 						var preItem = eventData.item || {};
 						nextPickerElement.picker.setItems(preItem.children);
@@ -112,7 +112,7 @@
 		getSelectedItems: function() {
 			var self = this;
 			var items = [];
-			for (var i in self.pickers) {    
+			for(var i in self.pickers) {
 				if(self.pickers.hasOwnProperty(i)) { // 修复for in会访问继承属性造成items报错情况
 					var picker = self.pickers[i];
 					items.push(picker.getSelectedItem() || {});
@@ -123,6 +123,8 @@
 		//显示
 		show: function(callback) {
 			var self = this;
+			self.panel.style.display = 'block';
+			self.body.style.display = 'block';
 			self.callback = callback;
 			self.mask.show();
 			document.body.classList.add($.className('poppicker-active-for-page'));
@@ -133,22 +135,45 @@
 				self.hide();
 			};
 		},
-		//隐藏
 		hide: function() {
 			var self = this;
-			if (self.disposed) return;
+			if(self.disposed) return;
 			self.panel.classList.remove($.className('active'));
 			self.mask.close();
 			document.body.classList.remove($.className('poppicker-active-for-page'));
+			self.panel.style.display = 'none';
+			self.body.style.display = 'none';
 			//处理物理返回键
-			$.back=self.__back;
+			$.back = self.__back;
 		},
+		//		show: function(callback) {
+		//			var self = this;
+		//			self.callback = callback;
+		//			self.mask.show();
+		//			document.body.classList.add($.className('poppicker-active-for-page'));
+		//			self.panel.classList.add($.className('active'));
+		//			//处理物理返回键
+		//			self.__back = $.back;
+		//			$.back = function() {
+		//				self.hide();
+		//			};
+		//		},
+		//		//隐藏
+		//		hide: function() {
+		//			var self = this;
+		//			if (self.disposed) return;
+		//			self.panel.classList.remove($.className('active'));
+		//			self.mask.close();
+		//			document.body.classList.remove($.className('poppicker-active-for-page'));
+		//			//处理物理返回键
+		//			$.back=self.__back;
+		//		},
 		dispose: function() {
 			var self = this;
 			self.hide();
 			setTimeout(function() {
 				self.panel.parentNode.removeChild(self.panel);
-				for (var name in self) {
+				for(var name in self) {
 					self[name] = null;
 					delete self[name];
 				};
