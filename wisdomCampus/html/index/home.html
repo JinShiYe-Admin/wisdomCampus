@@ -178,7 +178,7 @@
 		<script type="text/javascript" src="../../js/utils/storageKeyName.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../../js/home.js"></script>
-		
+
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script src="../../js/demoCssJs/jquery-weui.js"></script>
 		<script src='../../js/utils/store.js'></script>
@@ -410,7 +410,7 @@
 				if(id == 1 || id == 2) {
 					if(noticeCheckFlag > 0) {
 						//检查是否有权限
-						if(checkPermission()) {
+						if(checkPermission(0)) {
 							console.log('1111');
 							mui.toast("无此权限");
 						} else {
@@ -426,13 +426,19 @@
 				} else {
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
-					}else if(id == 3) {
-						if (personal.utp==0&&(personal.grds.length>0||personal.clss.length>0)) {
-							utils.mOpenWithData("../../html/studentManage/student-index.html", id);
-						} else{
+					} else if(id == 3) {
+						if(personal.utp == 0 && (personal.grds.length > 0 || personal.clss.length > 0)) {
+							console.log('personal.urolestr:' + personal.urolestr);
+							//检查是否有权限
+							if(checkPermission(1)) {
+								mui.toast("无此权限");
+							} else {
+								utils.mOpenWithData("../../html/studentManage/student-index.html", id);
+							}
+						} else {
 							mui.toast("无此权限");
 						}
-						
+
 					} else {
 						mui.toast("此功能暂未开放");
 					}
@@ -444,8 +450,8 @@
 				tempName = tempInfo.utname;
 			}
 			console.log('tempInfo:' + tempInfo);
-			//检查是否有权限
-			var checkPermission = function() {
+			//检查是否有权限，flag=0通知、事物，flag=1学生管理
+			var checkPermission = function(flag) {
 				//获取个人信息
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
@@ -457,19 +463,29 @@
 				if(personal.clss.length > 0) {
 					tempFlag++;
 				}
-				//判断是否是科任组长
-				if(personal.subs.length > 0) {
-					tempFlag++;
-				}
-				//判断个人信息的urolestr参数，第6位
-				var tempStr = personal.urolestr.substr(5, 1);
-				if(tempStr == 1) {
-					tempFlag++;
-				}
-				//判断个人信息的urolestr参数，第6位
-				var tempStr1 = personal.urolestr.substr(6, 1);
-				if(tempStr1 == 1) {
-					tempFlag++;
+				//通知、事物
+				if(flag == 0) {
+					//判断是否是科任组长
+					if(personal.subs.length > 0) {
+						tempFlag++;
+					}
+					//判断个人信息的urolestr参数，第6位
+					var tempStr = personal.urolestr.substr(5, 1);
+					if(tempStr == 1) {
+						tempFlag++;
+					}
+					//判断个人信息的urolestr参数，第6位
+					var tempStr1 = personal.urolestr.substr(6, 1);
+					if(tempStr1 == 1) {
+						tempFlag++;
+					}
+				} else { //学生管理
+					//判断个人信息的urolestr参数，第16位
+					var tempStr = personal.urolestr.substr(16, 1);
+					console.log('tempStr000:' + tempStr);
+					if(tempStr == 1) {
+						tempFlag++;
+					}
 				}
 				if(tempFlag == 0) {
 					return true;
