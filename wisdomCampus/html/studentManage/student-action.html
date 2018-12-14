@@ -122,6 +122,7 @@
 									</div>
 								</a>
 							</li>
+							
 						</ul>
 					</div>
 				</div>
@@ -298,43 +299,38 @@
 			});
 			 
 			//阻尼系数、初始化刷新加载更多
-			var deceleration = mui.os.ios ? 0.003 : 0.0009;
+			var deceleration = mui.os.ios ? 0.0003 : 0.0003;
 			mui('.mui-scroll-wrapper').scroll({
 				bounce: false,
 				indicators: true, //是否显示滚动条
 				deceleration: deceleration
 			});
-
+			var self;
 			//上拉下拉注册
 			mui(".mui-scroll-wrapper .mui-scroll").pullToRefresh({
 				down: {
 					callback: function() {
-						var self = this;
+						self = this;
 						pageIndex = 1;
 						flagRef = 0;
-//						getAttendanceList(pageIndex);
-location.reload() 
-						setTimeout(function() {
+						getAttendanceList(pageIndex);
 							//结束下拉刷新
 							self.endPullDownToRefresh();
-						}, 1000);
 					}
 				},
 				up: {
 					callback: function() {
-						var self = this;
+						self = this;
 						//console.log("上拉加载更多");
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
 							getAttendanceList(pageIndex);
-							setTimeout(function() {
 								//结束下拉刷新
 								self.endPullUpToRefresh();
 								if(mui(".mui-table-view-cell").length < 10) {
 									mui(".mui-pull-loading")[0].innerHTML = "";
 								}
-							}, 1000);
 						} else {
 							//结束下拉刷新
 							self.endPullUpToRefresh();
@@ -383,12 +379,18 @@ location.reload()
 						
 						pageIndex++;
 						if(flagRef == 0) { //刷新
+							if(self!=""&&self!=null&&self!=null){
+								self.endPullDownToRefresh();
+							}
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array=="+JSON.stringify(array));
 								actionArrayData.actionArray = array;
 								mui('.mui-scroll-wrapper').scroll().setTranslate(0,0);
 							})
 						} else { //加载更多
+							if(self!=""&&self!=null&&self!=null){
+								self.endPullUpToRefresh();
+							}
 							//合并数组
 							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
 								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
