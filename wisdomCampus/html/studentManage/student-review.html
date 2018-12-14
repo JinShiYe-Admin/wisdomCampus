@@ -162,7 +162,7 @@
 			var userPicker = new m$.PopPicker({layer: 2});
 			var typePicker = new m$.PopPicker({layer: 1});
 			mui.plusReady(function(){
-				studentMP.getStudentManagePermission(1,1,function(array){
+				studentMP.getStudentManagePermission(1,2,function(array){
 					console.log("ABCD=="+JSON.stringify(array))
 					selectTitle.list=array;
 					if(array.length>0){

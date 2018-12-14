@@ -130,7 +130,7 @@
 			var userPicker, userPickerType;
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.plusReady(function() {
-				studentMP.getStudentManagePermission(1, 1, function(array) {
+				studentMP.getStudentManagePermission(1, 2, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
 					selectTitle.list = array;
 					userPicker = new m$.PopPicker({

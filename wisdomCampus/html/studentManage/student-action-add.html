@@ -447,14 +447,14 @@
 					},
 					selectActionType: function() {
 						document.activeElement.blur();
-						userPicker233 = new $M.PopPicker({
+						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
-						userPicker233.setData(talkTitle.actionTypeList);
+						userPicker.setData(talkTitle.actionTypeList);
 						setTimeout(function() {
-							userPicker233.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
+							userPicker.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
 						}, 100);
-						userPicker233.show(function(items) {
+						userPicker.show(function(items) {
 							talkTitle.actionTypeText = _getParam(items[0], 'text');
 							talkTitle.actionTypeValue = _getParam(items[0], 'value');
 							setAttendanceType();
@@ -462,7 +462,7 @@
 					},
 					selectAction: function() {
 						document.activeElement.blur();
-						userPicker = new $M.PopPicker({
+						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
 						userPicker.setData(talkTitle.actionList);
