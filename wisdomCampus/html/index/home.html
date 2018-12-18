@@ -191,6 +191,7 @@
 				indicators: true, //是否显示滚动条
 			});
 			var noticeCheckFlag = 0; //通知、事务，是否有权限
+			var studentMFlag = 0; //学生管理，是否有权限
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			mui.init({
 				statusBarBackground: '#63BBFF'
@@ -366,6 +367,10 @@
 								console.log('noticeCheckFlag++;');
 								noticeCheckFlag++;
 							}
+							if(tempArray[i] == 9) {
+								console.log('studentMFlag++;');
+								studentMFlag++;
+							}
 						}
 					} else {}
 				});
@@ -427,18 +432,16 @@
 					if(id == 6) {
 						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
 					} else if(id == 3) {
-						if(personal.utp == 0 && (personal.grds.length > 0 || personal.clss.length > 0)) {
-							console.log('personal.urolestr:' + personal.urolestr);
-							//检查是否有权限
-							if(checkPermission(1)) {
-								mui.toast("无此权限");
-							} else {
+						if(studentMFlag > 0) {
+							if((personal.utp == 0 && (personal.grds.length > 0 || personal.clss.length > 0)) || !checkPermission(1)) {
+								console.log('personal.urolestr:' + personal.urolestr);
 								utils.mOpenWithData("../../html/studentManage/student-index.html", id);
+							} else {
+								mui.toast("无此权限");
 							}
 						} else {
-							mui.toast("无此权限");
+							mui.toast("此功能被关闭");
 						}
-
 					} else {
 						mui.toast("此功能暂未开放");
 					}
@@ -455,16 +458,16 @@
 				//获取个人信息
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
-				//判断是否年级领导
-				if(personal.grds.length > 0) {
-					tempFlag++;
-				}
-				//判断是否是班主任或任课老师
-				if(personal.clss.length > 0) {
-					tempFlag++;
-				}
 				//通知、事物
 				if(flag == 0) {
+					//判断是否年级领导
+					if(personal.grds.length > 0) {
+						tempFlag++;
+					}
+					//判断是否是班主任或任课老师
+					if(personal.clss.length > 0) {
+						tempFlag++;
+					}
 					//判断是否是科任组长
 					if(personal.subs.length > 0) {
 						tempFlag++;

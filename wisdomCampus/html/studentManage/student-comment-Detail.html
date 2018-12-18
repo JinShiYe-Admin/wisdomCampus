@@ -28,16 +28,19 @@
 				font-size: 13px;
 				color: blue;
 			}
+			
 			.lineCell {
 				height: 10px;
 				width: 100%;
 				background: #f2f2f2;
 			}
-			.liTitle{
+			
+			.liTitle {
 				font-size: 15px;
 				color: #333;
 			}
-			.liDetail{
+			
+			.liDetail {
 				font-size: 14px;
 				color: #666;
 			}
@@ -56,11 +59,11 @@
 				margin-right: 10px;
 			}
 			
-			.rCss{
+			.rCss {
 				font-size: 14px;
 				color: #666666;
 				float: right;
-				margin:0px 17px 0 0;
+				margin: 0px 17px 0 0;
 			}
 			
 			#notes {
@@ -73,16 +76,16 @@
 				padding-bottom: 25px;
 			}
 			
-			
-			.multimedia-header{
-			    width: 94%;
-			    border:0;
-			    border-left: 1px solid lightgray;
-			    border-right: 1px solid lightgray;
-			    border-bottom: 1px solid lightgray;
-			    margin: -20px 3% 5px;
+			.multimedia-header {
+				width: 94%;
+				border: 0;
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray;
+				border-bottom: 1px solid lightgray;
+				margin: -20px 3% 5px;
 			}
-			.multimedia-footer{
+			
+			.multimedia-footer {
 				border: 0;
 			}
 			
@@ -93,33 +96,33 @@
 			
 			.mui-navigate-right.rCss.no-icon:after {
 				content: ' ';
-			} 
-			
+			}
 			
 			.mui-popover-arrow {
 				display: none;
 			}
 			
-			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
 				background-color: #fff;
 			}
-			.mui-table-view.bottom-line:after{
-				    position: absolute;
-				    right: 0;
-				    bottom: 0;
-				    left: 0;
-				    height: 0;
-				    content: '';
-				    -webkit-transform: scaleY(.5);
-				    transform: scaleY(.5);
-				    background-color: #c8c7cc;
+			
+			.mui-table-view.bottom-line:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				height: 0;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #c8c7cc;
 			}
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#63BBFF;" id="commentHead">
-			<a   class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">评语详情</h1>
 			<a v-show="showFlag==1" id="finish" class="mui-pull-right" style="color: white;font-size: 14px;margin-top: 0px;" @tap="update()">{{btnText}}</a>
 		</header>
@@ -152,7 +155,7 @@
 			</ul>
 			<p class="lineCell"></p>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" >
+				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
 						<a>
 							<p class="mui-pull-right liDetail">{{commentDetail.year}}</p>
@@ -180,22 +183,22 @@
 				</ul>
 			</template>
 			<template v-else>
-				<ul class="mui-table-view" >
+				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectTimeType()" style="margin-top: -10px;">
-						<a  class="aCss">年份</a>
-						<span  class="mui-navigate-right rCss">{{commentDetail.year}}</span>
+						<a class="aCss">年份</a>
+						<span class="mui-navigate-right rCss">{{commentDetail.year}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectSysTermType()">
-						<a  class="aCss">学期</a>
-						<span  class="mui-navigate-right rCss">{{SysTermTypeText}}</span>
+						<a class="aCss">学期</a>
+						<span class="mui-navigate-right rCss">{{SysTermTypeText}}</span>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectCommentType()">
-						<a  class="aCss">评语类型</a>
-						<span  class="mui-navigate-right rCss">{{commentDetail.commentTypeName}}</span>
+						<a class="aCss">评语类型</a>
+						<span class="mui-navigate-right rCss">{{commentDetail.commentTypeName}}</span>
 					</li>
 				</ul>
 			</template>
-			<ul class="mui-table-view bottom-line" >
+			<ul class="mui-table-view bottom-line">
 				<li class="mui-table-view-cell">
 					<a>
 						<div class="mui-media-body liTitle">
@@ -211,7 +214,7 @@
 				<textarea id="notes" maxlength="300" v-model="content" placeholder="请输入行为说明（最多300字）" style="width: 94%;margin-top: 5px;"></textarea>
 			</template>
 			<template v-if="isEdit=='show'">
-				<ul class="mui-table-view" >	
+				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a>
 							<p class="mui-pull-right liDetail">{{commentDetail.beginTime}}</p>
@@ -233,12 +236,12 @@
 			<template v-else>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell" @tap="selectTime($event,'beginTime')" data-options='{"type":"date"}'>
-						<a  class="aCss">评价开始时间</a>
-						<p  data-options='{"type":"date"}' class="mui-navigate-right rCss">{{commentDetail.beginTime}}</p>
+						<a class="aCss">评价开始时间</a>
+						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{commentDetail.beginTime}}</p>
 					</li>
 					<li class="mui-table-view-cell" @tap="selectTime($event,'endTime')" data-options='{"type":"date"}'>
-						<a  class="aCss">评价结束时间</a>
-						<p  data-options='{"type":"date"}' class="mui-navigate-right rCss">{{commentDetail.endTime}}</p>
+						<a class="aCss">评价结束时间</a>
+						<p data-options='{"type":"date"}' class="mui-navigate-right rCss">{{commentDetail.endTime}}</p>
 					</li>
 				</ul>
 			</template>
@@ -252,7 +255,7 @@
 						</div>
 					</a>
 				</li>
-				
+
 				<template v-if="isEdit=='show'">
 					<li class="mui-table-view-cell">
 						<a>
@@ -293,18 +296,18 @@
 		<script type="text/javascript" src="../../js/utils/showvideoutil.js"></script>
 		<script type="text/javascript" src="../../js/utils/showaudio.js"></script>
 		<script type="text/javascript" src="../../js/utils/gallerypick.js"></script>
-		
-		<script src="../../js/utils/utils.js"></script> 
+
+		<script src="../../js/utils/utils.js"></script>
 		<script src="../../js/utils/cloudutil.js"></script>
 		<script src='../../js/utils/store.js'></script>
-		
+
 		<script type="text/javascript" src="../../js/classRoom/mui.picker.min.js"></script>
 		<!--<script src="../../js/utils/mui.picker.js"></script>-->
 		<script src="../../js/utils/mui.poppicker.js"></script>
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var $M=mui.init();
+			var $M = mui.init();
 			var curPage = {};
 			//年份选择器
 			var timeTypePicker = new $M.PopPicker({
@@ -318,28 +321,28 @@
 			var commentTypePicker = new $M.PopPicker({
 				layer: 1
 			});
-			var commentHead=new Vue({
-				el:'#commentHead',
-				data:{
-					showFlag:0,//0隐藏，1显示
-					btnText:'修改'
+			var commentHead = new Vue({
+				el: '#commentHead',
+				data: {
+					showFlag: 0, //0隐藏，1显示
+					btnText: '修改'
 				},
-				methods:{
-					update:function(){
-						if(commentData.isEdit=='show'){
-							commentData.isEdit='edit'
-							this.btnText='提交'
-						}else{
+				methods: {
+					update: function() {
+						if(commentData.isEdit == 'show') {
+							commentData.isEdit = 'edit'
+							this.btnText = '提交'
+						} else {
 							commentData.$options.methods.submit();
 						}
 					}
 				}
 			});
-			
+
 			var commentData = new Vue({
 				el: "#commentData",
 				data: {
-					isEdit:'show',
+					isEdit: 'show',
 					commentDetail: {},
 					stuList: [], //年级、班级、学生数组
 					timeTypeList: [], //年份选择列表
@@ -387,9 +390,11 @@
 					selectTime: function(event, lx) { //三个时间选择
 						document.activeElement.blur();
 						var _self = event.target;
-//						var optionsJson = _self.getAttribute('data-options') || '{}';
-//						var options = JSON.parse(optionsJson);
-						_self.picker = new $M.DtPicker({"type": "date"});
+						//						var optionsJson = _self.getAttribute('data-options') || '{}';
+						//						var options = JSON.parse(optionsJson);
+						_self.picker = new $M.DtPicker({
+							"type": "date"
+						});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'beginTime') {
@@ -421,7 +426,7 @@
 							_self.picker = null;
 						});
 					},
-					submit:function(){
+					submit: function() {
 						if(commentData.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
 							mui.toast('评语不能为空');
 							document.getElementById("finish").disabled = false;
@@ -465,14 +470,13 @@
 					}
 				}
 			});
-			
+
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
-			var curPage = {}; 
-			
-			
+
+			var curPage = {};
+
 			mui.plusReady(function() {
 				curPage = utils.getDataFromUrl(window.location.href);
 				console.log('2222:' + JSON.stringify(curPage));
@@ -489,28 +493,41 @@
 						//将从上个界面传值的年级、班级名称赋值
 						commentData.commentDetail.gradeName = curPage.gradeName;
 						commentData.commentDetail.className = curPage.className;
-						commentData.timeTypeValue=commentData.commentDetail.year;
-						commentData.commentDetail.year=commentData.commentDetail.year+"年";
-						commentData.commentTypeValue=commentData.commentDetail.commentType;
+						commentData.timeTypeValue = commentData.commentDetail.year;
+						commentData.commentDetail.year = commentData.commentDetail.year + "年";
+						commentData.commentTypeValue = commentData.commentDetail.commentType;
 						commentData.commentTypeList = data.RspData.commentTypeArray;
-						commentData.content=data.RspData.comment.commentText;
-						if (commentData.commentDetail.createUser == personal.utid) {
-							commentHead.showFlag = 1;
-						} else{
+						commentData.content = data.RspData.comment.commentText;
+						//判断是否有权限新增、修改
+						var personal = store.get(window.storageKeyName.PERSONALINFO);
+						if(personal.appeditstat == 0) {
 							commentHead.showFlag = 0;
+						} else {
+							var tempCount = 0;
+							for(var i = 0; i < personal.clss.length; i++) {
+								var tempModel = personal.clss[i];
+								if(tempModel.clsid == commentData.commentDetail.classId && tempModel.isms == 1 && tempModel.isfinish == 0 && commentData.commentDetail.createUser == personal.utid) {
+									tempCount++;
+								}
+							}
+							if(tempCount > 0) {
+								commentHead.showFlag = 1;
+							} else {
+								commentHead.showFlag = 0;
+							}
 						}
 						//获取学期列表
 						getSysTerm();
 					} else {
 						//							mui.toast(data.RspTxt);
-					} 
+					}
 				});
 				mui('.mui-scroll-wrapper').scroll();
-				
+
 				//获取当前年份，生成年份列表
 				var myDate = new Date().getFullYear();
 				console.log('myDate:' + myDate);
-				for(var i = myDate-5; i < myDate + 5; i++) {
+				for(var i = myDate - 5; i < myDate + 5; i++) {
 					var tepModel = {
 						text: i + '年',
 						value: i
@@ -536,8 +553,8 @@
 							var termList = data1.RspData.systerm;
 							var newList = [];
 							for(var i = 0; i < termList.length; i++) {
-								if(commentData.commentDetail.termCode==termList[i].termcode){
-									commentData.SysTermTypeText=termList[i].termname;
+								if(commentData.commentDetail.termCode == termList[i].termcode) {
+									commentData.SysTermTypeText = termList[i].termname;
 								}
 								var temp = {
 									text: termList[i].termname,
@@ -552,25 +569,24 @@
 					}
 				});
 			}
-			
-			
+
 			//获取当前日期
 			function getDate() {
-			    var date = new Date();
-			    var seperator1 = "-";
-			    var seperator2 = ":";
-			    var month = date.getMonth() + 1;
-			    var strDate = date.getDate();
-			    if (month >= 1 && month <= 9) {
-			        month = "0" + month;
-			    }
-			    if (strDate >= 0 && strDate <= 9) {
-			        strDate = "0" + strDate;
-			    }
-			    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-//			            + " " + date.getHours() + seperator2 + date.getMinutes()
-//			            + seperator2 + date.getSeconds();
-			    return currentdate;
+				var date = new Date();
+				var seperator1 = "-";
+				var seperator2 = ":";
+				var month = date.getMonth() + 1;
+				var strDate = date.getDate();
+				if(month >= 1 && month <= 9) {
+					month = "0" + month;
+				}
+				if(strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				}
+				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+				//			            + " " + date.getHours() + seperator2 + date.getMinutes()
+				//			            + seperator2 + date.getSeconds();
+				return currentdate;
 			}
 		</script>
 	</body>

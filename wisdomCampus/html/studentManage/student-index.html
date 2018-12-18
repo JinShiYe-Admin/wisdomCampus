@@ -10,14 +10,13 @@
 			.mui-bar-tab .mui-tab-item.mui-active {
 				color: #63BBFF;
 			}
-
-
+			
 			.mui-bar-tab .mui-tab-item .mui-icon {
 				width: 16px;
 				height: 16px;
 				left: -5px;
 			}
-
+			
 			.mui-segmented-control {
 				font-size: 15px;
 				font-weight: 400;
@@ -31,7 +30,7 @@
 				background-color: transparent;
 				-webkit-touch-callout: none;
 			}
-
+			
 			.mui-segmented-control .mui-control-item {
 				line-height: 30px;
 				display: table-cell;
@@ -46,24 +45,24 @@
 				border-color: red;
 				border-left: 1px solid red;
 			}
-
+			
 			.mui-segmented-control .mui-control-item.mui-active {
 				color: #fff;
 				background-color: red;
 			}
-
 			/*.mui-tab-label {
 				font-size: 12px;
 				color: #999;
 			}*/
+			
 			.mui-backdrop {
-			    position: fixed;
-			    z-index: 998;
-			    top: 0;
-			    right: 0;
-			    bottom: 0;
-			    left: 0;
-			    background-color: rgba(0, 0, 0, 0.1);
+				position: fixed;
+				z-index: 998;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background-color: rgba(0, 0, 0, 0.1);
 			}
 		</style>
 	</head>
@@ -115,23 +114,23 @@
 			var pageData = new Vue({
 				el: "#pageData",
 				data: {
-					showPage:0
+					showPage: 0
 				}
 			});
-			
+
 			//遮罩层
 			var flag = false;
-			var mask=mui.createMask(closeMask);
-			mask:"rgba(0,0,0,0.1)";
-			function closeMask(){
+			var mask = mui.createMask(closeMask);
+			mask: "rgba(0,0,0,0.1)";
+
+			function closeMask() {
 				return flag;
 			}
-			
-			
+
 			//关闭遮罩
 			window.addEventListener('closeMask', function() {
 				flag = true;
-        		mask.close();
+				mask.close();
 			});
 			//显示遮罩
 			window.addEventListener('showMask', function() {
@@ -143,19 +142,25 @@
 			mui.plusReady(function() {
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
-				for (var i = 0; i < personal.clss.length; i++) {
+				for(var i = 0; i < personal.clss.length; i++) {
 					var tempModel = personal.clss[i];
-					if (tempModel.isms==1) {
+					if(tempModel.isms == 1) {
 						tempFlag++;
 					}
 				}
-				if (personal.grds.length>0) {
+				if(personal.grds.length > 0) {
 					tempFlag++;
 				}
-				if (tempFlag>0) {
+				//判断个人信息的urolestr参数，第16位，学生管理授权用户
+				var tempStr = personal.urolestr.substr(16, 1);
+				if(tempStr == 1) {
 					pageData.showPage = 1;
-				} else{
-					pageData.showPage = 0;
+				} else {
+					if(tempFlag > 0) {
+						pageData.showPage = 1;
+					} else {
+						pageData.showPage = 0;
+					}
 				}
 				var defaultUrl = '../../html/studentManage/student-attendance.html';
 				var self = plus.webview.currentWebview();
@@ -168,11 +173,11 @@
 				//选项卡点击事件
 				mui('.mui-bar-tab').on('tap', 'a', function(e) {
 					var targetTab = this.getAttribute('href');
-					if (targetTab == activeTab) {
+					if(targetTab == activeTab) {
 						return;
 					} else {
 						var viewIsExists = plus.webview.getWebviewById(targetTab);
-						if (viewIsExists == null || viewIsExists == '' || viewIsExists == undefined) {
+						if(viewIsExists == null || viewIsExists == '' || viewIsExists == undefined) {
 							var newSub = plus.webview.create(targetTab, targetTab, subpage_style);
 							newSub.hide();
 							self.append(newSub);
@@ -194,7 +199,7 @@
 
 				//切换选项卡高亮
 				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
-				if (defaultTab !== current) {
+				if(defaultTab !== current) {
 					current.classList.remove('mui-active');
 					defaultTab.classList.add('mui-active');
 				}
@@ -207,7 +212,7 @@
 				mui.trigger(defaultTab, 'tap');
 				//切换选项卡高亮
 				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
-				if (defaultTab !== current) {
+				if(defaultTab !== current) {
 					current.classList.remove('mui-active');
 					defaultTab.classList.add('mui-active');
 				}

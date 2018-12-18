@@ -126,21 +126,21 @@
 				text-overflow: ellipsis;
 			}
 			
-			.mui-table-view-cell:before{
-			    position: absolute;
-			    right: 0;
-			    bottom: 0;
-			    left: 15px;
-			    height: 1px;
-			    content: '';
-			    -webkit-transform: scaleY(.5);
-			    transform: scaleY(.5);
-			    background-color: #c8c7cc;
+			.mui-table-view-cell:before {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 15px;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #c8c7cc;
 			}
 			
-			
-			.mui-table-view-cell:last-child:after, .mui-table-view-cell:last-child:before {
-			    height: 1px;
+			.mui-table-view-cell:last-child:after,
+			.mui-table-view-cell:last-child:before {
+				height: 1px;
 			}
 		</style>
 	</head>
@@ -309,10 +309,15 @@
 				document.getElementById("receive3").innerHTML = "已批"
 			}
 			var add = function() {
-				if(title_id == 1) {
-					utils.mOpenWithData("new_message.html", {})
+				//是否可以新增修改，flag=0只班主任，flag=1班主任和任课老师都可以
+				if(utils.canNotAddModify(1)) {
+					if(title_id == 1) {
+						utils.mOpenWithData("new_message.html", {})
+					} else {
+						utils.mOpenWithData("new-check.html", {})
+					}
 				} else {
-					utils.mOpenWithData("new-check.html", {})
+					mui.toast('无此权限');
 				}
 			}
 			var createFragment = function(ul, index, data) {

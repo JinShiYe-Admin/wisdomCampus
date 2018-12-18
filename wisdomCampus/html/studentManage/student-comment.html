@@ -88,7 +88,7 @@
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
-							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
+							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel,index)">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
@@ -159,14 +159,15 @@
 					actionArray: []
 				},
 				methods: {
-					deleteItem: function(event, index) {
+					deleteItem: function(event, model, index) {
 						var dom = event.target;
 						var li = dom.parentNode.parentNode;
 						var btnArray = ['确认', '取消'];
 						mui.confirm('确认删除该条记录？', '智慧校园', btnArray, function(e) {
 							if(e.index == 0) {
+								m$.swipeoutClose(li);
 								console.log("删除第" + index + "个item");
-								attendanceDelete(index, li);
+								attendanceDelete(index, li, model);
 							} else {
 								setTimeout(function() {
 									m$.swipeoutClose(li);
@@ -185,10 +186,19 @@
 				data: {},
 				methods: {
 					addComment: function() {
-						if(personal.utp == 0 && personal.clss.length > 0) {
-							utils.mOpenWithData("../../html/studentManage/student-comment-add.html", {});
+						if(personal.appeditstat == 0) {
+							mui.toast('此功能被关闭');
 						} else {
-							mui.toast("无此权限");
+							if(personal.utp == 0 && personal.clss.length > 0) {
+								//是否可以新增修改，flag=0只班主任，flag=1班主任和任课老师都可以
+								if(utils.canNotAddModify(0)) {
+									utils.mOpenWithData("../../html/studentManage/student-comment-add.html", {});
+								} else {
+									mui.toast('无此权限');
+								}
+							} else {
+								mui.toast("无此权限");
+							}
 						}
 					}
 				}
@@ -270,11 +280,11 @@
 						var self = this;
 						pageIndex = 1;
 						flagRef = 0;
-						getCommentList(pageIndex);
-						setTimeout(function() {
-							//结束下拉刷新
-							self.endPullDownToRefresh();
-						}, 1000);
+						getCommentList(pageIndex, this);
+						//						setTimeout(function() {
+						//							//结束下拉刷新
+						//							self.endPullDownToRefresh();
+						//						}, 1000);
 					}
 				},
 				up: {
@@ -284,10 +294,10 @@
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
-							getCommentList(pageIndex);
+							getCommentList(pageIndex, this);
 							setTimeout(function() {
 								//结束下拉刷新
-								self.endPullUpToRefresh();
+								//								self.endPullUpToRefresh();
 								if(mui(".mui-table-view-cell").length < 10) {
 									mui(".mui-pull-loading")[0].innerHTML = "";
 								}
@@ -302,7 +312,7 @@
 			});
 
 			//5.1. 学生评语首页列表
-			function getCommentList(index) {
+			function getCommentList(index, self) {
 				console.log("pageIndex====" + pageIndex);
 				console.log("flagRef====" + flagRef);
 				var gradeValue = selectTitle.sGrade;
@@ -345,12 +355,18 @@
 							selectTitle.typeList.push(tempModel);
 						}
 						if(flagRef == 0) { //刷新
+							if(self) {
+								self.endPullDownToRefresh();
+							}
 							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
 								console.log("array==" + JSON.stringify(array));
 								actionArrayData.actionArray = array;
-								mui('.mui-scroll-wrapper').scroll().setTranslate(0,0);
+								mui('.mui-scroll-wrapper').scroll().setTranslate(0, 0);
 							})
 						} else { //加载更多
+							if(self) {
+								self.endPullUpToRefresh();
+							}
 							//合并数组
 							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
 								console.log("array222222222222==" + JSON.stringify(actionArrayData.actionArray));
@@ -358,21 +374,32 @@
 							})
 						}
 					} else {
-						//							mui.toast(data.RspTxt);
+						if(flagRef == 0) { //刷新
+							if(self) {
+								self.endPullDownToRefresh();
+							}
+						} else { //加载更多
+							if(self) {
+								self.endPullUpToRefresh();
+							}
+						}
+						mui.toast(data.RspTxt);
 					}
 				});
 			};
 			//5.4. 删除评语记录
-			function attendanceDelete(index, li) {
+			function attendanceDelete(index, li, model) {
 				var comData = {
-					id: index
+					id: model.id
 				}
 				var wd = events.showWaiting();
 				getCommentDelete(comData, function(data) {
 					wd.close();
 					console.log('5.4. 删除评语记录:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						li.parentNode.removeChild(li);
+						var tempArr = [].concat(actionArrayData.actionArray);
+						tempArr.splice(index, 1);
+						actionArrayData.actionArray = [].concat(tempArr);
 					} else {
 						mui.toast("删除学生评语失败");
 					}

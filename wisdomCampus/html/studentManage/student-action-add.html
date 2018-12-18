@@ -348,8 +348,9 @@
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 			//输入控件获取焦点时，隐藏时间选择器
 			var _selfTimePicker;
-			function hidePicker(){
-				if(_selfTimePicker.picker!=null){
+
+			function hidePicker() {
+				if(_selfTimePicker.picker != null) {
 					_selfTimePicker.picker.dispose();
 					_selfTimePicker.picker = null;
 				}
@@ -389,17 +390,19 @@
 					selectTime: function(event, lx) {
 						document.activeElement.blur();
 						_selfTimePicker = event.target;
-//						var optionsJson = _self.getAttribute('data-options') || '{}';
-//						var options = JSON.parse(optionsJson);
-//						var id = _self.getAttribute('id');
-						_selfTimePicker.picker = new $M.DtPicker({"type": "date"});
+						//						var optionsJson = _self.getAttribute('data-options') || '{}';
+						//						var options = JSON.parse(optionsJson);
+						//						var id = _self.getAttribute('id');
+						_selfTimePicker.picker = new $M.DtPicker({
+							"type": "date"
+						});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'fsrq') {
 								_selfTimePicker.picker.setSelectedValue(talkTitle.time);
 							} else if(lx == 'record') {
 								_selfTimePicker.picker.setSelectedValue(talkTitle.record);
-							} 
+							}
 						}, 100);
 						_selfTimePicker.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
@@ -446,94 +449,76 @@
 					},
 					selectActionType: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.actionTypeList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.actionTypeText = _getParam(items[0], 'text');
-							talkTitle.actionTypeValue = _getParam(items[0], 'value');
-							setAttendanceType();
-						});
+						if(talkTitle.actionTypeList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.actionTypeList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.actionTypeValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.actionTypeText = _getParam(items[0], 'text');
+								talkTitle.actionTypeValue = _getParam(items[0], 'value');
+								setAttendanceType();
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectAction: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.actionList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.actionValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.actionText = _getParam(items[0], 'text');
-							talkTitle.actionValue = _getParam(items[0], 'value');
-						});
+						if(talkTitle.actionList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.actionList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.actionValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.actionText = _getParam(items[0], 'text');
+								talkTitle.actionValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectJc: function(e) { //选择节次
 						document.activeElement.blur();
-						//						var classes = [];
-						//						var names = [];
-						//						var obj = e.target;
-						//						var id = '#selectClasses';
-						//						$(id).find('li').each(function() {
-						//							if($(this).find('input').prop("checked")) {
-						//								names.push($(this).find('label').text());
-						//								classes.push($(this).find('input').val());
-						//							}
-						//						})
-						//						if(names.length>0){
-						//							if(classes.indexOf("day") != -1){
-						//								talkTitle.jcText ='全天';
-						//								talkTitle.jcValue ='day';
-						//								talkTitle.kmShow=-1;
-						//								talkTitle.kmText='请选择';
-						//								talkTitle.kmValue='';
-						//							}else{
-						//								talkTitle.jcText = names.join(",");
-						//								talkTitle.jcValue = classes.join(",");
-						//								if(classes.length==1){
-						//									talkTitle.kmShow=1;
-						//								}else{
-						//									talkTitle.kmShow=-1;
-						//									talkTitle.kmText='请选择';
-						//									talkTitle.kmValue='';
-						//								}
-						//							}
-						//						}else{
-						//							talkTitle.kmShow=1;
-						//							talkTitle.jcText='请选择';
-						//							talkTitle.jcValue = '';
-						//						}
-						//						mui(id).popover('toggle');
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.jcList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.jcText = _getParam(items[0], 'text');
-							talkTitle.jcValue = _getParam(items[0], 'value');
-						});
+						if(talkTitle.jcList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.jcList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.jcText = _getParam(items[0], 'text');
+								talkTitle.jcValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectKm: function() {
 						document.activeElement.blur();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.kmList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.kmText = _getParam(items[0], 'text');
-							talkTitle.kmValue = _getParam(items[0], 'value');
-						});
+						if(talkTitle.kmList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.kmList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.jcValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.kmText = _getParam(items[0], 'text');
+								talkTitle.kmValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					}
 				}
 			});
@@ -782,7 +767,7 @@
 
 				}
 				console.log('tempData:' + JSON.stringify(tempData));
-//				var wd = events.showWaiting();
+				//				var wd = events.showWaiting();
 				getActionSaveBehavior(tempData, function(data) {
 					wd.close();
 					console.log('8.保存行为信息 ' + JSON.stringify(data));

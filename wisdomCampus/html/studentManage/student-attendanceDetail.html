@@ -51,6 +51,7 @@
 				font-size: 14px;
 				padding-bottom: 25px;
 			}
+			
 			#notes2 {
 				border: none;
 				border-radius: initial;
@@ -59,6 +60,7 @@
 				font-size: 14px;
 				margin-bottom: 0px;
 			}
+			
 			.aCss {
 				font-size: 15px;
 				color: #999999;
@@ -81,10 +83,9 @@
 				color: #63BBFF;
 			}
 			
-			.mui-table-view-cell>a:not(.mui-btn).mui-active{
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
 				background-color: #fff;
 			}
-			
 		</style>
 	</head>
 
@@ -197,7 +198,7 @@
 								考勤说明
 							</div>
 						</a>
-						<textarea id="notes2" maxlength="120" v-model="content" disabled placeholder="请输入行为说明（最多120字）" style="width: 100%;margin-top: 5px;"></textarea>
+						<textarea id="notes2" maxlength="120" v-model="content" disabled placeholder="" style="width: 100%;margin-top: 5px;"></textarea>
 					</li>
 					<p class="lineCell"></p>
 					<li class="mui-table-view-cell" style="margin-top: -10px;">
@@ -310,8 +311,7 @@
 										<div class="mui-input-row mui-checkbox mui-right">
 											<label style="width: 100%;">{{jc.text}}</label>
 											<template v-if="abc.classNodes.indexOf(String(jc.value)) !=-1">
-												<input :name="jc.text" :value="jc.value" type="checkbox" :checked="abc.classCanCheck==-1? false:true"
-												 :disabled="abc.classCanCheck==-1">
+												<input :name="jc.text" :value="jc.value" type="checkbox" :checked="abc.classCanCheck==-1? false:true" :disabled="abc.classCanCheck==-1">
 											</template>
 											<template v-else>
 												<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="abc.classCanCheck==-1">
@@ -322,8 +322,7 @@
 							</div>
 						</div>
 						<div class="mui-input-row" style=";height:45px;top:255px;border-bottom-left-radius: 3px;border-bottom-right-radius: 3px; z-index: 20180704;background: #fff;">
-							<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #63BBFF;border: 0px;"
-							 @tap="selectJc($event,index)">确定</button>
+							<button class="mui-btn mui-btn-primary" style="display: block;margin:5px auto 0;float: none; width: 25%;background: #63BBFF;border: 0px;" @tap="selectJc($event,index)">确定</button>
 						</div>
 					</div>
 				</template>
@@ -364,12 +363,12 @@
 				};
 				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
 					wd.close();
-					if (data1.RspCode == 0) {
+					if(data1.RspCode == 0) {
 						console.log("data1:" + data1.RspTxt);
-						if (data1.RspData) {
+						if(data1.RspData) {
 							var kmList = data1.RspData.subs;
 							var newList = [];
-							for (var i = 0; i < kmList.length; i++) {
+							for(var i = 0; i < kmList.length; i++) {
 								var temp = {
 									text: kmList[i].subname,
 									value: kmList[i].subcode
@@ -392,19 +391,31 @@
 					id: curPage.id
 				}
 				getAttendanceDetail(tempData, function funcName(data) {
-					console.log('data:' + JSON.stringify(data));
+					console.log('getAttendanceDetail:' + JSON.stringify(data));
 					wd.close();
-					if (data.RspCode == 0) {
+					if(data.RspCode == 0) {
 						var personal = store.get(window.storageKeyName.PERSONALINFO);
-						if (data.RspData.sa.createUser == personal.utid) {
-							title.showFlag = 1;
-						} else {
+						if(personal.appeditstat == 0) {
 							title.showFlag = 0;
+						} else {
+							var tempCount = 0;
+							for(var i = 0; i < personal.clss.length; i++) {
+								var tempModel = personal.clss[i];
+								if(tempModel.clsid == data.RspData.sa.classId && tempModel.isfinish == 0 && data.RspData.sa.createUser == personal.utid) {
+									tempCount++;
+								}
+							}
+							if(tempCount > 0) {
+								title.showFlag = 1;
+							} else {
+								title.showFlag = 0;
+							}
 						}
-						for (var i = 0; i < data.RspData.qa.length; i++) {
+
+						for(var i = 0; i < data.RspData.qa.length; i++) {
 							var tempModel = data.RspData.qa[i];
-							if (tempModel.value == data.RspData.sa.attendanceType) {
-								attendanceDetialData.kqxxList = [].concat(tempModel.dataArray);//得到考勤细项数组
+							if(tempModel.value == data.RspData.sa.attendanceType) {
+								attendanceDetialData.kqxxList = [].concat(tempModel.dataArray); //得到考勤细项数组
 								break;
 							}
 						}
@@ -429,74 +440,74 @@
 							halfDayCanCheck: 1,
 							kmShow: 1
 						}
-						var atArr=attendanceDetialData.attendanceDetailSum.atArray;
+						var atArr = attendanceDetialData.attendanceDetailSum.atArray;
 						var attendanceType = attendanceDetialData.attendanceDetail.attendanceType;
-						for(var i=0;i<atArr.length;i++){
-							var value=atArr[i].value;
-							var t_showCnSub=atArr[i].showCnSub;
-							if(attendanceType==value&&t_showCnSub==1){//如果是课堂考勤
-								attendanceDetialData.jckmShow="1";
+						for(var i = 0; i < atArr.length; i++) {
+							var value = atArr[i].value;
+							var t_showCnSub = atArr[i].showCnSub;
+							if(attendanceType == value && t_showCnSub == 1) { //如果是课堂考勤
+								attendanceDetialData.jckmShow = "1";
 							}
 						}
 						nodes.attendanceTime = attendanceDetialData.attendanceDetail.attendanceTime; //给nodes对象赋值，用于修改操作
-						if(attendanceDetialData.jckmShow=="1"){//如果是课堂考勤，解析节次和科目信息
+						if(attendanceDetialData.jckmShow == "1") { //如果是课堂考勤，解析节次和科目信息
 							nodes.classNames = attendanceDetialData.attendanceDetail.period;
 							var classArr = attendanceDetialData.attendanceDetail.classNodes.split(",");
 							nodes.classNodes = classArr;
-							if (classArr.length > 1) {
+							if(classArr.length > 1) {
 								nodes.kmShow = -1;
 							}
-	
+
 							nodes.subCodes = attendanceDetialData.attendanceDetail.subCodes;
-							for (var i = 0; i < attendanceDetialData.kmList.length; i++) {
-								if (attendanceDetialData.kmList[i].value == attendanceDetialData.attendanceDetail.subCodes) {
+							for(var i = 0; i < attendanceDetialData.kmList.length; i++) {
+								if(attendanceDetialData.kmList[i].value == attendanceDetialData.attendanceDetail.subCodes) {
 									nodes.subName = attendanceDetialData.kmList[i].text;
 									break;
 								} else {
 									nodes.subName = '暂无科目'
 								}
 							}
-							if (attendanceDetialData.attendanceDetail.classNodes == 'day') {
+							if(attendanceDetialData.attendanceDetail.classNodes == 'day') {
 								nodes.halfDayCanCheck = -1;
 								nodes.classCanCheck = -1;
 								nodes.kmShow = -1;
 							}
-							if (attendanceDetialData.attendanceDetail.classNodes == 'halfDay') {
+							if(attendanceDetialData.attendanceDetail.classNodes == 'halfDay') {
 								nodes.dayCanCheck = -1;
 								nodes.classCanCheck = -1;
 								nodes.kmShow = -1;
 							}
 							//根据回传的考勤细项ID（quantizationAttendanceId） 和 考勤类型编码（attendanceType） 遍历 考勤类型与考勤细项关联数组（qa）,找到对应的考勤细项，判断是否选择的是请假或者缺勤，如果是，则显示全天、半天
-							
+
 							var qa = data.RspData.qa;
-							for (var i = 0; i < qa.length; i++) {
+							for(var i = 0; i < qa.length; i++) {
 								var value = qa[i].value;
-								if (attendanceType == value) {
+								if(attendanceType == value) {
 									var dataArray = qa[i].dataArray;
 									var quantizationAttendanceId = attendanceDetialData.attendanceDetail.quantizationAttendanceId;
-									for (var j = 0; j < dataArray.length; j++) {
+									for(var j = 0; j < dataArray.length; j++) {
 										var dValue = dataArray[j].value;
-										if (quantizationAttendanceId == dValue) {
+										if(quantizationAttendanceId == dValue) {
 											var showInOut = dataArray[j].showInOut;
 											var text = dataArray[j].text;
-											if (showInOut == "1") {
+											if(showInOut == "1") {
 												attendanceDetialData.dayShow = "1";
 											}
-											if (text.indexOf('请假') != -1) {
+											if(text.indexOf('请假') != -1) {
 												attendanceDetialData.qxShow = "1";
 											}
 										}
 									}
 								}
 							}
-	
-							if (attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
+
+							if(attendanceDetialData.attendanceDetail.outsidePermisionCode == 'outSchool') {
 								attendanceDetialData.sjShow = '1';
 							}
 						}
-						
+
 						attendanceDetialData.$set(attendanceDetialData.nodeSubJson, 0, nodes);
-						console.log("abc:"+JSON.stringify(attendanceDetialData.nodeSubJson));
+						console.log("abc:" + JSON.stringify(attendanceDetialData.nodeSubJson));
 					} else {
 						mui.toast(data.RspTxt);
 					}
@@ -557,7 +568,7 @@
 						var _self = event.target;
 						var obj = this;
 						var optionsJson = _self.getAttribute('data-options') || '{}';
-						if (lx == 'kqrq' || lx == 'jlsj') {
+						if(lx == 'kqrq' || lx == 'jlsj') {
 							optionsJson = '{"type":"date"}';
 						}
 						var options = JSON.parse(optionsJson);
@@ -577,31 +588,31 @@
 						}, 100);
 						_self.picker.show(function(rs) {
 
-							if (lx == 'lxsj') {
-								if (attendanceDetialData.attendanceDetail.backSchoolTime == "") {
+							if(lx == 'lxsj') {
+								if(attendanceDetialData.attendanceDetail.backSchoolTime == "") {
 									attendanceDetialData.attendanceDetail.leaveSchoolTime = rs.text;
 								} else {
-									if (compairTime(rs.text, attendanceDetialData.attendanceDetail.backSchoolTime)) {
+									if(compairTime(rs.text, attendanceDetialData.attendanceDetail.backSchoolTime)) {
 										attendanceDetialData.attendanceDetail.leaveSchoolTime = rs.text;
 									} else {
 										mui.toast('开始时间不能晚于结束时间');
 									}
 								}
-							} else if (lx == 'hxsj') {
-								if (attendanceDetialData.attendanceDetail.leaveSchoolTime == "") {
+							} else if(lx == 'hxsj') {
+								if(attendanceDetialData.attendanceDetail.leaveSchoolTime == "") {
 									attendanceDetialData.attendanceDetail.backSchoolTime = rs.text;
 								} else {
-									if (compairTime(attendanceDetialData.attendanceDetail.leaveSchoolTime, rs.text)) {
+									if(compairTime(attendanceDetialData.attendanceDetail.leaveSchoolTime, rs.text)) {
 										attendanceDetialData.attendanceDetail.backSchoolTime = rs.text;
 									} else {
 										mui.toast('结束时间不能早于开始时间');
 									}
 								}
-							} else if (lx == 'kqrq') {
+							} else if(lx == 'kqrq') {
 								var stime = rs.text;
 								var nodes = obj.nodeSubJson[index];
 								nodes.attendanceTime = rs.text;
-							} else if (lx == 'jlsj') {
+							} else if(lx == 'jlsj') {
 								attendanceDetialData.attendanceDetail.recordTime = rs.text;
 							}
 							_self.picker.dispose();
@@ -621,10 +632,10 @@
 							attendanceDetialData.attendanceDetail.attendanceTypeTxt = _getParam(items[0], 'text');
 							attendanceDetialData.attendanceDetail.attendanceType = _getParam(items[0], 'value');
 							var showCnSub = _getParam(items[0], 'showCnSub');
-							if(showCnSub=='1'){//如果是课堂考勤，才能选节次和科目
-								attendanceDetialData.jckmShow='1';
-							}else{
-								attendanceDetialData.jckmShow='0';
+							if(showCnSub == '1') { //如果是课堂考勤，才能选节次和科目
+								attendanceDetialData.jckmShow = '1';
+							} else {
+								attendanceDetialData.jckmShow = '0';
 							}
 							attendanceDetialData.qxShow = '0';
 							setAttendanceType();
@@ -646,7 +657,7 @@
 							attendanceDetialData.attendanceDetail.attendanceName = _getParam(items[0], 'text');
 							attendanceDetialData.attendanceDetail.quantizationAttendanceId = _getParam(items[0], 'value');
 							attendanceDetialData.qxShow = '0';
-							if (_getParam(items[0], 'showInOut') == '1') {
+							if(_getParam(items[0], 'showInOut') == '1') {
 								attendanceDetialData.qxShow = '1';
 							} else {
 								attendanceDetialData.attendanceDetail.backSchoolTime = '请选择';
@@ -655,10 +666,10 @@
 								attendanceDetialData.attendanceDetail.permision = '请选择'
 								attendanceDetialData.sjShow = '0';
 							}
-							console.log("liushuai:"+_getParam(items[0], 'showInOut'));
-							if (_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
+							console.log("liushuai:" + _getParam(items[0], 'showInOut'));
+							if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
 								attendanceDetialData.dayShow = '1';
-							}else{
+							} else {
 								attendanceDetialData.dayShow = '0';
 							}
 						});
@@ -676,7 +687,7 @@
 							attendanceDetialData.sjShow = '0';
 							attendanceDetialData.attendanceDetail.outsidePermisionCode = _getParam(items[0], 'value');
 							attendanceDetialData.attendanceDetail.permision = _getParam(items[0], 'text');
-							if (_getParam(items[0], 'value') == 'outSchool') {
+							if(_getParam(items[0], 'value') == 'outSchool') {
 								attendanceDetialData.sjShow = '1';
 							}
 						});
@@ -688,32 +699,32 @@
 						var obj = e.target;
 						var id = '#select' + index;
 						$(id).find('li').each(function() {
-							if ($(this).find('input').prop("checked")) {
+							if($(this).find('input').prop("checked")) {
 								names.push($(this).find('label').text());
 								classes.push($(this).find('input').val());
 							}
 						})
 						var nodes = this.nodeSubJson[index];
 						nodes.classNodes = [];
-						if (names.length > 0) {
-							if (classes.indexOf("day") != -1) {
+						if(names.length > 0) {
+							if(classes.indexOf("day") != -1) {
 								nodes.classNodes.push('day');
 								nodes.classNames = '全天';
 								nodes.kmShow = -1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
-							} else if (classes.indexOf("halfDay") != -1) {
+							} else if(classes.indexOf("halfDay") != -1) {
 								nodes.classNodes.push('halfDay');
 								nodes.classNames = '半天';
 								nodes.kmShow = -1;
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							} else {
-								for (var i = 0; i < classes.length; i++) {
+								for(var i = 0; i < classes.length; i++) {
 									nodes.classNodes.push(classes[i]);
 								}
 								nodes.classNames = names.join(",");
-								if (classes.length == 1) {
+								if(classes.length == 1) {
 									nodes.kmShow = 1;
 								} else {
 									nodes.kmShow = -1;
@@ -731,13 +742,13 @@
 					classItemCheck: function(index) {
 						document.activeElement.blur();
 						var nodeSubJson = attendanceDetialData.nodeSubJson[index];
-						if (nodeSubJson.dayCanCheck == 1) {
-							if (nodeSubJson.classCanCheck == 1) {
+						if(nodeSubJson.dayCanCheck == 1) {
+							if(nodeSubJson.classCanCheck == 1) {
 								nodeSubJson.classCanCheck = -1;
 							} else {
 								nodeSubJson.classCanCheck = 1;
 							}
-							if (nodeSubJson.halfDayCanCheck == 1) {
+							if(nodeSubJson.halfDayCanCheck == 1) {
 								nodeSubJson.halfDayCanCheck = -1;
 							} else {
 								nodeSubJson.halfDayCanCheck = 1;
@@ -747,13 +758,13 @@
 					classItemCheckHalf: function(index) {
 						document.activeElement.blur();
 						var nodeSubJson = attendanceDetialData.nodeSubJson[index];
-						if (nodeSubJson.halfDayCanCheck == 1) {
-							if (nodeSubJson.classCanCheck == 1) {
+						if(nodeSubJson.halfDayCanCheck == 1) {
+							if(nodeSubJson.classCanCheck == 1) {
 								nodeSubJson.classCanCheck = -1;
 							} else {
 								nodeSubJson.classCanCheck = 1;
 							}
-							if (nodeSubJson.dayCanCheck == 1) {
+							if(nodeSubJson.dayCanCheck == 1) {
 								nodeSubJson.dayCanCheck = -1;
 							} else {
 								nodeSubJson.dayCanCheck = 1;
@@ -768,7 +779,7 @@
 						});
 						userPicker.setData(attendanceDetialData.kmList);
 						var nodes = attendanceDetialData.nodeSubJson[index];
-						console.log("abc:"+nodes.subCodes)
+						console.log("abc:" + nodes.subCodes)
 						setTimeout(function() {
 							userPicker.pickers[0].setSelectedValue(nodes.subCodes);
 						}, 100);
@@ -781,14 +792,14 @@
 					},
 					updateInfo: function() {
 						document.activeElement.blur();
-						if (attendanceDetialData.update == '1') {
+						if(attendanceDetialData.update == '1') {
 							attendanceDetialData.$options.methods.submit();
 						} else {
 							attendanceDetialData.update = '1';
 							title.titleBar = '提交';
-//							attendanceDetialData.attendanceDetail.recordTime = getDate();
+							//							attendanceDetialData.attendanceDetail.recordTime = getDate();
 							var nodes = attendanceDetialData.nodeSubJson[0];
-							if (nodes.kmShow == 0) {
+							if(nodes.kmShow == 0) {
 								nodes.subName = '请选择';
 								nodes.subCodes = '';
 							}
@@ -800,10 +811,10 @@
 					submit: function() {
 						document.activeElement.blur();
 						var arr = [];
-						for (var i = 0; i < attendanceDetialData.nodeSubJson.length; i++) {
+						for(var i = 0; i < attendanceDetialData.nodeSubJson.length; i++) {
 							var obj = attendanceDetialData.nodeSubJson[i];
-							if(attendanceDetialData.jckmShow==1){
-								if(obj.classNodes.length===0){
+							if(attendanceDetialData.jckmShow == 1) {
+								if(obj.classNodes.length === 0) {
 									mui.toast('请选择考勤节次');
 									return 0;
 								}
@@ -815,7 +826,7 @@
 							}
 							arr.push(params);
 						}
-						if (attendanceDetialData.content.length > 120) {
+						if(attendanceDetialData.content.length > 120) {
 							mui.toast('内容最多120字');
 						}
 						console.log(JSON.stringify(arr))
@@ -833,12 +844,12 @@
 							recorder: attendanceDetialData.attendanceDetail.recorder
 						}
 
-						if (attendanceDetialData.qxShow == '1') {
+						if(attendanceDetialData.qxShow == '1') {
 							comData.outsidePermisionCode = attendanceDetialData.attendanceDetail.outsidePermisionCode
 						} else {
 							comData.outsidePermisionCode = ''
 						}
-						if (comData.outsidePermisionCode == 'outSchool') {
+						if(comData.outsidePermisionCode == 'outSchool') {
 							comData.leaveSchoolTime = attendanceDetialData.attendanceDetail.leaveSchoolTime,
 								comData.backSchoolTime = attendanceDetialData.attendanceDetail.backSchoolTime
 						} else {
@@ -850,7 +861,7 @@
 						getSaveAttendance(comData, function(data) {
 							wd.close();
 							console.log('3.保存考勤' + JSON.stringify(data));
-							if (data.RspCode == 0) {
+							if(data.RspCode == 0) {
 								mui.toast(data.RspTxt);
 								mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {});
 								setTimeout(function() {
@@ -866,9 +877,9 @@
 
 			//将类型、细项的值对应
 			var setAttendanceType = function() {
-				for (var i = 0; i < attendanceDetialData.attendanceDetailSum.qa.length; i++) {
+				for(var i = 0; i < attendanceDetialData.attendanceDetailSum.qa.length; i++) {
 					var tempModel = attendanceDetialData.attendanceDetailSum.qa[i];
-					if (tempModel.value == attendanceDetialData.attendanceDetail.attendanceType) {
+					if(tempModel.value == attendanceDetialData.attendanceDetail.attendanceType) {
 						attendanceDetialData.kqxxList = [].concat(tempModel.dataArray);
 						attendanceDetialData.attendanceDetail.attendanceName = '请选择';
 						attendanceDetialData.attendanceDetail.quantizationAttendanceId = '';
@@ -884,12 +895,12 @@
 			//比对时间大小
 			function compairTime(startTime, endTime) {
 				console.log(endTime)
-				if (startTime == '请选择' || endTime == '请选择') {
+				if(startTime == '请选择' || endTime == '请选择') {
 					return true;
 				}
 				var start = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var end = new Date(endTime.replace("-", "/").replace("-", "/"));
-				if (end > start) {
+				if(end > start) {
 					return true;
 				}
 				return false;
@@ -902,10 +913,10 @@
 				var seperator2 = ":";
 				var month = date.getMonth() + 1;
 				var strDate = date.getDate();
-				if (month >= 1 && month <= 9) {
+				if(month >= 1 && month <= 9) {
 					month = "0" + month;
 				}
-				if (strDate >= 0 && strDate <= 9) {
+				if(strDate >= 0 && strDate <= 9) {
 					strDate = "0" + strDate;
 				}
 				var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate

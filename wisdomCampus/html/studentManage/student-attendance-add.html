@@ -469,7 +469,7 @@
 					selectTime: function(event, lx, index) {
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						showDTPickerFlag = 1; //显示时间选择器
 						var _self = event.target;
 						var obj = this;
@@ -518,15 +518,20 @@
 							dtPicker = null;
 						});
 					},
-					selectGrade: function() { //选择年级 班级 学生\
+					selectGrade: function() { //选择年级 班级 学生
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						if(talkTitle.gradelist.length > 0) {
 							var userPicker = new $M.PopPicker({
 								layer: 3
 							});
 							userPicker.setData(talkTitle.gradelist);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.sGrade);
+								userPicker.pickers[1].setSelectedValue(talkTitle.sClasses);
+								userPicker.pickers[2].setSelectedValue(talkTitle.sStudent);
+							}, 100);
 							userPicker.show(function(items) {
 								talkTitle.grade = _getParam(items[0], 'text');
 								talkTitle.classes = _getParam(items[1], 'text');
@@ -542,7 +547,7 @@
 					classItemCheck: function(index) {
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var nodeSubJson = talkTitle.nodeSubJson[index];
 						if(nodeSubJson.dayCanCheck == 1) {
 							if(nodeSubJson.classCanCheck == 1) {
@@ -561,7 +566,7 @@
 					classItemCheckHalf: function(index) {
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var nodeSubJson = talkTitle.nodeSubJson[index];
 						if(nodeSubJson.halfDayCanCheck == 1) {
 							if(nodeSubJson.classCanCheck == 1) {
@@ -580,105 +585,117 @@
 					selectKm: function(e, index) { //选择科目
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var userPicker = new $M.PopPicker({
 							layer: 1
 						});
-						var nodes = talkTitle.nodeSubJson[index];
-						userPicker.setData(talkTitle.kmList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(nodes.subCodes);
-						}, 100);
-						userPicker.show(function(items) {
-
-							console.log("nodes===" + JSON.stringify(nodes))
-							console.log("index===" + JSON.stringify(index))
-							nodes.subName = _getParam(items[0], 'text');
-							nodes.subCodes = _getParam(items[0], 'value');
-						});
+						if(talkTitle.kmList.length > 0) {
+							var nodes = talkTitle.nodeSubJson[index];
+							userPicker.setData(talkTitle.kmList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(nodes.subCodes);
+							}, 100);
+							userPicker.show(function(items) {
+								console.log("nodes===" + JSON.stringify(nodes))
+								console.log("index===" + JSON.stringify(index))
+								nodes.subName = _getParam(items[0], 'text');
+								nodes.subCodes = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectkqxxName: function() { //选择考勤细项
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.kqxxNameList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.kqxxValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.kqxxName = _getParam(items[0], 'text');
-							talkTitle.kqxxValue = _getParam(items[0], 'value');
-							talkTitle.qxShow = '0';
-							talkTitle.dayShow = '0';
-							if(_getParam(items[0], 'showInOut') == '1') {
-								talkTitle.qxShow = '1';
-							} else {
-								talkTitle.lxsj = '请选择';
-								talkTitle.hxsj = '请选择';
-								talkTitle.qx = '请选择';
-								talkTitle.qValue = '';
-								talkTitle.sjShow = '0';
-							}
-							var type = _getParam(items[0], 'type');
-							if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
-								talkTitle.dayShow = '1';
-							}
-						});
+						showHidDTPicker();
+						if(talkTitle.kqxxNameList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.kqxxNameList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.kqxxValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.kqxxName = _getParam(items[0], 'text');
+								talkTitle.kqxxValue = _getParam(items[0], 'value');
+								talkTitle.qxShow = '0';
+								talkTitle.dayShow = '0';
+								if(_getParam(items[0], 'showInOut') == '1') {
+									talkTitle.qxShow = '1';
+								} else {
+									talkTitle.lxsj = '请选择';
+									talkTitle.hxsj = '请选择';
+									talkTitle.qx = '请选择';
+									talkTitle.qValue = '';
+									talkTitle.sjShow = '0';
+								}
+								var type = _getParam(items[0], 'type');
+								if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
+									talkTitle.dayShow = '1';
+								}
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectkqlxName: function() { //选择考勤类型
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.kqlxNameList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.kqlxValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.kqlxName = _getParam(items[0], 'text');
-							talkTitle.kqlxValue = _getParam(items[0], 'value');
-							var showCnSub = _getParam(items[0], 'showCnSub');
-							if(showCnSub == '1') { //如果是课堂考勤，才能选节次和科目
-								talkTitle.jckmShow = '1';
-							} else {
-								talkTitle.jckmShow = '0';
-							}
-							talkTitle.qxShow = '0';
-							setAttendanceType();
-							//							if(_getParam(items[0], 'value') == '12') {
-							//								talkTitle.qxShow = '1';
-							//							}
-						});
+						showHidDTPicker();
+						if(talkTitle.kqlxNameList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.kqlxNameList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.kqlxValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.kqlxName = _getParam(items[0], 'text');
+								talkTitle.kqlxValue = _getParam(items[0], 'value');
+								var showCnSub = _getParam(items[0], 'showCnSub');
+								if(showCnSub == '1') { //如果是课堂考勤，才能选节次和科目
+									talkTitle.jckmShow = '1';
+								} else {
+									talkTitle.jckmShow = '0';
+								}
+								talkTitle.qxShow = '0';
+								setAttendanceType();
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectQx: function() { //选择权限
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
-						var userPicker = new $M.PopPicker({
-							layer: 1
-						});
-						userPicker.setData(talkTitle.qxList);
-						setTimeout(function() {
-							userPicker.pickers[0].setSelectedValue(talkTitle.qValue);
-						}, 100);
-						userPicker.show(function(items) {
-							talkTitle.qx = _getParam(items[0], 'text');
-							talkTitle.qValue = _getParam(items[0], 'value');
-							talkTitle.sjShow = '0';
-							if(_getParam(items[0], 'value') == 'outSchool') {
-								talkTitle.sjShow = '1';
-							}
-						});
+						showHidDTPicker();
+						if(talkTitle.qxList.length > 0) {
+							var userPicker = new $M.PopPicker({
+								layer: 1
+							});
+							userPicker.setData(talkTitle.qxList);
+							setTimeout(function() {
+								userPicker.pickers[0].setSelectedValue(talkTitle.qValue);
+							}, 100);
+							userPicker.show(function(items) {
+								talkTitle.qx = _getParam(items[0], 'text');
+								talkTitle.qValue = _getParam(items[0], 'value');
+								talkTitle.sjShow = '0';
+								if(_getParam(items[0], 'value') == 'outSchool') {
+									talkTitle.sjShow = '1';
+								}
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectJc: function(e, index) { //选择节次
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var classes = [];
 						var names = [];
 						var obj = e.target;
@@ -768,7 +785,7 @@
 					deleteLi: function(e, index) { //添加考勤日期节次 项
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var obj = e.target;
 						if(this.nodeSubJson.length == 1) {
 							mui.toast("至少要填写一条考勤数据")
@@ -780,7 +797,7 @@
 					submit: function() {
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
-						shouHidDTPicker();
+						showHidDTPicker();
 						var arr = [];
 						for(var i = 0; i < talkTitle.nodeSubJson.length; i++) {
 							var obj = talkTitle.nodeSubJson[i];
@@ -873,7 +890,7 @@
 				return obj[param] || '';
 			}
 			//判断时间选择器是否在显示，如果显示，给干掉
-			var shouHidDTPicker = function() {
+			var showHidDTPicker = function() {
 				if(showDTPickerFlag == 1) {
 					showDTPickerFlag = 0; //干掉时间选择器
 					dtPicker.dispose();

@@ -28,26 +28,46 @@ var studentMP = (function(mod) {
 					var tempFlag0 = 0;
 					//如果是查看，需要判断是否是年级领导，将年级塞入数组
 					if(gradeFalg == 1) {
-						if(personal.grds.length > 0) { //年级领导
+						//判断个人信息的urolestr参数，第16位，学生管理授权用户
+						var tempStr = personal.urolestr.substr(16, 1);
+						if(tempStr == 1) {
 							var tempflag = 0;
-							for(var i = 0; i < personal.grds.length; i++) {
-								var tempModel = personal.grds[i];
-								if(tempModel.isfinish == 0) {
-									for(var a = 0; a < data.RspData.grds.length; a++) {
-										var tempModel1 = data.RspData.grds[a];
-										tempModel1.classArray = [];
-										if(tempModel.grdid == tempModel1.grdid) {
-											grdsArray.push(tempModel1);
-											tempflag++;
-										}
-									}
-								}
+							for(var a = 0; a < data.RspData.grds.length; a++) {
+								var tempModel1 = data.RspData.grds[a];
+								tempModel1.classArray = [];
+//								if(tempModel.isfinish == 0) {
+									grdsArray.push(tempModel1);
+									tempflag++;
+//								}
 							}
 							console.log('年级领导:' + JSON.stringify(grdsArray));
 							//2.3 学校年级下班级
 							if(tempflag > 0) {
 								getGradeClass(grdsArray, callback);
 								tempFlag0++;
+							}
+						} else {
+							if(personal.grds.length > 0) { //年级领导
+								var tempflag = 0;
+								for(var i = 0; i < personal.grds.length; i++) {
+									var tempModel = personal.grds[i];
+									if(tempModel.isfinish == 0) {
+										for(var a = 0; a < data.RspData.grds.length; a++) {
+											var tempModel1 = data.RspData.grds[a];
+											tempModel1.classArray = [];
+											if(tempModel.grdid == tempModel1.grdid) {
+												grdsArray.push(tempModel1);
+												tempflag++;
+											}
+										}
+									}
+								}
+								console.log('年级领导:' + JSON.stringify(grdsArray));
+								//2.3 学校年级下班级
+								if(tempflag > 0) {
+									getGradeClass(grdsArray, callback);
+									tempFlag0++;
+								}
 							}
 						}
 					}

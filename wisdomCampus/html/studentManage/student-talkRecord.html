@@ -13,48 +13,58 @@
 			[v-cloak] {
 				visibility: hidden;
 			}
-			body{
+			
+			body {
 				background: #fff;
 			}
-			.mui-segmented-control{
+			
+			.mui-segmented-control {
 				border: 0px;
 				background: #F0F0F0;
 			}
-			.mui-segmented-control .mui-control-item{
+			
+			.mui-segmented-control .mui-control-item {
 				border: 0px;
 				color: #666;
 				font-size: 12px;
-			}			
+			}
+			
 			.mui-segmented-control .mui-control-item.mui-active {
-			    background-color: transparent;
-			    color: #666;
+				background-color: transparent;
+				color: #666;
 				font-size: 12px;
 			}
-			.mui-segmented-control .mui-control-item span{
+			
+			.mui-segmented-control .mui-control-item span {
 				font-size: 12px;
 				padding: 0 0 0 5px;
 				color: #666;
 			}
-			.leftTag{
+			
+			.leftTag {
 				font-size: 14px;
 			}
-			.rightTag{
+			
+			.rightTag {
 				font-size: 13px;
 				float: right;
 				color: #999999;
 			}
-			.rightTagTh{
+			
+			.rightTagTh {
 				font-size: 13px;
 				float: right;
 			}
-			.mui-ellipsis{
+			
+			.mui-ellipsis {
 				font-size: 13px;
 				float: left;
 				color: #999999;
 				width: 75%;
 			}
-			.mui-table-view-cell:after{
-				left:0px;
+			
+			.mui-table-view-cell:after {
+				left: 0px;
 			}
 		</style>
 	</head>
@@ -66,7 +76,7 @@
 			<!--<a @tap="revoke()" class="mui-pull-right" style="color: white;font-size: 25px;margin-top: 10px;">+</a>-->
 		</header>
 		<div class="mui-content" id="selectTitle" style="position: fixed;z-index: 1;">
-			<div class="mui-segmented-control" >
+			<div class="mui-segmented-control">
 				<a class="mui-control-item" v-cloak href="javascript:void(0)" @tap="selectGrade()"><span>{{grade}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectClass()"><span>{{classes}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
 				<a class="mui-control-item" v-cloak href="javaScript:void(0)" @tap="selectGrade()"><span>{{student}}</span><span class="mui-icon mui-icon-arrowdown"></span></a>
@@ -77,8 +87,8 @@
 			<div class="mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell mui-media"   v-for="(actionModel,index) in actionArray">
-							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel.id)">
+						<li class="mui-table-view-cell mui-media" v-for="(actionModel,index) in actionArray">
+							<div v-if='personalModel.utid==actionModel.createUser' class="mui-slider-right mui-disabled" @tap="deleteItem($event,actionModel,index)">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<a class="mui-slider-handle" href="javascript:;" @tap="gotoDeatil(index,actionModel)">
@@ -117,28 +127,32 @@
 		<script src="../../js/studentManage/studentManagePermission.js"></script>
 		<script src="../../js/publicProtocol.js"></script>
 		<script type="text/javascript">
-			var m$=mui.init()
+			var m$ = mui.init()
 			var pageIndex = 1; //请求数据页面
 			var pageSize = 10; //请求数据页面
 			var totalPageCount; //总页码
 			var flagRef = 0; //是刷新0，还是加载更多1
-			var userPicker,userPickerType;
+			var userPicker, userPickerType;
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			mui.plusReady(function(){
-				studentMP.getStudentManagePermission(1,2,function(array){
-					console.log("ABCD=="+JSON.stringify(array))
-					selectTitle.list=array;
-					userPicker = new m$.PopPicker({layer: 3});
+			mui.plusReady(function() {
+				studentMP.getStudentManagePermission(1, 2, function(array) {
+					console.log("ABCD==" + JSON.stringify(array))
+					selectTitle.list = array;
+					userPicker = new m$.PopPicker({
+						layer: 3
+					});
 					userPicker.setData(selectTitle.list);
-					userPickerType = new m$.PopPicker({layer: 1});
+					userPickerType = new m$.PopPicker({
+						layer: 1
+					});
 					userPickerType.setData(selectTitle.typeList);
-					if(array.length>0){
-						var allGrade=array[0];
-						var allClasses=allGrade.children[0];
-						var allStudent=allClasses.children[0];
-						selectTitle.sGrade=allGrade.value;
-						selectTitle.sClasses=allClasses.value;
-						selectTitle.sStudent=allStudent.value;
+					if(array.length > 0) {
+						var allGrade = array[0];
+						var allClasses = allGrade.children[0];
+						var allStudent = allClasses.children[0];
+						selectTitle.sGrade = allGrade.value;
+						selectTitle.sClasses = allClasses.value;
+						selectTitle.sStudent = allStudent.value;
 						getAttendanceList(pageIndex);
 					}
 				});
@@ -147,22 +161,23 @@
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
-					personalModel:personal,
+					personalModel: personal,
 					actionArray: []
 				},
 				methods: {
-					deleteItem:function(event,index){
-						var dom=event.target;
+					deleteItem: function(event, model, index) {
+						var dom = event.target;
 						var li = dom.parentNode.parentNode;
 						var btnArray = ['确认', '取消'];
 						mui.confirm('确认删除该条记录？', '智慧校园', btnArray, function(e) {
-							if (e.index == 0) {
-								console.log("删除第"+index+"个item")
-								if(index==null){
-									mui.toast("未谈话的记录无法删除")	
+							if(e.index == 0) {
+								m$.swipeoutClose(li);
+								console.log("删除第" + index + "个item")
+								if(index == null) {
+									mui.toast("未谈话的记录无法删除")
 									return
 								}
-								attendanceDelete(index,li)
+								attendanceDelete(index, li, model);
 							} else {
 								setTimeout(function() {
 									m$.swipeoutClose(li);
@@ -170,85 +185,91 @@
 							}
 						});
 					},
-					gotoDeatil:function(index,model){//item点击事件
+					gotoDeatil: function(index, model) { //item点击事件
 						utils.mOpenWithData("../../html/studentManage/student-talkRecord-Detail.html", model);
 					}
 				}
 			});
-			
-			var actionHead =new Vue({
-				el:'#actionHead',
-				data:{},
-				methods:{
-					revoke:function(){
+
+			var actionHead = new Vue({
+				el: '#actionHead',
+				data: {},
+				methods: {
+					revoke: function() {
 						utils.mOpenWithData("student-talkRecord-add.html", {});
 					}
 				}
 			});
-			
-			var selectTitle =new Vue({
-				el:"#selectTitle",
-				data:{
-					grade:'全部年级',
-					classes:'全部班级',
-					student:'全部学生',//显示用
-					type:'全部状态',
-					sGrade:"",//存值用
-					sClasses:"",//存值用
-					sStudent:"",//存值用
-					typeValue:"",//存值用
-					list:[],
-					typeList:[
-							 {value: '',text: '全部状态'},
-							 {value: '0',text: '未谈'},
-							 {value: '1',text: '已谈'}
-						 ]
+
+			var selectTitle = new Vue({
+				el: "#selectTitle",
+				data: {
+					grade: '全部年级',
+					classes: '全部班级',
+					student: '全部学生', //显示用
+					type: '全部状态',
+					sGrade: "", //存值用
+					sClasses: "", //存值用
+					sStudent: "", //存值用
+					typeValue: "", //存值用
+					list: [],
+					typeList: [{
+							value: '',
+							text: '全部状态'
+						},
+						{
+							value: '0',
+							text: '未谈'
+						},
+						{
+							value: '1',
+							text: '已谈'
+						}
+					]
 				},
-				methods:{
-					selectGrade:function(){
+				methods: {
+					selectGrade: function() {
 						userPicker.show(function(items) {
-							selectTitle.grade=_getParam(items[0], 'text');
-							selectTitle.classes=_getParam(items[1], 'text');
-							selectTitle.student=_getParam(items[2], 'text');
-							
-							selectTitle.sGrade=_getParam(items[0], 'value');
-							selectTitle.sClasses=_getParam(items[1], 'value');
-							selectTitle.sStudent=_getParam(items[2], 'value');
-							
+							selectTitle.grade = _getParam(items[0], 'text');
+							selectTitle.classes = _getParam(items[1], 'text');
+							selectTitle.student = _getParam(items[2], 'text');
+
+							selectTitle.sGrade = _getParam(items[0], 'value');
+							selectTitle.sClasses = _getParam(items[1], 'value');
+							selectTitle.sStudent = _getParam(items[2], 'value');
+
 							pageIndex = 1;
 							flagRef = 0;
 							getAttendanceList(pageIndex);
 						});
 					},
-					selectClass:function(){
+					selectClass: function() {
 						this.$options.methods.selectGrade();
 					},
-					selectType:function(){
-						var obj=this;
+					selectType: function() {
+						var obj = this;
 						userPickerType.show(function(items) {
-							obj.type=_getParam(items[0], 'text')
-							obj.typeValue=_getParam(items[0], 'value')
-							
+							obj.type = _getParam(items[0], 'text')
+							obj.typeValue = _getParam(items[0], 'value')
+
 							pageIndex = 1;
 							flagRef = 0;
 							getAttendanceList(pageIndex);
 						});
 					}
 				}
-			}); 
+			});
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
 			}
-			
-			
-			
+
 			//接收添加或详情页通知的刷新列表事件
 			window.addEventListener('refreshList', function() {
 				pageIndex = 1;
 				flagRef = 0;
 				getAttendanceList(pageIndex);
 			});
-			
+
 			//阻尼系数、初始化刷新加载更多
 			var deceleration = mui.os.ios ? 0.003 : 0.0009;
 			mui('.mui-scroll-wrapper').scroll({
@@ -264,11 +285,11 @@
 						var self = this;
 						pageIndex = 1;
 						flagRef = 0;
-						getAttendanceList(pageIndex);
-						setTimeout(function() {
-							//结束下拉刷新
-							self.endPullDownToRefresh();
-						}, 1000);
+						getAttendanceList(pageIndex, this);
+						//						setTimeout(function() {
+						//							//结束下拉刷新
+						//							self.endPullDownToRefresh();
+						//						}, 1000);
 					}
 				},
 				up: {
@@ -278,14 +299,14 @@
 						flagRef = 1;
 						if(pageIndex <= totalPageCount) {
 							//54.科教频道_个人收藏列表
-							getAttendanceList(pageIndex);
-							setTimeout(function() {
-								//结束下拉刷新
-								self.endPullUpToRefresh();
-								if(mui(".mui-table-view-cell").length < 10) {
-									mui(".mui-pull-loading")[0].innerHTML = "";
-								}
-							}, 1000);
+							getAttendanceList(pageIndex, this);
+							//							setTimeout(function() {
+							//								//结束下拉刷新
+							//								self.endPullUpToRefresh();
+							//								if(mui(".mui-table-view-cell").length < 10) {
+							//									mui(".mui-pull-loading")[0].innerHTML = "";
+							//								}
+							//							}, 1000);
 						} else {
 							//结束下拉刷新
 							self.endPullUpToRefresh();
@@ -294,31 +315,31 @@
 					}
 				}
 			});
-			
+
 			//3.1.教师谈话首页列表
-			function getAttendanceList(index) {
-				console.log("pageIndex===="+pageIndex);
-				console.log("flagRef===="+flagRef);
-				var gradeValue=selectTitle.sGrade;
-				var classesValue=selectTitle.sClasses;
-				var stuValue=selectTitle.sStudent;
-				if (stuValue==0) {
+			function getAttendanceList(index, self) {
+				console.log("pageIndex====" + pageIndex);
+				console.log("flagRef====" + flagRef);
+				var gradeValue = selectTitle.sGrade;
+				var classesValue = selectTitle.sClasses;
+				var stuValue = selectTitle.sStudent;
+				if(stuValue == 0) {
 					stuValue = '';
 				}
-				var comData ={
-					grdIds:gradeValue,
-					clsIds:classesValue,
-					stuId:stuValue,
-					status:selectTitle.typeValue,
-					pageSize:pageSize,
-					pageNumber:index
+				var comData = {
+					grdIds: gradeValue,
+					clsIds: classesValue,
+					stuId: stuValue,
+					status: selectTitle.typeValue,
+					pageSize: pageSize,
+					pageNumber: index
 				}
 				var wd;
-				if(flagRef==0){
-					wd= events.showWaiting();
+				if(flagRef == 0) {
+					wd = events.showWaiting();
 				}
-				getTalkChatIndex(comData,function(data) {
-					if(flagRef==0){
+				getTalkChatIndex(comData, function(data) {
+					if(flagRef == 0) {
 						wd.close();
 					}
 					console.log('3.1.教师谈话首页列表:' + JSON.stringify(data));
@@ -327,34 +348,51 @@
 						totalPageCount = data.RspData.totalPage;
 						pageIndex++;
 						if(flagRef == 0) { //刷新
-							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
-								console.log("array=="+JSON.stringify(array));
+							if(self) {
+								self.endPullDownToRefresh();
+							}
+							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
+								console.log("array==" + JSON.stringify(array));
 								actionArrayData.actionArray = array;
-								mui('.mui-scroll-wrapper').scroll().setTranslate(0,0);
+								mui('.mui-scroll-wrapper').scroll().setTranslate(0, 0);
 							})
 						} else { //加载更多
+							if(self) {
+								self.endPullUpToRefresh();
+							}
 							//合并数组
-							studentMP.setGrdNameClsName(selectTitle.list,data.RspData.list,function(array){
-								console.log("array222222222222=="+JSON.stringify(actionArrayData.actionArray));
+							studentMP.setGrdNameClsName(selectTitle.list, data.RspData.list, function(array) {
+								console.log("array222222222222==" + JSON.stringify(actionArrayData.actionArray));
 								actionArrayData.actionArray = actionArrayData.actionArray.concat(array);
 							})
 						}
 					} else {
-//							mui.toast(data.RspTxt);
+						if(flagRef == 0) { //刷新
+							if(self) {
+								self.endPullDownToRefresh();
+							}
+						} else { //加载更多
+							if(self) {
+								self.endPullUpToRefresh();
+							}
+						}
+						mui.toast(data.RspTxt);
 					}
 				});
 			};
 			//3.4.删除谈话记录
-			function attendanceDelete(index,li) {
-				var comData ={
-					id:index
+			function attendanceDelete(index, li, model) {
+				var comData = {
+					id: model.id
 				}
 				var wd = events.showWaiting();
-				getTalkDelete(comData,function(data) {
+				getTalkDelete(comData, function(data) {
 					wd.close();
 					console.log('3.4.删除谈话记录:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						li.parentNode.removeChild(li);
+						var tempArr = [].concat(actionArrayData.actionArray);
+						tempArr.splice(index, 1);
+						actionArrayData.actionArray = [].concat(tempArr);
 					} else {
 						mui.toast("删除考勤信息失败");
 					}
@@ -362,5 +400,5 @@
 			};
 		</script>
 	</body>
- 
+
 </html>

@@ -316,22 +316,9 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			//年份选择器
-			var timeTypePicker = new $M.PopPicker({
-				layer: 1
-			});
-			//学期选择器
-			var systermTypePicker = new $M.PopPicker({
-				layer: 1
-			});
-			//评价类型选择器
-			var commentTypePicker = new $M.PopPicker({
-				layer: 1
-			});
-			//年级、班级、学生选择器
-			var stuPicker = new $M.PopPicker({
-				layer: 3
-			});
+			//日期选择器
+			var dtPicker;
+			var showDTPickerFlag = 0; //0不显示，1显示
 			var commentSum = new Vue({
 				el: '#talk',
 				data: {
@@ -344,7 +331,7 @@
 					classesValue: '', //班级选择的值
 					studentValue: '', //学生选择的值
 					timeTypeList: [], //年份选择列表
-					timeTypeText: new Date().getFullYear()+'年', //年份选择后显示
+					timeTypeText: new Date().getFullYear() + '年', //年份选择后显示
 					timeTypeValue: new Date().getFullYear(), //年份选择的值
 					SysTermTypeList: [], //学期选择列表
 					SysTermTypeText: '请选择', //学期选择后显示
@@ -361,21 +348,24 @@
 				methods: {
 					selectTime: function(event, lx) { //三个时间选择
 						document.activeElement.blur();
+						//判断时间选择器是否在显示，如果显示，给干掉
+						showHidDTPicker();
+						showDTPickerFlag = 1; //显示时间选择器
 						var _self = event.target;
-//						var optionsJson = _self.getAttribute('data-options') || '{}';
-//						var options = JSON.parse(optionsJson);
-						_self.picker = new $M.DtPicker({"type": "date"});
+						dtPicker = new $M.DtPicker({
+							"type": "date"
+						});
 						//设置默认值
 						setTimeout(function() {
 							if(lx == 'begin') {
-								_self.picker.setSelectedValue(commentSum.beginTime);
+								dtPicker.setSelectedValue(commentSum.beginTime);
 							} else if(lx == 'end') {
-								_self.picker.setSelectedValue(commentSum.endTime);
+								dtPicker.setSelectedValue(commentSum.endTime);
 							} else if(lx == 'write') {
-								_self.picker.setSelectedValue(commentSum.writeTime);
+								dtPicker.setSelectedValue(commentSum.writeTime);
 							}
 						}, 100);
-						_self.picker.show(function(rs) {
+						dtPicker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
 							if(lx == 'begin') {
 								if(utils.compairTime(rs.text, commentSum.endTime)) {
@@ -392,14 +382,26 @@
 							} else if(lx == 'write') {
 								commentSum.writeTime = rs.text;
 							}
-							_self.picker.dispose();
-							_self.picker = null;
+							showDTPickerFlag = 0; //干掉时间选择器
+							dtPicker.dispose();
+							dtPicker = null;
 						});
 					},
 					selectGrade: function() { //年级、班级、学生选择
 						document.activeElement.blur();
+						//判断时间选择器是否在显示，如果显示，给干掉
+						showHidDTPicker();
 						if(commentSum.stuList.length > 0) {
+							//年级、班级、学生选择器
+							var stuPicker = new $M.PopPicker({
+								layer: 3
+							});
 							stuPicker.setData(commentSum.stuList);
+							setTimeout(function() {
+								stuPicker.pickers[0].setSelectedValue(commentSum.gradeValue);
+								stuPicker.pickers[1].setSelectedValue(commentSum.classesValue);
+								stuPicker.pickers[2].setSelectedValue(commentSum.studentValue);
+							}, 100);
 							stuPicker.show(function(items) {
 								commentSum.gradeText = _getParam(items[0], 'text');
 								commentSum.classesText = _getParam(items[1], 'text');
@@ -414,39 +416,78 @@
 					},
 					selectTimeType: function() { //选择年份
 						document.activeElement.blur();
-						timeTypePicker.setData(commentSum.timeTypeList);
-						timeTypePicker.pickers[0].setSelectedValue(commentSum.timeTypeValue);
-						timeTypePicker.show(function(items) {
-							commentSum.timeTypeText = _getParam(items[0], 'text');
-							commentSum.timeTypeValue = _getParam(items[0], 'value');
-						});
-//						var dtpicker = new mui.DtPicker({
-//							"type": "year"
-//						})
-//						dtpicker.show(function(e) {
-//							console.log(e);
-//						})
+						//判断时间选择器是否在显示，如果显示，给干掉
+						showHidDTPicker();
+						if(commentSum.timeTypeList.length > 0) {
+							//年份选择器
+							var timeTypePicker = new $M.PopPicker({
+								layer: 1
+							});
+							timeTypePicker.setData(commentSum.timeTypeList);
+							timeTypePicker.pickers[0].setSelectedValue(commentSum.timeTypeValue);
+							timeTypePicker.show(function(items) {
+								commentSum.timeTypeText = _getParam(items[0], 'text');
+								commentSum.timeTypeValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectCommentType: function() { //选择评价类型
 						document.activeElement.blur();
-						commentTypePicker.setData(commentSum.commentTypeList);
-						commentTypePicker.show(function(items) {
-							commentSum.commentTypeText = _getParam(items[0], 'text');
-							commentSum.commentTypeValue = _getParam(items[0], 'value');
-						});
+						//判断时间选择器是否在显示，如果显示，给干掉
+						showHidDTPicker();
+						if(commentSum.commentTypeList.length > 0) {
+							//评价类型选择器
+							var commentTypePicker = new $M.PopPicker({
+								layer: 1
+							});
+							commentTypePicker.setData(commentSum.commentTypeList);
+							setTimeout(function() {
+								commentTypePicker.pickers[0].setSelectedValue(commentSum.commentTypeValue);
+							}, 100);
+							commentTypePicker.show(function(items) {
+								commentSum.commentTypeText = _getParam(items[0], 'text');
+								commentSum.commentTypeValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					},
 					selectSysTermType: function() { //选择学期
 						document.activeElement.blur();
-						systermTypePicker.setData(commentSum.SysTermTypeList);
-						systermTypePicker.show(function(items) {
-							commentSum.SysTermTypeText = _getParam(items[0], 'text');
-							commentSum.SysTermTypeValue = _getParam(items[0], 'value');
-						});
+						//判断时间选择器是否在显示，如果显示，给干掉
+						showHidDTPicker();
+						if(commentSum.SysTermTypeList.length > 0) {
+							//学期选择器
+							var systermTypePicker = new $M.PopPicker({
+								layer: 1
+							});
+							systermTypePicker.setData(commentSum.SysTermTypeList);
+							setTimeout(function() {
+								systermTypePicker.pickers[0].setSelectedValue(commentSum.SysTermTypeValue);
+							}, 100);
+							systermTypePicker.show(function(items) {
+								commentSum.SysTermTypeText = _getParam(items[0], 'text');
+								commentSum.SysTermTypeValue = _getParam(items[0], 'value');
+							});
+						} else {
+							mui.toast('暂无数据');
+						}
 					}
 				}
 			});
 			var _getParam = function(obj, param) {
 				return obj[param] || '';
+			}
+
+			//判断时间选择器是否在显示，如果显示，给干掉
+			var showHidDTPicker = function() {
+				if(showDTPickerFlag == 1) {
+					showDTPickerFlag = 0; //干掉时间选择器
+					dtPicker.dispose();
+					dtPicker = null;
+				}
 			}
 
 			mui.plusReady(function() {
@@ -483,7 +524,7 @@
 				//获取当前年份，生成年份列表
 				var myDate = new Date().getFullYear();
 				console.log('myDate:' + myDate);
-				for(var i = myDate-5; i < myDate + 6; i++) {
+				for(var i = myDate - 5; i < myDate + 6; i++) {
 					var tepModel = {
 						text: i + '年',
 						value: i
@@ -622,7 +663,7 @@
 						mui.toast('请选择评价类型');
 						document.getElementById("finish").disabled = false;
 					} else {
-//						var wd = events.showWaiting();
+						//						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
 						//						console.log(JSON.stringify(multiMedia))
 						//						console.log(JSON.stringify(multiMedia.data.PictureArray))

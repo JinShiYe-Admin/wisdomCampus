@@ -184,8 +184,9 @@
 				margin: 5px 5px 0 10px !important;
 			}
 			/**add*/
+			
 			.mui-table-view-cell.mui-active {
-			    background-color:transparent ;
+				background-color: transparent;
 			}
 		</style>
 	</head>
@@ -201,7 +202,7 @@
 				<div class="mui-row title-info">
 					<p v-cloak class="user-title">{{curPage.gradeName}}{{curPage.className}}{{curPage.studentName}}</p>
 					<p v-cloak class="user-title-se">{{sb.behaviorTime}}&nbsp;{{sb.period}}</p>
-					<p v-cloak class="user-title-body">【{{sb.behaviorName}}】&nbsp;{{sb.behaviorDetail}}</p>
+					<p v-cloak class="user-title-body" style="word-break: break-all;">【{{sb.behaviorName}}】&nbsp;{{sb.behaviorDetail}}</p>
 					<div class="fj" v-if="sb.attachs==undefined || sb.attachs.length==0"></div>
 					<div class="fj" v-else>附件:</div>
 					<div v-cloak style="float: left;margin:5px 0 0 0;">
@@ -357,10 +358,12 @@
 				methods: {
 					selectTime: function(event, lx) {
 						var _self = event.target;
-//						var optionsJson = _self.getAttribute('data-options') || '{}';
-//						var options = JSON.parse(optionsJson);
-//						var id = _self.getAttribute('id');
-						_self.picker = new $M.DtPicker({"type": "date"});
+						//						var optionsJson = _self.getAttribute('data-options') || '{}';
+						//						var options = JSON.parse(optionsJson);
+						//						var id = _self.getAttribute('id');
+						_self.picker = new $M.DtPicker({
+							"type": "date"
+						});
 						_self.picker.show(function(rs) {
 							console.log('选择结果: ' + rs.text);
 							if(lx == 'thrq') { //谈话日期
@@ -429,17 +432,21 @@
 					if(data.RspCode == 0) {
 						var sb = data.RspData.sb;
 						var personal = store.get(window.storageKeyName.PERSONALINFO);
-						var tempCount = 0;
-						for(var i = 0; i < personal.clss.length; i++) {
-							var tempModel = personal.clss[i];
-							if(tempModel.clsid == sb.classId && tempModel.isms == 1) {
-								tempCount++;
-							}
-						}
-						if(tempCount > 0) {
-							actionHead.showFlag = 1;
-						} else {
+						if(personal.appeditstat == 0) {
 							actionHead.showFlag = 0;
+						} else {
+							var tempCount = 0;
+							for(var i = 0; i < personal.clss.length; i++) {
+								var tempModel = personal.clss[i];
+								if(tempModel.clsid == sb.classId && tempModel.isms == 1 && tempModel.isfinish == 0) {
+									tempCount++;
+								}
+							}
+							if(tempCount > 0) {
+								actionHead.showFlag = 1;
+							} else {
+								actionHead.showFlag = 0;
+							}
 						}
 						console.log("查询学生对应的名称")
 						for(var a = 0; a < talkTitle.list.length; a++) {
@@ -558,7 +565,7 @@
 								imgUrl.push(_attachs[i].url);
 							}
 							multiMedia.addImages(imgUrl);
-							multiMedia.options.imageId = imgUrl.length+1;
+							multiMedia.options.imageId = imgUrl.length + 1;
 						}
 					} else {
 						if(talkTitle.content.replace(/(^\s*)|(\s*$)/g, "") == "") { //为空不允许发送
