@@ -667,6 +667,16 @@
 								attendanceDetialData.sjShow = '0';
 							}
 							console.log("liushuai:" + _getParam(items[0], 'showInOut'));
+							//重置节次为可选状态
+							for(var i=0;i<attendanceDetialData.nodeSubJson.length;i++){
+								var nodesub=attendanceDetialData.nodeSubJson[i];
+								nodesub.classCanCheck = 1;
+								nodesub.dayCanCheck = 1;
+    							nodesub.halfDayCanCheck = 1;
+								nodesub.classNames='请选择';
+								nodesub.classNodes = [];
+								nodesub.kmShow=1;
+							}
 							if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
 								attendanceDetialData.dayShow = '1';
 							} else {
@@ -694,6 +704,7 @@
 					},
 					selectJc: function(e, index) { //选择节次
 						document.activeElement.blur();
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0);
 						var classes = [];
 						var names = [];
 						var obj = e.target;
