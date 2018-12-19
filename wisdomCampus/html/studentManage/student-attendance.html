@@ -295,6 +295,11 @@
 			}
 
 			mui.plusReady(function() {
+				//获取筛选的人员信息
+				getStudnets();
+			});
+			//获取筛选的人员信息
+			var getStudnets = function() {
 				studentMP.getStudentManagePermission(1, 1, function(array) {
 					console.log("ABCD==" + JSON.stringify(array))
 					selectTitle.list = array;
@@ -310,7 +315,7 @@
 						getAttendanceList(pageIndex);
 					}
 				});
-			});
+			}
 			//接收student-index发送的close事件
 			window.addEventListener('closePop', function() {
 				$("#bottomPopover").hide();
@@ -338,13 +343,15 @@
 					callback: function() {
 						console.log("下拉刷新");
 						var self = this;
-						pageIndex = 1;
-						flagRef = 0;
-						getAttendanceList(pageIndex, this);
-						//						setTimeout(function() {
-						//							//结束下拉刷新
-						//							self.endPullDownToRefresh();
-						//						}, 1000);
+						if(selectTitle.list.length>0) {
+							pageIndex = 1;
+							flagRef = 0;
+							getAttendanceList(pageIndex, this);
+						} else {
+							self.endPullDownToRefresh();
+							//获取筛选的人员信息
+							getStudnets();
+						}
 					}
 				},
 				up: {
