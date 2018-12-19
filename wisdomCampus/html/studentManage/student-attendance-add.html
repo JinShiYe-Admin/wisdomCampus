@@ -265,19 +265,19 @@
 								<li v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheck(index)">
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">全天</label>
-										<input name="全天" value="day" type="checkbox" :disabled="abc.dayCanCheck==-1">
+										<input name="全天" value="day" type="checkbox" :checked="checked('day',abc.classNodes,'')" :disabled="abc.dayCanCheck==-1">
 									</div>
 								</li>
 								<li v-if="dayShow==1" class="mui-table-view-cell" style="padding: 0;" @tap="classItemCheckHalf(index)">
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">半天</label>
-										<input name="半天" value="halfDay" type="checkbox" :disabled="abc.halfDayCanCheck==-1">
+										<input name="半天" value="halfDay" type="checkbox" :checked="checked('halfDay',abc.classNodes,'')" :disabled="abc.halfDayCanCheck==-1">
 									</div>
 								</li>
-								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList">
+								<li class="mui-table-view-cell" style="padding: 0;" v-for="jc in jcList" >
 									<div class="mui-input-row mui-checkbox mui-right">
 										<label style="width: 100%;">{{jc.text}}</label>
-										<input :name="jc.text" :value="jc.value" type="checkbox" :disabled="abc.classCanCheck==-1">
+										<input :name="jc.text" :value="jc.value" type="checkbox" :checked="checked(jc.value,abc.classNodes,jc.value)" :disabled="abc.classCanCheck==-1">
 									</div>
 								</li>
 							</ul>
@@ -560,6 +560,11 @@
 							} else {
 								nodeSubJson.halfDayCanCheck = 1;
 							}
+							if(JSON.stringify(nodeSubJson.classNodes).indexOf('day')!=-1){
+								nodeSubJson.classNodes=[];
+							}else{
+								nodeSubJson.classNodes.push('day');
+							}
 						}
 
 					},
@@ -579,8 +584,31 @@
 							} else {
 								nodeSubJson.dayCanCheck = 1;
 							}
+							if(JSON.stringify(nodeSubJson.classNodes).indexOf('halfDay')!=-1){
+								nodeSubJson.classNodes=[];
+							}else{
+								nodeSubJson.classNodes.push('halfDay');
+							}
 						}
-
+					},
+					checked:function(lx,value,valueJc){//判断节次弹窗中的节次是否需要选中
+						if(lx=='day'){
+							console.log('day:'+value);
+							if(JSON.stringify(value).indexOf("day")!=-1){
+								return true;
+							}
+						}else if(lx=='halfDay'){
+							console.log('halfDay:'+value);
+							if(JSON.stringify(value).indexOf("halfDay")!=-1){
+								return true;
+							}
+						}else{
+							console.log('classes:'+value);
+							if(JSON.stringify(value).indexOf(valueJc)!=-1){
+								return true;
+							}
+						}
+						return false;
 					},
 					selectKm: function(e, index) { //选择科目
 						document.activeElement.blur();
@@ -606,6 +634,7 @@
 						}
 					},
 					selectkqxxName: function() { //选择考勤细项
+						console.log(JSON.stringify(talkTitle.nodeSubJson));
 						document.activeElement.blur();
 						//判断时间选择器是否在显示，如果显示，给干掉
 						showHidDTPicker();
@@ -634,6 +663,16 @@
 								var type = _getParam(items[0], 'type');
 								if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
 									talkTitle.dayShow = '1';
+								}
+								//重置节次为可选状态
+								for(var i=0;i<talkTitle.nodeSubJson.length;i++){
+									var nodesub=talkTitle.nodeSubJson[i];
+									nodesub.classCanCheck = 1;
+									nodesub.dayCanCheck = 1;
+	    							nodesub.halfDayCanCheck = 1;
+									nodesub.classNames='请选择';
+									nodesub.classNodes = [];
+									nodesub.kmShow=1;
 								}
 							});
 						} else {
@@ -694,6 +733,7 @@
 					},
 					selectJc: function(e, index) { //选择节次
 						document.activeElement.blur();
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0);
 						//判断时间选择器是否在显示，如果显示，给干掉
 						showHidDTPicker();
 						var classes = [];
