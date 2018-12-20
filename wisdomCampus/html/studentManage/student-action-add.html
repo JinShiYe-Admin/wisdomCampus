@@ -350,7 +350,7 @@
 			var _selfTimePicker;
 
 			function hidePicker() {
-				if(_selfTimePicker.picker != null) {
+				if(_selfTimePicker != null) {
 					_selfTimePicker.picker.dispose();
 					_selfTimePicker.picker = null;
 				}
@@ -707,8 +707,8 @@
 					} else {
 						var wd = events.showWaiting();
 						document.getElementById("finish").disabled = true;
-						console.log(JSON.stringify(multiMedia))
-						console.log(JSON.stringify(multiMedia.data.PictureArray))
+//						console.log(JSON.stringify(multiMedia))
+//						console.log(JSON.stringify(multiMedia.data.PictureArray))
 						if(multiMedia.data.PictureArray.length == 0) { //没有传附件
 							addNotice(wd, '3', '', '', 0, '');
 						} else {
