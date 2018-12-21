@@ -603,7 +603,6 @@
 								return true;
 							}
 						}else{
-							console.log('classes:'+value);
 							if(JSON.stringify(value).indexOf(valueJc)!=-1){
 								return true;
 							}
@@ -732,8 +731,7 @@
 						}
 					},
 					selectJc: function(e, index) { //选择节次
-						document.activeElement.blur();
-						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0);
+						document.activeElement.blur(); 
 						//判断时间选择器是否在显示，如果显示，给干掉
 						showHidDTPicker();
 						var classes = [];
