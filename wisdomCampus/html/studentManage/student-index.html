@@ -6,6 +6,7 @@
 		<title>学生管理index</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../fonts/iconfont2.css"/>
 		<style type="text/css">
 			.mui-bar-tab .mui-tab-item.mui-active {
 				color: #63BBFF;
@@ -75,23 +76,23 @@
 		</header>-->
 		<nav class="mui-bar mui-bar-tab" id="pageData">
 			<a id="defaultTab" class="mui-tab-item mui-active" href="../../html/studentManage/student-attendance.html">
-				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-icon iconfont icon-kaoqinqiandao"></span>
 				<span id="flag0" class="mui-tab-label">学生考勤</span>
 			</a>
 			<a class="mui-tab-item" href="../../html/studentManage/student-action.html">
-				<span class="mui-icon mui-icon-email"></span>
+				<span class="mui-icon iconfont icon-hangwei"></span>
 				<span id="flag1" class="mui-tab-label">学生行为</span>
 			</a>
 			<a v-show='showPage==1' class="mui-tab-item" href="../../html/studentManage/student-talkRecord.html">
-				<span class="mui-icon mui-icon-chatboxes-filled"></span>
+				<span class="mui-icon iconfont icon-tanhuahanxun"></span>
 				<span id="flag2" class="mui-tab-label">谈话记录</span>
 			</a>
 			<a v-show='showPage==1' class="mui-tab-item" href="../../html/studentManage/student-review.html">
-				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-icon iconfont icon-score"></span>
 				<span id="flag3" class="mui-tab-label">量化考评</span>
 			</a>
 			<a v-show='showPage==1' class="mui-tab-item" href="../../html/studentManage/student-comment.html">
-				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-icon iconfont icon-xiepingyu"></span>
 				<span id="flag4" class="mui-tab-label">评语</span>
 			</a>
 		</nav>
