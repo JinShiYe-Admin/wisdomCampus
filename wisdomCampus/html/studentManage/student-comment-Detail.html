@@ -451,7 +451,6 @@
 								comment: commentData.content //评语
 							}
 							console.log('tempData:' + JSON.stringify(tempData));
-							var wd = events.showWaiting();
 							getCommentSave(tempData, function(data) {
 								wd.close();
 								console.log('5.3. 保存学生评语 ' + JSON.stringify(data));
