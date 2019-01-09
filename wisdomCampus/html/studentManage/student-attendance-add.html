@@ -660,7 +660,7 @@
 									talkTitle.sjShow = '0';
 								}
 								var type = _getParam(items[0], 'type');
-								if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
+								if(type == '1') { //如果是请假和缺勤，显示全天和半天
 									talkTitle.dayShow = '1';
 								}
 								//重置节次为可选状态

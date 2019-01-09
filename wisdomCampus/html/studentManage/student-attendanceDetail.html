@@ -492,9 +492,9 @@
 									for(var j = 0; j < dataArray.length; j++) {
 										var dValue = dataArray[j].value;
 										if(quantizationAttendanceId == dValue) {
-											var showInOut = dataArray[j].showInOut;
+											var type = dataArray[j].type;
 											var text = dataArray[j].text;
-											if(showInOut == "1") {
+											if(type == "1") {
 												attendanceDetialData.dayShow = "1";
 											}
 											if(text.indexOf('请假') != -1) {
@@ -670,8 +670,7 @@
 								attendanceDetialData.attendanceDetail.permision = '请选择'
 								attendanceDetialData.sjShow = '0';
 							}
-							console.log("liushuai:" + _getParam(items[0], 'showInOut'));
-							//重置节次为可选状态
+							//重置节次为可选状态   
 							for(var i=0;i<attendanceDetialData.nodeSubJson.length;i++){
 								var nodesub=attendanceDetialData.nodeSubJson[i];
 								nodesub.classCanCheck = 1;
@@ -681,7 +680,8 @@
 								nodesub.classNodes = [];
 								nodesub.kmShow=1;
 							}
-							if(_getParam(items[0], 'showInOut') == '1') { //如果是请假和缺勤，显示全天和半天
+							var type=_getParam(items[0], 'type')
+							if(type == '1') { //如果是请假和缺勤，显示全天和半天
 								attendanceDetialData.dayShow = '1';
 							} else {
 								attendanceDetialData.dayShow = '0';
