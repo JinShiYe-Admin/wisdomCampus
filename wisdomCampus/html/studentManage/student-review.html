@@ -127,7 +127,7 @@
 									</template>
 									<template v-if="actionModel.type=='期评'">
 										<div class="mui-media-body">
-											<span class="leftTag-title" style="background: #EC971F;font-size: 12px;">{{actionModel.type}}</span><span class="leftTag" style="font-size: 14px;color: #333;">{{actionModel.gradeName}}{{actionModel.className}}{{actionModel.year}}年{{actionModel.term}}学期学生行为量化考评</span>
+											<span class="leftTag-title" style="background: #EC971F;font-size: 12px;">{{actionModel.type}}</span><span class="leftTag" style="font-size: 14px;color: #333;">{{actionModel.gradeName}}{{actionModel.className}}{{actionModel.year}}年{{actionModel.termname}}学生行为量化考评</span>
 											<br/>
 											<span class='mui-ellipsis' style="font-size: 12px;color: #999;">量化时间：{{actionModel.fromDate}}——{{actionModel.toDate}}</span>
 											<span class='rightTag-title' style="font-size: 12px;color: #333;">{{actionModel.createUsername}}</span>
@@ -147,7 +147,6 @@
 					<li class="mui-table-view-cell" @tap="toPage('http://')">查看量化指标</li>
 				</ul>
 			</div>
-		</div>
 		</div>
 		<script src="../../js/mui2.js"></script>
 		<script src="../../js/utils/mui.picker.js"></script>
@@ -178,9 +177,33 @@
 				layer: 1
 			});
 			mui.plusReady(function() {
+				//3.4 系统学期
+				getSysTerm();
 				//获取筛选的人员信息
 				getStudnets();
 			});
+			//3.4 系统学期
+			var getSysTerm = function() {
+				var enData1 = {};
+				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicPar = store.get(window.storageKeyName.PUBLICPARAMETER);
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				postDataEncry('SysTerm', enData1, comData1, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						console.log("3.4 系统学期:" + JSON.stringify(data1));
+						if(data1.RspData) {
+							actionArrayData.sysTermArray = data1.RspData.systerm;
+						}
+					} else {
+						console.log("data1:" + data1.RspTxt);
+					}
+				});
+			}
 
 			//获取筛选的人员信息
 			var getStudnets = function() {
@@ -205,6 +228,7 @@
 			var actionArrayData = new Vue({
 				el: "#actionArrayData",
 				data: {
+					sysTermArray:[],//系统学期数组
 					actionArray: []
 				},
 				methods: {
@@ -352,6 +376,15 @@
 					}
 					console.log('4.1 量化考评首页列表' + JSON.stringify(data));
 					if(data.RspCode == 0) {
+						for (var i = 0; i < data.RspData.list.length; i++) {
+							var tempM = data.RspData.list[i];
+							for (var a = 0; a < actionArrayData.sysTermArray.length; a++) {
+								var tempTerm = actionArrayData.sysTermArray[a];
+								if (tempM.term == tempTerm.termcode) {
+									tempM.termname = tempTerm.termname;
+								}
+							}
+						}
 						//总页数
 						totalPageCount = data.RspData.totalPage;
 						pageIndex++;
