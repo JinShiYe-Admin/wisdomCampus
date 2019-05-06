@@ -345,7 +345,7 @@ var UploadHeadImage = (function($, mod) {
 		};
 		events.showWaiting();
 		//发送网络请求，data为网络返回值
-		postDataEncry('UpUserInfo', enData0, comData0, 0, function(data) {
+		postDataEncry(0,'UpUserInfo', enData0, comData0, 0, function(data) {
 			console.log('UpUserInfo:' + JSON.stringify(data));
 			events.closeWaiting();
 			if(data.RspCode == 0) {

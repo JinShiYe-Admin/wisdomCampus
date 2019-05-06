@@ -2,10 +2,10 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1; //0开发，1云测试，2部署
+	mod.key = 0; //0开发，1云测试，2部署
 	var exLog = console.log;
 	console.log = function(hint, object) {
-		if(mod.key === 1) {
+		if(mod.key === 0) {
 			var argus = hint;
 			if(typeof(object) !== 'undefined') {
 				argus = hint + JSON.stringify(object);
@@ -17,12 +17,15 @@ var storageKeyName = (function(mod) {
 		case 0: //开发
 			mod.SCHOOLID = 100005; //学校ID
 			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/'; //顾工接口
-			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAService/'; //孔工接口
+			mod.INTERFACEZENG = 'http://139.129.252.49:8080/sup/'; //系统接口
+			mod.INTERFACEMENG = 'http://139.129.252.49:8080/sys/api/'; //系统接口
+			mod.INTERFACEKONG = 'hhttps://jbyj.jiaobaowang.net/SchoolOAServiceNew/'; //孔工接口
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
 			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
 			mod.ANDROIDUPDATEURL = 'http://192.168.1.121:8081/app/versionCode.xml';
 			mod.STUDENTMANAGE = 'https://gxkf.jiaobaowang.net:9443/sm/app/'; //学生管理
+			mod.PLATFORMCODE = 'PT0001'; //平台代码
+			mod.APPCODE = 'smartSchAPP'; //应用系统代码
 
 			//---七牛空间和接口---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名

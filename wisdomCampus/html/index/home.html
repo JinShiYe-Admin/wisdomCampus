@@ -343,7 +343,7 @@
 				//12.获取学校资源平台信息
 				getSchoolInfoSource();
 				//判断是否需要更新
-				setTimeout(appUpdate.updateApp(personal.schid), 5000);
+				setTimeout(appUpdate.updateApp(personal.user.school_id), 5000);
 			});
 			//12.获取学校资源平台信息
 			var getSchoolInfoSource = function() {
@@ -352,11 +352,11 @@
 				//不需要加密的数据
 				var comData0 = {
 					uuid: publicParameter.uuid, //用户设备号
-					utoken: personal.utoken, //用户令牌
+					utoken: personal.access_token, //用户令牌
 					appid: publicParameter.appid //系统所分配的应用ID
 				}
 				//发送网络请求，data为网络返回值
-				postDataEncry('SchInfoSoure', enData0, comData0, 0, function(data) {
+				postDataEncry(0,'SchInfoSoure', enData0, comData0, 0, function(data) {
 					console.log("12.获取学校资源平台信息:" + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						//是否有权限的字段,字段是被，分割，数字4，代表有行政管理事务权限，即通知、事务
@@ -387,7 +387,7 @@
 				var info = plus.push.getClientInfo();
 				var tempBindData = {
 					appId: info.appid,
-					alias: tempInfo00.utid,
+					alias: tempInfo00.user.id,
 					cid: info.clientid
 				}
 				bindPro(tempBindData, function function_name(data) {
@@ -450,7 +450,7 @@
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);
 			var tempName = '暂无姓名';
 			if(tempInfo) {
-				tempName = tempInfo.utname;
+				tempName = tempInfo.user.name;
 			}
 			console.log('tempInfo:' + tempInfo);
 			//检查是否有权限，flag=0通知、事物，flag=1学生管理
@@ -577,9 +577,10 @@
 				var tempCount = 0;
 				var tempFlag = 0;
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:'+JSON.stringify(personal));
 				var tempData = {
-					schoolId: personal.schid, //学校ID
-					receiveManId: personal.utid
+					schoolId: personal.user.school_id, //学校ID
+					receiveManId: personal.user.id
 				}
 				getNoReadCntByManPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
@@ -605,8 +606,8 @@
 					}
 				});
 				tempData = {
-					schoolId: personal.schid, //学校ID
-					approveManId: personal.utid
+					schoolId: personal.user.school_id, //学校ID
+					approveManId: personal.user.id
 				}
 				getNoApproveCntByManPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))

@@ -415,7 +415,7 @@
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry('DepartUser', enData0, comData0, 0, function(data) {
+					postDataEncry(0,'DepartUser', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -473,7 +473,7 @@
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry('ClassTec', enData0, comData0, 0, function(data) {
+					postDataEncry(0,'ClassTec', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -554,7 +554,7 @@
 				}
 				events.showWaiting();
 				//发送网络请求，data为网络返回值
-				postDataEncry('SchDepart', enData0, comData0, 0, function(data) {
+				postDataEncry(0,'SchDepart', enData0, comData0, 0, function(data) {
 					events.closeWaiting();
 					selectPeopleData.departmentArray = [];
 					if(data.RspCode == 0) {
@@ -712,7 +712,7 @@
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry('GradeClass', enData0, comData0, 0, function(data) {
+					postDataEncry(0,'GradeClass', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {

@@ -36,7 +36,7 @@ function setImg(imgURL) {
 //commonData,不需要加密的对象
 //flag,0表示不需要合并共用数据，1为添加uuid、utid、token、appid普通参数，2为uuid、appid、token
 //callback,返回值
-var postDataEncry = function(url, encryData, commonData, flag, callback) {
+var postDataEncry = function(urlFlag,url, encryData, commonData, flag, callback) {
 	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 		callback({
 			RspCode: 404,
@@ -45,9 +45,12 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 		});
 		return;
 	}
-	var tempUrl = window.storageKeyName.INTERFACEGU;
-	url = tempUrl + url;
-	console.log('url:', url);
+	var tempUrl = window.storageKeyName.INTERFACEZENG;
+	if (urlFlag == 1) {
+		tempUrl = window.storageKeyName.INTERFACEMENG;
+	}
+	var url1 = tempUrl + url;
+	console.log('url1:', url1);
 	//拼接登录需要的签名
 	var signTemp = postDataEncry1(encryData, commonData, flag);
 	console.log('signTemp000:' + signTemp);
@@ -58,12 +61,10 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 		var tempData = $.extend(encryData, commonData);
 		//添加签名
 		tempData.sign = sign;
-		// 等待的对话框
-		var urlArr = url.split('/');
-		console.log('传递的参数' + urlArr[urlArr.length - 1] + ':', JSON.stringify(tempData));
+		console.log('传递的参数' + url + ':', JSON.stringify(tempData));
 		var tempStr = JSON.stringify(tempData).replace(/\\/g, "");
 		console.log('tempStr:' + tempStr);
-		jQAjaxPost(url, tempStr, callback);
+		jQAjaxPost(urlFlag,url, tempStr, callback);
 //		jQAjaxPost(url, JSON.stringify(tempData), callback);
 	});
 }
@@ -169,19 +170,13 @@ var xhrPost = function(url, commonData, callback) {
 					var personal = store.get(window.storageKeyName.PERSONALINFO);
 					//需要参数
 					var comData = {
-						uuid: publicParameter.uuid,
-						utid: personal.utid,
-						utoken: personal.utoken,
-						appid: publicParameter.appid,
-						schid: personal.schid,
-						utp: personal.utp,
-						utname: personal.utname
+						access_token: personal.access_token
 					};
 					//令牌续订
-					postDataEncry('TokenReset', {}, comData, 0, function(data1) {
+					postDataEncry(0,'api/token/refresh', {}, comData, 0, function(data1) {
 						if(data1.RspCode == 0) {
 							var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-							tempInfo00.utoken = data1.RspData;
+							tempInfo00.access_token = data1.RspData;
 							store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 							commonData.token = data1.RspData;
 							delete commonData.sign;
@@ -221,7 +216,7 @@ var xhrPost = function(url, commonData, callback) {
 	});
 }
 
-var jQAjaxPost = function(url, data, callback) {
+var jQAjaxPost = function(urlFlag,url, data, callback) {
 	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 		callback({
 			RspCode: 404,
@@ -230,10 +225,15 @@ var jQAjaxPost = function(url, data, callback) {
 		});
 		return;
 	}
+	var tempUrl = window.storageKeyName.INTERFACEZENG;
+	if (urlFlag == 1) {
+		tempUrl = window.storageKeyName.INTERFACEMENG;
+	}
+	var url1 = tempUrl + url;
 	console.log('jQAP-Url:', url);
 	console.log('jQAP-Data111:', data);
 	jQuery.ajax({
-		url: url,
+		url: url1,
 		type: "POST",
 		data: data,
 		timeout: 10000,
@@ -241,32 +241,26 @@ var jQAjaxPost = function(url, data, callback) {
 		contentType: "application/json",
 		async: true,
 		success: function(success_data) { //请求成功的回调
-			console.log('jQAP-Success:', success_data);
+			console.log(url+':jQAP-Success:', success_data);
 			if(success_data.RspCode == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				//需要参数
 				var comData = {
-					uuid: publicParameter.uuid,
-					utid: personal.utid,
-					utoken: personal.utoken,
-					appid: publicParameter.appid,
-					schid: personal.schid,
-					utp: personal.utp,
-					utname: personal.utname
+					access_token: personal.access_token
 				};
 				//令牌续订
-				postDataEncry('TokenReset', {}, comData, 0, function(data1) {
+				postDataEncry(0,'api/token/refresh', {}, comData, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.utoken = data1.RspData;
+						tempInfo00.access_token = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-						var urlArr = url.split('/');
+//						var urlArr = url.split('/');
 						var tempData = JSON.parse(data);
-						tempData.utoken = data1.RspData;
+						tempData.access_token = data1.RspData;
 						delete tempData.sign;
-						postDataEncry(urlArr[urlArr.length - 1], {}, tempData, 0, function(data2) {
+						postDataEncry(urlFlag,url, {}, tempData, 0, function(data2) {
 							callback(data2);
 						});
 					}
@@ -313,19 +307,13 @@ var tempPro = function(url, data0, callback) {
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				//需要参数
 				var comData = {
-					uuid: publicParameter.uuid,
-					utid: personal.utid,
-					utoken: personal.utoken,
-					appid: publicParameter.appid,
-					schid: personal.schid,
-					utp: personal.utp,
-					utname: personal.utname
+					access_token: personal.access_token
 				};
 				//令牌续订
-				postDataEncry('TokenReset', {}, comData, 0, function(data1) {
+				postDataEncry(0,'api/token/refresh', {}, comData, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.utoken = data1.RspData;
+						tempInfo00.access_token = data1.RspData;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 						//						data0.utoken = data1.RspData;
 						delete data0.sign;
@@ -390,7 +378,7 @@ var extendParameter = function(data0) {
 	var tempData = {
 		uuid: publicPar.uuid,
 		appid: publicPar.appid,
-		token: personal.utoken
+		token: personal.access_token
 	}
 	return $.extend(data0, tempData);
 }
@@ -590,7 +578,7 @@ var extendParameter1 = function(data0) {
 		utid: personal.utid,
 		utname: personal.utname,
 		schid: personal.schid,
-		token: personal.utoken
+		token: personal.access_token
 	}
 	return $.extend(data0, tempData);
 }
