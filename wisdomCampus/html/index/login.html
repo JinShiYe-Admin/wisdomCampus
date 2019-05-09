@@ -145,6 +145,7 @@
 				password: hex_md5(key + tempPW), //秘钥+密码再MD5加密
 				platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
 				app_code: window.storageKeyName.APPCODE, //应用系统代码
+				unit_code:'-1',//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 				login_name: tempName //登录名
 			};
 			//登录
