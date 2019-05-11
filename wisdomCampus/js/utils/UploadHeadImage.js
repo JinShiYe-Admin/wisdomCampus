@@ -336,20 +336,36 @@ var UploadHeadImage = (function($, mod) {
 		var enData0 = {};
 		//不需要加密的数据
 		var comData0 = {
-			uuid: publicParameter.uuid, //用户设备号
-			utid: personal.utid, //用户ID
-			type: 'uico', //修改类型，upw:密码, uico:头像
+//			uuid: publicParameter.uuid, //用户设备号
+//			utid: personal.utid, //用户ID
+//			type: 'uico', //修改类型，upw:密码, uico:头像
+//			val: domain, //对应类型的值
+//			utoken: personal.utoken, //用户令牌
+//			appid: publicParameter.appid //系统所分配的应用ID
+			
+			platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
+			app_code: window.storageKeyName.APPCODE, //应用系统代码
+			type: 'uico', //修改类型，uico:头像
 			val: domain, //对应类型的值
-			utoken: personal.utoken, //用户令牌
-			appid: publicParameter.appid //系统所分配的应用ID
+			access_token: personal.utoken //用户令牌
 		};
 		events.showWaiting();
 		//发送网络请求，data为网络返回值
-		postDataEncry(0,'UpUserInfo', enData0, comData0, 0, function(data) {
-			console.log('UpUserInfo:' + JSON.stringify(data));
-			events.closeWaiting();
-			if(data.RspCode == 0) {
-				//成功的回调
+//		postDataEncry(0,'UpUserInfo', enData0, comData0, 0, function(data) {
+//			console.log('UpUserInfo:' + JSON.stringify(data));
+//			events.closeWaiting();
+//			if(data.RspCode == 0) {
+//				//成功的回调
+//				successCallBack(imgeURL);
+//			} else {
+//				errorCallBack(data);
+//			}
+//		});
+		
+		postDataEncry(1, 'upUserInfo', {}, comData0, 0, function(data3) {
+			console.log('UpUserInfo:' + JSON.stringify(data3));
+			events.showWaiting();
+			if(data3.code == 'SUCCESS') {
 				successCallBack(imgeURL);
 			} else {
 				errorCallBack(data);

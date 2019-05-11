@@ -341,40 +341,40 @@
 				//推送绑定
 				bindInfo();
 				//12.获取学校资源平台信息
-				getSchoolInfoSource();
+//				getSchoolInfoSource();
 				//判断是否需要更新
 				setTimeout(appUpdate.updateApp(personal.user.school_id), 5000);
 			});
 			//12.获取学校资源平台信息
-			var getSchoolInfoSource = function() {
-				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-				var enData0 = {};
-				//不需要加密的数据
-				var comData0 = {
-					uuid: publicParameter.uuid, //用户设备号
-					utoken: personal.access_token, //用户令牌
-					appid: publicParameter.appid //系统所分配的应用ID
-				}
-				//发送网络请求，data为网络返回值
-				postDataEncry(0,'SchInfoSoure', enData0, comData0, 0, function(data) {
-					console.log("12.获取学校资源平台信息:" + JSON.stringify(data));
-					if(data.RspCode == 0) {
-						//是否有权限的字段,字段是被，分割，数字4，代表有行政管理事务权限，即通知、事务
-						var tempArray = data.RspData.baseapps.split(',')
-						//如果里面有数字4，即有权限
-						for(var i = 0; i < tempArray.length; i++) {
-							if(tempArray[i] == 4) {
-								console.log('noticeCheckFlag++;');
-								noticeCheckFlag++;
-							}
-							if(tempArray[i] == 9) {
-								console.log('studentMFlag++;');
-								studentMFlag++;
-							}
-						}
-					} else {}
-				});
-			}
+//			var getSchoolInfoSource = function() {
+//				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+//				var enData0 = {};
+//				//不需要加密的数据
+//				var comData0 = {
+//					uuid: publicParameter.uuid, //用户设备号
+//					utoken: personal.access_token, //用户令牌
+//					appid: publicParameter.appid //系统所分配的应用ID
+//				}
+//				//发送网络请求，data为网络返回值
+//				postDataEncry(0,'SchInfoSoure', enData0, comData0, 0, function(data) {
+//					console.log("12.获取学校资源平台信息:" + JSON.stringify(data));
+//					if(data.RspCode == 0) {
+//						//是否有权限的字段,字段是被，分割，数字4，代表有行政管理事务权限，即通知、事务
+//						var tempArray = data.RspData.baseapps.split(',')
+//						//如果里面有数字4，即有权限
+//						for(var i = 0; i < tempArray.length; i++) {
+//							if(tempArray[i] == 4) {
+//								console.log('noticeCheckFlag++;');
+//								noticeCheckFlag++;
+//							}
+//							if(tempArray[i] == 9) {
+//								console.log('studentMFlag++;');
+//								studentMFlag++;
+//							}
+//						}
+//					} else {}
+//				});
+//			}
 			window.addEventListener('setHeadImg', function(data) {
 				console.log("data" + JSON.stringify(data.detail.imgurl))
 				mine.userImg = data.detail.imgurl;
@@ -412,40 +412,71 @@
 			});
 			mui(".mui-table-view").on('tap', 'a', function() {
 				var id = this.parentElement.id;
-				if(id == 1 || id == 2) {
-					if(noticeCheckFlag > 0) {
-						//检查是否有权限
-						if(checkPermission(0)) {
-							console.log('1111');
-							mui.toast("无此权限");
-						} else {
-							console.log('22222');
-							//							var noRead = document.getElementById("noRead_" + id);
-							//							noRead.className = "mui-badge mui-hidden";
+				console.log(id);
+				switch(id){
+					case '1'://通知公告
+						if(checkPermission(window.storageKeyName.Notice)){
 							utils.mOpenWithData("../../html/checkNotice/all-list.html", id)
+						}else{
+							mui.toast("无此权限");
 						}
-					} else {
-						mui.toast("此功能被关闭");
-					}
-					//					utils.hrefSessionStorage("all.html", id);
-				} else {
-					if(id == 6) {
-						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
-					} else if(id == 3) {
-						if(studentMFlag > 0) {
-							if((personal.utp == 0 && (personal.grds.length > 0 || personal.clss.length > 0)) || !checkPermission(1)) {
-								console.log('personal.urolestr:' + personal.urolestr);
-								utils.mOpenWithData("../../html/studentManage/student-index.html", id);
-							} else {
-								mui.toast("无此权限");
-							}
-						} else {
-							mui.toast("此功能被关闭");
+						break;
+					case '2'://事务审批
+						if(checkPermission(window.storageKeyName.Approve_index)){
+							utils.mOpenWithData("？？？", id)
+						}else{
+							mui.toast("无此权限");
 						}
-					} else {
+						break;
+					case '3'://学生管理
+						if(checkPermission(window.storageKeyName.StuManage_index)){
+							utils.mOpenWithData("../../html/studentManage/student-index.html", id)
+						}else{
+							mui.toast("无此权限");
+						}
+						break;
+					case '6'://签到考勤
+						if(checkPermission(window.storageKeyName.Attendance_index)){
+							utils.mOpenWithData("../../html/signIn/signInIndex1.html", id)
+						}else{
+							mui.toast("无此权限");
+						}
+						break;
+					default:
 						mui.toast("此功能暂未开放");
-					}
+						break;
 				}
+//				if(id == 1 || id == 2) {
+//					if(noticeCheckFlag > 0) {
+//						//检查是否有权限
+//						if(checkPermission(0)) {
+//							console.log('1111');
+//							mui.toast("无此权限");
+//						} else {
+//							console.log('22222');
+//							utils.mOpenWithData("../../html/checkNotice/all-list.html", id)
+//						}
+//					} else {
+//						mui.toast("此功能被关闭");
+//					}
+//				} else {
+//					if(id == 6) {
+//						utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
+//					} else if(id == 3) {
+//						if(studentMFlag > 0) {
+//							if((personal.utp == 0 && (personal.grds.length > 0 || personal.clss.length > 0)) || !checkPermission(1)) {
+//								console.log('personal.urolestr:' + personal.urolestr);
+//								utils.mOpenWithData("../../html/studentManage/student-index.html", id);
+//							} else {
+//								mui.toast("无此权限");
+//							}
+//						} else {
+//							mui.toast("此功能被关闭");
+//						}
+//					} else {
+//						mui.toast("此功能暂未开放");
+//					}
+//				}
 			});
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);
 			var tempName = '暂无姓名';
@@ -453,40 +484,30 @@
 				tempName = tempInfo.user.name;
 			}
 			console.log('tempInfo:' + tempInfo);
-			//检查是否有权限，flag=0通知、事物，flag=1学生管理
-			var checkPermission = function(flag) {
+			
+			//检查是否有权限，modelName 每个模块规定好的权限信息
+			var checkPermission = function(modelName) {
 				//获取个人信息
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
-				//通知、事物
-				if(flag == 0) {
-					//判断是否年级领导
-					if(personal.grds.length > 0) {
-						tempFlag++;
-					}
-					//判断是否是班主任或任课老师
-					if(personal.clss.length > 0) {
-						tempFlag++;
-					}
-					//判断是否是科任组长
-					if(personal.subs.length > 0) {
-						tempFlag++;
-					}
-					//判断个人信息的urolestr参数，第6位
-					var tempStr = personal.urolestr.substr(5, 1);
-					if(tempStr == 1) {
-						tempFlag++;
-					}
-					//判断个人信息的urolestr参数，第6位
-					var tempStr1 = personal.urolestr.substr(6, 1);
-					if(tempStr1 == 1) {
-						tempFlag++;
-					}
-				} else { //学生管理
-					//判断个人信息的urolestr参数，第16位
-					var tempStr = personal.urolestr.substr(16, 1);
-					console.log('tempStr000:' + tempStr);
-					if(tempStr == 1) {
+				//判断是否年级领导
+				if(personal.grds!=null&&personal.grds.length > 0) {
+					tempFlag++;
+				}
+				//判断是否是班主任或任课老师
+				if(personal.clss!=null&&personal.clss.length > 0) {
+					tempFlag++;
+				}
+				//判断是否是科任组长
+				if(personal.subs!=null&&personal.subs.length > 0) {
+					tempFlag++;
+				}
+				
+				var aclList=personal.aclList;
+				console.log('身份权限信息：'+JSON.stringify(aclList));
+				console.log('模块权限信息：'+modelName);
+				for(var i in aclList){
+					if(aclList[i]==modelName){
 						tempFlag++;
 					}
 				}

@@ -116,6 +116,14 @@ var storageKeyName = (function(mod) {
 	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
 	mod.ICONNUM = 0; //角标数量
 
+	//模块权限
+	mod.Notice='smartSchAPP#OA:Notice'//通知公告
+	mod.Notice_index='smartSchAPP#OA:Notice:index'//我发布的
+	mod.Notice_add='smartSchAPP#OA:Notice:add'//新建通知
+	mod.Approve_index='smartSchAPP#OA:Approve;index'//事务审批
+	mod.StuManage_index='smartSchAPP#OA:StuManage:index'//学生管理
+	mod.Attendance_index='smartSchAPP#OA:Attendance:index'//签到考勤
+	
 	/**
 	 * 在本地存永久数据
 	 * @param {Object} key

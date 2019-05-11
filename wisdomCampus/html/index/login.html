@@ -170,7 +170,7 @@
 					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
 						console.log('data2:' + JSON.stringify(data2));
 						$.hideLoading();
-						if(data2.code == 'SUCCESS') {
+						if(data2.code == '0000') {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
 							var tempData = $.extend(tempPerInfo, data2.data);
@@ -198,6 +198,10 @@
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
 							var tempData = $.extend(tempPerInfo, data3.data);
+							
+//							repalceKey(tempData.clss,'grdid','****');//将personal 中的key更改为指定的值
+//							console.log('new tempData:'+JSON.stringify(tempData));
+
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
 							tempFlag++;
 							console.log('tempFlag01:'+tempFlag);
@@ -227,6 +231,20 @@
 				utils.hrefSessionStorage('home.html', {});
 			}
 		}
+		
+		//更换personal 对象的key 值
+		var repalceKey = function(obj,oldKey,newKey) {
+			if(obj instanceof Array){
+				for(var i in obj){
+					obj[i][newKey]=obj[i][oldKey];
+					delete obj[i][oldKey];
+				}
+			}else{
+					obj[newKey]=obj[oldKey];
+					delete obj[oldKey];
+			}
+		}
+		
 
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
