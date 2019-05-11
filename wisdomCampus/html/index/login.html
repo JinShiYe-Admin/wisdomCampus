@@ -170,7 +170,7 @@
 					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
 						console.log('data2:' + JSON.stringify(data2));
 						$.hideLoading();
-						if(data2.code == '0000') {
+						if(data2.code == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
 							var tempData = $.extend(tempPerInfo, data2.data);
@@ -199,9 +199,6 @@
 							//合并对象
 							var tempData = $.extend(tempPerInfo, data3.data);
 							
-//							repalceKey(tempData.clss,'grdid','****');//将personal 中的key更改为指定的值
-//							console.log('new tempData:'+JSON.stringify(tempData));
-
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
 							tempFlag++;
 							console.log('tempFlag01:'+tempFlag);
@@ -222,6 +219,21 @@
 		//跳转界面
 		var gotoPage = function(tempPW) {
 			console.log('11111');
+			
+			var tempData = store.get(window.storageKeyName.PERSONALINFO);
+			//将personal 中的key更改为指定的值
+			repalceKey(tempData,'access_token','utoken');
+			
+			repalceKey(tempData.user,'school_code','schid');
+			repalceKey(tempData.user,'school_name','schname');
+			repalceKey(tempData.user,'img_url','imgurl');
+			repalceKey(tempData.user,'name','utname');
+			repalceKey(tempData.user,'id','utid');
+			repalceKey(tempData.user,'login_name','uid');
+			
+			console.log('new tempData:'+JSON.stringify(tempData));
+			store.set(window.storageKeyName.PERSONALINFO, tempData);
+			
 			if(tempPW == '123456') {
 				var tempModel = {
 					flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
