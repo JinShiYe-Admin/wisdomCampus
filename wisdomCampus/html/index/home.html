@@ -416,28 +416,28 @@
 				switch(id){
 					case '1'://通知公告
 						if(checkPermission(window.storageKeyName.Notice)){
-							utils.mOpenWithData("../../html/checkNotice/all-list.html", id)
+							utils.mOpenWithData("../../html/checkNotice/all-list.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '2'://事务审批
 						if(checkPermission(window.storageKeyName.Approve_index)){
-							utils.mOpenWithData("？？？", id)
+							utils.mOpenWithData("../../html/checkNotice/all-list.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '3'://学生管理
 						if(checkPermission(window.storageKeyName.StuManage_index)){
-							utils.mOpenWithData("../../html/studentManage/student-index.html", id)
+							utils.mOpenWithData("../../html/studentManage/student-index.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '6'://签到考勤
 						if(checkPermission(window.storageKeyName.Attendance_index)){
-							utils.mOpenWithData("../../html/signIn/signInIndex1.html", id)
+							utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
@@ -512,9 +512,9 @@
 					}
 				}
 				if(tempFlag == 0) {
-					return true;
-				} else {
 					return false;
+				} else {
+					return true;
 				}
 			}
 			var mine1 = new Vue({
