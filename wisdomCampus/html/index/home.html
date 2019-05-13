@@ -343,7 +343,7 @@
 				//12.获取学校资源平台信息
 //				getSchoolInfoSource();
 				//判断是否需要更新
-				setTimeout(appUpdate.updateApp(personal.user.school_id), 5000);
+				setTimeout(appUpdate.updateApp(personal.schid), 5000);
 			});
 			//12.获取学校资源平台信息
 //			var getSchoolInfoSource = function() {
@@ -387,7 +387,7 @@
 				var info = plus.push.getClientInfo();
 				var tempBindData = {
 					appId: info.appid,
-					alias: tempInfo00.user.id,
+					alias: tempInfo00.utid,
 					cid: info.clientid
 				}
 				bindPro(tempBindData, function function_name(data) {
@@ -481,7 +481,7 @@
 			var tempInfo = store.get(window.storageKeyName.PERSONALINFO);
 			var tempName = '暂无姓名';
 			if(tempInfo) {
-				tempName = tempInfo.user.name;
+				tempName = tempInfo.utname;
 			}
 			console.log('tempInfo:' + tempInfo);
 			
@@ -600,8 +600,8 @@
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:'+JSON.stringify(personal));
 				var tempData = {
-					schoolId: personal.user.school_id, //学校ID
-					receiveManId: personal.user.id
+					schoolId: personal.schid, //学校ID
+					receiveManId: personal.utid
 				}
 				getNoReadCntByManPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))
@@ -627,8 +627,8 @@
 					}
 				});
 				tempData = {
-					schoolId: personal.user.school_id, //学校ID
-					approveManId: personal.user.id
+					schoolId: personal.schid, //学校ID
+					approveManId: personal.utid
 				}
 				getNoApproveCntByManPro(tempData, function function_name(data) {
 					console.log(JSON.stringify(data))

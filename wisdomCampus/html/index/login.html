@@ -157,34 +157,34 @@
 					data1.data.userName0 = tempName;
 					data1.data.passWord0 = tempPW;
 					store.set(window.storageKeyName.PERSONALINFO, data1.data);
-					var tempFlag = 0;
+//					var tempFlag = 0;
 					//获取权限
-					var enData2 = {};
-					//不需要加密的数据
-					var comData2 = {
-						access_token: data1.data.access_token, //用户令牌
-						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
-						app_code: window.storageKeyName.APPCODE //应用系统代码
-					};
-					//获取权限
-					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
-						console.log('data2:' + JSON.stringify(data2));
-						$.hideLoading();
-						if(data2.code == 0) {
-							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
-							//合并对象
-							var tempData = $.extend(tempPerInfo, data2.data);
-							store.set(window.storageKeyName.PERSONALINFO, tempData);
-							tempFlag++;
-							console.log('tempFlag00:'+tempFlag);
-							if(tempFlag == 2) {
-								//跳转界面
-								gotoPage(tempPW);
-							}
-						} else {
-							mui.toast(data2.msg);
-						}
-					});
+//					var enData2 = {};
+//					//不需要加密的数据
+//					var comData2 = {
+//						access_token: data1.data.access_token, //用户令牌
+//						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
+//						app_code: window.storageKeyName.APPCODE //应用系统代码
+//					};
+//					//获取权限
+//					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
+//						console.log('data2:' + JSON.stringify(data2));
+//						$.hideLoading();
+//						if(data2.code == 0) {
+//							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
+//							//合并对象
+//							var tempData = $.extend(tempPerInfo, data2.data);
+//							store.set(window.storageKeyName.PERSONALINFO, tempData);
+//							tempFlag++;
+//							console.log('tempFlag00:'+tempFlag);
+//							if(tempFlag == 2) {
+//								//跳转界面
+//								gotoPage(tempPW);
+//							}
+//						} else {
+//							mui.toast(data2.msg);
+//						}
+//					});
 					//登录用户岗位信息
 					//不需要加密的数据
 					var comData3 = {
@@ -200,12 +200,12 @@
 							var tempData = $.extend(tempPerInfo, data3.data);
 							
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
-							tempFlag++;
-							console.log('tempFlag01:'+tempFlag);
-							if(tempFlag == 2) {
+//							tempFlag++;
+//							console.log('tempFlag01:'+tempFlag);
+//							if(tempFlag == 2) {
 								//跳转界面
 								gotoPage(tempPW);
-							}
+//							}
 						} else {
 							mui.toast(data3.msg);
 						}
@@ -224,12 +224,14 @@
 			//将personal 中的key更改为指定的值
 			repalceKey(tempData,'access_token','utoken');
 			
-			repalceKey(tempData.user,'school_code','schid');
-			repalceKey(tempData.user,'school_name','schname');
-			repalceKey(tempData.user,'img_url','imgurl');
-			repalceKey(tempData.user,'name','utname');
-			repalceKey(tempData.user,'id','utid');
-			repalceKey(tempData.user,'login_name','uid');
+			tempData.schid=tempData.user.school_code;
+			tempData.schname=tempData.user.school_name;
+			tempData.imgurl=tempData.user.img_url;
+			tempData.utname=tempData.user.name;
+			tempData.utid=tempData.user.id;
+			tempData.uid=tempData.user.login_name;
+			
+			delete tempData['user'];
 			
 			console.log('new tempData:'+JSON.stringify(tempData));
 			store.set(window.storageKeyName.PERSONALINFO, tempData);
@@ -266,7 +268,7 @@
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			if(personal) {
-				if(personal.user.id == 'undefined' || personal.user.id == null || personal.userName0 == null) {
+				if(personal.utid == 'undefined' || personal.utid == null || personal.userName0 == null) {
 
 				} else {
 					if(personal.userName0) {
