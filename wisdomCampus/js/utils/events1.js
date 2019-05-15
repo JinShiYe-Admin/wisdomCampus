@@ -1180,7 +1180,7 @@ var events = (function(mod) {
 		};
 		//console.log('endata:' + JSON.stringify(enData) + 'comdata:' + JSON.stringify(comData));
 		//发送网络请求，data为网络返回值
-		postDataEncry(0,storageKeyName.MAINURL + 'PostLogin', enData, comData, 0, wd, function(data) {
+		postDataEncry(0,storageKeyName.INTERFACEZENG + 'api/login', enData, comData, 0, wd, function(data) {
 			wd.close();
 			wd.close();
 			//console.log('账号密码登录s1111111e:' + data.RspCode + ',RspData:' + JSON.stringify(data.RspData) + ',RspTxt:' + data.RspTxt);

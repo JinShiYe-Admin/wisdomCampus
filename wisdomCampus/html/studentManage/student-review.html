@@ -197,7 +197,7 @@
 					if(data1.RspCode == 0) {
 						console.log("3.4 系统学期:" + JSON.stringify(data1));
 						if(data1.RspData) {
-							actionArrayData.sysTermArray = data1.RspData.systerm;
+							actionArrayData.sysTermArray = data1.RspData;
 						}
 					} else {
 						console.log("data1:" + data1.RspTxt);

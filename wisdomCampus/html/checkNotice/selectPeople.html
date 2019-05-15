@@ -407,15 +407,13 @@
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
-						uuid: publicParameter.uuid, //用户设备号
-						utoken: personal.utoken, //用户令牌
-						dptids: model.dptid, //需要查询的部门ID，多个代码用英文逗号隔开
-						uidstat: 1, //需要查询的用户类型,-1全部,0无账号,1有账号
-						appid: publicParameter.appid //系统所分配的应用ID
+						uid_stat: 1, //需要查询的用户类型，-1全部,0无账号,1有账号
+						access_token: personal.utoken, //用户令牌
+						dpt_ids: model.dptid, //需要查询的部门ID，多个代码用英文逗号隔开
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry(0,'DepartUser', enData0, comData0, 0, function(data) {
+					postDataEncry(1,'api/user/dptUser', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -466,14 +464,12 @@
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
-						uuid: publicParameter.uuid, //用户设备号
-						utoken: personal.utoken, //用户令牌
-						classids: model.clsid, //需要查询的班级ID,多个代码用英文逗号隔开
-						appid: publicParameter.appid //系统所分配的应用ID
+						access_token: personal.utoken, //用户令牌
+						class_ids: model.clsid //需要查询的班级ID,多个代码用英文逗号隔开
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry(0,'ClassTec', enData0, comData0, 0, function(data) {
+					postDataEncry(1,'api/tec/list', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -548,13 +544,11 @@
 				var enData0 = {};
 				//不需要加密的数据
 				var comData0 = {
-					uuid: publicParameter.uuid, //用户设备号
-					utoken: personal.utoken, //用户令牌
-					appid: publicParameter.appid //系统所分配的应用ID
+					access_token: personal.utoken //用户令牌
 				}
 				events.showWaiting();
 				//发送网络请求，data为网络返回值
-				postDataEncry(0,'SchDepart', enData0, comData0, 0, function(data) {
+				postDataEncry(1,'api/org/list', enData0, comData0, 0, function(data) {
 					events.closeWaiting();
 					selectPeopleData.departmentArray = [];
 					if(data.RspCode == 0) {
@@ -705,14 +699,13 @@
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
-						uuid: publicParameter.uuid, //用户设备号
-						utoken: personal.utoken, //用户令牌
-						gradeids: tempGradeId, //需要查询的年级ID，多个代码用英文逗号隔开
-						appid: publicParameter.appid //系统所分配的应用ID
+						is_finish: 0, //是否已毕业，0未毕业,1已毕业,-1全部
+						access_token: personal.utoken, //用户令牌
+						grade_ids: tempGradeId //需要查询的年级ID，多个ID用英文逗号隔开
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry(0,'GradeClass', enData0, comData0, 0, function(data) {
+					postDataEncry(1,'api/cls/list', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {

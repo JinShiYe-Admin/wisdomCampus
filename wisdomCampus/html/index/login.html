@@ -126,12 +126,12 @@
 			//发送网络请求，data为网络返回值
 			postDataEncry(0, 'api/login/getEncryptKey', enData0, comData0, 0, function(data) {
 				console.log('2121212data:' + JSON.stringify(data));
-				if(data.code == 0) {
-					store.set(window.storageKeyName.SHAKEHAND, data.data.encryptKey);
-					loginPro(tempName, tempPW, data.data.encryptKey);
+				if(data.RspCode == 0) {
+					store.set(window.storageKeyName.SHAKEHAND, data.RspData.encryptKey);
+					loginPro(tempName, tempPW, data.RspData.encryptKey);
 				} else {
 					$.hideLoading();
-					mui.toast(data.msg);
+					mui.toast(data.RspTxt);
 				}
 			});
 
@@ -152,17 +152,17 @@
 			postDataEncry(0, 'api/login', enData1, comData1, 0, function(data1) {
 				console.log('data1:' + JSON.stringify(data1));
 				$.hideLoading();
-				if(data1.code == 0) {
+				if(data1.RspCode == 0) {
 					loginFlag = 1;
-					data1.data.userName0 = tempName;
-					data1.data.passWord0 = tempPW;
-					store.set(window.storageKeyName.PERSONALINFO, data1.data);
+					data1.RspData.userName0 = tempName;
+					data1.RspData.passWord0 = tempPW;
+					store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
 //					var tempFlag = 0;
 					//获取权限
 //					var enData2 = {};
 //					//不需要加密的数据
 //					var comData2 = {
-//						access_token: data1.data.access_token, //用户令牌
+//						access_token: data1.RspData.access_token, //用户令牌
 //						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
 //						app_code: window.storageKeyName.APPCODE //应用系统代码
 //					};
@@ -170,10 +170,10 @@
 //					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
 //						console.log('data2:' + JSON.stringify(data2));
 //						$.hideLoading();
-//						if(data2.code == 0) {
+//						if(data2.RspCode == 0) {
 //							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 //							//合并对象
-//							var tempData = $.extend(tempPerInfo, data2.data);
+//							var tempData = $.extend(tempPerInfo, data2.RspData);
 //							store.set(window.storageKeyName.PERSONALINFO, tempData);
 //							tempFlag++;
 //							console.log('tempFlag00:'+tempFlag);
@@ -182,22 +182,22 @@
 //								gotoPage(tempPW);
 //							}
 //						} else {
-//							mui.toast(data2.msg);
+//							mui.toast(data2.RspTxt);
 //						}
 //					});
 					//登录用户岗位信息
 					//不需要加密的数据
 					var comData3 = {
-						access_token: data1.data.access_token //用户令牌
+						access_token: data1.RspData.access_token //用户令牌
 					};
 					//登录用户岗位信息
 					postDataEncry(1, 'user/userInfo', {}, comData3, 0, function(data3) {
 						console.log('data3:' + JSON.stringify(data3));
 						$.hideLoading();
-						if(data3.code == 'SUCCESS') {
+						if(data3.RspCode == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
-							var tempData = $.extend(tempPerInfo, data3.data);
+							var tempData = $.extend(tempPerInfo, data3.RspData);
 							
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
 //							tempFlag++;
@@ -207,11 +207,11 @@
 								gotoPage(tempPW);
 //							}
 						} else {
-							mui.toast(data3.msg);
+							mui.toast(data3.RspTxt);
 						}
 					});
 				} else {
-					mui.toast(data1.msg);
+					mui.toast(data1.RspTxt);
 				}
 			});
 		}

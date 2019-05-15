@@ -31,7 +31,7 @@ var events = (function(mod) {
 			appid: publicParameter.appid //系统所分配的应用ID
 		}
 		//发送网络请求，data为网络返回值
-		postDataEncry(0,'SendSms', enData0, comData0, 0, function(data) {
+		postDataEncry(2,'SendSms', enData0, comData0, 0, function(data) {
 			
 		});
 	}

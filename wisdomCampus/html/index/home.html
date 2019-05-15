@@ -352,7 +352,7 @@
 //				//不需要加密的数据
 //				var comData0 = {
 //					uuid: publicParameter.uuid, //用户设备号
-//					utoken: personal.access_token, //用户令牌
+//					utoken: personal.utoken, //用户令牌
 //					appid: publicParameter.appid //系统所分配的应用ID
 //				}
 //				//发送网络请求，data为网络返回值
@@ -490,27 +490,56 @@
 				//获取个人信息
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				var tempFlag = 0;
-				//判断是否年级领导
-				if(personal.grds!=null&&personal.grds.length > 0) {
-					tempFlag++;
-				}
-				//判断是否是班主任或任课老师
-				if(personal.clss!=null&&personal.clss.length > 0) {
-					tempFlag++;
-				}
-				//判断是否是科任组长
-				if(personal.subs!=null&&personal.subs.length > 0) {
-					tempFlag++;
-				}
 				
-				var aclList=personal.aclList;
-				console.log('身份权限信息：'+JSON.stringify(aclList));
-				console.log('模块权限信息：'+modelName);
-				for(var i in aclList){
-					if(aclList[i]==modelName){
-						tempFlag++;
-					}
-				}
+				//8根据选择的年级班级科目查询权限符
+					//不需要加密的数据
+					var comData3 = {
+						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
+						app_code: window.storageKeyName.APPCODE, //应用系统代码
+						grd_id: 0, //年级id，全部年级则传-1,不需要判断年级则传0
+						cls_id: 0, //班级id，年级下全部班级则传-1，不需要判断班级则传0
+						stu_id: 0, //学生id，全部学生则传-1，不需要判断学生则传0
+						sub_code: 0, //科目代码，全部科目则传“-1”，不需要判断年级则传“0”
+						access: modelName, //权限符，需要判断权限的权限符，多个则用逗号拼接
+						access_token: personal.utoken //用户令牌
+					};
+					//登录用户岗位信息
+					postDataEncry(0, 'api/acl/permissionByPosition', {}, comData3, 0, function(data3) {
+						console.log('permissionByPosition:' + JSON.stringify(data3));
+//						$.hideLoading();
+//						if(data3.RspCode == 0) {
+//							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
+//							//合并对象
+//							var tempData = $.extend(tempPerInfo, data3.RspData);
+//							
+//							store.set(window.storageKeyName.PERSONALINFO, tempData);
+//								gotoPage(tempPW);
+//						} else {
+//							mui.toast(data3.RspTxt);
+//						}
+					});
+				
+				//判断是否年级领导
+//				if(personal.grds!=null&&personal.grds.length > 0) {
+//					tempFlag++;
+//				}
+//				//判断是否是班主任或任课老师
+//				if(personal.clss!=null&&personal.clss.length > 0) {
+//					tempFlag++;
+//				}
+//				//判断是否是科任组长
+//				if(personal.subs!=null&&personal.subs.length > 0) {
+//					tempFlag++;
+//				}
+//				
+//				var aclList=personal.aclList;
+//				console.log('身份权限信息：'+JSON.stringify(aclList));
+//				console.log('模块权限信息：'+modelName);
+//				for(var i in aclList){
+//					if(aclList[i]==modelName){
+//						tempFlag++;
+//					}
+//				}
 				if(tempFlag == 0) {
 					return false;
 				} else {

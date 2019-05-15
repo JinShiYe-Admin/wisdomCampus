@@ -21,7 +21,7 @@ var studentMP = (function(mod) {
 			appid: publicParameter.appid //系统所分配的应用ID
 		}
 		//2.1 学校年级
-		postDataEncry(0,'SchGrade', enData0, comData0, 0, function(data) {
+		postDataEncry(1,'grd/list', enData0, comData0, 0, function(data) {
 			console.log('2.1 学校年级:' + JSON.stringify(data));
 			if(data.RspCode == 0) {
 				if(data.RspData) {
@@ -32,8 +32,8 @@ var studentMP = (function(mod) {
 						var tempStr = personal.urolestr.substr(16, 1);
 						if(tempStr == 1) {
 							var tempflag = 0;
-							for(var a = 0; a < data.RspData.grds.length; a++) {
-								var tempModel1 = data.RspData.grds[a];
+							for(var a = 0; a < data.RspData.length; a++) {
+								var tempModel1 = data.RspData[a];
 								tempModel1.classArray = [];
 //								if(tempModel.isfinish == 0) {
 									grdsArray.push(tempModel1);
@@ -52,8 +52,8 @@ var studentMP = (function(mod) {
 								for(var i = 0; i < personal.grds.length; i++) {
 									var tempModel = personal.grds[i];
 									if(tempModel.isfinish == 0) {
-										for(var a = 0; a < data.RspData.grds.length; a++) {
-											var tempModel1 = data.RspData.grds[a];
+										for(var a = 0; a < data.RspData.length; a++) {
+											var tempModel1 = data.RspData[a];
 											tempModel1.classArray = [];
 											if(tempModel.grdid == tempModel1.grdid) {
 												grdsArray.push(tempModel1);
@@ -79,8 +79,8 @@ var studentMP = (function(mod) {
 						tempClass1 = tempClass1.unique('grdid');
 						personal.clss = personal.clss.unique('clsid');
 						console.log('tempClass1:' + JSON.stringify(tempClass1));
-						for(var a = 0; a < data.RspData.grds.length; a++) {
-							var tempModel1 = data.RspData.grds[a];
+						for(var a = 0; a < data.RspData.length; a++) {
+							var tempModel1 = data.RspData[a];
 							tempModel1.classArray = [];
 							//循环所在班级，判断是否年级列表中，已存在此年级
 							for(var m = 0; m < tempClass1.length; m++) {
@@ -273,14 +273,14 @@ var studentMP = (function(mod) {
 			}
 			//			events.showWaiting();
 			//2.3 学校年级下班级
-			postDataEncry(0,'GradeClass', enData0, comData0, 0, function(data) {
+			postDataEncry(1,'api/cls/list', enData0, comData0, 0, function(data) {
 				console.log('2.3 学校年级下班级:' + JSON.stringify(data));
 				//				events.closeWaiting();
 				if(data.RspCode == 0) {
 					if(data.RspData) {
 						//将获取到的班级，塞到对应的年级数组
-						for(var i = 0; i < data.RspData.clss.length; i++) {
-							var tempClss = data.RspData.clss[i];
+						for(var i = 0; i < data.RspData.length; i++) {
+							var tempClss = data.RspData[i];
 							tempClss.studentArray = [];
 							for(var a = 0; a < grdsArray.length; a++) {
 								var tempModel = grdsArray[a];
@@ -324,14 +324,14 @@ var studentMP = (function(mod) {
 			}
 			//		events.showWaiting();
 			//2.6 学校班级学生
-			postDataEncry(0,'ClassStu', enData0, comData0, 0, function(data) {
+			postDataEncry(1,'api/stu/list', enData0, comData0, 0, function(data) {
 				//			events.closeWaiting();
 				console.log('2.6 学校班级学生:' + JSON.stringify(data));
 				if(data.RspCode == 0) {
 					if(data.RspData) {
 						//将获取到的学生，塞到对应的班级数组
-						for(var i = 0; i < data.RspData.clssstus.length; i++) {
-							var tempStu = data.RspData.clssstus[i];
+						for(var i = 0; i < data.RspData.length; i++) {
+							var tempStu = data.RspData[i];
 							for(var a = 0; a < grdsArray.length; a++) {
 								var tempModel = grdsArray[a]; //年级
 								for(var b = 0; b < tempModel.classArray.length; b++) {

@@ -346,7 +346,7 @@ var UploadHeadImage = (function($, mod) {
 		postDataEncry(0, 'upUserInfo', {}, comData0, 0, function(data3) {
 			console.log('UpUserInfo:' + JSON.stringify(data3));
 			events.showWaiting();
-			if(data3.code == 'SUCCESS') {
+			if(data3.RspCode == 0) {
 				successCallBack(imgeURL);
 			} else {
 				errorCallBack(data);
