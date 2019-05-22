@@ -216,8 +216,8 @@
 				console.log('personal:' + JSON.stringify(personal));
 				publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				//根据个人信息，获取权限等
-//				getData();
-getSchDepart();
+				//				getData();
+				getSchDepart();
 			});
 
 			//刚进入页面，判断部门上次是否选择
@@ -402,7 +402,7 @@ getSchDepart();
 			//点击部门，包括点击是否选择部门----flag=0点击部门，flag=1点击选中部门，flag=2取消选中部门
 			var clickDepartmentSelect = function(model, index, flag) {
 				console.log('tempFlag111:' + JSON.stringify(model));
-				console.log('点击取消选择部门flag:'+flag);
+				console.log('点击取消选择部门flag:' + flag);
 				//点击获取部门用户
 				if(model.dptname && model.peopleArray.length == 0) {
 					var enData0 = {};
@@ -414,7 +414,7 @@ getSchDepart();
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry(1,'api/user/dptUser', enData0, comData0, 0, function(data) {
+					postDataEncry(1, 'api/user/dptUser', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -466,11 +466,11 @@ getSchDepart();
 					//不需要加密的数据
 					var comData0 = {
 						access_token: personal.utoken, //用户令牌
-						class_ids: model.clsid //需要查询的班级ID,多个代码用英文逗号隔开
+						cls_ids: model.clsid //需要查询的班级ID,多个代码用英文逗号隔开
 					}
 					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					postDataEncry(1,'api/tec/list', enData0, comData0, 0, function(data) {
+					postDataEncry(1, 'api/tec/list', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
 						if(data.RspCode == 0) {
 							if(data.RspData) {
@@ -549,40 +549,40 @@ getSchDepart();
 				}
 				events.showWaiting();
 				//发送网络请求，data为网络返回值
-				postDataEncry(1,'api/org/list', enData0, comData0, 0, function(data) {
-					console.log('api/org/list:'+JSON.stringify(data));
+				postDataEncry(1, 'api/org/list', enData0, comData0, 0, function(data) {
+					console.log('api/org/list:' + JSON.stringify(data));
 					events.closeWaiting();
 					selectPeopleData.departmentArray = [];
 					if(data.RspCode == 0) {
 						//将个人信息中的部门列表，根据此协议，添加成完整的model
 						setArray0(data.RspData);
 						//判断权限
-//						if(PrivilegeStr > 999) { //第一位：新建可选本部门及下级部门教师
+						//						if(PrivilegeStr > 999) { //第一位：新建可选本部门及下级部门教师
 						if(personal.noticeApproveDownDpt == '1') { //第一位：新建可选本部门及下级部门教师
 							setArray1(data.RspData);
 						}
 						var tempFlag3 = PrivilegeStr.toString().substring(1);
-//						if(tempFlag3 > 99) { //第二位：新建可选任教年级教师
+						//						if(tempFlag3 > 99) { //第二位：新建可选任教年级教师
 						if(personal.noticeApproveTeaCls == '1') { //第二位：新建可选任教年级教师
 							//8.年级下班级
 							getGradeClass();
 						}
 						var tempFlag2 = PrivilegeStr.toString().substring(2);
 						//判断个人信息的urolestr参数，第6位，可选上级部门人员
-//						var tempStr = personal.urolestr.substr(5, 1);
-//						console.log('tempStr:' + tempStr);
-//						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
-	console.log('personal.noticeApproveUpDpt:'+personal.noticeApproveUpDpt);
+						//						var tempStr = personal.urolestr.substr(5, 1);
+						//						console.log('tempStr:' + tempStr);
+						//						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
+						console.log('personal.noticeApproveUpDpt:' + personal.noticeApproveUpDpt);
 						if(personal.noticeApproveUpDpt == '1') { //第三位：新建可选上级部门教师
 							console.log('0000000000000000000000000000');
 							setArray3(data.RspData);
 						}
-//						if (tempStr == 1) {
-//							setArray1(data.RspData);
-//						}
+						//						if (tempStr == 1) {
+						//							setArray1(data.RspData);
+						//						}
 						var tempFlag1 = PrivilegeStr.toString().substring(3);
-//						var tempStr1 = personal.urolestr.substr(6, 1);
-//						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
+						//						var tempStr1 = personal.urolestr.substr(6, 1);
+						//						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
 						if(personal.noticeApproveAllDpt == '1') { //第四位：新建可选全校教师
 							for(var i = 0; i < data.RspData.length; i++) {
 								var tempModel = data.RspData[i];
@@ -648,7 +648,7 @@ getSchDepart();
 				}
 				if(tempDepartArray.length > 0) {
 					selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(tempDepartArray);
-//					setSubordinateDepart(array, tempDepartArray);
+					//					setSubordinateDepart(array, tempDepartArray);
 				}
 				selectDepartment();
 			}
@@ -669,12 +669,12 @@ getSchDepart();
 					}
 				}
 				//再获取上级部门的下级全部部门
-//				setSubordinateDepart(array, selectPeopleData.departmentArray);
+				//				setSubordinateDepart(array, selectPeopleData.departmentArray);
 			}
 
 			//8.年级下班级
 			var getGradeClass = function() {
-				if(personal.grds.length > 0 || personal.clss.length > 0) {
+				if(personal.grds.length > 0 || personal.clss.length > 0|| personal.masterclss.length > 0) {
 					var tempGradeId = ''; //需要查询的年级ID
 					if(personal.grds.length > 0) {
 						//个人信息中的年级列表
@@ -699,45 +699,65 @@ getSchDepart();
 							tempGradeId = tempGradeId + ',' + tempModel.grdid;
 						}
 					}
-					//去掉第一个，
-					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
-					if(tempGradeId.length == 0) {
-						return;
-					}
-					var enData0 = {};
-					//不需要加密的数据
-					var comData0 = {
-						is_finish: 0, //是否已毕业，0未毕业,1已毕业,-1全部
-						access_token: personal.utoken, //用户令牌
-						grade_ids: tempGradeId //需要查询的年级ID，多个ID用英文逗号隔开
-					}
-					events.showWaiting();
-					//发送网络请求，data为网络返回值
-					postDataEncry(1,'api/cls/list', enData0, comData0, 0, function(data) {
-						events.closeWaiting();
-						if(data.RspCode == 0) {
-							if(data.RspData) {
-								var tempClassId = ''; //需要查询的年级ID
-								for(var i = 0; i < data.RspData.length; i++) {
-									var tempModel = data.RspData[i];
-									tempClassId = tempClassId + ',' + tempModel.clsid;
-								}
-								//去掉第一个，
-								tempClassId = tempClassId.substr(1, tempClassId.length);
-								var tempClassModel = {
-									clsname: '任教年级教师',
-									clsid: tempClassId,
-									departFlag: 0, //部门是否选中
-									peopleArray: []
-								}
-								selectPeopleData.departmentArray.unshift(tempClassModel);
-								selectPeopleData.flag = 1;
-							}
-							selectDepartment();
-						} else {
-							mui.toast(data.RspTxt, "cancel");
+					console.log('personal.masterclss:'+personal.masterclss.length);
+					//如果是班主任
+					if(personal.masterclss.length > 0) {
+						var tempClassId = ''; //需要查询的年级ID
+						for(var i = 0; i < personal.masterclss.length; i++) {
+							var tempModel = personal.masterclss[i];
+							tempClassId = tempClassId + ',' + tempModel.clsid;
 						}
-					});
+						//去掉第一个，
+						tempClassId = tempClassId.substr(1, tempClassId.length);
+						var tempClassModel = {
+							clsname: '任教年级教师',
+							clsid: tempClassId,
+							departFlag: 0, //部门是否选中
+							peopleArray: []
+						}
+						selectPeopleData.departmentArray.unshift(tempClassModel);
+						selectPeopleData.flag = 1;
+						selectDepartment();
+					}
+					//去掉第一个，
+					//					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
+					//					if(tempGradeId.length == 0) {
+					//						return;
+					//					}
+					//					var enData0 = {};
+					//					//不需要加密的数据
+					//					var comData0 = {
+					//						is_finish: 0, //是否已毕业，0未毕业,1已毕业,-1全部
+					//						access_token: personal.utoken, //用户令牌
+					//						grade_ids: tempGradeId //需要查询的年级ID，多个ID用英文逗号隔开
+					//					}
+					//					events.showWaiting();
+					//发送网络请求，data为网络返回值
+					//					postDataEncry(1,'api/cls/list', enData0, comData0, 0, function(data) {
+					//						events.closeWaiting();
+					//						if(data.RspCode == 0) {
+					//							if(data.RspData) {
+					//					var tempClassId = ''; //需要查询的年级ID
+					//					for(var i = 0; i < data.RspData.length; i++) {
+					//						var tempModel = data.RspData[i];
+					//						tempClassId = tempClassId + ',' + tempModel.clsid;
+					//					}
+					//					//去掉第一个，
+					//					tempClassId = tempClassId.substr(1, tempClassId.length);
+					//					var tempClassModel = {
+					//						clsname: '任教年级教师',
+					//						clsid: tempClassId,
+					//						departFlag: 0, //部门是否选中
+					//						peopleArray: []
+					//					}
+					//					selectPeopleData.departmentArray.unshift(tempClassModel);
+					//					selectPeopleData.flag = 1;
+					//				}
+					//				selectDepartment();
+					//						} else {
+					//							mui.toast(data.RspTxt, "cancel");
+					//						}
+					//					});
 				}
 			}
 

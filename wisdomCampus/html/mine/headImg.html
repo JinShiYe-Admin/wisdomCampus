@@ -149,7 +149,7 @@
 								//name: data.studentName //资料名称
 							}, function(successCB) {
 								var wd = events.showWaiting('更新头像...');
-								//console.log('上传并修改个人头像，成功的回调' + JSON.stringify(successCB));
+								console.log('上传并修改个人头像，成功的回调' + JSON.stringify(successCB));
 								mui.toast('个人头像更新成功');
 								setTimeout(function() {
 									document.getElementById("img").src = successCB;
