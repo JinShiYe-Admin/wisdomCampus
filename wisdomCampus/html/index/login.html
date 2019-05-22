@@ -157,41 +157,56 @@
 					data1.RspData.userName0 = tempName;
 					data1.RspData.passWord0 = tempPW;
 					store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
-//					var tempFlag = 0;
+					var tempFlag = 0;
 					//获取权限
-//					var enData2 = {};
-//					//不需要加密的数据
-//					var comData2 = {
-//						access_token: data1.RspData.access_token, //用户令牌
-//						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
-//						app_code: window.storageKeyName.APPCODE //应用系统代码
-//					};
-//					//获取权限
-//					postDataEncry(0, 'api/user/roleAcl', enData2, comData2, 0, function(data2) {
-//						console.log('data2:' + JSON.stringify(data2));
-//						$.hideLoading();
-//						if(data2.RspCode == 0) {
-//							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
-//							//合并对象
-//							var tempData = $.extend(tempPerInfo, data2.RspData);
-//							store.set(window.storageKeyName.PERSONALINFO, tempData);
-//							tempFlag++;
-//							console.log('tempFlag00:'+tempFlag);
-//							if(tempFlag == 2) {
-//								//跳转界面
-//								gotoPage(tempPW);
-//							}
-//						} else {
-//							mui.toast(data2.RspTxt);
-//						}
-//					});
+					var enData2 = {};
+					//不需要加密的数据
+					var comData2 = {
+						platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
+						app_code: window.storageKeyName.APPCODE, //应用系统代码
+						grd_id: 0, //年级id，全部年级则传-1,不需要判断年级则传0
+						cls_id: 0, //班级id，年级下全部班级则传-1，不需要判断班级则传0
+						stu_id: 0, //学生id，全部学生则传-1，不需要判断学生则传0
+						sub_code: 0, //科目代码，全部科目则传“-1”，不需要判断年级则传“0”
+						access: data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ADD+','+data1.RspData.user.app_code+window.storageKeyName.NOTICE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.APPROVE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.ATTENDANCE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.STUMANAGE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ALLDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_UPDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_TEACLS+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_DOWNDPT, //权限符，需要判断权限的权限符，多个则用逗号拼接
+						access_token: data1.RspData.access_token //用户令牌
+					};
+					//获取权限
+					postDataEncry(0, 'api/acl/permissionByPosition', enData2, comData2, 0, function(data2) {
+						console.log('权限permissionByPosition:' + JSON.stringify(data2));
+						$.hideLoading();
+						if(data2.RspCode == 0) {
+							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
+							//合并对象
+							var tempArray = data2.RspData.split(',');
+							//权限
+							tempPerInfo.noticeApproveAdd = tempArray[0];
+							tempPerInfo.noticeIndex = tempArray[1];
+							tempPerInfo.approveIndex = tempArray[2];
+							tempPerInfo.attendanceIndex = tempArray[3];
+							tempPerInfo.stuManageIndex = tempArray[4];
+							tempPerInfo.noticeApproveAllDpt = tempArray[5];
+							tempPerInfo.noticeApproveUpDpt = tempArray[6];
+							tempPerInfo.noticeApproveTeaCls = tempArray[7];
+							tempPerInfo.noticeApproveDownDpt = tempArray[8];
+							store.set(window.storageKeyName.PERSONALINFO, tempPerInfo);
+							tempFlag++;
+							console.log('tempFlag00:'+tempFlag);
+							if(tempFlag == 2) {
+								//跳转界面
+								gotoPage(tempPW);
+							}
+						} else {
+							mui.toast(data2.RspTxt);
+						}
+					});
 					//登录用户岗位信息
 					//不需要加密的数据
 					var comData3 = {
 						access_token: data1.RspData.access_token //用户令牌
 					};
 					//登录用户岗位信息
-					postDataEncry(1, 'user/userInfo', {}, comData3, 0, function(data3) {
+					postDataEncry(1, 'api/user/userInfo', {}, comData3, 0, function(data3) {
 						console.log('data3:' + JSON.stringify(data3));
 						$.hideLoading();
 						if(data3.RspCode == 0) {
@@ -200,12 +215,12 @@
 							var tempData = $.extend(tempPerInfo, data3.RspData);
 							
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
-//							tempFlag++;
-//							console.log('tempFlag01:'+tempFlag);
-//							if(tempFlag == 2) {
+							tempFlag++;
+							console.log('tempFlag01:'+tempFlag);
+							if(tempFlag == 2) {
 								//跳转界面
 								gotoPage(tempPW);
-//							}
+							}
 						} else {
 							mui.toast(data3.RspTxt);
 						}
@@ -230,6 +245,22 @@
 			tempData.utname=tempData.user.name;
 			tempData.utid=tempData.user.id;
 			tempData.uid=tempData.user.login_name;
+			tempData.app_code=tempData.user.app_code;
+			if (tempData.masterclss == null) {
+				tempData.masterclss = [];
+			}
+			if (tempData.dpts == null) {
+				tempData.dpts = [];
+			}
+			if (tempData.subs == null) {
+				tempData.subs = [];
+			}
+			if (tempData.clss == null) {
+				tempData.clss = [];
+			}
+			if (tempData.grds == null) {
+				tempData.grds = [];
+			}
 			
 			delete tempData['user'];
 			

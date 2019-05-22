@@ -415,28 +415,28 @@
 				console.log(id);
 				switch(id){
 					case '1'://通知公告
-						if(checkPermission(window.storageKeyName.Notice)){
+						if(personal.noticeIndex == '1'){
 							utils.mOpenWithData("../../html/checkNotice/all-list.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '2'://事务审批
-						if(checkPermission(window.storageKeyName.Approve_index)){
+						if(personal.approveIndex == '1'){
 							utils.mOpenWithData("../../html/checkNotice/all-list.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '3'://学生管理
-						if(checkPermission(window.storageKeyName.StuManage_index)){
+						if(personal.stuManageIndex == '1'){
 							utils.mOpenWithData("../../html/studentManage/student-index.html", id);
 						}else{
 							mui.toast("无此权限");
 						}
 						break;
 					case '6'://签到考勤
-						if(checkPermission(window.storageKeyName.Attendance_index)){
+						if(personal.attendanceIndex == '1'){
 							utils.mOpenWithData("../../html/signIn/signInIndex1.html", id);
 						}else{
 							mui.toast("无此权限");

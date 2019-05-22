@@ -343,7 +343,7 @@ var UploadHeadImage = (function($, mod) {
 			access_token: personal.utoken //用户令牌
 		};
 		events.showWaiting();
-		postDataEncry(0, 'upUserInfo', {}, comData0, 0, function(data3) {
+		postDataEncry(0, 'api/user/upUserInfo', {}, comData0, 0, function(data3) {
 			console.log('UpUserInfo:' + JSON.stringify(data3));
 			events.showWaiting();
 			if(data3.RspCode == 0) {

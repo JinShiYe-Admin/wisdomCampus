@@ -93,14 +93,14 @@
 						</div>
 					</div>
 				</div>
-				</template>
-				<div id="MultiMedia">
-					<div class="mui-input-row mui-checkbox mui-left" id="senMSN" style="float: right;margin-top: 3px;display: none;">
-						<label style="font-size: 14px;color: #333333;">发送短信</label>
-						<input v-model="smsSync" name="checkbox1" type="checkbox">
-					</div>
+			</template>
+			<div id="MultiMedia">
+				<div class="mui-input-row mui-checkbox mui-left" id="senMSN" style="float: right;margin-top: 3px;display: none;">
+					<label style="font-size: 14px;color: #333333;">发送短信</label>
+					<input v-model="smsSync" name="checkbox1" type="checkbox">
 				</div>
-				<template>
+			</div>
+			<template>
 				<div class="weui-cells" style="margin-top: 0px;">
 					<div class="weui-cell">
 						<div class="weui-cell__hd"><label class="weui-label">审批人</label></div>
@@ -115,9 +115,10 @@
 						<div class="weui-cell__hd" style="margin-right: 18px;">顺序审批人</div>
 						<div class="weui-cell__bd">
 							<ol>
-								<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
+								<li v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>
+									<!--<li v-if="workFlow.length>0" v-for="(item,index) in flowMan_arr" style="margin-top: 10px;"><span style="border: solid 1px;padding: 7px 5px 5px;border-width: 0px;">{{item.ManName}}</span>-->
 									<a v-if='item.flag==1'></a>
-									<a v-else=''><span  @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
+									<a v-else=''><span @click="delPeople(index)" class="mui-icon mui-icon-trash mui-pull-right" style="color: gray;"></span></a>
 								</li>
 
 							</ol>
@@ -158,7 +159,7 @@
 		<script src="../../js/vue.min.js"></script>
 		<script src='../../js/lib/vconsole/vconsole.min.js'></script>
 		<script src="../../js/demoCssJs/jquery-weui.js"></script>
-		
+
 		<!--视频、照片控件用-->
 		<script type="text/javascript" src="../../js/utils/events.js"></script>
 		<script type="text/javascript" src="../../js/utils/MultiMedia.js"></script>
@@ -194,18 +195,18 @@
 				getSelWorkFlow();
 			});
 			//多媒体控件
-				multiMedia = MultiMedia.multiMedia({
-					MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
-					Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
-					Picture: true, //是否显示图片图标
-					Audio: false, //是否显示音频图标
-					Video: false, //是否显示视频图标
-					TotalPicture: 9, //图片的个数
-					TotalAudio: 1, //音频的个数
-					TotalVideo: 1, //视频的个数
-				});
-				//显示发送短信按钮
-//				document.getElementById('senMSN').style.display = 'inherit';
+			multiMedia = MultiMedia.multiMedia({
+				MultiMediaId: 'MultiMedia', //存放多媒体对象控件的id
+				Key: store.get(window.storageKeyName.PERSONALINFO).utid, //utid
+				Picture: true, //是否显示图片图标
+				Audio: false, //是否显示音频图标
+				Video: false, //是否显示视频图标
+				TotalPicture: 9, //图片的个数
+				TotalAudio: 1, //音频的个数
+				TotalVideo: 1, //视频的个数
+			});
+			//显示发送短信按钮
+			//				document.getElementById('senMSN').style.display = 'inherit';
 
 			/*
 			 * 初始化控件
@@ -468,9 +469,9 @@
 
 				}
 				getWorkFlowListByIdPro(tempData, function function_name(data) {
-					console.log('getWorkFlowListById:'+JSON.stringify(data));
+					console.log('getWorkFlowListById:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						for (var i = 0; i < data.RspData.Data.length; i++) {
+						for(var i = 0; i < data.RspData.Data.length; i++) {
 							var tempModel = data.RspData.Data[i];
 							tempModel.flag = 1;
 						}
@@ -485,9 +486,10 @@
 			function selectWorkFlow(input_item) {
 				document.activeElement.blur();
 				var self = input_item;
-				//		if(message.workFlow==undefined||message.workFlow.length==0){
-				//			alert("暂无部门")
-				//		}
+				if(message.workFlow == undefined || message.workFlow.length == 0) {
+					mui.toast("暂无流程");
+					return;
+				}
 
 				weui.picker(message.workFlow, {
 					onChange: function(result) {
@@ -516,6 +518,7 @@
 					tempArr.push(tempData)
 				}
 				message.flowMan_arr = message.flowMan_arr.concat(tempArr);
+				console.log('message.flowMan_arr:' + JSON.stringify(message.flowMan_arr));
 			});
 			//判断是否输入了值
 			var checkInput = function(text) {
@@ -628,7 +631,7 @@
 						taskCreate(wd);
 					} else {
 						//						console.log('### ERROR ### 获取上传凭证失败 ### ');
-//						document.getElementById("finish").disabled = false;
+						//						document.getElementById("finish").disabled = false;
 						wd.close();
 						mui.toast('上传失败 ' + data.message);
 					}
@@ -767,7 +770,7 @@
 								}
 							} else {
 								//console.log('### ERROR ### 上传失败 ### ' + status + ' ' + JSON.stringify(upload));
-//								document.getElementById("finish").disabled = false;
+								//								document.getElementById("finish").disabled = false;
 								mui.toast('上传失败 ' + status + ' ' + upload.responseText);
 								if(pathList.length != 0) {
 									BatchDelete(pathList, wd);

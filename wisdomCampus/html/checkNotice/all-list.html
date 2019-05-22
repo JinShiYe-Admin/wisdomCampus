@@ -239,7 +239,7 @@
 		<script>
 			var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
 			var add = document.getElementById("add")
-			if(tempInfo00.appeditstat == 0) {
+			if(tempInfo00.noticeApproveAdd != '1') {
 				add.className = "mui-icon  mui-pull-right mui-hidden"
 			} else {
 				add.className = "mui-icon  mui-pull-right"
@@ -310,15 +310,15 @@
 			}
 			var add = function() {
 				//是否可以新增修改，flag=0只班主任，flag=1班主任和任课老师都可以
-				if(utils.canNotAddModify(1)) {
+//				if(utils.canNotAddModify(1)) {
 					if(title_id == 1) {
 						utils.mOpenWithData("new_message.html", {})
 					} else {
 						utils.mOpenWithData("new-check.html", {})
 					}
-				} else {
-					mui.toast('无此权限');
-				}
+//				} else {
+//					mui.toast('无此权限');
+//				}
 			}
 			var createFragment = function(ul, index, data) {
 				var length = ul.querySelectorAll('li').length;

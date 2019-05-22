@@ -216,7 +216,8 @@
 				console.log('personal:' + JSON.stringify(personal));
 				publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				//根据个人信息，获取权限等
-				getData();
+//				getData();
+getSchDepart();
 			});
 
 			//刚进入页面，判断部门上次是否选择
@@ -418,8 +419,8 @@
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								//默认不选中
-								for(var i = 0; i < data.RspData.users.length; i++) {
-									var tempModel = data.RspData.users[i];
+								for(var i = 0; i < data.RspData.length; i++) {
+									var tempModel = data.RspData[i];
 									if(flag == 0) { //光点击部门
 										var tempA = 0;
 										//判断当前的utid是否已经选择
@@ -446,7 +447,7 @@
 										changePeoPleDepartmentSelect(tempModel, index, flag);
 									}
 								}
-								model.peopleArray = [].concat(data.RspData.users);
+								model.peopleArray = [].concat(data.RspData);
 								if(selectPeopleData.selectPeopleArray.length > 0) {
 									//去重
 									selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
@@ -474,10 +475,10 @@
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								//去重
-								data.RspData.clssusers = data.RspData.clssusers.unique('utid');
+								data.RspData = data.RspData.unique('utid');
 								//默认不选中
-								for(var i = 0; i < data.RspData.clssusers.length; i++) {
-									var tempModel = data.RspData.clssusers[i];
+								for(var i = 0; i < data.RspData.length; i++) {
+									var tempModel = data.RspData[i];
 									if(flag == 0) { //光点击部门
 										var tempA = 0;
 										//判断当前的utid是否已经选择
@@ -503,7 +504,7 @@
 										changePeoPleDepartmentSelect(tempModel, index, flag);
 									}
 								}
-								model.peopleArray = [].concat(data.RspData.clssusers);
+								model.peopleArray = [].concat(data.RspData);
 								if(selectPeopleData.selectPeopleArray.length > 0) {
 									//去重
 									selectPeopleData.selectPeopleArray = selectPeopleData.selectPeopleArray.unique('utid');
@@ -549,40 +550,47 @@
 				events.showWaiting();
 				//发送网络请求，data为网络返回值
 				postDataEncry(1,'api/org/list', enData0, comData0, 0, function(data) {
+					console.log('api/org/list:'+JSON.stringify(data));
 					events.closeWaiting();
 					selectPeopleData.departmentArray = [];
 					if(data.RspCode == 0) {
 						//将个人信息中的部门列表，根据此协议，添加成完整的model
-						setArray0(data.RspData.dpts);
+						setArray0(data.RspData);
 						//判断权限
-						if(PrivilegeStr > 999) { //第一位：新建可选本部门及下级部门教师
-							setArray1(data.RspData.dpts);
+//						if(PrivilegeStr > 999) { //第一位：新建可选本部门及下级部门教师
+						if(personal.noticeApproveDownDpt == '1') { //第一位：新建可选本部门及下级部门教师
+							setArray1(data.RspData);
 						}
 						var tempFlag3 = PrivilegeStr.toString().substring(1);
-						if(tempFlag3 > 99) { //第二位：新建可选任教年级教师
+//						if(tempFlag3 > 99) { //第二位：新建可选任教年级教师
+						if(personal.noticeApproveTeaCls == '1') { //第二位：新建可选任教年级教师
 							//8.年级下班级
 							getGradeClass();
 						}
 						var tempFlag2 = PrivilegeStr.toString().substring(2);
 						//判断个人信息的urolestr参数，第6位，可选上级部门人员
-						var tempStr = personal.urolestr.substr(5, 1);
-						console.log('tempStr:' + tempStr);
-						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
-							setArray3(data.RspData.dpts);
+//						var tempStr = personal.urolestr.substr(5, 1);
+//						console.log('tempStr:' + tempStr);
+//						if(tempFlag2 > 9 || tempStr == 1) { //第三位：新建可选上级部门教师
+	console.log('personal.noticeApproveUpDpt:'+personal.noticeApproveUpDpt);
+						if(personal.noticeApproveUpDpt == '1') { //第三位：新建可选上级部门教师
+							console.log('0000000000000000000000000000');
+							setArray3(data.RspData);
 						}
-						if (tempStr == 1) {
-							setArray1(data.RspData.dpts);
-						}
+//						if (tempStr == 1) {
+//							setArray1(data.RspData);
+//						}
 						var tempFlag1 = PrivilegeStr.toString().substring(3);
-						var tempStr1 = personal.urolestr.substr(6, 1);
-						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
-							for(var i = 0; i < data.RspData.dpts.length; i++) {
-								var tempModel = data.RspData.dpts[i];
+//						var tempStr1 = personal.urolestr.substr(6, 1);
+//						if(tempFlag1 > 0 || tempStr1 == 1) { //第四位：新建可选全校教师
+						if(personal.noticeApproveAllDpt == '1') { //第四位：新建可选全校教师
+							for(var i = 0; i < data.RspData.length; i++) {
+								var tempModel = data.RspData[i];
 								tempModel.departFlag = 0; //部门是否选中
 								tempModel.peopleArray = [];
 							}
 							selectPeopleData.flag = 1;
-							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData.dpts);
+							selectPeopleData.departmentArray = selectPeopleData.departmentArray.concat(data.RspData);
 						}
 						if(selectPeopleData.departmentArray.length > 0) {
 							//给数组去重
@@ -710,8 +718,8 @@
 						if(data.RspCode == 0) {
 							if(data.RspData) {
 								var tempClassId = ''; //需要查询的年级ID
-								for(var i = 0; i < data.RspData.clss.length; i++) {
-									var tempModel = data.RspData.clss[i];
+								for(var i = 0; i < data.RspData.length; i++) {
+									var tempModel = data.RspData[i];
 									tempClassId = tempClassId + ',' + tempModel.clsid;
 								}
 								//去掉第一个，

@@ -408,8 +408,8 @@
 					receiveManNames: arrayToStr(names) //接收人姓名
 				}
 				addNoticePro(tempData, function function_name(data) {
+					console.log('addNoticePro:'+JSON.stringify(data));
 					events.closeWaiting();
-					console.log(JSON.stringify(data))
 					if(data.RspCode == 0) {
 						if(mobiles.length > 0&&smsSync == 1) {
 							var tempMobiles = mobiles.join(',').toString();

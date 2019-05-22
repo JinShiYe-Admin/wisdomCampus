@@ -17,9 +17,10 @@ var storageKeyName = (function(mod) {
 		case 0: //开发
 			mod.SCHOOLID = 100005; //学校ID
 			mod.USERTYPE = 0; //用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://jsypay.jiaobaowang.net/useradminwebapi/api/data/'; //顾工接口
 			mod.INTERFACEZENG = 'http://139.129.252.49:8080/sup/'; //系统接口
-			mod.INTERFACEMENG = 'http://139.129.252.49:8080/sys/api/'; //系统接口
-			mod.INTERFACEKONG = 'hhttps://jbyj.jiaobaowang.net/SchoolOAServiceNew/'; //孔工接口
+			mod.INTERFACEMENG = 'http://139.129.252.49:8080/sys/'; //系统接口
+			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net/SchoolOAServiceNew/'; //孔工接口
 			mod.INTERFACESIGNINKONG = 'https://jbyj.jiaobaowang.net/SchoolAttendanceService/'; //孔工接口IMG
 			mod.TEACHERIMG = 'http://jsypay.jiaobaowang.net/jsyadmin/upuserimg.ashx?userid='; //老师上传头像
 			mod.ANDROIDUPDATEURL = 'http://192.168.1.121:8081/app/versionCode.xml';
@@ -117,12 +118,15 @@ var storageKeyName = (function(mod) {
 	mod.ICONNUM = 0; //角标数量
 
 	//模块权限
-	mod.Notice='smartSchAPP#OA:Notice'//通知公告
-	mod.Notice_index='smartSchAPP#OA:Notice:index'//我发布的
-	mod.Notice_add='smartSchAPP#OA:Notice:add'//新建通知
-	mod.Approve_index='smartSchAPP#OA:Approve;index'//事务审批
-	mod.StuManage_index='smartSchAPP#OA:StuManage:index'//学生管理
-	mod.Attendance_index='smartSchAPP#OA:Attendance:index'//签到考勤
+	mod.NOTICEAPPROVE_ADD='#OA:NoticeApprove:add'//通知公告、事物审批发布权限
+	mod.NOTICE_INDEX='#OA:Notice:index'//通知公告
+	mod.APPROVE_INDEX='#OA:Approve:index'//事务审批
+	mod.ATTENDANCE_INDEX='#OA:Attendance:index'//签到考勤
+	mod.STUMANAGE_INDEX='#OA:StuManage:index'//学生管理
+	mod.NOTICEAPPROVE_ALLDPT='#OA:NoticeApprove:allDpt'//全部老师
+	mod.NOTICEAPPROVE_UPDPT='#OA:NoticeApprove:upDpt'//上级部门老师
+	mod.NOTICEAPPROVE_TEACLS='#OA:NoticeApprove:teaCls'//本年级老师
+	mod.NOTICEAPPROVE_DOWNDPT='#OA:NoticeApprove:downDpt'//本部门及下级部门老师
 	
 	/**
 	 * 在本地存永久数据

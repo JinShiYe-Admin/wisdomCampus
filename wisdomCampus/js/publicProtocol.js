@@ -163,7 +163,7 @@ var xhrPost = function(url, commonData, callback) {
 				var urlArr = url.split('/');
 				var success_data = JSON.parse(this.responseText);
 				console.log('XHRP-Success:', JSON.stringify(success_data));
-				if(success_data.RspCode == 6) { //令牌过期
+				if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
 					//续订令牌
 					var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 					var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -180,13 +180,13 @@ var xhrPost = function(url, commonData, callback) {
 							commonData.token = data1.RspData;
 							delete commonData.sign;
 							xhrPost(url, commonData, function(data2) {
-								data2 = modifyParameter(data2);
+								data2 = modifyParameter(url, data2);
 								callback(data2);
 							});
 						}
 					});
 				} else {
-					success_data = modifyParameter(success_data);
+					success_data = modifyParameter(url, success_data);
 					callback(success_data);
 				}
 			} else {
@@ -229,6 +229,8 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 	var tempUrl = window.storageKeyName.INTERFACEZENG;
 	if(urlFlag == 1) {
 		tempUrl = window.storageKeyName.INTERFACEMENG;
+	}else if(urlFlag == 2){
+		tempUrl = window.storageKeyName.INTERFACEGU;
 	}
 	var url1 = tempUrl + url;
 	console.log('jQAP-Url:', url);
@@ -243,7 +245,7 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 		async: true,
 		success: function(success_data) { //请求成功的回调
 			console.log(url + ':jQAP-Success:', success_data);
-			if(success_data.RspCode == 6) { //令牌过期
+			if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -262,13 +264,13 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 						tempData.utoken = data1.RspData;
 						delete tempData.sign;
 						postDataEncry(urlFlag, url, {}, tempData, 0, function(data2) {
-							data2 = modifyParameter(data2);
+							data2 = modifyParameter(url, data2);
 							callback(data2);
 						});
 					}
 				});
 			} else {
-				success_data = modifyParameter(success_data);
+				success_data = modifyParameter(url, success_data);
 				callback(success_data);
 			}
 		},
@@ -304,7 +306,7 @@ var tempPro = function(url, data0, callback) {
 			var urlArr = url.split('/');
 			var success_data = JSON.parse(this.responseText);
 			console.log('XHRP-Success:', JSON.stringify(success_data));
-			if(success_data.RspCode == 6) { //令牌过期
+			if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -321,13 +323,13 @@ var tempPro = function(url, data0, callback) {
 						//						data0.utoken = data1.RspData;
 						delete data0.sign;
 						tempPro(url, data0, function(data2) {
-							data2 = modifyParameter(data2);
+							data2 = modifyParameter(url, data2);
 							callback(data2);
 						});
 					}
 				});
 			} else {
-				success_data = modifyParameter(success_data);
+				success_data = modifyParameter(url, success_data);
 				callback(success_data);
 			}
 		} else {
@@ -357,10 +359,36 @@ var tempPro = function(url, data0, callback) {
 	xhr.send(JSON.stringify(data0));
 }
 
-var modifyParameter = function(model) {
-	repalceKey(model, 'code', 'RspCode');
-	repalceKey(model, 'data', 'RspData');
-	repalceKey(model, 'msg', 'RspTxt');
+var modifyParameter = function(url, model) {
+	if(model.msg) {
+		repalceKey(model, 'code', 'RspCode');
+		repalceKey(model, 'data', 'RspData');
+		repalceKey(model, 'msg', 'RspTxt');
+	}
+
+	if(url == 'api/user/dptUser') { //学校部门用户
+		//		model.RspData = model.RspData.users;
+	} else if(url == 'api/org/list') { //学校部门
+		//		model.RspData = model.RspData.dpts;
+	} else if(url == 'api/cls/list') { //学校班级
+		//		model.RspData = model.RspData.clss;
+		repalceKey(model, 'finish', 'isfinish');
+	} else if(url == 'api/tec/list') { //学校班级任课老师
+		//		model.RspData = model.RspData.clssusers;
+		repalceKey(model, 'master', 'isms');
+	} else if(url == 'api/user/dptUser') { //
+
+	} else if(url == 'api/user/dptUser') { //
+
+	} else if(url == 'api/user/dptUser') { //
+
+	} else if(url == 'api/user/dptUser') { //
+
+	} else if(url == 'api/user/dptUser') { //
+
+	} else if(url == 'api/user/dptUser') { //
+
+	}
 	return model;
 }
 
