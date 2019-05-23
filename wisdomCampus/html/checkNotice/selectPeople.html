@@ -405,6 +405,10 @@
 				console.log('点击取消选择部门flag:' + flag);
 				//点击获取部门用户
 				if(model.dptname && model.peopleArray.length == 0) {
+					if (model.dptid.length==0) {
+						mui.toast('当前部门没有人');
+						return;
+					}
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
@@ -462,6 +466,10 @@
 						}
 					});
 				} else if(model.clsname && model.peopleArray.length == 0) {
+					if (model.clsid.length==0) {
+						mui.toast('当前部门没有人');
+						return;
+					}
 					var enData0 = {};
 					//不需要加密的数据
 					var comData0 = {
@@ -472,8 +480,9 @@
 					//发送网络请求，data为网络返回值
 					postDataEncry(1, 'api/tec/list', enData0, comData0, 0, function(data) {
 						events.closeWaiting();
+						console.log('api/tec/list:'+JSON.stringify(data));
 						if(data.RspCode == 0) {
-							if(data.RspData) {
+							if(data.RspData.length>0) {
 								//去重
 								data.RspData = data.RspData.unique('utid');
 								//默认不选中
@@ -674,7 +683,7 @@
 
 			//8.年级下班级
 			var getGradeClass = function() {
-				if(personal.grds.length > 0 || personal.clss.length > 0|| personal.masterclss.length > 0) {
+				if(personal.grds.length > 0 || personal.clss.length > 0 || personal.masterclss.length > 0) {
 					var tempGradeId = ''; //需要查询的年级ID
 					if(personal.grds.length > 0) {
 						//个人信息中的年级列表
@@ -699,65 +708,46 @@
 							tempGradeId = tempGradeId + ',' + tempModel.grdid;
 						}
 					}
-					console.log('personal.masterclss:'+personal.masterclss.length);
-					//如果是班主任
-					if(personal.masterclss.length > 0) {
-						var tempClassId = ''; //需要查询的年级ID
-						for(var i = 0; i < personal.masterclss.length; i++) {
-							var tempModel = personal.masterclss[i];
-							tempClassId = tempClassId + ',' + tempModel.clsid;
-						}
-						//去掉第一个，
-						tempClassId = tempClassId.substr(1, tempClassId.length);
-						var tempClassModel = {
-							clsname: '任教年级教师',
-							clsid: tempClassId,
-							departFlag: 0, //部门是否选中
-							peopleArray: []
-						}
-						selectPeopleData.departmentArray.unshift(tempClassModel);
-						selectPeopleData.flag = 1;
-						selectDepartment();
-					}
+					console.log('personal.masterclss:' + personal.masterclss.length);
 					//去掉第一个，
-					//					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
-					//					if(tempGradeId.length == 0) {
-					//						return;
-					//					}
-					//					var enData0 = {};
-					//					//不需要加密的数据
-					//					var comData0 = {
-					//						is_finish: 0, //是否已毕业，0未毕业,1已毕业,-1全部
-					//						access_token: personal.utoken, //用户令牌
-					//						grade_ids: tempGradeId //需要查询的年级ID，多个ID用英文逗号隔开
-					//					}
-					//					events.showWaiting();
+					tempGradeId = tempGradeId.substr(1, tempGradeId.length);
+					if(tempGradeId.length == 0) {
+						return;
+					}
+					var enData0 = {};
+					//不需要加密的数据
+					var comData0 = {
+						is_finish: 0, //是否已毕业，0未毕业,1已毕业,-1全部
+						access_token: personal.utoken, //用户令牌
+						grade_ids: tempGradeId //需要查询的年级ID，多个ID用英文逗号隔开
+					}
+					events.showWaiting();
 					//发送网络请求，data为网络返回值
-					//					postDataEncry(1,'api/cls/list', enData0, comData0, 0, function(data) {
-					//						events.closeWaiting();
-					//						if(data.RspCode == 0) {
-					//							if(data.RspData) {
-					//					var tempClassId = ''; //需要查询的年级ID
-					//					for(var i = 0; i < data.RspData.length; i++) {
-					//						var tempModel = data.RspData[i];
-					//						tempClassId = tempClassId + ',' + tempModel.clsid;
-					//					}
-					//					//去掉第一个，
-					//					tempClassId = tempClassId.substr(1, tempClassId.length);
-					//					var tempClassModel = {
-					//						clsname: '任教年级教师',
-					//						clsid: tempClassId,
-					//						departFlag: 0, //部门是否选中
-					//						peopleArray: []
-					//					}
-					//					selectPeopleData.departmentArray.unshift(tempClassModel);
-					//					selectPeopleData.flag = 1;
-					//				}
-					//				selectDepartment();
-					//						} else {
-					//							mui.toast(data.RspTxt, "cancel");
-					//						}
-					//					});
+					postDataEncry(1, 'api/cls/list', enData0, comData0, 0, function(data) {
+						events.closeWaiting();
+						if(data.RspCode == 0) {
+							if(data.RspData) {
+								var tempClassId = ''; //需要查询的年级ID
+								for(var i = 0; i < data.RspData.length; i++) {
+									var tempModel = data.RspData[i];
+									tempClassId = tempClassId + ',' + tempModel.clsid;
+								}
+								//去掉第一个，
+								tempClassId = tempClassId.substr(1, tempClassId.length);
+								var tempClassModel = {
+									clsname: '任教年级教师',
+									clsid: tempClassId,
+									departFlag: 0, //部门是否选中
+									peopleArray: []
+								}
+								selectPeopleData.departmentArray.unshift(tempClassModel);
+								selectPeopleData.flag = 1;
+							}
+							selectDepartment();
+						} else {
+							mui.toast(data.RspTxt, "cancel");
+						}
+					});
 				}
 			}
 
