@@ -12,15 +12,22 @@
 		<link rel="stylesheet" href="../../js/demoCssJs/weui.min.css">
 		<link rel="stylesheet" href="../../js/demoCssJs/jquery-weui.css">
 		<link rel="stylesheet" href="../../js/demoCssJs/demos.css">
-		<script type="text/javascript">
-		</script>
+		<style>
+			.mui-bar-nav {
+				background-color: #63BBFF;
+			}
+		</style>
 
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title" style="color: white;"></h1>
+			<a id="zhuce" class="mui-icon  mui-pull-right" style="color: white;font-size: 16px;padding-top: 20px;">注册</a>
+		</header>
 
 		<div class="mui-content">
-			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;">登录</div>
+			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;"></div>
 			<div class="mui-input-row">
 				<label style="margin-top: -5px;"><image src="../../img/login/username.png" style="width: 30px;height: 30px;" /></label>
 				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
@@ -113,6 +120,11 @@
 
 			}
 		});
+		
+		//注册按钮
+		document.getElementById('zhuce').addEventListener('tap',function () {
+		        utils.hrefSessionStorage('register.html', {});
+		})
 
 		//获取秘钥
 		var getEncryptKeyLogin = function(tempName, tempPW) {
@@ -180,15 +192,15 @@
 							//合并对象
 							var tempArray = data2.RspData.split(',');
 							//权限
-							tempPerInfo.noticeApproveAdd = tempArray[0];
-							tempPerInfo.noticeIndex = tempArray[1];
-							tempPerInfo.approveIndex = tempArray[2];
-							tempPerInfo.attendanceIndex = tempArray[3];
-							tempPerInfo.stuManageIndex = tempArray[4];
-							tempPerInfo.noticeApproveAllDpt = tempArray[5];
-							tempPerInfo.noticeApproveUpDpt = tempArray[6];
-							tempPerInfo.noticeApproveTeaCls = tempArray[7];
-							tempPerInfo.noticeApproveDownDpt = tempArray[8];
+							tempPerInfo.noticeApproveAdd = tempArray[0];//通知公告、事物审批，是否能添加
+							tempPerInfo.noticeIndex = tempArray[1];//是否有通知公告功能
+							tempPerInfo.approveIndex = tempArray[2];//是否有事物审批功能
+							tempPerInfo.attendanceIndex = tempArray[3];//是否有签到考勤功能
+							tempPerInfo.stuManageIndex = tempArray[4];//是否有学生管理功能
+							tempPerInfo.noticeApproveAllDpt = tempArray[5];//通知公告、事物审批，是否能选全部老师
+							tempPerInfo.noticeApproveUpDpt = tempArray[6];//通知公告、事物审批，是否能选上级部门老师
+							tempPerInfo.noticeApproveTeaCls = tempArray[7];//通知公告、事物审批，是否能选本年级老师
+							tempPerInfo.noticeApproveDownDpt = '1';//通知公告、事物审批，是否能选本部门及下级部门老师，默认能选
 							store.set(window.storageKeyName.PERSONALINFO, tempPerInfo);
 							tempFlag++;
 							console.log('tempFlag00:'+tempFlag);
