@@ -28,11 +28,11 @@
 			}
 			
 			body {
-				background: #F1F1F1;
+				background: #F2F2F2;
 			}
 			
 			.mui-bar-nav {
-				background-color: #63BBFF;
+				background-color: #63BBFF !important;
 			}
 			
 			.mui-content {
@@ -51,15 +51,16 @@
 			
 			.aCss {
 				font-size: 15px;
-				color: #999999;
-				width: 130px;
-				float: left;
+				color: #333;
+				width: 110px;
 			}
 			
 			.icon-right{
-				float: right;
-				font-size:14px;
-				margin-top:3px;
+				    position: fixed;
+				    float: right;
+				    font-size: 14px;
+				    margin-top: 11px;
+				    right: 10px;
 			}
 			
 			.code-btn{
@@ -68,7 +69,7 @@
 				border-radius:25px;
 				height: 25px;
 				width:90px;
-				font-size: 12px;
+				font-size: 10px;
 				padding: 4px 15px;
 				margin-top: -33px;
 				right: 5%;
@@ -92,9 +93,9 @@
 			}
 			
 			.mui-input-row label~input, input::-webkit-input-placeholder {
-				 color: #666666;
+				 color: #999;
 		         /* placeholder字体大小  */
-		         font-size: 13px;
+		         font-size: 14px;
 			}
 			
 			.mui-navigate-right.rCss.no-icon:after {
@@ -112,6 +113,19 @@
 			.mui-table-view:after {
 			    height: 0px;
 			}
+			
+			.mui-input-row:after {
+			    position: absolute;
+			    right: 0;
+			    bottom: 0;
+			    left: 0;
+			    height: 1px;
+			    content: '';
+			    -webkit-transform: scaleY(.5);
+			    transform: scaleY(.5);
+			    background-color: #e4e4e4;
+			}
+			
 		</style>
 	</head>
 
@@ -121,52 +135,48 @@
 			<h1 class="mui-title" style="color: white;">注 册</h1>
 		</header>
 		<div id="register-body" class="mui-content" style="background: white;">
-				<div style="background-color: #F1F1F1;height: 10px;"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectUType()">
-						<a class="aCss">用户类型</a>
-						<span class="rCss">{{utype}}</span>
-						<span class="mui-icon mui-icon-arrowdown icon-right"></span>
-					</li>
-				</ul>
+				<div style="background-color: #F2F2F2;height: 10px;"></div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">用户姓名</label>
+					<label class="aCss"  @tap="selectUType()">用户类型</label>
+					<input type="text" @tap="selectUType()" placeholder="请选择"  v-model="utype" readonly  >
+					<span class="mui-icon mui-icon-arrowdown icon-right"></span>
+				</div>
+				<div class="mui-input-row">
+					<label class="aCss">用户姓名</label>
 					<input type="text" placeholder="请输入姓名"  v-model="uname">
 				</div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">用户电话</label>
+					<label class="aCss">用户电话</label>
 					<input type="number" maxlength="11" placeholder="请输入电话" onkeyup="clearNoNum(this)" v-model="uphone">
 				</div>
-				<div style="background-color: #F1F1F1;height: 10px;"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="selectSchool()">
-						<a class="aCss">所属学校</a>
-						<span class="rCss">{{uschool}}</span>
-						<span class="mui-icon mui-icon-arrowdown icon-right"></span>
-					</li>
-				</ul>
-				<div style="background-color: #F1F1F1;height: 10px;"></div>
+				<div style="background-color: #F2F2F2;height: 10px;"></div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">用户账号</label>
+					<label class="aCss"  @tap="selectSchool()">所属学校</label>
+					<input type="text" @tap="selectSchool()" placeholder="请选择"  v-model="uschool" readonly  >
+					<span class="mui-icon mui-icon-arrowdown icon-right"></span>
+				</div>
+				<div style="background-color: #F2F2F2;height: 10px;"></div>
+				<div class="mui-input-row">
+					<label class="aCss">用户账号</label>
 					<input type="text" placeholder="请输入账号" v-model="uaccount">
 				</div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">请输入密码</label>
+					<label class="aCss">请输入密码</label>
 					<input type="password" placeholder="请输入密码" v-model="upassword">
 				</div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">确认密码</label>
+					<label class="aCss">确认密码</label>
 					<input type="password" placeholder="确认密码" v-model="confirmpassword">
 				</div>
 				<div class="mui-input-row">
-					<label style="font-size: 15px;color: #000;width: 130px;">验证码</label>
+					<label class="aCss">验证码</label>
 					<input type="number" placeholder="请输入验证码" v-model="code">
 				</div>
 				<div>
 					<button id='idenCodebtn' @click="getPhoneCode" type="button" class="mui-btn mui-btn-block mui-btn-primary code-btn">发送验证码</button>
 				</div>
-			<div style="bottom: 0;position: fixed;width: 90%;margin: 0 5%;">
-				<button id='idenCodebtn' @click="submit" type="button" class="mui-btn mui-btn-block mui-btn-primary" style="background: #63BBFF;border: 0;height: 40px;font-size: 17px;line-height: 0;">确 定</button>
+			<div style="bottom: 0;position: fixed;width: 95%;margin: 0 2.5%;">
+				<button id='idenCodebtn' @click="submit" type="button" class="mui-btn mui-btn-block mui-btn-primary" style="background: #63BBFF;border: 0;height: 36px;font-size: 15px;line-height: 0;">确 定</button>
 			</div>
 		</div>
 		<script src="../../js/mui.js"></script>
