@@ -47,6 +47,8 @@ var postDataEncry = function(urlFlag, url, encryData, commonData, flag, callback
 	var tempUrl = window.storageKeyName.INTERFACEZENG;
 	if(urlFlag == 1) {
 		tempUrl = window.storageKeyName.INTERFACEMENG;
+	}else if(urlFlag == 2){
+		tempUrl = window.storageKeyName.INTERFACEGU;
 	}
 	var url1 = tempUrl + url;
 	console.log('url1:', url1);
