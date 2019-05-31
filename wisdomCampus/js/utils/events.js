@@ -32,7 +32,7 @@ var events = (function(mod) {
 		}
 		//发送网络请求，data为网络返回值
 		postDataEncry(2,'SendSms', enData0, comData0, 0, function(data) {
-			
+			console.log('SendSms:'+JSON.stringify(SendSms));
 		});
 	}
 

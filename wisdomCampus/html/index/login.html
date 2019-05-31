@@ -140,13 +140,13 @@
 				console.log('2121212data:' + JSON.stringify(data));
 				if(data.RspCode == 0) {
 					store.set(window.storageKeyName.SHAKEHAND, data.RspData.encryptKey);
+					tempModel.key = data.RspData.encryptKey;
 					loginPro(tempName, tempPW, data.RspData.encryptKey);
 				} else {
 					$.hideLoading();
 					mui.toast(data.RspTxt);
 				}
 			});
-
 		}
 
 		//登录
@@ -250,7 +250,7 @@
 			var tempData = store.get(window.storageKeyName.PERSONALINFO);
 			//将personal 中的key更改为指定的值
 			repalceKey(tempData,'access_token','utoken');
-			
+			tempData.utp=tempData.user.user_type;
 			tempData.schid=tempData.user.school_code;
 			tempData.schname=tempData.user.school_name;
 			tempData.imgurl=tempData.user.img_url;
