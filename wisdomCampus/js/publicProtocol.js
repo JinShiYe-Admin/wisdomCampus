@@ -24,7 +24,7 @@ function setImg(imgURL) {
 		tempUrl = '../../img/login/headImg.png';
 	} else {
 		var myDate = new Date();
-		tempUrl = imgURL + '?' + myDate.getTime();
+		tempUrl = imgURL + '?' + Math.random();
 	}
 	//	console.log('tempUrl000:'+tempUrl);
 	return tempUrl;

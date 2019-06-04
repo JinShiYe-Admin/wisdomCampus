@@ -54,6 +54,7 @@
 	<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../js/publicProtocol.js"></script>
 	<script src='../../js/md5.js'></script>
+	<script src='../../js/utils/events.js'></script>
 	<script type="text/javascript">
 		mui.init({
 			statusBarBackground: '#63BBFF'
@@ -123,7 +124,7 @@
 		
 		//注册按钮
 		document.getElementById('zhuce').addEventListener('tap',function () {
-			utils.mOpenWithData("../../html/index/register.html", tempModel);
+			utils.mOpenWithData("../../html/index/register.html", {});
 		})
 
 		//获取秘钥
@@ -134,16 +135,16 @@
 			var comData0 = {
 				platform_code: window.storageKeyName.PLATFORMCODE //平台代码
 			};
-			$.showLoading();
+			events.showWaiting();
 			//发送网络请求，data为网络返回值
 			postDataEncry(0, 'api/login/getEncryptKey', enData0, comData0, 0, function(data) {
 				console.log('2121212data:' + JSON.stringify(data));
+				events.closeWaiting();
 				if(data.RspCode == 0) {
 					store.set(window.storageKeyName.SHAKEHAND, data.RspData.encryptKey);
 					tempModel.key = data.RspData.encryptKey;
 					loginPro(tempName, tempPW, data.RspData.encryptKey);
 				} else {
-					$.hideLoading();
 					mui.toast(data.RspTxt);
 				}
 			});
@@ -160,10 +161,11 @@
 				unit_code:'-1',//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 				login_name: tempName //登录名
 			};
+			events.showWaiting();
 			//登录
 			postDataEncry(0, 'api/login', enData1, comData1, 0, function(data1) {
 				console.log('data1:' + JSON.stringify(data1));
-				$.hideLoading();
+				events.closeWaiting();
 				if(data1.RspCode == 0) {
 					loginFlag = 1;
 					data1.RspData.userName0 = tempName;
@@ -183,10 +185,11 @@
 						access: data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ADD+','+data1.RspData.user.app_code+window.storageKeyName.NOTICE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.APPROVE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.ATTENDANCE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.STUMANAGE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ALLDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_UPDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_TEACLS+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_DOWNDPT, //权限符，需要判断权限的权限符，多个则用逗号拼接
 						access_token: data1.RspData.access_token //用户令牌
 					};
+					events.showWaiting();
 					//获取权限
 					postDataEncry(0, 'api/acl/permissionByPosition', enData2, comData2, 0, function(data2) {
 						console.log('权限permissionByPosition:' + JSON.stringify(data2));
-						$.hideLoading();
+						events.closeWaiting();
 						if(data2.RspCode == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
@@ -217,10 +220,11 @@
 					var comData3 = {
 						access_token: data1.RspData.access_token //用户令牌
 					};
+					events.showWaiting();
 					//登录用户岗位信息
 					postDataEncry(1, 'api/user/userInfo', {}, comData3, 0, function(data3) {
 						console.log('data3:' + JSON.stringify(data3));
-						$.hideLoading();
+						events.closeWaiting();
 						if(data3.RspCode == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象

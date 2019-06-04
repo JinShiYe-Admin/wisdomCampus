@@ -678,7 +678,7 @@
 				if(imgURL == null || imgURL.length == 0) {
 					tempUrl = '../../img/login/headImg.png';
 				} else {
-					tempUrl = imgURL;
+					tempUrl = imgURL+'?'+Math.random();
 				}
 				//				console.log('tempUrl:' + tempUrl);
 				return tempUrl;
