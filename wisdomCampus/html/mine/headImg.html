@@ -87,62 +87,7 @@
 						if(chenkNetwork()) {
 							return;
 						}
-						if(personal.utp == 0) { //0老师，1学生，2家长
-							var btnArray = [{
-								title: "拍照"
-							}, {
-								title: "从相册选"
-							}];
-							plus.nativeUI.actionSheet({
-								title: "选择修改头像的方式",
-								cancel: "取消",
-								buttons: btnArray
-							}, function(e) {
-								var index = e.index;
-								switch(index) {
-									case 0:
-										break;
-									case 1:
-										if(chenkNetwork()) {
-											return;
-										}
-										var cmr = plus.camera.getCamera();
-										cmr.captureImage(function(p) { //打开相机
-											plus.io.resolveLocalFileSystemURL(p, function(entry) { //拍照
-												_compressImage(entry.toLocalURL(), function(event) { //压缩
-													uploadFile(entry, index); //上传
-												}, function(error) {
-													console.log('图片压缩 失败 ' + JSON.stringify(error));
-												});
-											}, function(e) {
-												console.log('读取拍照文件错误：' + e.message);
-											});
-										}, function(e) {
-											console.log('取消拍照：' + e.message);
-										}, {
-											filename: '_doc/camera/',
-											index: 1
-										});
-										break;
-									case 2:
-										if(chenkNetwork()) {
-											return;
-										}
-										plus.gallery.pick(function(path) { //选照片
-											_compressImage(path, function(event) { //压缩
-												uploadFile(path, index); //上传
-											}, function(error) {
-												console.log('图片压缩 失败 ' + JSON.stringify(error));
-											});
-										}, function(e) {
-											console.log('取消选择图片');
-										}, {
-											filter: 'image'
-										});
-										break;
-								}
-							});
-						} else {
+						if(personal.utp == 0) {} else {
 							var img = document.getElementById("img");
 							UploadHeadImage.addListener(img, 0, {
 								id: personal.utid, //utid

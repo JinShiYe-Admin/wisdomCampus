@@ -47,7 +47,7 @@ var postDataEncry = function(urlFlag, url, encryData, commonData, flag, callback
 	var tempUrl = window.storageKeyName.INTERFACEZENG;
 	if(urlFlag == 1) {
 		tempUrl = window.storageKeyName.INTERFACEMENG;
-	}else if(urlFlag == 2){
+	} else if(urlFlag == 2) {
 		tempUrl = window.storageKeyName.INTERFACEGU;
 	}
 	var url1 = tempUrl + url;
@@ -165,7 +165,7 @@ var xhrPost = function(url, commonData, callback) {
 				var urlArr = url.split('/');
 				var success_data = JSON.parse(this.responseText);
 				console.log('XHRP-Success:', JSON.stringify(success_data));
-				if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
+				if(success_data.RspCode == 6 || success_data.code == 6) { //令牌过期
 					//续订令牌
 					var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 					var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -177,9 +177,10 @@ var xhrPost = function(url, commonData, callback) {
 					postDataEncry(0, 'api/token/refresh', {}, comData, 0, function(data1) {
 						if(data1.RspCode == 0) {
 							var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-							tempInfo00.utoken = data1.RspData;
+							tempInfo00.utoken = data1.RspData.access_token;
 							store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
-							commonData.token = data1.RspData;
+							commonData.token = data1.RspData.access_token;
+							commonData.access_token = data1.RspData.access_token;
 							delete commonData.sign;
 							xhrPost(url, commonData, function(data2) {
 								data2 = modifyParameter(url, data2);
@@ -231,7 +232,7 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 	var tempUrl = window.storageKeyName.INTERFACEZENG;
 	if(urlFlag == 1) {
 		tempUrl = window.storageKeyName.INTERFACEMENG;
-	}else if(urlFlag == 2){
+	} else if(urlFlag == 2) {
 		tempUrl = window.storageKeyName.INTERFACEGU;
 	}
 	var url1 = tempUrl + url;
@@ -247,7 +248,7 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 		async: true,
 		success: function(success_data) { //请求成功的回调
 			console.log(url + ':jQAP-Success:', success_data);
-			if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
+			if(success_data.RspCode == 6 || success_data.code == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -259,11 +260,12 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 				postDataEncry(0, 'api/token/refresh', {}, comData, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.utoken = data1.RspData;
+						tempInfo00.utoken = data1.RspData.access_token;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 						//						var urlArr = url.split('/');
 						var tempData = JSON.parse(data);
-						tempData.utoken = data1.RspData;
+						tempData.utoken = data1.RspData.access_token;
+						tempData.access_token = data1.RspData.access_token;
 						delete tempData.sign;
 						postDataEncry(urlFlag, url, {}, tempData, 0, function(data2) {
 							data2 = modifyParameter(url, data2);
@@ -272,8 +274,42 @@ var jQAjaxPost = function(urlFlag, url, data, callback) {
 					}
 				});
 			} else {
-				success_data = modifyParameter(url, success_data);
-				callback(success_data);
+				//如果是班级老师、部门用户，需要获取用户头像
+				if(url == 'api/user/dptUser' || url == 'api/tec/list') {
+					var tempArr = [];
+					for(var i = 0; i < success_data.data.length; i++) {
+						var tempM = success_data.data[i];
+						tempArr.push(tempM.utid);
+					}
+					var personal = store.get(window.storageKeyName.PERSONALINFO);
+					//需要参数
+					var comData9 = {
+						user_ids: tempArr.join(','), //用户账号，多个以逗号分隔
+						access_token: personal.utoken
+					};
+					//令牌续订
+					postDataEncry(0, 'api/user/getUserInfo', {}, comData9, 0, function(data9) {
+						console.log('getUserInfo:' + JSON.stringify(data9));
+						if(data9.RspCode == 0) {
+							console.log('success_data.data:'+success_data.data.length);
+							console.log('data9.RspData:'+data9.RspData.length);
+							for(var i = 0; i < success_data.data.length; i++) {
+								var tempM = success_data.data[i];
+								for(var a = 0; a < data9.RspData.length; a++) {
+									var tempM1 = data9.RspData[a];
+									if(tempM.utid == tempM1.id) {
+										tempM.imgurl = tempM1.img_url;
+									}
+								}
+							}
+							success_data = modifyParameter(url, success_data);
+							callback(success_data);
+						}
+					});
+				} else {
+					success_data = modifyParameter(url, success_data);
+					callback(success_data);
+				}
 			}
 		},
 		error: function(xhr, type, errorThrown) {
@@ -308,7 +344,7 @@ var tempPro = function(url, data0, callback) {
 			var urlArr = url.split('/');
 			var success_data = JSON.parse(this.responseText);
 			console.log('XHRP-Success:', JSON.stringify(success_data));
-			if(success_data.RspCode == 6||success_data.code == 6) { //令牌过期
+			if(success_data.RspCode == 6 || success_data.code == 6) { //令牌过期
 				//续订令牌
 				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -320,7 +356,7 @@ var tempPro = function(url, data0, callback) {
 				postDataEncry(0, 'api/token/refresh', {}, comData, 0, function(data1) {
 					if(data1.RspCode == 0) {
 						var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-						tempInfo00.utoken = data1.RspData;
+						tempInfo00.utoken = data1.RspData.access_token;
 						store.set(window.storageKeyName.PERSONALINFO, tempInfo00);
 						//						data0.utoken = data1.RspData;
 						delete data0.sign;
