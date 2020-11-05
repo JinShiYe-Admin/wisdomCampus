@@ -1,18 +1,18 @@
-﻿//此js用于保存本地存储时，用到的key值
+//此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1; //0开发，1云测试，2部署
+	mod.key = 0; //0开发，1云测试，2部署
 	var exLog = console.log;
-	console.log = function(hint, object) {
-		if(mod.key === 0) {
-			var argus = hint;
-			if(typeof(object) !== 'undefined') {
-				argus = hint + JSON.stringify(object);
-			}
-			exLog.apply(this, [argus]);
-		}
-	}
+	// console.log = function(hint, object) {
+	// 	if(mod.key === 0) {
+	// 		var argus = hint;
+	// 		if(typeof(object) !== 'undefined') {
+	// 			argus = hint + JSON.stringify(object);
+	// 		}
+	// 		exLog.apply(this, [argus]);
+	// 	}
+	// }
 	switch(mod.key) {
 		case 0: //开发
 			mod.SCHOOLID = 100005; //学校ID
@@ -131,6 +131,8 @@ var storageKeyName = (function(mod) {
 	mod.NOTICEAPPROVE_TEACLS='#OA:NoticeApprove:teaCls'//本年级老师
 	mod.NOTICEAPPROVE_DOWNDPT='#OA:NoticeApprove:downDpt'//本部门及下级部门老师
 	
+	mod.FIRSTOPEN = 'firstOpen';//首次打开，判断是否同意用户协议
+	mod.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbxyPrivacy.htm';//用户隐私政策地址
 	/**
 	 * 在本地存永久数据
 	 * @param {Object} key

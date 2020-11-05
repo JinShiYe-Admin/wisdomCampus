@@ -16,6 +16,13 @@
 			.mui-bar-nav {
 				background-color: #63BBFF;
 			}
+			.yonghuxieyi{
+				margin-top: 10px;
+				font-size: 14px;
+				color: gray;
+				text-align: left;
+				text-indent: 1.5em;
+			}
 		</style>
 
 	</head>
@@ -29,13 +36,15 @@
 		<div class="mui-content">
 			<div style="height: 200px;font-size: 25px;color: dodgerblue;padding: 100px 0px;text-align: center;"></div>
 			<div class="mui-input-row">
-				<label style="margin-top: -5px;"><image src="../../img/login/username.png" style="width: 30px;height: 30px;" /></label>
+				<label style="margin-top: -5px;">
+					<image src="../../img/login/username.png" style="width: 30px;height: 30px;" /></label>
 				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 5px 60px ;" />
 
 			<div class="mui-input-row ">
-				<label><image src="../../img/login/password.png" style="width: 30px;height: 30px;" /></label>
+				<label>
+					<image src="../../img/login/password.png" style="width: 30px;height: 30px;" /></label>
 				<input id='password' type="password" class="mui-input-clear mui-input " placeholder="请输入密码">
 			</div>
 			<hr style=" height:1px;border:none;border-top:1px solid dodgerblue;margin: -12px 20px 0px 60px ;" />
@@ -66,6 +75,7 @@
 
 		var loginFlag = 0; //0自动登录，1不自动登录//判断上次有没有登录，如果登录，就不执行登录协议
 		mui.plusReady(function() {
+			plus.navigator.setStatusBarBackground("#63BBFF");
 			var wv = plus.webview.currentWebview();
 			// 关闭侧滑返回功能
 			wv.setStyle({
@@ -75,7 +85,7 @@
 			var backButtonPress = 0; //重写返回键
 			mui.back = function(event) {
 				backButtonPress++;
-				if(backButtonPress > 1) {
+				if (backButtonPress > 1) {
 					plus.runtime.quit();
 				} else {
 					plus.nativeUI.toast('再按一次退出应用');
@@ -86,33 +96,107 @@
 				return false;
 			};
 			tempModel = {
-				uuid: plus.device.uuid,
-				appid: plus.runtime.appid
+				uuid: '',
+				appid: ''
 			}
-			setUUID();
-			document.addEventListener("netchange", wainshow, false);
-
-			function wainshow() {
-				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-					mui.toast("网络异常，请检查网络设置！");
-				} else {
-					mui.toast("已接入网络");
-					//判断上次有没有登录，如果登录，就不执行登录协议
-					if(loginFlag == 0) {
-						loginFlag = 1;
-						setUUID();
+			
+			
+			//判断是否是第一次使用APP start
+			var firstOpen = store.get(window.storageKeyName.FIRSTOPEN);
+			if(firstOpen == null){
+				mui.confirm("<div class='yonghuxieyi'>依据最新的法律要求，我们更新了《<a id='yonghuA' style='text-decoration: underline;'>用户隐私政策</a>》，请您务必审慎阅读，充分理解相关条款内容，特别是字体加粗标识的重要条款</div><div class='yonghuxieyi'>点击同意即代表您已阅读并同意《<a id='yonghuAA' style='text-decoration: underline;'>用户隐私政策</a>》，如果您不同意用户协议和隐私政策的内容，我们暂时无法为您提供服务</div><div class='yonghuxieyi'>我们会尽力保护您的个人信息安全</div>", '用户须知', ['同意', '不同意'], function(e) {
+					if (e.index == 0) {
+						store.set(window.storageKeyName.FIRSTOPEN,'1');
+						getInfo();
+						document.addEventListener("netchange", wainshow, false);
+						
+						function wainshow() {
+							if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+								mui.toast("网络异常，请检查网络设置！");
+							} else {
+								mui.toast("已接入网络");
+								//判断上次有没有登录，如果登录，就不执行登录协议
+								if (loginFlag == 0) {
+									loginFlag = 1;
+									getInfo();
+								}
+							}
+						}
+					}else{
+						mui.alert("<div class='yonghuxieyi'>由于您不同意教宝校园《用户隐私政策》的相关内容，我们暂时无法为您提供服务。请谅解！</div>",'','返回',function (e) {
+						},'div')
+						return false;
+					}
+				},'div');
+				document.getElementById('yonghuA').addEventListener('tap',function () {
+					utils.mOpenWithData("../../html/index/privace.html", {});
+				})
+				document.getElementById('yonghuAA').addEventListener('tap',function () {
+					utils.mOpenWithData("../../html/index/privace.html", {});
+				})
+			}else{
+				getInfo();
+				document.addEventListener("netchange", wainshow, false);
+				function wainshow() {
+					if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+						mui.toast("网络异常，请检查网络设置！");
+					} else {
+						mui.toast("已接入网络");
+						//判断上次有没有登录，如果登录，就不执行登录协议
+						if (loginFlag == 0) {
+							loginFlag = 1;
+							getInfo();
+						}
 					}
 				}
 			}
+			//判断是否是第一次使用APP end
 		});
+		
+		function getInfo() {
+			console.log('333333');
+			plus.device.getInfo({
+				success: function(info) {
+					console.log('getDeviceInfo success: '+JSON.stringify(info));
+					let id = ''
+					if (info.uuid) {
+						id = info.uuid.split(",")[0]
+					}
+					if (id) {
+						tempModel.uuid = id
+						tempModel.appid = id
+					}
+					tempModel.webid = plus.os.name + plus.os.version;
+					store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
+					var backButtonPress = 0;
+					setUUID();
+				},
+				fail:function(info){
+					console.log('getDeviceInfo failed: '+JSON.stringify(info));
+					let id = ''
+					if (info.uuid) {
+						id = info.uuid.split(",")[0]
+					}
+					if (id) {
+						tempModel.uuid = id
+						tempModel.appid = id
+					}
+					tempModel.webid = plus.os.name + plus.os.version;
+					store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
+					var backButtonPress = 0;
+					setUUID();
+				}
+			});
+		}
+		
 		document.getElementById("login").addEventListener('tap', function(event) {
 			console.log("登录");
 			var tempName = document.getElementById("account").value;
 			var tempPW = document.getElementById("password").value;
 			console.log('tempName:' + tempName + ',tempPW' + tempPW);
 			//判断输入是否符合要求 
-			if(checkInput(tempName)) {
-				if(checkInput(tempPW)) {
+			if (checkInput(tempName)) {
+				if (checkInput(tempPW)) {
 					getEncryptKeyLogin(tempName, tempPW);
 				} else {
 
@@ -121,9 +205,9 @@
 
 			}
 		});
-		
+
 		//注册按钮
-		document.getElementById('zhuce').addEventListener('tap',function () {
+		document.getElementById('zhuce').addEventListener('tap', function() {
 			utils.mOpenWithData("../../html/index/register.html", {});
 		})
 
@@ -140,7 +224,7 @@
 			postDataEncry(0, 'api/login/getEncryptKey', enData0, comData0, 0, function(data) {
 				console.log('2121212data:' + JSON.stringify(data));
 				events.closeWaiting();
-				if(data.RspCode == 0) {
+				if (data.RspCode == 0) {
 					store.set(window.storageKeyName.SHAKEHAND, data.RspData.encryptKey);
 					tempModel.key = data.RspData.encryptKey;
 					loginPro(tempName, tempPW, data.RspData.encryptKey);
@@ -158,7 +242,7 @@
 				password: hex_md5(key + tempPW), //秘钥+密码再MD5加密
 				platform_code: window.storageKeyName.PLATFORMCODE, //平台代码
 				app_code: window.storageKeyName.APPCODE, //应用系统代码
-				unit_code:'-1',//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+				unit_code: '-1', //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 				login_name: tempName //登录名
 			};
 			events.showWaiting();
@@ -166,7 +250,7 @@
 			postDataEncry(0, 'api/login', enData1, comData1, 0, function(data1) {
 				console.log('data1:' + JSON.stringify(data1));
 				events.closeWaiting();
-				if(data1.RspCode == 0) {
+				if (data1.RspCode == 0) {
 					loginFlag = 1;
 					data1.RspData.userName0 = tempName;
 					data1.RspData.passWord0 = tempPW;
@@ -182,7 +266,12 @@
 						cls_id: 0, //班级id，年级下全部班级则传-1，不需要判断班级则传0
 						stu_id: 0, //学生id，全部学生则传-1，不需要判断学生则传0
 						sub_code: 0, //科目代码，全部科目则传“-1”，不需要判断年级则传“0”
-						access: data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ADD+','+data1.RspData.user.app_code+window.storageKeyName.NOTICE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.APPROVE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.ATTENDANCE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.STUMANAGE_INDEX+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_ALLDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_UPDPT+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_TEACLS+','+data1.RspData.user.app_code+window.storageKeyName.NOTICEAPPROVE_DOWNDPT, //权限符，需要判断权限的权限符，多个则用逗号拼接
+						access: data1.RspData.user.app_code + window.storageKeyName.NOTICEAPPROVE_ADD + ',' + data1.RspData.user.app_code +
+							window.storageKeyName.NOTICE_INDEX + ',' + data1.RspData.user.app_code + window.storageKeyName.APPROVE_INDEX +
+							',' + data1.RspData.user.app_code + window.storageKeyName.ATTENDANCE_INDEX + ',' + data1.RspData.user.app_code +
+							window.storageKeyName.STUMANAGE_INDEX + ',' + data1.RspData.user.app_code + window.storageKeyName.NOTICEAPPROVE_ALLDPT +
+							',' + data1.RspData.user.app_code + window.storageKeyName.NOTICEAPPROVE_UPDPT + ',' + data1.RspData.user.app_code +
+							window.storageKeyName.NOTICEAPPROVE_TEACLS + ',' + data1.RspData.user.app_code + window.storageKeyName.NOTICEAPPROVE_DOWNDPT, //权限符，需要判断权限的权限符，多个则用逗号拼接
 						access_token: data1.RspData.access_token //用户令牌
 					};
 					events.showWaiting();
@@ -190,24 +279,24 @@
 					postDataEncry(0, 'api/acl/permissionByPosition', enData2, comData2, 0, function(data2) {
 						console.log('权限permissionByPosition:' + JSON.stringify(data2));
 						events.closeWaiting();
-						if(data2.RspCode == 0) {
+						if (data2.RspCode == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
 							var tempArray = data2.RspData.split(',');
 							//权限
-							tempPerInfo.noticeApproveAdd = tempArray[0];//通知公告、事物审批，是否能添加
-							tempPerInfo.noticeIndex = tempArray[1];//是否有通知公告功能
-							tempPerInfo.approveIndex = tempArray[2];//是否有事物审批功能
-							tempPerInfo.attendanceIndex = tempArray[3];//是否有签到考勤功能
-							tempPerInfo.stuManageIndex = tempArray[4];//是否有学生管理功能
-							tempPerInfo.noticeApproveAllDpt = tempArray[5];//通知公告、事物审批，是否能选全部老师
-							tempPerInfo.noticeApproveUpDpt = tempArray[6];//通知公告、事物审批，是否能选上级部门老师
-							tempPerInfo.noticeApproveTeaCls = tempArray[7];//通知公告、事物审批，是否能选本年级老师
-							tempPerInfo.noticeApproveDownDpt = '1';//通知公告、事物审批，是否能选本部门及下级部门老师，默认能选
+							tempPerInfo.noticeApproveAdd = tempArray[0]; //通知公告、事物审批，是否能添加
+							tempPerInfo.noticeIndex = tempArray[1]; //是否有通知公告功能
+							tempPerInfo.approveIndex = tempArray[2]; //是否有事物审批功能
+							tempPerInfo.attendanceIndex = tempArray[3]; //是否有签到考勤功能
+							tempPerInfo.stuManageIndex = tempArray[4]; //是否有学生管理功能
+							tempPerInfo.noticeApproveAllDpt = tempArray[5]; //通知公告、事物审批，是否能选全部老师
+							tempPerInfo.noticeApproveUpDpt = tempArray[6]; //通知公告、事物审批，是否能选上级部门老师
+							tempPerInfo.noticeApproveTeaCls = tempArray[7]; //通知公告、事物审批，是否能选本年级老师
+							tempPerInfo.noticeApproveDownDpt = '1'; //通知公告、事物审批，是否能选本部门及下级部门老师，默认能选
 							store.set(window.storageKeyName.PERSONALINFO, tempPerInfo);
 							tempFlag++;
-							console.log('tempFlag00:'+tempFlag);
-							if(tempFlag == 2) {
+							console.log('tempFlag00:' + tempFlag);
+							if (tempFlag == 2) {
 								//跳转界面
 								gotoPage(tempPW);
 							}
@@ -225,15 +314,15 @@
 					postDataEncry(1, 'api/user/userInfo', {}, comData3, 0, function(data3) {
 						console.log('data3:' + JSON.stringify(data3));
 						events.closeWaiting();
-						if(data3.RspCode == 0) {
+						if (data3.RspCode == 0) {
 							var tempPerInfo = store.get(window.storageKeyName.PERSONALINFO);
 							//合并对象
 							var tempData = $.extend(tempPerInfo, data3.RspData);
-							
+
 							store.set(window.storageKeyName.PERSONALINFO, tempData);
 							tempFlag++;
-							console.log('tempFlag01:'+tempFlag);
-							if(tempFlag == 2) {
+							console.log('tempFlag01:' + tempFlag);
+							if (tempFlag == 2) {
 								//跳转界面
 								gotoPage(tempPW);
 							}
@@ -250,18 +339,18 @@
 		//跳转界面
 		var gotoPage = function(tempPW) {
 			console.log('11111');
-			
+
 			var tempData = store.get(window.storageKeyName.PERSONALINFO);
 			//将personal 中的key更改为指定的值
-			repalceKey(tempData,'access_token','utoken');
-			tempData.utp=tempData.user.user_type;
-			tempData.schid=tempData.user.school_code;
-			tempData.schname=tempData.user.school_name;
-			tempData.imgurl=tempData.user.img_url;
-			tempData.utname=tempData.user.name;
-			tempData.utid=tempData.user.id;
-			tempData.uid=tempData.user.login_name;
-			tempData.app_code=tempData.user.app_code;
+			repalceKey(tempData, 'access_token', 'utoken');
+			tempData.utp = tempData.user.user_type;
+			tempData.schid = tempData.user.school_code;
+			tempData.schname = tempData.user.school_name;
+			tempData.imgurl = tempData.user.img_url;
+			tempData.utname = tempData.user.name;
+			tempData.utid = tempData.user.id;
+			tempData.uid = tempData.user.login_name;
+			tempData.app_code = tempData.user.app_code;
 			if (tempData.masterclss == null) {
 				tempData.masterclss = [];
 			}
@@ -278,13 +367,13 @@
 				tempData.grds = [];
 			}
 			tempData.clss = tempData.clss.concat(tempData.masterclss);
-			
+
 			delete tempData['user'];
-			
-			console.log('new tempData:'+JSON.stringify(tempData));
+
+			console.log('new tempData:' + JSON.stringify(tempData));
 			store.set(window.storageKeyName.PERSONALINFO, tempData);
-			
-			if(tempPW == '123456') {
+
+			if (tempPW == '123456') {
 				var tempModel = {
 					flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
 				}
@@ -293,20 +382,20 @@
 				utils.hrefSessionStorage('home.html', {});
 			}
 		}
-		
+
 		//更换personal 对象的key 值
-		var repalceKey = function(obj,oldKey,newKey) {
-			if(obj instanceof Array){
-				for(var i in obj){
-					obj[i][newKey]=obj[i][oldKey];
+		var repalceKey = function(obj, oldKey, newKey) {
+			if (obj instanceof Array) {
+				for (var i in obj) {
+					obj[i][newKey] = obj[i][oldKey];
 					delete obj[i][oldKey];
 				}
-			}else{
-					obj[newKey]=obj[oldKey];
-					delete obj[oldKey];
+			} else {
+				obj[newKey] = obj[oldKey];
+				delete obj[oldKey];
 			}
 		}
-		
+
 
 		//从ios原生得到信息
 		var setUUID = function(tempStr) {
@@ -315,11 +404,11 @@
 			//			console.log('tempStr:' + tempStr);
 			//判断上次是否登录过，自动登录
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
-			if(personal) {
-				if(personal.utid == 'undefined' || personal.utid == null || personal.userName0 == null) {
+			if (personal) {
+				if (personal.utid == 'undefined' || personal.utid == null || personal.userName0 == null) {
 
 				} else {
-					if(personal.userName0) {
+					if (personal.userName0) {
 						document.getElementById("account").value = personal.userName0;
 						document.getElementById("password").value = personal.passWord0;
 						//login登录
@@ -335,11 +424,11 @@
 
 		//判断是否输入了值
 		var checkInput = function(text) {
-			if(text.trim().length == 0) {
+			if (text.trim().length == 0) {
 				mui.toast('请输入账号密码');
 				return false;
 			}
-			if(isNull(text)) {
+			if (isNull(text)) {
 				mui.toast('请输入账号密码');
 				return false;
 			}
@@ -348,7 +437,7 @@
 
 		//判断输入字符串是否为空或者全部都是空格
 		function isNull(str) {
-			if(str == "") return true;
+			if (str == "") return true;
 			var regu = "^[ ]+$";
 			var re = new RegExp(regu);
 			return re.test(str);

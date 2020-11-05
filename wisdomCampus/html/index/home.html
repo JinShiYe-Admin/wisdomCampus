@@ -562,8 +562,13 @@
 						icon: "../../img/login/lock.png",
 						href: "",
 						tempID: 0
+					},{
+						name: "注销账号",
+						icon: "../../img/login/lock.png",
+						href: "",
+						tempID: 2
 					}, {
-						name: "关于我们",
+						name: "关于智慧校园",
 						icon: "../../img/login/mine.png",
 						href: "",
 						tempID: 1
@@ -608,6 +613,8 @@
 							//							utils.mOpenWithData("../../html/mine/redirectPassword.html", setting);
 						} else if(setting.tempID == 1) {
 							utils.mOpenWithData("../../html/mine/about.html", tempModel);
+						} else if(setting.tempID == 2) {
+							alert('未实现接口')
 						}
 					},
 					clickHeadImg: function() {

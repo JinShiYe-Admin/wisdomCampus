@@ -125,6 +125,19 @@
 				transform: scaleY(.5);
 				background-color: #e4e4e4;
 			}
+			
+			.mui-input-row.permission:after {
+			    height: 0px;
+			}
+					
+			.mui-input-row.permission label {
+				line-height: 0.9;
+			}
+			
+			.mui-checkbox.mui-left label, .mui-radio.mui-left label {
+			    padding-right: 15px;
+			    padding-left: 58px;
+			}
 		</style>
 	</head>
 
@@ -176,6 +189,17 @@
 			</div>-->
 			<div style="bottom: 0;position: fixed;width: 95%;margin: 0 2.5%;">
 				<button id='idenCodebtn' @click="submit" type="button" class="mui-btn mui-btn-block mui-btn-primary" style="background: #63BBFF;border: 0;height: 36px;font-size: 15px;line-height: 0;">确 定</button>
+			</div>
+			<div style="margin-top: 10px;"> 
+				<div @click="clickPrivace()" style="float: right;margin:8px 20px 0 -10px;color: #63BBFF;text-decoration: underline;">《用户隐私政策》</div>
+				<div v-if="privaceFlag == 0" @click="clickFlag(0)" class="mui-input-row permission mui-checkbox mui-left" style="float: right;">
+					<label>同意</label>
+					<input name="checkbox1" value="Item 1" type="checkbox">
+				</div>
+				<div v-else-if="privaceFlag == 1" @click="clickFlag(1)" class="mui-input-row permission mui-checkbox mui-left" style="float: right;">
+					<label>同意</label>
+					<input name="checkbox1" value="Item 1" type="checkbox" checked>
+				</div>
 			</div>
 		</div>
 		<script src="../../js/mui.js"></script>
@@ -276,9 +300,21 @@
 					uaccount: '', //用户账号
 					upassword: '', //用户密码
 					confirmpassword: '', //确认密码
-					code: '' //验证码
+					code: '' ,//验证码
+					privaceFlag: 0,
 				},
 				methods: {
+					clickPrivace: function() {
+						console.log('clickPrivace')
+						utils.mOpenWithData("../../html/index/privace.html", {});
+					},
+					clickFlag: function(flag) {
+						if (flag == 0) {
+							register.privaceFlag = 1;
+						} else {
+							register.privaceFlag = 0;
+						}
+					},
 					selectUType: function() { //选择身份
 						document.activeElement.blur();
 						userTypePicker.show(function(items) {
@@ -399,7 +435,9 @@
 							mui.toast('密码需为数字和字母的组合');
 						} else if(register.confirmpassword.length > 18 || register.confirmpassword.length < 6) {
 							mui.toast('密码长度需为6到18个字符');
-						}
+						}else if (register.privaceFlag == 0) {
+							mui.toast('请先同意隐私政策');
+						} 
 						//						else if(register.code == '' || register.code.length != 6) {
 						//							mui.toast('请输入正确的验证码');
 						//						} 
